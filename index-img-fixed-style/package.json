@@ -1,9 +1,0 @@
-{
-  "name": "index-img-fixed-style",
-  "version": "1.0",
-  "title": "首页样式",
-  "description": "首页图片不滚动（注意：此样式在 IE 上可能出现抽搐现象）",
-  "author": "printempw",
-  "url": "https://blessing.studio/",
-  "namespace": "Blessing\\IndexImgFixedStyle"
-}
