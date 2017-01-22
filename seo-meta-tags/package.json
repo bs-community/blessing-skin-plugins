@@ -1,0 +1,10 @@
+{
+  "name": "seo-meta-tags",
+  "version": "1.0.1",
+  "title": "SEO META 标签",
+  "description": "为站点添加 keywords、description 等 meta 标签，用于 SEO 优化",
+  "author": "printempw",
+  "url": "https://blessing.studio/",
+  "namespace": "SeoMetaTags",
+  "config": "config.tpl"
+}

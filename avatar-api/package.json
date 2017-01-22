@@ -1,0 +1,9 @@
+{
+  "name": "avatar-api",
+  "version": "1.1",
+  "title": "头像 API",
+  "description": "通过角色名获取根据该角色所设置的皮肤生成的头像。调用方法：/getavatar/{size}/{player_name}.png，成功返回 size*size 大小的图片，失败返回 404。",
+  "author": "printempw",
+  "url": "https://blessing.studio/",
+  "namespace": "Blessing\\Avatar"
+}
