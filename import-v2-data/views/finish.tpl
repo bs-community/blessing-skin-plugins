@@ -11,6 +11,4 @@
 <a href="../../" class="button button-large">导入完成</a>
 </p>
 
-@endif
-
 @endsection

@@ -3,11 +3,15 @@
  * @Author: printempw
  * @Date:   2016-11-25 21:48:57
  * @Last Modified by:   printempw
- * @Last Modified time: 2016-12-17 22:48:15
+ * @Last Modified time: 2017-06-03 21:35:29
  */
 
 namespace Blessing\ImportV2Data;
 
+use Log;
+use Utils;
+use Option;
+use Storage;
 use Database;
 use App\Models\User;
 use App\Models\Player;
@@ -37,7 +41,7 @@ class Migration
 
         $score = Option::get('user_initial_score');
 
-        $sql = "SELECT * FROM `{$options['table_name']}` ORDER BY `uid` LIMIT $start, 250";
+        $sql = "SELECT * FROM `{$options['table_name']}` ORDER BY `uid`";
         $result = $db->query($sql);
 
         while ($row = $result->fetch_array()) {
