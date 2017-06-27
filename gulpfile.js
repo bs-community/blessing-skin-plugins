@@ -28,11 +28,13 @@ gulp.task('release', () => {
 
     let folders = getFolders(pluginsPath);
 
-    let tasks = folders.map(function (folder) {
-        console.log('Zipping ' + folder);
+    let tasks = folders.map((folder) => {
+        let version = require(`./${folder}/package.json`).version;
+
+        console.log(`Zipping plugin ${folder}, version ${version}`);
 
         return gulp.src(folder + '/**/*', { base: pluginsPath })
-                    .pipe(zip(folder + '.zip'))
+                    .pipe(zip( `${folder}_v${version}.zip`))
                     .pipe(gulp.dest(distPath));
     });
 
