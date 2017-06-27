@@ -126,6 +126,7 @@ class Migration
                 }
 
                 $c->setTextures(json_encode($items));
+                $p->save();
 
                 $user_imported++;
 

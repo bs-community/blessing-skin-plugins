@@ -1,6 +1,6 @@
 {
   "name": "import-v2-data",
-  "version": "1.1",
+  "version": "1.1.1",
   "title": "导入 v2 数据",
   "description": "导入 Blessing Skin Server v2.x 的站点数据（用户、皮肤）到 v3.x",
   "author": "printempw",
