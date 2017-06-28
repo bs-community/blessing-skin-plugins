@@ -141,6 +141,9 @@ class AuthController extends BaseController
                 $this->setUsername($user, $_POST['username']);
 
                 MyUtils::addUniquePlayer($user);
+                Log::info("[DataIntegration][$user->username] Unique player bound. Trying to sync.");
+                event(new Events\UserRegistered($user));
+
                 return true;
             }
         }
