@@ -112,8 +112,8 @@
     </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
 
-<script type="text/javascript" src="{{ assets('dist/libs/three.min.js') }}"></script>
-<script type="text/javascript" src="{{ assets('dist/libs/three.msp.js') }}"></script>
+<script type="text/javascript" src="{{ assets('scripts/three.min.js') }}"></script>
+<script type="text/javascript" src="{{ assets('scripts/three.msp.js') }}"></script>
 
 @endsection
 
