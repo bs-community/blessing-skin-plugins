@@ -17,14 +17,9 @@ class Crazy extends LoginSystemSynchronizer
     {
         $username = $user->username;
 
-        $text = "ÜÄaeut//&/=I " . $raw_passwd . "7421€547" . $username . "__+IÄIH§%NK " . $raw_passwd;
-        $t1 = unpack("H*", $text);
-        $t2 = substr($t1[1], 0, mb_strlen($text, 'UTF-8')*2);
-        $t3 = pack("H*", $t2);
+        $result = app('cipher')->hash($raw_passwd, $username);
 
-        $result = app('cipher')->hash($t3);
-
-        Log::info("[DataIntegration][$username] Password hashed with username: [$username], Hash: [$result], Expecting: [$user->password]");
+        Log::info("[DataIntegration][$username] Password hashed with salt(username): [$username], Hash: [$result], Expecting: [$user->password]");
 
         return $result;
     }
