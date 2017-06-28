@@ -6,3 +6,7 @@ mod-intro: |
   <p>Detailed Documentation Here: <a href="https://github.com/printempw/blessing-skin-server/wiki/Mod-Configuration" target="_blank">@GitHub</a></p>
 version: Version
 config-file: Config File
+
+extra-list-intro: |
+  ExtraList (supported by CustomSkinLoader 14.4+) is designing for providing a faster and more convenient way to add custom skin servers. Just download the ExtraList file below and put it into <code>.minecraft/CustomSkinLoader/ExtraList</code> directory. Restart the Minecraft, and it's done!
+extra-list-download: Click to download ExtraList

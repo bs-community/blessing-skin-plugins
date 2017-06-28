@@ -60,6 +60,20 @@
                         </table>
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
+                <div class="box box-success">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            <i class="fa fa-star"></i> CustomSkinLoader ExtraList
+                        </h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <p>{!! trans('Blessing\ConfigGenerator::config.extra-list-intro') !!}</p>
+
+                        <button id="download-extralist" class="btn btn-primary">
+                            {!! trans('Blessing\ConfigGenerator::config.extra-list-download') !!}
+                        </button>
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
             </div>
             <div class="col-md-6">
                 <div class="box box-default">
@@ -162,7 +176,29 @@ Cape: http://skins.minecraft.net/MinecraftCloaks/%s.png
         $('#config-'+$('#version-select').val()).show();
     }
 
-    $('#mod-select').change(function() {
+    /**
+     * 创建并下载文件
+     * @param  {String} fileName 文件名
+     * @param  {String} content  文件内容
+     */
+    function createAndDownloadFile(fileName, content) {
+        var aTag = document.createElement('a');
+        var blob = new Blob([content]);
+        aTag.download = fileName;
+        aTag.href = URL.createObjectURL(blob);
+        aTag.click();
+        URL.revokeObjectURL(blob);
+    }
+
+    $('#download-extralist').click(function () {
+        createAndDownloadFile(blessing.site_name + '.json', JSON.stringify({
+            "name": blessing.site_name,
+            "type": "CustomSkinAPI",
+            "root": blessing.base_url + "/csl/"
+        }));
+    });
+
+    $('#mod-select').change(function () {
         freshVersionSelect(this);
     });
     $('#version-select').change(showConfig);

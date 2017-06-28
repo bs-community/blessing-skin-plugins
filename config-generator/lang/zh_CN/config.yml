@@ -6,3 +6,7 @@ mod-intro: |
   <p>详细教程：<a href="https://github.com/printempw/blessing-skin-server/wiki/Mod-Configuration" target="_blank">@GitHub</a></p>
 version: 版本
 config-file: 配置文件
+
+extra-list-intro: |
+  ExtraList 是 CustomSkinLoader（14.4 以上版本）提供的快捷添加皮肤站功能。不需要任何繁琐的配置修改，您只需要下载下面提供的 ExtraList 文件，放入 <code>.minecraft/CustomSkinLoader/ExtraList</code> 目录下并重启游戏即可。
+extra-list-download: 点击下载 ExtraList 文件
