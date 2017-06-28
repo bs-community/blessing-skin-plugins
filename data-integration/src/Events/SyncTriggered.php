@@ -11,7 +11,7 @@ namespace DataIntegration\Events;
 use App\Events\Event;
 use DataIntegration\Synchronizer\BaseSynchronizer as Synchronizer;
 
-class SyncTriggerred extends Event
+class SyncTriggered extends Event
 {
     public $synchronizer;
 

@@ -71,9 +71,14 @@ class AuthController extends BaseController
                 return json(trans('auth.register.registered'), 5);
             }
 
-            event(new Events\UserRegistered($user));
+            $player = MyUtils::addUniquePlayer($user);
 
-            MyUtils::addUniquePlayer($user);
+            Log::info("[DataIntegration][$username] New user registered.", [
+                'email' => $request['email'],
+                'player' => $player,
+            ]);
+
+            event(new Events\UserRegistered($user));
 
             return json([
                 'errno' => 0,

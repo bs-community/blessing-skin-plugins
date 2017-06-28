@@ -14,7 +14,7 @@ use App\Models\User;
 use App\Models\Player;
 use DataIntegration\Log;
 use DataIntegration\Utils;
-use DataIntegration\Events\SyncTriggerred;
+use DataIntegration\Events\SyncTriggered;
 
 abstract class BaseSynchronizer
 {
@@ -35,21 +35,23 @@ abstract class BaseSynchronizer
     }
 
     public function sync($username) {
-        Event::fire(new SyncTriggerred($this, $username));
+        Event::fire(new SyncTriggered($this, $username));
 
         // 仅当 $username 存在于目标数据库中时进行同步
         // 从皮肤站同步用户至目标数据库（双向同步）请查看 DataIntegration\Listener\BilateralSync
         if (Utils::checkUserExistTarget($username)) {
             // 用户是否存在于皮肤站数据库中
             if (Utils::checkUserExistSelf($username)) {
-                Log::info("[DataIntegration][$username][Self <=> Target] Sync triggerred: ".static::class);
+                Log::info("[DataIntegration][$username][Self <=> Target] Sync triggered: ".static::class);
                 // sync password if user exists in both two databases
                 $this->syncPassword($username);
             } else {
-                Log::info("[DataIntegration][$username][Self <== Target] Sync triggerred: ".static::class);
+                Log::info("[DataIntegration][$username][Self <== Target] Sync triggered: ".static::class);
 
                 $this->syncFromTarget($username);
             }
+        } else {
+            Log::info("[DataIntegration][$username][<x> Target <x>] Waiting for BilateralSync. SyncTriggered event fired: ".static::class);
         }
     }
 

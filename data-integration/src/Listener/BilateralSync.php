@@ -12,7 +12,7 @@ use Database;
 use DataIntegration\Log;
 use DataIntegration\Utils;
 use DataIntegration\Synchronizer;
-use DataIntegration\Events\SyncTriggerred;
+use DataIntegration\Events\SyncTriggered;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class BilateralSync
@@ -23,18 +23,22 @@ class BilateralSync
     public function subscribe(Dispatcher $events)
     {
         // 从皮肤站同步用户到目标程序（当「双向同步」开启时生效）
-        $events->listen(SyncTriggerred::class, function($event) {
+        $events->listen(SyncTriggered::class, function($event) {
+            $username = $event->username;
+            Log::info("[DataIntegration][$username] Bilateral Synchronization triggered.");
+
             // do bilateral sync
-            if (Utils::checkUserExistSelf($event->username)) {
+            if (Utils::checkUserExistSelf($username)) {
                 // 当目标数据库不存在此用户时进行同步
-                if (!Utils::checkUserExistTarget($event->username)) {
+                if (!Utils::checkUserExistTarget($username)) {
 
-                    Log::info("[DataIntegration][$event->username][Self ==> Target] Sync triggerred with synchronizer: ".get_class($event->synchronizer));
+                    Log::info("[DataIntegration][$username][Self ==> Target] Sync triggered with synchronizer: ".get_class($event->synchronizer));
 
-                    $event->synchronizer->syncFromSelf($event->username);
+                    $event->synchronizer->syncFromSelf($username);
                 }
             } else {
                 // do nothing if user not exists in blessing skin database
+                Log::info("[DataIntegration][$username] BilateralSync, nothing to do.");
             }
         }, SynchronizeUser::PRIORITY);
 

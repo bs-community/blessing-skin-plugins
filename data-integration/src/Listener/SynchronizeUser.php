@@ -10,6 +10,7 @@ namespace DataIntegration\Listener;
 
 use App\Events;
 use App\Models\User;
+use DataIntegration\Log;
 use DataIntegration\Utils;
 use DataIntegration\Synchronizer;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -27,11 +28,13 @@ class SynchronizeUser
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(Events\CheckPlayerExists::class, function($event) {
+        $events->listen(Events\CheckPlayerExists::class, function ($event) {
+            Log::info("[DataIntegration] Triggered by event CheckPlayerExists");
             app('synchronizer')->sync($event->player_name);
         }, static::PRIORITY);
 
-        $events->listen(Events\UserTryToLogin::class, function($event) {
+        $events->listen(Events\UserTryToLogin::class, function ($event) {
+            Log::info("[DataIntegration] Triggered by event UserTryToLogin");
             $syncer = app('synchronizer');
 
             if ($event->authType == "username") {
@@ -56,17 +59,20 @@ class SynchronizeUser
             }
         }, static::PRIORITY);
 
-        $events->listen(Events\PlayerProfileUpdated::class, function($event) {
+        $events->listen(Events\PlayerProfileUpdated::class, function ($event) {
+            Log::info("[DataIntegration] Triggered by event PlayerProfileUpdated");
             app('synchronizer')->sync($event->player->player_name);
         }, static::PRIORITY);
 
-        $events->listen(Events\UserProfileUpdated::class, function($event) {
+        $events->listen(Events\UserProfileUpdated::class, function ($event) {
+            Log::info("[DataIntegration] Triggered by event UserProfileUpdated");
             if ($event->type == "email") {
                 app('synchronizer')->sync($event->user->username);
             }
         }, static::PRIORITY);
 
-        $events->listen(Events\UserRegistered::class, function($event) {
+        $events->listen(Events\UserRegistered::class, function ($event) {
+            Log::info("[DataIntegration] Triggered by event UserRegistered");
             app('synchronizer')->sync($event->user->username);
         }, static::PRIORITY);
     }
