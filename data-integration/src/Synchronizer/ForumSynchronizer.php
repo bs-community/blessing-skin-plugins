@@ -25,10 +25,24 @@ class ForumSynchronizer extends BaseSynchronizer
         if ($user = User::where('email', $result['email'])->first()) {
             // 根据「重复处理」选择更新皮肤站/目标数据库中的用户名
             if (option('da_duplicated_prefer') == 'skin') {
-                $this->updateTargetUsername($user->username);
+                $this->updateTargetUsername($user, $user->username);
             } else {
-                $this->updateSelfUsername($username);
+                $this->updateSelfUsername($user, $username);
+
+                if ($correspondingPlayer = Player::where('player_name', $username)->first()) {
+                    if ($correspondingPlayer->uid = $user->uid) {
+                        return;
+                    } else {
+                        $correspondingPlayer->uid = $user->uid;
+                        $correspondingPlayer->save();
+                    }
+                } else {
+                    // Add a new player
+                    MyUtils::getUniquePlayer($user);
+                }
+
             }
+
             return;
         }
 
@@ -65,9 +79,9 @@ class ForumSynchronizer extends BaseSynchronizer
         if (app('db.target')->has('email', $user->email)) {
             // 根据「重复处理」选择更新皮肤站/目标数据库中的用户名
             if (option('da_duplicated_prefer') == 'skin') {
-                $this->updateTargetUsername($user->username);
+                $this->updateTargetUsername($user, $user->username);
             } else {
-                $this->updateSelfUsername(MyUtils::getUsernameFromTargetByEmail($user->email));
+                $this->updateSelfUsername($user, MyUtils::getUsernameFromTargetByEmail($user->email));
             }
             return;
         }
