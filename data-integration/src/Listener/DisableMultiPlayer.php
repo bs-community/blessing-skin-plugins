@@ -39,16 +39,21 @@ class DisableMultiPlayer
             // Events\UserTryToLogin::class
         ], 'DataIntegration\Controllers\AuthController@determineUniqueUsername');
 
+        // Hijack views
         View::alias('DataIntegration::register', 'auth.register');
 
-        Hook::addRoute(function($router) {
-            $router->any('/user/player', function() {
-                $player = MyUtils::getUniquePlayer(app('user.current'));
+        // Delete menu item links to of /user/player
+        config(['menu.user' => collect(config('menu.user'))->reject(function ($item) {
+            return $item['link'] == 'user/player';
+        })->all()]);
 
-                return view('DataIntegration::player')->with('player', $player)->with('user', app('user.current'));
-            })->middleware(['web', 'auth']);
-
-            $router->post('/auth/register', 'DataIntegration\Controllers\AuthController@handleRegister')->middleware(['web']);
+        Hook::addRoute(function ($router) {
+            $router->any('/user', 'DataIntegration\Controllers\UserController@index')
+                ->middleware(['web', 'auth']);
+            $router->any('/user/closet', 'DataIntegration\Controllers\UserController@closet')
+                ->middleware(['web', 'auth']);
+            $router->post('/auth/register', 'DataIntegration\Controllers\AuthController@handleRegister')
+                ->middleware(['web']);
         });
     }
 }
