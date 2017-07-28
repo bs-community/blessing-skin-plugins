@@ -1,0 +1,7 @@
+{
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-zip": "^4.0.0",
+    "merge-stream": "^1.0.1"
+  }
+}

@@ -19,12 +19,16 @@ const distPath    = './dist/';
 
 function getFolders(dir) {
     return fs.readdirSync(dir).filter((file) => {
-        return file != ".git" && file != "dist" && fs.statSync(path.join(dir, file)).isDirectory();
+        return file != ".git" &&
+               file != "dist" &&
+               file != "node_modules" &&
+               fs.statSync(path.join(dir, file)).isDirectory();
     });
 }
 
 // release
 gulp.task('release', () => {
+    del(['dist']);
 
     let folders = getFolders(pluginsPath);
 
