@@ -1,0 +1,9 @@
+{
+  "name": "yggdrasil-api",
+  "version": "1.0",
+  "title": "Yggdrasil API",
+  "description": "为皮肤站添加 Yggdrasil API 支持，可配合 authlib-agent 等登录系统使用。强烈建议使用 HTTPS，因为 Yggdrasil API 的密码为明文传输。",
+  "author": "printempw",
+  "url": "https://blessing.studio/",
+  "namespace": "Yggdrasil"
+}
