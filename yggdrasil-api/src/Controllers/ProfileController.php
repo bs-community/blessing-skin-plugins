@@ -2,6 +2,7 @@
 
 namespace Yggdrasil\Controllers;
 
+use Log;
 use App\Models\Player;
 use Yggdrasil\Utils\UUID;
 use Illuminate\Http\Request;

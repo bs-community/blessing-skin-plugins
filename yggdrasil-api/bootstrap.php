@@ -19,6 +19,10 @@ return function (Dispatcher $events) {
         });
     }
 
+    Log::info('============================================================');
+    Log::info(app('request')->method(), [app('request')->path()]);
+    Log::info('============================================================');
+
     app()->bind(YggdrasilServiceInterface::class, BlessingYggdrasilService::class);
 
     Hook::addRoute(function ($router) {

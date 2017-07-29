@@ -16,6 +16,8 @@ $router->post('profiles', 'ProfileController@searchProfile');
 $router->get('profiles/minecraft/{uuid}', 'ProfileController@getProfileFromUuid');
 $router->get('username2profile/{username}', 'ProfileController@getProfileFromName');
 $router->post('profilerepo', 'ProfileController@searchProfile');
+$router->get('hasJoined', 'ServerController@hasJoinedServer');
+$router->get('hasjoinserver', 'ServerController@hasJoinedServer');
 
 $router->group([
     'middleware' => ['Yggdrasil\Middleware\CheckContentType'],
@@ -29,9 +31,7 @@ $router->group([
     $router->post('signout', 'AuthController@signout');
 
     $router->post('join', 'ServerController@joinServer');
-    $router->get('hasJoined', 'ServerController@hasJoinedServer');
 
     // 下面几个路由是为了配合 authlib-agent 的路由规则
     $router->post('joinserver', 'ServerController@joinServer');
-    $router->get('hasjoinserver', 'ServerController@hasJoinedServer');
 });
