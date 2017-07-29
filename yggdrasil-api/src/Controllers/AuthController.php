@@ -85,14 +85,17 @@ class AuthController extends Controller
             $token->setAccessToken(UUID::generate()->clearDashes());
 
             $identification = $token->getOwner();
+            $user = app('users')->get($identification, 'email');
 
-            Cache::put("I$identification", serialize($token), YGG_TOKEN_EXPIRE / 60);
-            Cache::put("C$clientToken", serialize($token), YGG_TOKEN_EXPIRE / 60);
+            if ($user) {
+                Cache::put("I$identification", serialize($token), YGG_TOKEN_EXPIRE / 60);
+                Cache::put("C$clientToken", serialize($token), YGG_TOKEN_EXPIRE / 60);
 
-            return $this->createAuthenticationResponse($token, $user);
-        } else {
-            throw new ForbiddenOperationException('Invalid access token');
+                return $this->createAuthenticationResponse($token, $user);
+            }
         }
+
+        throw new ForbiddenOperationException('Invalid access token');
     }
 
     protected function createAuthenticationResponse(Token $token, User $user)
