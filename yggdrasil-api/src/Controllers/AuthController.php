@@ -4,6 +4,7 @@ namespace Yggdrasil\Controllers;
 
 use Log;
 use Cache;
+use App\Models\User;
 use Yggdrasil\Utils\UUID;
 use Yggdrasil\Models\Token;
 use Illuminate\Http\Request;
@@ -47,24 +48,12 @@ class AuthController extends Controller
             throw new ForbiddenOperationException('Invalid credentials. Invalid username or password.');
         }
 
-        $availableProfiles = [];
-
-        foreach ($user->players()->get() as $player) {
-            $uuid = Profile::getUuidFromName($player->player_name);
-
-            $availableProfiles[] = [
-                'id' => $uuid,
-                'name' => $player->player_name
-            ];
-        }
-
         if (! $clientToken) {
             $clientToken = UUID::generate()->string;
         }
 
         // Remove dashes
         $clientToken = UUID::format($clientToken);
-
         $accessToken = UUID::generate()->clearDashes();
 
         $token = new Token($clientToken, $accessToken);
@@ -75,24 +64,7 @@ class AuthController extends Controller
         Cache::put("I$identification", serialize($token), YGG_TOKEN_EXPIRE / 60);
         Cache::put("C$clientToken", serialize($token), YGG_TOKEN_EXPIRE / 60);
 
-        $result = [
-            'accessToken' => UUID::import($token->getAccessToken())->string,
-            'clientToken' => UUID::import($token->getClientToken())->string,
-            'availableProfiles' => $availableProfiles
-        ];
-
-        if (! empty($availableProfiles)) {
-            // $result['selectedProfile'] = $availableProfiles[0];
-
-            // if ($request->get('requestUser')) {
-            //     $result['user'] = [
-            //         'id' => $availableProfiles[0]['id'],
-            //         'properties' => []
-            //     ];
-            // }
-        }
-
-        return json($result);
+        return $this->createAuthenticationResponse($token, $user);
     }
 
     public function refresh(Request $request)
@@ -117,67 +89,44 @@ class AuthController extends Controller
             Cache::put("I$identification", serialize($token), YGG_TOKEN_EXPIRE / 60);
             Cache::put("C$clientToken", serialize($token), YGG_TOKEN_EXPIRE / 60);
 
-            $result = [
-                'accessToken' => UUID::import($token->getAccessToken())->string,
-                'clientToken' => UUID::import($token->getClientToken())->string,
-                // 'selectedProfile' => [
-                //     'id' => $uuid,
-                //     'name' => Profile::createFromUuid($uuid)->getName()
-                // ]
-            ];
-
-            if ($request->get('requestUser')) {
-
-                $user = app('users')->get($identification, 'email');
-
-                if (! $user) {
-                    throw new NotFoundException('No such user');
-                }
-
-                $availableProfiles = [];
-
-                foreach ($user->players()->get() as $player) {
-                    $uuid = Profile::getUuidFromName($player->player_name);
-
-                    $availableProfiles[] = [
-                        'id' => $uuid,
-                        'name' => $player->player_name
-                    ];
-                }
-
-                $result['availableProfiles'] = $availableProfiles;
-                //
-                // $selectedProfile = $availableProfiles[0];
-                //
-                // $result['selectedProfile'] = $selectedProfile;
-                //
-                // $textures = [
-                //     'timestamp' => round(microtime(true) * 1000),
-                //     'profileId' => $selectedProfile['id'],
-                //     'profileName' => $selectedProfile['name'],
-                //     'textures' => []
-                // ];
-                //
-                // $textures['textures']['SKIN'] = [
-                //     'url' => url("textures/3d82f454ceeb30f2546283e08ab060a45d450dc6042c9077f638f10ca51205d4")
-                // ];
-                //
-                // $result['user'] = [
-                //     'id' => $selectedProfile['id'],
-                //     'properties' => [
-                //         [
-                //             'name' => 'textures',
-                //             'value' => base64_encode(json_encode($textures)),
-                //             'metadata' => ['model' => 'slim']
-                //         ]
-                //     ]
-                // ];
-            }
-
-            return json($result);
+            return $this->createAuthenticationResponse($token, $user);
         } else {
             throw new ForbiddenOperationException('Invalid access token');
         }
+    }
+
+    protected function createAuthenticationResponse(Token $token, User $user)
+    {
+        $availableProfiles = [];
+
+        foreach ($user->players()->get() as $player) {
+            $uuid = Profile::getUuidFromName($player->player_name);
+
+            $availableProfiles[] = [
+                'id' => $uuid,
+                'name' => $player->player_name
+            ];
+        }
+
+        $result = [
+            'accessToken' => UUID::import($token->getAccessToken())->string,
+            'clientToken' => UUID::import($token->getClientToken())->string,
+            'availableProfiles' => $availableProfiles
+        ];
+
+        if (! empty($availableProfiles) && count($availableProfiles) == 1) {
+
+            $result['selectedProfile'] = $availableProfiles[0];
+
+            if (app('request')->get('requestUser')) {
+                $result['user'] = [
+                    'id' => $result['selectedProfile']['id'],
+                    'properties' => []
+                ];
+            }
+        }
+
+        return json($result);
     }
 
     public function validate(Request $request)
