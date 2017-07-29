@@ -2,6 +2,7 @@
 
 namespace Yggdrasil\Controllers;
 
+use Log;
 use Cache;
 use Yggdrasil\Utils\UUID;
 use Yggdrasil\Models\Token;
@@ -15,35 +16,83 @@ use Yggdrasil\Service\YggdrasilServiceInterface as Yggdrasil;
 
 class AuthController extends Controller
 {
+    public function __construct(Request $request)
+    {
+        Log::info('Recieved request', [$request->path(), $request->json()->all()]);
+    }
+
     public function authenticate(Request $request, Yggdrasil $ygg)
     {
-        $username = $request->get('username');
+        /**
+         * 注意，新版账户验证中 username 字段填的是邮箱，
+         * 只有旧版的用户填的才是用户名（legacy = true）
+         */
+        $identification = $request->get('username');
         $password = $request->get('password');
         $clientToken = $request->get('clientToken');
 
-        if (is_null($username) || is_null($password)) {
+        if (is_null($identification) || is_null($password)) {
             throw new IllegalArgumentException('Credentials is null');
         }
 
-        $token = $ygg->authenticate($username, $password, $clientToken);
+        // $token = $ygg->authenticate($username, $password, $clientToken);
 
-        $uuid = $token->getOwnerUuid();
+        $user = app('users')->get($identification, 'email');
 
-        $selectedProfile = [
-            'id' => $uuid,
-            'name' => $username
+        if (! $user) {
+            throw new NotFoundException('No such user');
+        }
+
+        if (! $user->verifyPassword($password)) {
+            throw new ForbiddenOperationException('Invalid credentials. Invalid username or password.');
+        }
+
+        $availableProfiles = [];
+
+        foreach ($user->players()->get() as $player) {
+            $uuid = Profile::getUuidFromName($player->player_name);
+
+            $availableProfiles[] = [
+                'id' => $uuid,
+                'name' => $player->player_name
+            ];
+        }
+
+        if (! $clientToken) {
+            $clientToken = UUID::generate()->string;
+        }
+
+        // Remove dashes
+        $clientToken = UUID::format($clientToken);
+
+        $accessToken = UUID::generate()->clearDashes();
+
+        $token = new Token($clientToken, $accessToken);
+        $token->setOwner($identification);
+
+        Log::info('New token generated and stored', [$token->serialize()]);
+
+        Cache::put("I$identification", serialize($token), YGG_TOKEN_EXPIRE / 60);
+        Cache::put("C$clientToken", serialize($token), YGG_TOKEN_EXPIRE / 60);
+
+        $result = [
+            'accessToken' => UUID::import($token->getAccessToken())->string,
+            'clientToken' => UUID::import($token->getClientToken())->string,
+            'availableProfiles' => $availableProfiles
         ];
 
-        return json([
-            'accessToken' => $token->getAccessToken(),
-            'clientToken' => $token->getClientToken(),
-            'availableProfiles' => [$selectedProfile],
-            'selectedProfile' => $selectedProfile,
-            'user' => [
-                'id' => $uuid,
-                'properties' => []
-            ]
-        ]);
+        if (! empty($availableProfiles)) {
+            // $result['selectedProfile'] = $availableProfiles[0];
+
+            // if ($request->get('requestUser')) {
+            //     $result['user'] = [
+            //         'id' => $availableProfiles[0]['id'],
+            //         'properties' => []
+            //     ];
+            // }
+        }
+
+        return json($result);
     }
 
     public function refresh(Request $request)
@@ -57,29 +106,72 @@ class AuthController extends Controller
             throw new ForbiddenOperationException('Invalid client token');
         }
 
+        Log::info("Try to refresh with access token [$accessToken], expected [".$token->getAccessToken()."]");
+
         if ($accessToken === $token->getAccessToken()) {
             // Generate new access token
             $token->setAccessToken(UUID::generate()->clearDashes());
 
-            $uuid = $token->getOwnerUuid();
+            $identification = $token->getOwner();
 
-            Cache::put("U$uuid", serialize($token), YGG_TOKEN_EXPIRE / 60);
+            Cache::put("I$identification", serialize($token), YGG_TOKEN_EXPIRE / 60);
             Cache::put("C$clientToken", serialize($token), YGG_TOKEN_EXPIRE / 60);
 
             $result = [
-                'accessToken' => $token->getAccessToken(),
-                'clientToken' => $token->getClientToken(),
-                'selectedProfile' => [
-                    'id' => $uuid,
-                    'name' => Profile::createFromUuid($uuid)->getName()
-                ]
+                'accessToken' => UUID::import($token->getAccessToken())->string,
+                'clientToken' => UUID::import($token->getClientToken())->string,
+                // 'selectedProfile' => [
+                //     'id' => $uuid,
+                //     'name' => Profile::createFromUuid($uuid)->getName()
+                // ]
             ];
 
             if ($request->get('requestUser')) {
-                $result['user'] = [
-                    'id' => $uuid,
-                    'properties' => []
-                ];
+
+                $user = app('users')->get($identification, 'email');
+
+                if (! $user) {
+                    throw new NotFoundException('No such user');
+                }
+
+                $availableProfiles = [];
+
+                foreach ($user->players()->get() as $player) {
+                    $uuid = Profile::getUuidFromName($player->player_name);
+
+                    $availableProfiles[] = [
+                        'id' => $uuid,
+                        'name' => $player->player_name
+                    ];
+                }
+
+                $result['availableProfiles'] = $availableProfiles;
+                //
+                // $selectedProfile = $availableProfiles[0];
+                //
+                // $result['selectedProfile'] = $selectedProfile;
+                //
+                // $textures = [
+                //     'timestamp' => round(microtime(true) * 1000),
+                //     'profileId' => $selectedProfile['id'],
+                //     'profileName' => $selectedProfile['name'],
+                //     'textures' => []
+                // ];
+                //
+                // $textures['textures']['SKIN'] = [
+                //     'url' => url("textures/3d82f454ceeb30f2546283e08ab060a45d450dc6042c9077f638f10ca51205d4")
+                // ];
+                //
+                // $result['user'] = [
+                //     'id' => $selectedProfile['id'],
+                //     'properties' => [
+                //         [
+                //             'name' => 'textures',
+                //             'value' => base64_encode(json_encode($textures)),
+                //             'metadata' => ['model' => 'slim']
+                //         ]
+                //     ]
+                // ];
             }
 
             return json($result);
@@ -101,7 +193,7 @@ class AuthController extends Controller
             }
         }
 
-        throw new ForbiddenOperationException('Invalid token');
+        throw new ForbiddenOperationException('Invalid client token');
     }
 
     public function signout(Request $request)
@@ -138,7 +230,7 @@ class AuthController extends Controller
 
         if ($cache = Cache::get("C$clientToken")) {
             $token = unserialize($cache);
-            $uuid = $token->getOwnerUuid();
+            $uuid = $token->getOwner();
 
             if ($accessToken === $token->getAccessToken()) {
                 Cache::forget("U$uuid");

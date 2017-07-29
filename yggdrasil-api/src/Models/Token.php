@@ -9,7 +9,7 @@ use Yggdrasil\Exceptions\NotFoundException;
 
 class Token
 {
-    protected $ownerUuid;
+    protected $owner;
 
     protected $clientToken;
 
@@ -41,13 +41,22 @@ class Token
         return ($this->accessToken = $token);
     }
 
-    public function getOwnerUuid()
+    public function getOwner()
     {
-        return $this->ownerUuid;
+        return $this->owner;
     }
 
-    public function setOwnerUuid($uuid)
+    public function setOwner($uuid)
     {
-        return ($this->ownerUuid = $uuid);
+        return ($this->owner = $uuid);
+    }
+
+    public function serialize()
+    {
+        return [
+            'clientToken' => $this->clientToken,
+            'accessToken' => $this->accessToken,
+            'owner' => $this->owner
+        ];
     }
 }

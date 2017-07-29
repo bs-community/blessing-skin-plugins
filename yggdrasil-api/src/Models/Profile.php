@@ -110,6 +110,10 @@ class Profile
             $textures['textures']['SKIN'] = [
                 'url' => url("textures/{$this->skin}")
             ];
+
+            if ($this->model == "slim") {
+                $textures['textures']['SKIN']['metadata'] = ['model' => 'slim'];
+            }
         }
 
         if ($this->cape != "") {
@@ -129,7 +133,7 @@ class Profile
             'properties' => [
                 [
                     'name' => 'textures',
-                    'value' => base64_encode(json_encode($textures))
+                    'value' => base64_encode(json_encode($textures, JSON_UNESCAPED_SLASHES))
                 ]
             ]
         ];
@@ -138,11 +142,7 @@ class Profile
             $result['properties'][0]['signature'] = $signature;
         }
 
-        if ($this->model == "slim") {
-            $result['properties'][0]['metadata'] = ['model' => 'slim'];
-        }
-
-        return json_encode($result);
+        return json_encode($result, JSON_UNESCAPED_SLASHES);
     }
 
     public function __toString()
