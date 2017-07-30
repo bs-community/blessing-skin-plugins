@@ -1,0 +1,9 @@
+{
+  "name": "report-texture",
+  "version": "1.0",
+  "title": "举报材质",
+  "description": "用户可以举报皮肤库中的公开材质，管理员可在后台收到通知，并选择处理方式。",
+  "author": "printempw",
+  "url": "https://blessing.studio/",
+  "namespace": "Blessing\\Report"
+}
