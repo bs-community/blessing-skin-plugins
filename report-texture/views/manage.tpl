@@ -44,13 +44,16 @@
                                 <td>
                                     {{ report_uid_to_nickname($report->uploader) }}
                                     (UID: {{ $report->uploader }})
-                                    <a href="{{ url('http://skin.dev/skinlib?filter=skin&uploader='.$report->uploader) }}">
+                                    <a href="{{ url('admin/users?uid='.$report->uploader) }}">
                                         <i class="fa fa-share-square-o" aria-hidden="true"></i>
                                     </a>
                                 </td>
                                 <td>
                                     {{ report_uid_to_nickname($report->reporter) }}
                                     (UID: {{ $report->reporter }})
+                                    <a href="{{ url('admin/users?uid='.$report->reporter) }}">
+                                        <i class="fa fa-share-square-o" aria-hidden="true"></i>
+                                    </a>
                                 </td>
                                 <td>{{ $report->reason }}</td>
                                 <td id="status">{{ report_status($report->status) }}</td>
