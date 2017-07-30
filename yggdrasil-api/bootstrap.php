@@ -19,9 +19,10 @@ return function (Dispatcher $events) {
         });
     }
 
-    Log::info('============================================================');
-    Log::info(app('request')->method(), [app('request')->path()]);
-    Log::info('============================================================');
+    if (app('request')->is('api/yggdrasil/*')) {
+        Log::info('============================================================');
+        Log::info(app('request')->method(), [app('request')->path()]);
+    }
 
     app()->bind(YggdrasilServiceInterface::class, BlessingYggdrasilService::class);
 
