@@ -6,6 +6,7 @@ use DB;
 use App\Models\Player;
 use Yggdrasil\Utils\UUID;
 use Yggdrasil\Exceptions\NotFoundException;
+use Yggdrasil\Exceptions\IllegalArgumentException;
 
 class Profile
 {
@@ -92,19 +93,39 @@ class Profile
         return ($this->cape = $cape);
     }
 
-    public function sign()
+    public function sign($data, $key)
     {
-        return 'signature';
+        openssl_sign($data, $sign, $key);
+        openssl_free_key($key);
+
+        return $sign;
     }
 
     public function serialize($unsigned = true)
     {
         $textures = [
             'timestamp' => round(microtime(true) * 1000),
-            'profileId' => $this->getUuidWithoutDashes(),
+            'profileId' => UUID::import($this->uuid)->string,
             'profileName' => $this->name,
+            'isPublic' => true,
             'textures' => []
         ];
+
+        $privateKeyPath = plugin('yggdrasil-api')->getPath().'/key.pem';
+
+        if (file_exists($privateKeyPath)) {
+            $unsigned = false;
+
+            $privateKeyContent = file_get_contents($privateKeyPath);
+
+            $key = openssl_pkey_get_private($privateKeyContent);
+
+            if (! $key) {
+                throw new IllegalArgumentException('无效的 RSA 公钥', 1);
+            }
+
+            $textures['signatureRequired'] = true;
+        }
 
         if ($this->skin != "") {
             $textures['textures']['SKIN'] = [
@@ -122,24 +143,23 @@ class Profile
             ];
         }
 
-        if (! $unsigned) {
-            $textures['signatureRequired'] = true;
-            $signature = $this->sign($textures);
-        }
-
         $result = [
             'id' => $this->getUuidWithoutDashes(),
             'name' => $this->name,
             'properties' => [
                 [
                     'name' => 'textures',
-                    'value' => base64_encode(json_encode($textures, JSON_UNESCAPED_SLASHES))
+                    'value' => base64_encode(
+                        json_encode($textures, JSON_UNESCAPED_SLASHES | JSON_FORCE_OBJECT)
+                    )
                 ]
             ]
         ];
 
-        if (isset($signature)) {
-            $result['properties'][0]['signature'] = $signature;
+        if (! $unsigned) {
+            $signature = $this->sign($result['properties'][0]['value'], $key);
+
+            $result['properties'][0]['signature'] = base64_encode($signature);
         }
 
         return json_encode($result, JSON_UNESCAPED_SLASHES);
