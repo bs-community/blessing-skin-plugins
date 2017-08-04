@@ -96,13 +96,18 @@ class Profile
     public function sign($data, $key)
     {
         openssl_sign($data, $sign, $key);
-        openssl_free_key($key);
 
         return $sign;
     }
 
     public function serialize($unsigned = true)
     {
+        $privateKeyPath = plugin('yggdrasil-api')->getPath().'/key.pem';
+
+        if (app('request')->get('unsigned') === 'false' || file_exists($privateKeyPath)) {
+            $unsigned = false;
+        }
+
         $textures = [
             'timestamp' => round(microtime(true) * 1000),
             'profileId' => UUID::import($this->uuid)->string,
@@ -111,20 +116,21 @@ class Profile
             'textures' => []
         ];
 
-        $privateKeyPath = plugin('yggdrasil-api')->getPath().'/key.pem';
+        if ($unsigned === false) {
+            // Load private key
+            if (file_exists($privateKeyPath)) {
+                $privateKeyContent = file_get_contents($privateKeyPath);
 
-        if (file_exists($privateKeyPath)) {
-            $unsigned = false;
+                $key = openssl_pkey_get_private($privateKeyContent);
 
-            $privateKeyContent = file_get_contents($privateKeyPath);
+                if (! $key) {
+                    throw new IllegalArgumentException('无效的 RSA 私钥');
+                }
 
-            $key = openssl_pkey_get_private($privateKeyContent);
-
-            if (! $key) {
-                throw new IllegalArgumentException('无效的 RSA 公钥', 1);
+                $textures['signatureRequired'] = true;
+            } else {
+                throw new IllegalArgumentException('RSA 私钥不存在');
             }
-
-            $textures['signatureRequired'] = true;
         }
 
         if ($this->skin != "") {
@@ -156,10 +162,16 @@ class Profile
             ]
         ];
 
-        if (! $unsigned) {
-            $signature = $this->sign($result['properties'][0]['value'], $key);
+        if ($unsigned === false) {
+            // Sign every properties
+            foreach ($result['properties'] as &$prop) {
+                $signature = $this->sign($prop['value'], $key);
 
-            $result['properties'][0]['signature'] = base64_encode($signature);
+                $prop['signature'] = base64_encode($signature);
+            }
+
+            unset($prop);
+            openssl_free_key($key);
         }
 
         return json_encode($result, JSON_UNESCAPED_SLASHES);
