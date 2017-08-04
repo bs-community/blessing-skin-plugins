@@ -17,7 +17,7 @@ POST /api/yggdrasil/profilerepo
 GET  /api/yggdrasil/username2profile/{username}
 ```
 
-编译 authlib-javaagent 时请将 `AGENT_API_ROOT` 修改为 `http://你的皮肤站地址.com/api/yggdrasil/`，并在材质白名单中加入你的皮肤站域名。
+编译 authlib-javaagent 时请将 `AGENT_API_ROOT` 修改为 `http://你的皮肤站地址.com/api/yggdrasil/`，并在材质白名单中加入你的皮肤站域名。如需在 Profile 中提供材质签名，请把 authlib-agent 生成密钥对时的 RSA 私钥 `key.pem` 复制到本插件根目录下（如果未找到该文件将会自动忽略签名）。目前看来，authlib-agent 在服务端未提供签名时会出现 [神秘的问题](https://github.com/to2mbn/authlib-agent/issues/16)。
 
 注意，「启动器」、「游戏」与「服务端」都必须加载 `authlib-javaagent`（否则会无法登录）。
 
