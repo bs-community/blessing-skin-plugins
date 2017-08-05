@@ -1,6 +1,6 @@
 {
   "name": "data-integration",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "title": "数据对接",
   "description": "将皮肤站登录插件或论坛程序对接，实现账户统一管理等功能。目前支持对接的程序有：Authme、CrazyLogin、Discuz 和 Phpwind。",
   "author": "printempw",
