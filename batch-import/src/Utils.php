@@ -90,4 +90,29 @@ class Utils
         return $tmp_dir;
     }
 
+    /**
+     * Recursively count files of specified directory
+     *
+     * @param  string $dir
+     * @param  $file_num
+     * @return int, total size in bytes
+     */
+    public static function getFileNum($dir, $file_num = 0)
+    {
+        $resource = opendir($dir);
+        while($filename = readdir($resource)) {
+            if ($filename != "." && $filename != "..") {
+                $path = "$dir/$filename";
+                if (is_dir($path)) {
+                    // recursion
+                    $file_num = self::getFileNum($path, $file_num);
+                } else {
+                    $file_num++;
+                }
+            }
+        }
+        closedir($resource);
+        return $file_num;
+    }
+
 }

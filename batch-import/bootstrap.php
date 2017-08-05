@@ -8,7 +8,6 @@
 
 use App\Services\Hook;
 use App\Models\Texture;
-use App\Services\Storage as MyStorage;
 use Blessing\BatchImport\Utils as MyUtils;
 use Illuminate\Contracts\Events\Dispatcher;
 
@@ -66,9 +65,12 @@ return function (Dispatcher $events) {
                                     $filename = mb_convert_encoding($filename, 'UTF-8', 'GBK');
                                 }
 
-                                $hash = MyStorage::hash($full_path);
+                                $hash = hash_file('sha256', $full_path);
                                 $new_path = storage_path("textures/$hash");
-                                MyStorage::rename($full_path, $new_path);
+
+                                if (false === rename($full_path, $new_path)) {
+                                    throw new \Exception("Failed to rename $full_path to $new_path.");
+                                }
 
                                 if (Texture::where('hash', $hash)->get()->isEmpty()) {
 
@@ -99,7 +101,7 @@ return function (Dispatcher $events) {
                     Log::info("[Batch Import] Importing done, imported $imported textures");
                     Log::info("=========================================================");
 
-                    MyStorage::removeDir($tmp_dir);
+                    File::deleteDirectory($tmp_dir);
 
                     return json(['imported' => $imported]);
 
@@ -114,7 +116,7 @@ return function (Dispatcher $events) {
                         return '缓存文件夹不存在，请重新执行导入操作';
                     }
 
-                    $remain = MyStorage::getFileNum(session('import-tmp-dir'));
+                    $remain = MyUtils::getFileNum(session('import-tmp-dir'));
 
                     $progress = ($total - $remain) / $total * 100;
 
