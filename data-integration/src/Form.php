@@ -20,12 +20,13 @@ class Form
 
         $forms['config'] = Option::form('config', '对接配置', function ($form) {
 
-            $form->select('da_adapter', '数据对接适配器')
-                    ->option('',        '不进行数据对接')
-                    ->option('Authme',  'Authme')
-                    ->option('Crazy',   'CrazyLogin')
-                    ->option('Discuz',  'Discuz')
-                    ->option('Phpwind', 'Phpwind');
+            $form->select('da_adapter',  '数据对接适配器')
+                    ->option('',         '不进行数据对接')
+                    ->option('Authme',   'Authme')
+                    ->option('Crazy',    'CrazyLogin')
+                    ->option('BeeLogin', 'BeeLogin')
+                    ->option('Discuz',   'Discuz')
+                    ->option('Phpwind',  'Phpwind');
 
             $form->text('da_columns[username]', '用户名字段');
             $form->text('da_columns[password]', '密码字段');
