@@ -1,10 +1,4 @@
 <?php
-/**
- * @Author: printempw
- * @Date:   2016-10-25 21:28:34
- * @Last Modified by:   printempw
- * @Last Modified time: 2017-01-17 22:20:52
- */
 
 use App\Services\Hook;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -12,7 +6,9 @@ use Illuminate\Contracts\Events\Dispatcher;
 return function (Dispatcher $events) {
     Hook::registerPluginTransScripts('config-generator');
 
-    Hook::addMenuItem('user', 3, [
+    $index = (plugin('data-integration') && plugin('data-integration')->isEnabled()) ? 2 : 3;
+
+    Hook::addMenuItem('user', $index, [
         'title' => 'Blessing\ConfigGenerator::config.generate-config',
         'link'  => 'user/config',
         'icon'  => 'fa-book'

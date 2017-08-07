@@ -28,7 +28,9 @@ return function (Dispatcher $events) {
 
     // Hook::registerPluginTransScripts('example-plugin');
 
-    Hook::addMenuItem('user', 3, [
+    $index = (plugin('data-integration') && plugin('data-integration')->isEnabled()) ? 2 : 3;
+
+    Hook::addMenuItem('user', $index, [
         'title' => '我的举报',
         'link'  => 'user/report',
         'icon'  => 'fa-flag'

@@ -1,6 +1,6 @@
 {
   "name": "config-generator",
-  "version": "1.2",
+  "version": "1.2.1",
   "title": "配置生成",
   "description": "添加自动生成皮肤 Mod 配置的页面。",
   "author": "printempw",
