@@ -1,6 +1,6 @@
 {
   "name": "insane-profile-cache",
-  "version": "1.0",
+  "version": "1.0.1",
   "title": "Profile 文件缓存",
   "description": "直接生成玩家 profile 的文件缓存，交给 Nginx 处理。每次玩家更新皮肤时会刷新缓存，慎用。",
   "author": "printempw",

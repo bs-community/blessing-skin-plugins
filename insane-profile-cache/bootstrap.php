@@ -4,6 +4,7 @@ use App\Models\Player;
 use App\Services\Hook;
 use App\Services\Storage;
 use Illuminate\Contracts\Events\Dispatcher;
+use InsaneProfileCache\Listener\DeleteFileCache;
 use InsaneProfileCache\Listener\UpdateFileCache;
 
 require __DIR__.'/src/common_functions.php';
@@ -25,6 +26,7 @@ return function (Dispatcher $events) {
     ]);
 
     $events->subscribe(UpdateFileCache::class);
+    $events->subscribe(DeleteFileCache::class);
 
     $events->listen('Illuminate\Console\Events\ArtisanStarting', function ($event) {
         $event->artisan->resolveCommands([
