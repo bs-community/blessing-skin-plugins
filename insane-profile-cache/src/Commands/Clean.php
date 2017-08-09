@@ -28,8 +28,7 @@ class Clean extends Command
     public function handle()
     {
         $this->info('Cleaning...');
-        // Delete all cache file first
-        array_map('unlink', glob(PROFILE_CACHE_PATH."/*"));
+        cleanProfileFileCache();
 
         $this->info('Cache file deleted.');
     }

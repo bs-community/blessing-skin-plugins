@@ -30,7 +30,7 @@ class Generate extends Command
     {
         $this->info('Cleaning...');
         // Delete all cache file first
-        array_map('unlink', glob(PROFILE_CACHE_PATH."/*"));
+        cleanProfileFileCache();
         $this->info('Expired cache deleted. Caculating...');
 
         $players = Player::all();

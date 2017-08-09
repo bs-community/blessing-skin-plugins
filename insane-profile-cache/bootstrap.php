@@ -10,8 +10,10 @@ require __DIR__.'/src/common_functions.php';
 
 define('PROFILE_CACHE_PATH', realpath(__DIR__.'/cache'));
 
-if (!PROFILE_CACHE_PATH || !is_writable(PROFILE_CACHE_PATH)) {
-    die("没有对文件缓存目录 ".PROFILE_CACHE_PATH." 的写入权限");
+foreach (['csl', 'usm'] as $apiType) {
+    if (!PROFILE_CACHE_PATH || !is_writable(PROFILE_CACHE_PATH."/$apiType")) {
+        die("没有对文件缓存目录 /cache/$apiType 的写入权限");
+    }
 }
 
 return function (Dispatcher $events) {
@@ -37,7 +39,7 @@ return function (Dispatcher $events) {
 
             if (isset($_GET['continue'])) {
                 // Delete all cache file first
-                array_map('unlink', glob(PROFILE_CACHE_PATH."/*"));
+                cleanProfileFileCache();
 
                 $indicator = 0;
 

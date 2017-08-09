@@ -1,3 +1,6 @@
 node_modules/*
 unofficial-plugins-market/*
-insane-profile-cache/cache/*
+insane-profile-cache/cache/csl/*
+insane-profile-cache/cache/usm/*
+!insane-profile-cache/cache/csl/.gitkeep
+!insane-profile-cache/cache/usm/.gitkeep
