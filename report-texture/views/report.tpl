@@ -42,7 +42,7 @@
                                 </td>
                                 <td>
                                     {{ report_uid_to_nickname($report->uploader) }}
-                                    <a href="{{ url('http://skin.dev/skinlib?filter=skin&uploader='.$report->uploader) }}">
+                                    <a href="{{ url('skinlib?filter=skin&uploader='.$report->uploader) }}">
                                         <i class="fa fa-share-square-o" aria-hidden="true"></i>
                                     </a>
                                 </td>
