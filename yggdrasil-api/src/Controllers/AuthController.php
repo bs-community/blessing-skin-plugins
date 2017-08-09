@@ -48,6 +48,10 @@ class AuthController extends Controller
             throw new ForbiddenOperationException('Invalid credentials. Invalid username or password.');
         }
 
+        if ($user->getPermission() == User::BANNED) {
+            throw new ForbiddenOperationException('You have been banned on this site.');
+        }
+
         if (! $clientToken) {
             $clientToken = UUID::generate()->string;
         }
