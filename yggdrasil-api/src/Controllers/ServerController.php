@@ -3,9 +3,9 @@
 namespace Yggdrasil\Controllers;
 
 use DB;
-use Log;
 use Cache;
 use App\Models\Player;
+use Yggdrasil\Utils\Log;
 use Yggdrasil\Utils\UUID;
 use Illuminate\Http\Request;
 use Yggdrasil\Models\Profile;
