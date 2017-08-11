@@ -2,9 +2,9 @@
 
 namespace Yggdrasil\Controllers;
 
-use Log;
 use Cache;
 use App\Models\User;
+use Yggdrasil\Utils\Log;
 use Yggdrasil\Utils\UUID;
 use Yggdrasil\Models\Token;
 use Illuminate\Http\Request;
@@ -121,11 +121,7 @@ class AuthController extends Controller
             'availableProfiles' => $availableProfiles
         ];
 
-        if (empty($availableProfiles)) {
-            throw new ForbiddenOperationException('你还没有创建任何角色哦');
-        }
-
-        if (count($availableProfiles) == 1) {
+        if (!empty($availableProfiles) && count($availableProfiles) == 1) {
 
             $result['selectedProfile'] = $availableProfiles[0];
 

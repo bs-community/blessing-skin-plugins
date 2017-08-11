@@ -1,6 +1,7 @@
 <?php
 
 use App\Services\Hook;
+use Yggdrasil\Utils\Log as MyLog;
 use Yggdrasil\Service\BlessingYggdrasilService;
 use Yggdrasil\Service\YggdrasilServiceInterface;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -20,8 +21,8 @@ return function (Dispatcher $events) {
     }
 
     if (app('request')->is('api/yggdrasil/*')) {
-        Log::info('============================================================');
-        Log::info(app('request')->method(), [app('request')->path()]);
+        MyLog::info('============================================================');
+        MyLog::info(app('request')->method(), [app('request')->path()]);
     }
 
     app()->bind(YggdrasilServiceInterface::class, BlessingYggdrasilService::class);
