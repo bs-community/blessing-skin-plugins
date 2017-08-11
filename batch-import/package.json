@@ -1,6 +1,6 @@
 {
   "name": "batch-import",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "title": "批量导入",
   "description": "从本地文件批量导入材质至皮肤库",
   "author": "printempw",
