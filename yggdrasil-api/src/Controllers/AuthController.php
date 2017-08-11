@@ -33,7 +33,7 @@ class AuthController extends Controller
         $clientToken = $request->get('clientToken');
 
         if (is_null($identification) || is_null($password)) {
-            throw new IllegalArgumentException('Credentials is null');
+            throw new IllegalArgumentException('邮箱或者密码没填哦');
         }
 
         // $token = $ygg->authenticate($username, $password, $clientToken);
@@ -41,15 +41,15 @@ class AuthController extends Controller
         $user = app('users')->get($identification, 'email');
 
         if (! $user) {
-            throw new NotFoundException('No such user');
+            throw new NotFoundException('用户不存在');
         }
 
         if (! $user->verifyPassword($password)) {
-            throw new ForbiddenOperationException('Invalid credentials. Invalid username or password.');
+            throw new ForbiddenOperationException('输入的邮箱与密码不匹配');
         }
 
         if ($user->getPermission() == User::BANNED) {
-            throw new ForbiddenOperationException('You have been banned on this site.');
+            throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
         }
 
         if (! $clientToken) {
@@ -79,7 +79,7 @@ class AuthController extends Controller
         if ($cache = Cache::get("C$clientToken")) {
             $token = unserialize($cache);
         } else {
-            throw new ForbiddenOperationException('Invalid client token');
+            throw new ForbiddenOperationException('无效的 Client Token，请重新登录');
         }
 
         Log::info("Try to refresh with access token [$accessToken], expected [".$token->getAccessToken()."]");
@@ -99,7 +99,7 @@ class AuthController extends Controller
             }
         }
 
-        throw new ForbiddenOperationException('Invalid access token');
+        throw new ForbiddenOperationException('无效的 Access Token，请重新使用密码登录');
     }
 
     protected function createAuthenticationResponse(Token $token, User $user)
@@ -121,7 +121,11 @@ class AuthController extends Controller
             'availableProfiles' => $availableProfiles
         ];
 
-        if (! empty($availableProfiles) && count($availableProfiles) == 1) {
+        if (empty($availableProfiles)) {
+            throw new ForbiddenOperationException('你还没有创建任何角色哦');
+        }
+
+        if (count($availableProfiles) == 1) {
 
             $result['selectedProfile'] = $availableProfiles[0];
 
@@ -149,7 +153,7 @@ class AuthController extends Controller
             }
         }
 
-        throw new ForbiddenOperationException('Invalid client token');
+        throw new ForbiddenOperationException('无效的 Client Token，请重新登录');
     }
 
     public function signout(Request $request)
@@ -160,7 +164,7 @@ class AuthController extends Controller
         $user = app('users')->get($username, 'username');
 
         if (! $user) {
-            throw new NotFoundException('No such user');
+            throw new NotFoundException('用户不存在');
         }
 
         if ($user->verifyPassword($password)) {
@@ -175,7 +179,7 @@ class AuthController extends Controller
                 return response('');
             }
         } else {
-            throw new ForbiddenOperationException('Invalid credentials. Invalid username or password.');
+            throw new ForbiddenOperationException('输入的邮箱与密码不匹配');
         }
     }
 
@@ -194,10 +198,10 @@ class AuthController extends Controller
 
                 return response('');
             } else {
-                throw new ForbiddenOperationException('Invalid access token');
+                throw new ForbiddenOperationException('无效的 Access Token，请重新登录');
             }
         } else {
-            throw new ForbiddenOperationException('Invalid client token');
+            throw new ForbiddenOperationException('无效的 Client Token，请重新登录');
         }
 
     }
