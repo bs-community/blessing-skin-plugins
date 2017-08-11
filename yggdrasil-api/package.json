@@ -1,6 +1,6 @@
 {
   "name": "yggdrasil-api",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "title": "Yggdrasil API",
   "description": "为皮肤站添加 Yggdrasil API 支持，可配合 authlib-agent 等登录系统使用。强烈建议使用 HTTPS，因为 Yggdrasil API 的密码为明文传输。",
   "author": "printempw",
