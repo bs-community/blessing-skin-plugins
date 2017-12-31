@@ -4,6 +4,7 @@ namespace Yggdrasil\Controllers;
 
 use Cache;
 use App\Models\User;
+use App\Models\Player;
 use Yggdrasil\Utils\Log;
 use Yggdrasil\Utils\UUID;
 use Yggdrasil\Models\Token;
@@ -22,6 +23,27 @@ class AuthController extends Controller
         Log::info('Recieved request', [$request->path(), $request->json()->all()]);
     }
 
+    public function hello(Request $request)
+    {
+        // Default skin domain whitelist:
+        // - Specified by option 'site_url'
+        // - Extract host from current URL
+        $skinDomains = array_map('trim', array_unique(array_merge(explode(',', option('ygg_skin_domain')), [
+            parse_url(option('site_url'), PHP_URL_HOST),
+            $request->getHost()
+        ])));
+
+        return json([
+            'meta' => [
+                'serverName' => option('site_name'),
+                'implementationName' => 'Yggdrasil API for Blessing Skin',
+                'implementationVersion' => plugin('yggdrasil-api')['version']
+            ],
+            'skinDomains' => $skinDomains,
+            'signaturePublickey' => str_replace("\r", '', option('ygg_public_key'))
+        ]);
+    }
+
     public function authenticate(Request $request, Yggdrasil $ygg)
     {
         /**
@@ -36,12 +58,10 @@ class AuthController extends Controller
             throw new IllegalArgumentException('邮箱或者密码没填哦');
         }
 
-        // $token = $ygg->authenticate($username, $password, $clientToken);
-
         $user = app('users')->get($identification, 'email');
 
         if (! $user) {
-            throw new NotFoundException('用户不存在');
+            throw new ForbiddenOperationException('用户不存在');
         }
 
         if (! $user->verifyPassword($password)) {
@@ -52,154 +72,138 @@ class AuthController extends Controller
             throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
         }
 
-        if (! $clientToken) {
-            $clientToken = UUID::generate()->string;
-        }
+        $token = $ygg->authenticate($identification, $password, $clientToken);
 
-        // Remove dashes
-        $clientToken = UUID::format($clientToken);
-        $accessToken = UUID::generate()->clearDashes();
-
-        $token = new Token($clientToken, $accessToken);
-        $token->setOwner($identification);
-
-        Log::info('New token generated and stored', [$token->serialize()]);
-
-        Cache::put("I$identification", serialize($token), YGG_TOKEN_EXPIRE / 60);
-        Cache::put("C$clientToken", serialize($token), YGG_TOKEN_EXPIRE / 60);
-
-        return $this->createAuthenticationResponse($token, $user);
-    }
-
-    public function refresh(Request $request)
-    {
-        $clientToken = UUID::format($request->get('clientToken'));
-        $accessToken = UUID::format($request->get('accessToken'));
-
-        if ($cache = Cache::get("C$clientToken")) {
-            $token = unserialize($cache);
-        } else {
-            throw new ForbiddenOperationException('无效的 Client Token，请重新登录');
-        }
-
-        Log::info("Try to refresh with access token [$accessToken], expected [".$token->getAccessToken()."]");
-
-        if ($accessToken === $token->getAccessToken()) {
-            // Generate new access token
-            $token->setAccessToken(UUID::generate()->clearDashes());
-
-            $identification = $token->getOwner();
-            $user = app('users')->get($identification, 'email');
-
-            if ($user) {
-                Cache::put("I$identification", serialize($token), YGG_TOKEN_EXPIRE / 60);
-                Cache::put("C$clientToken", serialize($token), YGG_TOKEN_EXPIRE / 60);
-
-                return $this->createAuthenticationResponse($token, $user);
-            }
-        }
-
-        throw new ForbiddenOperationException('无效的 Access Token，请重新使用密码登录');
-    }
-
-    protected function createAuthenticationResponse(Token $token, User $user)
-    {
-        $availableProfiles = [];
-
-        foreach ($user->players()->get() as $player) {
-            $uuid = Profile::getUuidFromName($player->player_name);
-
-            $availableProfiles[] = [
-                'id' => $uuid,
-                'name' => $player->player_name
-            ];
-        }
+        $availableProfiles = $this->getAvailableProfiles($user);
 
         $result = [
-            'accessToken' => UUID::import($token->getAccessToken())->string,
-            'clientToken' => UUID::import($token->getClientToken())->string,
+            'accessToken' => UUID::format($token->accessToken),
+            'clientToken' => $token->clientToken, // clientToken 原样返回
             'availableProfiles' => $availableProfiles
         ];
 
+        if (app('request')->get('requestUser')) {
+            $result['user'] = [
+                'id' => UUID::generate(5, $user->email, UUID::NS_DNS)->clearDashes(),
+                'properties' => []
+            ];
+        }
+
         if (!empty($availableProfiles) && count($availableProfiles) == 1) {
-
             $result['selectedProfile'] = $availableProfiles[0];
-
-            if (app('request')->get('requestUser')) {
-                $result['user'] = [
-                    'id' => $result['selectedProfile']['id'],
-                    'properties' => []
-                ];
-            }
         }
 
         return json($result);
     }
 
-    public function validate(Request $request)
+    public function refresh(Request $request, Yggdrasil $ygg)
     {
-        $clientToken = UUID::format($request->get('clientToken'));
+        // clientToken 原样返回
+        $clientToken = $request->get('clientToken');
         $accessToken = UUID::format($request->get('accessToken'));
 
-        if ($cache = Cache::get("C$clientToken")) {
-            $token = unserialize($cache);
-
-            if ($accessToken === $token->getAccessToken()) {
-                return response('')->setStatusCode(204);
-            }
-        }
-
-        throw new ForbiddenOperationException('无效的 Client Token，请重新登录');
-    }
-
-    public function signout(Request $request)
-    {
-        $username = $request->get('username');
-        $password = $request->get('password');
-
-        $user = app('users')->get($username, 'username');
+        // 先不刷新，拿到旧的 Token 实例先
+        $token = $ygg->retrieveToken($accessToken);
+        $user = app('users')->get($token->owner, 'email');
 
         if (! $user) {
-            throw new NotFoundException('用户不存在');
+            throw new ForbiddenOperationException('令牌绑定的用户不存在');
         }
 
-        if ($user->verifyPassword($password)) {
-            $uuid = Profile::getUuidFromName($username);
+        $availableProfiles = $this->getAvailableProfiles($user);
 
-            if ($cache = Cache::get("U$uuid")) {
-                $clientToken = unserialize($cache)->getClientToken();
+        $result = [
+            'accessToken' => UUID::format($token->accessToken),
+            'clientToken' => $token->clientToken, // clientToken 原样返回
+            'availableProfiles' => $availableProfiles
+        ];
 
-                Cache::forget("U$uuid");
-                Cache::forget("C$clientToken");
+        if (app('request')->get('requestUser')) {
+            $result['user'] = [
+                'id' => UUID::generate(5, $user->email, UUID::NS_DNS)->clearDashes(),
+                'properties' => []
+            ];
+        }
 
-                return response('');
+        // 当指定了 selectedProfile 时
+        if ($selected = $request->get('selectedProfile')) {
+            if (! Player::where('player_name', $selected['name'])->first()) {
+                throw new IllegalArgumentException('请求的角色不存在');
+            }
+
+            foreach ($availableProfiles as $profile) {
+                if ($profile['id'] == $selected['id']) {
+                    $result['selectedProfile'] = $profile;
+                }
+            }
+
+            if (! isset($result['selectedProfile'])) {
+                throw new ForbiddenOperationException('请求的角色不是你的');
             }
         } else {
-            throw new ForbiddenOperationException('输入的邮箱与密码不匹配');
+            if (!empty($availableProfiles) && count($availableProfiles) == 1) {
+                $result['selectedProfile'] = $availableProfiles[0];
+            }
         }
+
+        // 上面那一大票检测完了，最后再刷新令牌
+        $token = $ygg->refresh($clientToken, $accessToken);
+        $result['accessToken'] = UUID::format($token->accessToken);
+
+        return json($result);
     }
 
-    public function invalidate(Request $request)
+    protected function getAvailableProfiles(User $user)
+    {
+        $profiles = [];
+
+        foreach ($user->players()->get() as $player) {
+            $uuid = Profile::getUuidFromName($player->player_name);
+
+            $profiles[] = [
+                'id' => $uuid,
+                'name' => $player->player_name
+            ];
+        }
+
+        return $profiles;
+    }
+
+    public function validate(Request $request, Yggdrasil $ygg)
     {
         $clientToken = UUID::format($request->get('clientToken'));
         $accessToken = UUID::format($request->get('accessToken'));
 
-        if ($cache = Cache::get("C$clientToken")) {
-            $token = unserialize($cache);
-            $uuid = $token->getOwner();
-
-            if ($accessToken === $token->getAccessToken()) {
-                Cache::forget("U$uuid");
-                Cache::forget("C$clientToken");
-
-                return response('');
-            } else {
-                throw new ForbiddenOperationException('无效的 Access Token，请重新登录');
-            }
+        if ($ygg->validate($clientToken, $accessToken)) {
+            return response('')->setStatusCode(204);
         } else {
-            throw new ForbiddenOperationException('无效的 Client Token，请重新登录');
+            throw new ForbiddenOperationException('提供的 ClientToken 与 AccessToken 不匹配');
+        }
+    }
+
+    public function signout(Request $request, Yggdrasil $ygg)
+    {
+        $identification = $request->get('username');
+        $password = $request->get('password');
+
+        if (is_null($identification) || is_null($password)) {
+            throw new IllegalArgumentException('邮箱或者密码没填哦');
         }
 
+        $ygg->signout($identification, $password);
+
+        return response('')->setStatusCode(204);
+    }
+
+    public function invalidate(Request $request, Yggdrasil $ygg)
+    {
+        $clientToken = UUID::format($request->get('clientToken'));
+        $accessToken = UUID::format($request->get('accessToken'));
+
+        // 据说不用检查 clientToken 与 accessToken 是否匹配
+        $ygg->invalidate($accessToken);
+
+        return response('')->setStatusCode(204);
     }
 
 }

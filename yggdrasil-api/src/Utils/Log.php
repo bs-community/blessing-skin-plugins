@@ -19,7 +19,7 @@ class Log extends Facade
     public static function __callStatic($method, $args)
     {
         // only log when verbose log is enabled
-        if (YGG_VERBOSE_LOG) {
+        if (option('ygg_verbose_log')) {
             parent::__callStatic($method, $args);
         }
     }

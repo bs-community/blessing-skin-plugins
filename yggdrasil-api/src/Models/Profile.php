@@ -5,93 +5,16 @@ namespace Yggdrasil\Models;
 use DB;
 use App\Models\Player;
 use Yggdrasil\Utils\UUID;
-use Yggdrasil\Exceptions\NotFoundException;
 use Yggdrasil\Exceptions\IllegalArgumentException;
 
 class Profile
 {
-    protected $uuid = "";
-
-    protected $name = "";
-
-    protected $player = null;
-
-    protected $model = "default";
-
-    protected $skin = "";
-
-    protected $cape = "";
-
-    protected $signature = null;
-
-    public function getUuid()
-    {
-        return $this->uuid;
-    }
-
-    public function getUuidWithoutDashes()
-    {
-        return UUID::import($this->uuid)->clearDashes();
-    }
-
-    public function setUuid($uuid)
-    {
-        return ($this->uuid = $uuid);
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function setName($name)
-    {
-        return ($this->name = $name);
-    }
-
-    public function getModel()
-    {
-        return $this->model;
-    }
-
-    public function setModel($model)
-    {
-        if ($model != "default" && $model != "slim") {
-            throw new \InvalidArgumentException('The model must be one of "default" or "slim"', 1);
-        }
-
-        return ($this->model = $model);
-    }
-
-    public function getPlayer()
-    {
-        return $this->player;
-    }
-
-    public function setPlayer(Player $player)
-    {
-        return ($this->player = $player);
-    }
-
-    public function getSkin()
-    {
-        return $this->skin;
-    }
-
-    public function setSkin($skin)
-    {
-        return ($this->skin = $skin);
-    }
-
-    public function getCape()
-    {
-        return $this->cape;
-    }
-
-    public function setCape($cape)
-    {
-        return ($this->cape = $cape);
-    }
+    public $uuid;
+    public $name;
+    public $player;
+    public $model = "default";
+    public $skin;
+    public $cape;
 
     public function sign($data, $key)
     {
@@ -102,35 +25,25 @@ class Profile
 
     public function serialize($unsigned = true)
     {
-        $privateKeyPath = plugin('yggdrasil-api')->getPath().'/key.pem';
-
-        if (app('request')->get('unsigned') === 'false' || file_exists($privateKeyPath)) {
-            $unsigned = false;
-        }
+        $unsigned = request()->get('unsigned') === 'true';
 
         $textures = [
             'timestamp' => round(microtime(true) * 1000),
-            'profileId' => UUID::import($this->uuid)->string,
+            'profileId' => UUID::format($this->uuid),
             'profileName' => $this->name,
             'isPublic' => true,
             'textures' => []
         ];
 
+        // 检查 RSA 私钥
         if ($unsigned === false) {
-            // Load private key
-            if (file_exists($privateKeyPath)) {
-                $privateKeyContent = file_get_contents($privateKeyPath);
+            $key = openssl_pkey_get_private(option('ygg_private_key'));
 
-                $key = openssl_pkey_get_private($privateKeyContent);
-
-                if (! $key) {
-                    throw new IllegalArgumentException('无效的 RSA 私钥');
-                }
-
-                $textures['signatureRequired'] = true;
-            } else {
-                throw new IllegalArgumentException('RSA 私钥不存在');
+            if (! $key) {
+                throw new IllegalArgumentException('无效的 RSA 私钥，请访问插件配置页设置');
             }
+
+            $textures['signatureRequired'] = true;
         }
 
         if ($this->skin != "") {
@@ -150,7 +63,7 @@ class Profile
         }
 
         $result = [
-            'id' => $this->getUuidWithoutDashes(),
+            'id' => UUID::format($this->uuid),
             'name' => $this->name,
             'properties' => [
                 [
@@ -163,7 +76,7 @@ class Profile
         ];
 
         if ($unsigned === false) {
-            // Sign every properties
+            // 给每个 properties 签名
             foreach ($result['properties'] as &$prop) {
                 $signature = $this->sign($prop['value'], $key);
 
@@ -187,6 +100,7 @@ class Profile
         $result = DB::table('uuid')->where('name', $name)->first();
 
         if (! $result) {
+            // 分配新的 UUID
             $result = UUID::generate()->clearDashes();
             DB::table('uuid')->insert(['name' => $name, 'uuid' => $result]);
         } else {
@@ -200,29 +114,21 @@ class Profile
     {
         $result = DB::table('uuid')->where('uuid', $uuid)->first();
 
-        if (! $result) {
-            throw new NotFoundException('No such UUID.', 1);
+        if ($result && ($player = Player::where('player_name', $result->name)->first())) {
+            return static::createFromPlayer($player);
         }
-
-        $player = Player::where('player_name', $result->name)->first();
-
-        if (! $player) {
-            throw new NotFoundException('The player associated with this UUID does not exist', 1);
-        }
-
-        return static::createFromPlayer($player);
     }
 
     public static function createFromPlayer(Player $player)
     {
         $profile = new static();
 
-        $profile->setUuid(static::getUuidFromName($player->player_name));
-        $profile->setName($player->player_name);
-        $profile->setModel($player->getPreference());
-        $profile->setPlayer($player);
-        $profile->setSkin($player->getTexture('skin'));
-        $profile->setCape($player->getTexture('cape'));
+        $profile->uuid = static::getUuidFromName($player->player_name);
+        $profile->name = $player->player_name;
+        $profile->model = $player->getPreference();
+        $profile->player = $player;
+        $profile->skin = $player->getTexture('skin');
+        $profile->cape = $player->getTexture('cape');
 
         return $profile;
     }
