@@ -8,16 +8,30 @@ use Illuminate\Http\Request;
 use Yggdrasil\Models\Profile;
 use Illuminate\Routing\Controller;
 use Yggdrasil\Exceptions\NotFoundException;
-use Yggdrasil\Services\YggdrasilServiceInterface as Yggdrasil;
+use Yggdrasil\Exceptions\ForbiddenOperationException;
+use Yggdrasil\Service\YggdrasilServiceInterface as Yggdrasil;
 
 class ProfileController extends Controller
 {
-    public function getProfileFromName($username)
+    public function getProfileFromUuid($uuid)
     {
-        $player = Player::where('player_name', $username)->first();
+        $profile = Profile::createFromUuid(UUID::format($uuid));
+
+        if ($profile) {
+            return response()->json()->setContent($profile);
+        } else {
+            // UUID 不存在
+            return response('')->setStatusCode(204);
+        }
+    }
+
+    public function getProfileFromName($name)
+    {
+        $player = Player::where('player_name', $name)->first();
 
         if (! $player) {
-            throw new NotFoundException('Player not found');
+            // 角色不存在
+            return response('')->setStatusCode(204);
         }
 
         $profile = Profile::createFromPlayer($player);
@@ -25,18 +39,13 @@ class ProfileController extends Controller
         return response()->json()->setContent($profile);
     }
 
-    public function getProfileFromUuid($uuid)
-    {
-        $formattedUuid = UUID::format($uuid);
-
-        $profile = Profile::createFromUuid($formattedUuid);
-
-        return response()->json()->setContent($profile);
-    }
-
     public function searchProfile(Request $request)
     {
         $profiles = [];
+
+        if (count($request->json()) > option('ygg_search_profile_max')) {
+            throw new ForbiddenOperationException('一次最多只能查询 '.option('ygg_search_profile_max').' 个角色哦');
+        }
 
         foreach ($request->json() as $name) {
             $player = Player::where('player_name', $name)->first();
