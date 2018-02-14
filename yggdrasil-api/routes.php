@@ -25,7 +25,6 @@ $router->group([
     $router->get('hasJoined', 'SessionController@hasJoinedServer');
 
     $router->get('profile/{uuid}', 'ProfileController@getProfileFromUuid');
-    $router->get('profile/username/{name}', 'ProfileController@getProfileFromName');
 });
 
 $router->post('api/profiles/minecraft', 'ProfileController@searchProfile');
