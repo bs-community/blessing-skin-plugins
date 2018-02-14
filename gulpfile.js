@@ -1,45 +1,46 @@
-/*
-* @Author: printempw
-* @Date:   2017-01-22 17:25:14
-* @Last Modified by:   printempw
-* @Last Modified time: 2017-01-22 17:52:40
-*/
-
 'use strict';
 
 const gulp  = require('gulp'),
-      del   = require('del'),
       fs    = require('fs'),
       path  = require('path'),
       merge = require('merge-stream'),
       zip   = require('gulp-zip');
 
+const distPath    = '.dist';
 const pluginsPath = './';
-const distPath    = './dist/';
+const excludePath = [
+    distPath,
+    ".git",
+    ".travis",
+    "node_modules"
+];
 
-function getFolders(dir) {
-    return fs.readdirSync(dir).filter((file) => {
-        return file != ".git" &&
-               file != "dist" &&
-               file != "node_modules" &&
-               fs.statSync(path.join(dir, file)).isDirectory();
-    });
+function getPluginFolders(dir) {
+    return fs.readdirSync(dir).filter(
+        filename => (fs.statSync(path.join(dir, filename)).isDirectory() && !excludePath.includes(filename))
+    );
 }
 
-// release
 gulp.task('release', () => {
-    del(['dist']);
+    let folders = getPluginFolders(pluginsPath);
 
-    let folders = getFolders(pluginsPath);
-
-    let tasks = folders.map((folder) => {
+    let tasks = folders.map(folder => {
         let version = require(`./${folder}/package.json`).version;
+        let archiveFileName = `${folder}_v${version}.zip`;
 
-        console.log(`Zipping plugin ${folder}, version ${version}`);
+        let gulpStream = gulp.src(folder + '/**/*', { base: pluginsPath });
 
-        return gulp.src(folder + '/**/*', { base: pluginsPath })
-                    .pipe(zip( `${folder}_v${version}.zip`))
-                    .pipe(gulp.dest(distPath));
+        if (fs.existsSync(path.join(distPath, archiveFileName))) {
+            console.log(`[${folder}][${version}] no change detected, skipping`);
+
+            return gulpStream;
+        }
+
+        console.log(`[${folder}][${version}] version change detected, processing`);
+
+        return gulpStream
+                .pipe(zip(archiveFileName))
+                .pipe(gulp.dest(distPath));
     });
 
     return merge(tasks);

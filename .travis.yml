@@ -1,0 +1,25 @@
+language: node_js
+node_js: node
+
+cache: yarn
+
+addons:
+  ssh_known_hosts:
+  - github.com
+  - coding.net
+
+before_install:
+- export TZ='Asia/Shanghai'
+- openssl aes-256-cbc -K $encrypted_8150ab04d2e0_key -iv $encrypted_8150ab04d2e0_iv -in .travis/travis.key.enc -out ~/.ssh/id_rsa -d
+- chmod 600 ~/.ssh/id_rsa
+- git config --global user.name "printempw"
+- git config --global user.email "h@prinzeugen.net"
+
+install:
+- yarn
+
+script:
+- ./node_modules/.bin/gulp release
+
+after_success:
+- .travis/deploy.sh
