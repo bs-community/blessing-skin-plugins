@@ -54,7 +54,7 @@ class ProfileController extends Controller
                 $profile = Profile::createFromPlayer($player);
 
                 $profiles[] = [
-                    'id' => $profile->getUuid(),
+                    'id' => $profile->uuid,
                     'name' => $name
                 ];
             }
