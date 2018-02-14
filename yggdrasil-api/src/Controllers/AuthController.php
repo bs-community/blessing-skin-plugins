@@ -28,10 +28,17 @@ class AuthController extends Controller
         // Default skin domain whitelist:
         // - Specified by option 'site_url'
         // - Extract host from current URL
-        $skinDomains = array_map('trim', array_unique(array_merge(explode(',', option('ygg_skin_domain')), [
+        $extra = option('ygg_skin_domain') === '' ? [] : explode(',', option('ygg_skin_domain'));
+        $skinDomains = array_map('trim', array_unique(array_merge($extra, [
             parse_url(option('site_url'), PHP_URL_HOST),
             $request->getHost()
         ])));
+
+        $privateKey = openssl_pkey_get_private(option('ygg_private_key'));
+
+        if (! $privateKey) {
+            throw new IllegalArgumentException('无效的 RSA 私钥，请访问插件配置页重新设置');
+        }
 
         return json([
             'meta' => [
@@ -40,7 +47,7 @@ class AuthController extends Controller
                 'implementationVersion' => plugin('yggdrasil-api')['version']
             ],
             'skinDomains' => $skinDomains,
-            'signaturePublickey' => str_replace("\r", '', option('ygg_public_key'))
+            'signaturePublickey' => openssl_pkey_get_details($privateKey)['key']
         ]);
     }
 
