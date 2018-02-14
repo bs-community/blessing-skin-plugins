@@ -3,13 +3,12 @@
 namespace Yggdrasil\Controllers;
 
 use App\Models\Player;
+use Yggdrasil\Utils\Log;
 use Yggdrasil\Utils\UUID;
 use Illuminate\Http\Request;
 use Yggdrasil\Models\Profile;
 use Illuminate\Routing\Controller;
-use Yggdrasil\Exceptions\NotFoundException;
 use Yggdrasil\Exceptions\ForbiddenOperationException;
-use Yggdrasil\Service\YggdrasilServiceInterface as Yggdrasil;
 
 class ProfileController extends Controller
 {
@@ -18,9 +17,11 @@ class ProfileController extends Controller
         $profile = Profile::createFromUuid(UUID::format($uuid));
 
         if ($profile) {
+            Log::info("Returning profile for uuid [$uuid]", [$profile->serialize()]);
             return response()->json()->setContent($profile);
         } else {
-            // UUID 不存在
+            // UUID 不存在就返回 204
+            Log::info("Profile not found for uuid [$uuid]");
             return response('')->setStatusCode(204);
         }
     }
@@ -44,7 +45,7 @@ class ProfileController extends Controller
         $profiles = [];
 
         if (count($request->json()) > option('ygg_search_profile_max')) {
-            throw new ForbiddenOperationException('一次最多只能查询 '.option('ygg_search_profile_max').' 个角色哦');
+            throw new ForbiddenOperationException(sprintf('一次最多只能查询 %s 个角色哦', option('ygg_search_profile_max')));
         }
 
         foreach ($request->json() as $name) {

@@ -14,15 +14,9 @@ use Illuminate\Routing\Controller;
 use Yggdrasil\Exceptions\NotFoundException;
 use Yggdrasil\Exceptions\IllegalArgumentException;
 use Yggdrasil\Exceptions\ForbiddenOperationException;
-use Yggdrasil\Service\YggdrasilServiceInterface as Yggdrasil;
 
 class AuthController extends Controller
 {
-    public function __construct(Request $request)
-    {
-        Log::info('Recieved request', [$request->path(), $request->json()->all()]);
-    }
-
     public function hello(Request $request)
     {
         // Default skin domain whitelist:
@@ -51,51 +45,53 @@ class AuthController extends Controller
         ]);
     }
 
-    public function authenticate(Request $request, Yggdrasil $ygg)
+    public function authenticate(Request $request)
     {
         /**
          * 注意，新版账户验证中 username 字段填的是邮箱，
          * 只有旧版的用户填的才是用户名（legacy = true）
          */
         $identification = $request->get('username');
-        $password = $request->get('password');
-        $clientToken = $request->get('clientToken');
+        $user = $this->checkUserCredentials($request);
 
-        if (is_null($identification) || is_null($password)) {
-            throw new IllegalArgumentException('邮箱或者密码没填哦');
+        // clientToken 原样返回，如果没提供就给客户端生成一个
+        $clientToken = $request->get('clientToken') ?: UUID::generate()->clearDashes();
+        // clientToken 原样返回，生成新 accessToken 并格式化为不带符号的 UUID
+        $accessToken = UUID::generate()->clearDashes();
+
+        // 吊销该用户的其他令牌
+        if ($cache = Cache::get("ID_$identification")) {
+            $expiredAccessToken = unserialize($cache)->accessToken;
+
+            Cache::forget("ID_$identification");
+            Cache::forget("TOKEN_$expiredAccessToken");
         }
 
-        $user = app('users')->get($identification, 'email');
+        // 实例化并存储 Token
+        $token = new Token($clientToken, $accessToken);
+        $token->owner = $identification;
+        $this->storeToken($token, $identification);
 
-        if (! $user) {
-            throw new ForbiddenOperationException('用户不存在');
-        }
+        Log::info("New token [$accessToken] generated and stored for user [$identification]");
 
-        if (! $user->verifyPassword($password)) {
-            throw new ForbiddenOperationException('输入的邮箱与密码不匹配');
-        }
-
-        if ($user->getPermission() == User::BANNED) {
-            throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
-        }
-
-        $token = $ygg->authenticate($identification, $password, $clientToken);
-
+        // 准备响应
         $availableProfiles = $this->getAvailableProfiles($user);
 
         $result = [
-            'accessToken' => UUID::format($token->accessToken),
-            'clientToken' => $token->clientToken, // clientToken 原样返回
+            'accessToken' => $token->accessToken,
+            'clientToken' => $token->clientToken,
             'availableProfiles' => $availableProfiles
         ];
 
         if (app('request')->get('requestUser')) {
+            // 用户 ID 根据其邮箱生成
             $result['user'] = [
                 'id' => UUID::generate(5, $user->email, UUID::NS_DNS)->clearDashes(),
                 'properties' => []
             ];
         }
 
+        // 当用户只有一个角色时自动帮他选择
         if (!empty($availableProfiles) && count($availableProfiles) == 1) {
             $result['selectedProfile'] = $availableProfiles[0];
         }
@@ -103,25 +99,38 @@ class AuthController extends Controller
         return json($result);
     }
 
-    public function refresh(Request $request, Yggdrasil $ygg)
+    public function refresh(Request $request)
     {
-        // clientToken 原样返回
         $clientToken = $request->get('clientToken');
         $accessToken = UUID::format($request->get('accessToken'));
 
-        // 先不刷新，拿到旧的 Token 实例先
-        $token = $ygg->retrieveToken($accessToken);
+        Log::info("Try to refresh access token with client token [$clientToken]");
+
+        // 先不刷新，尝试从缓存中取出旧的 Token 实例
+        if ($cache = Cache::get("TOKEN_$accessToken")) {
+            $token = unserialize($cache);
+
+            if ($clientToken && $token->clientToken !== $clientToken) {
+                Log::info("Expect client token to be [$token->clientToken]");
+                throw new ForbiddenOperationException('提供的 ClientToken 与 AccessToken 不匹配，请重新登录');
+            }
+        } else {
+            // 这里不需要检测令牌是否暂时失效
+            // 因为如果令牌完全失效就会被直接清除出缓存
+            throw new ForbiddenOperationException('无效的 AccessToken，请重新登录');
+        }
+
         $user = app('users')->get($token->owner, 'email');
 
         if (! $user) {
-            throw new ForbiddenOperationException('令牌绑定的用户不存在');
+            throw new ForbiddenOperationException('令牌绑定的用户不存在，请重新登录');
         }
 
         $availableProfiles = $this->getAvailableProfiles($user);
 
         $result = [
             'accessToken' => UUID::format($token->accessToken),
-            'clientToken' => $token->clientToken, // clientToken 原样返回
+            'clientToken' => $token->clientToken, // 原样返回
             'availableProfiles' => $availableProfiles
         ];
 
@@ -145,19 +154,111 @@ class AuthController extends Controller
             }
 
             if (! isset($result['selectedProfile'])) {
-                throw new ForbiddenOperationException('请求的角色不是你的');
+                throw new ForbiddenOperationException('拉倒吧，请求的角色不是你的');
             }
         } else {
+            // 只有一个角色时自动选择
             if (!empty($availableProfiles) && count($availableProfiles) == 1) {
                 $result['selectedProfile'] = $availableProfiles[0];
             }
         }
 
         // 上面那一大票检测完了，最后再刷新令牌
-        $token = $ygg->refresh($clientToken, $accessToken);
+        Cache::forget("TOKEN_$accessToken");
+        $token->accessToken = UUID::generate()->clearDashes();
+        $this->storeToken($token, $token->owner);
+
+        Log::info("New token [{$token->accessToken}] generated and stored for user [{$user->email}]");
+
         $result['accessToken'] = UUID::format($token->accessToken);
 
         return json($result);
+    }
+
+    public function validate(Request $request)
+    {
+        $clientToken = UUID::format($request->get('clientToken'));
+        $accessToken = UUID::format($request->get('accessToken'));
+
+        if ($cache = Cache::get("TOKEN_$accessToken")) {
+            $token = unserialize($cache);
+
+            if ($clientToken && $clientToken !== $token->clientToken) {
+                throw new ForbiddenOperationException('提供的 ClientToken 与 AccessToken 不匹配，请重新登录');
+            }
+
+            // 未提供 clientToken 且 accessToken 有效时
+            Log::info('Given access token matches the client token');
+            return response('')->setStatusCode(204);
+        } else {
+            throw new IllegalArgumentException('提供的 AccessToken 无效');
+        }
+    }
+
+    public function signout(Request $request)
+    {
+        $identification = $request->get('username');
+        $user = $this->checkUserCredentials($request, false);
+
+        // 吊销所有令牌
+        if ($cache = Cache::get("ID_$identification")) {
+            $accessToken = unserialize($cache)->accessToken;
+
+            Cache::forget("ID_$identification");
+            Cache::forget("TOKEN_$accessToken");
+        }
+
+        Log::info("User [$identification] signed out, all tokens revoked");
+        return response('')->setStatusCode(204);
+    }
+
+    public function invalidate(Request $request)
+    {
+        $clientToken = UUID::format($request->get('clientToken'));
+        $accessToken = UUID::format($request->get('accessToken'));
+
+        // 据说不用检查 clientToken 与 accessToken 是否匹配
+        if ($cache = Cache::get("TOKEN_$accessToken")) {
+            $token = unserialize($cache);
+            $identification = $token->owner;
+
+            Cache::forget("ID_$identification");
+            Cache::forget("TOKEN_$accessToken");
+
+            Log::info("Access token [$accessToken] was successful revoked");
+        } else {
+            Log::info("Invalid access token [$accessToken]");
+        }
+
+        // 据说无论操作是否成功都应该返回 204
+        return response('')->setStatusCode(204);
+    }
+
+    protected function checkUserCredentials(Request $request, $checkBanned = true)
+    {
+        // 验证一大堆乱七八糟的东西
+        $identification = $request->get('username');
+        $password = $request->get('password');
+
+        if (is_null($identification) || is_null($password)) {
+            throw new IllegalArgumentException('邮箱或者密码没填哦');
+        }
+
+        $user = app('users')->get($identification, 'email');
+
+        if (! $user) {
+            throw new ForbiddenOperationException("用户 [$identification] 不存在");
+        }
+
+        if (! $user->verifyPassword($password)) {
+            throw new ForbiddenOperationException('输入的邮箱与密码不匹配');
+        }
+
+        if ($checkBanned && $user->getPermission() == User::BANNED) {
+            throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
+        }
+
+        return $user;
     }
 
     protected function getAvailableProfiles(User $user)
@@ -176,41 +277,13 @@ class AuthController extends Controller
         return $profiles;
     }
 
-    public function validate(Request $request, Yggdrasil $ygg)
+    // 推荐使用 Redis 作为缓存驱动
+    protected function storeToken(Token $token, $identification)
     {
-        $clientToken = UUID::format($request->get('clientToken'));
-        $accessToken = UUID::format($request->get('accessToken'));
-
-        if ($ygg->validate($clientToken, $accessToken)) {
-            return response('')->setStatusCode(204);
-        } else {
-            throw new ForbiddenOperationException('提供的 ClientToken 与 AccessToken 不匹配');
-        }
+        $timeToFullyExpired = option('ygg_token_expire_2') / 60;
+        // 使用 accessToken 作为缓存主键
+        Cache::put("TOKEN_{$token->accessToken}", serialize($token), $timeToFullyExpired);
+        // TODO: 实现一个用户可以签发多个 Token
+        Cache::put("ID_$identification", serialize($token), $timeToFullyExpired);
     }
-
-    public function signout(Request $request, Yggdrasil $ygg)
-    {
-        $identification = $request->get('username');
-        $password = $request->get('password');
-
-        if (is_null($identification) || is_null($password)) {
-            throw new IllegalArgumentException('邮箱或者密码没填哦');
-        }
-
-        $ygg->signout($identification, $password);
-
-        return response('')->setStatusCode(204);
-    }
-
-    public function invalidate(Request $request, Yggdrasil $ygg)
-    {
-        $clientToken = UUID::format($request->get('clientToken'));
-        $accessToken = UUID::format($request->get('accessToken'));
-
-        // 据说不用检查 clientToken 与 accessToken 是否匹配
-        $ygg->invalidate($accessToken);
-
-        return response('')->setStatusCode(204);
-    }
-
 }

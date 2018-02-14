@@ -2,6 +2,8 @@
 
 namespace Yggdrasil\Exceptions;
 
+use Yggdrasil\Utils\Log;
+
 class YggdrasilException extends \Exception
 {
     /**
@@ -37,6 +39,8 @@ class YggdrasilException extends \Exception
 
         $this->cause = $cause;
         $this->errorMessage = $message;
+
+        Log::error(static::class.": $message", [$this->statusCode, $cause]);
 
         $this->render()->send();
         exit;

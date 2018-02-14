@@ -3,8 +3,6 @@
 use App\Services\Hook;
 use Yggdrasil\Utils\Log as MyLog;
 use Illuminate\Contracts\Events\Dispatcher;
-use Yggdrasil\Service\BlessingYggdrasilService;
-use Yggdrasil\Service\YggdrasilServiceInterface;
 use Yggdrasil\Exceptions\IllegalArgumentException;
 
 return function (Dispatcher $events) {
@@ -34,12 +32,13 @@ return function (Dispatcher $events) {
         }
     }
 
-    if (app('request')->is('api/yggdrasil*')) {
+    // 记录访问详情
+    $request = app('request');
+    if ($request->is('api/yggdrasil/*')) {
         MyLog::info('============================================================');
-        MyLog::info(app('request')->method(), [app('request')->path()]);
+        MyLog::info($request->method(), [$request->path(), $request->json()->all()]);
     }
 
-    app()->bind(YggdrasilServiceInterface::class, BlessingYggdrasilService::class);
     // App\Http\Middleware\RedirectIfUrlEndsWithSlash
     Hook::addRoute(function ($router) {
         $router->any('api/yggdrasil', 'Yggdrasil\Controllers\AuthController@hello');

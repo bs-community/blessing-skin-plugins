@@ -4,6 +4,7 @@ namespace Yggdrasil\Models;
 
 use DB;
 use App\Models\Player;
+use Yggdrasil\Utils\Log;
 use Yggdrasil\Utils\UUID;
 use Yggdrasil\Exceptions\IllegalArgumentException;
 
@@ -47,7 +48,7 @@ class Profile
         }
 
         // 避免 BungeeCord 服务器上可能出现无法加载材质的 Bug
-        app()->forceRootUrl(option('site_url'));
+        app('url')->forceRootUrl(option('site_url'));
 
         if ($this->skin != "") {
             $textures['textures']['SKIN'] = [
@@ -106,6 +107,8 @@ class Profile
             // 分配新的 UUID
             $result = UUID::generate()->clearDashes();
             DB::table('uuid')->insert(['name' => $name, 'uuid' => $result]);
+
+            Log::info("New uuid [$result] allocated to player [$name]");
         } else {
             $result = $result->uuid;
         }
