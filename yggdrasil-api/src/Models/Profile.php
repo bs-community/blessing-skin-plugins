@@ -46,6 +46,9 @@ class Profile
             $textures['signatureRequired'] = true;
         }
 
+        // 避免 BungeeCord 服务器上可能出现无法加载材质的 Bug
+        app()->forceRootUrl(option('site_url'));
+
         if ($this->skin != "") {
             $textures['textures']['SKIN'] = [
                 'url' => url("textures/{$this->skin}")
