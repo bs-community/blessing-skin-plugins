@@ -9,14 +9,15 @@ class Throttle
 {
     public function handle($request, \Closure $next)
     {
-        $id = "YGG_LAST_REQ_".$request->get('username');
-        $retryAfter = option('ygg_rate_limit') - (time() - Cache::get($id));
+        $id = sprintf('YGG_LAST_REQ_%s', $request->get('username'));
+        $currentTimeInMillisecond = microtime(true);
+        $retryAfter = option('ygg_rate_limit') - ($currentTimeInMillisecond * 1000 - Cache::get($id));
 
         if ($retryAfter > 0) {
-            throw new ForbiddenOperationException("请求过于频繁，请等待 $retryAfter 秒后重试");
+            throw new ForbiddenOperationException(sprintf('请求过于频繁，请等待 %d 秒后重试', ceil($retryAfter / 1000)));
         }
 
-        Cache::put($id, time(), 60);
+        Cache::put($id, $currentTimeInMillisecond, 60);
 
         return $next($request);
     }

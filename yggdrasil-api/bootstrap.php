@@ -20,7 +20,7 @@ return function (Dispatcher $events) {
     $items = [
         'ygg_token_expire_1' => '600',
         'ygg_token_expire_2' => '1200',
-        'ygg_rate_limit' => '1',
+        'ygg_rate_limit' => '1000',
         'ygg_skin_domain' => '',
         'ygg_search_profile_max' => '5',
         'ygg_verbose_log' => 'true'
