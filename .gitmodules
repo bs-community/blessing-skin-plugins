@@ -1,0 +1,3 @@
+[submodule "yggdrasil-api"]
+	path = yggdrasil-api
+	url = git@github.com:printempw/yggdrasil-api.git
