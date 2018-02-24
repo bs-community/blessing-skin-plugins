@@ -31,7 +31,8 @@
                 $form->addMessage("成功连接至 Redis 服务器：[$server]", 'success');
               }
             } catch (Exception $e) {
-              $form->addMessage("无法连接至 Redis 服务器：{$e->getMessage()}", 'danger');
+              $msg = iconv('gbk', 'utf-8', $e->getMessage());
+              $form->addMessage("无法连接至 Redis 服务器：{$msg}", 'danger');
             }
           })->renderWithOutSubmitButton();
 
@@ -44,4 +45,3 @@
 </div><!-- /.content-wrapper -->
 
 @endsection
-
