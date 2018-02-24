@@ -18,10 +18,10 @@ class Utils
 {
     public static function init()
     {
-        // add username column
-        if (!Schema::hasColumn('users', 'username')) {
+        // Add username column
+        if (! Schema::hasColumn('users', 'username')) {
             Schema::table('users', function ($table) {
-                $table->string('username')->comment = "Added by data-integration plugin.";
+                $table->string('username')->default('')->comment = "Added by data-integration plugin.";
             });
         }
 
