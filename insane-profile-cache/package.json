@@ -1,9 +1,10 @@
 {
   "name": "insane-profile-cache",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "title": "Profile 文件缓存",
-  "description": "直接生成玩家 profile 的文件缓存，交给 Nginx 处理。每次玩家更新皮肤时会刷新缓存，慎用。",
+  "description": "直接生成玩家 Profile 的文件缓存，交给 Nginx 处理，慎用。每次玩家更新皮肤时、添加新角色时都会自动更新文件缓存。",
   "author": "printempw",
   "url": "https://blessing.studio/",
-  "namespace": "InsaneProfileCache"
+  "namespace": "InsaneProfileCache",
+  "config": "generate.tpl"
 }

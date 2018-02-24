@@ -13,17 +13,11 @@ define('PROFILE_CACHE_PATH', realpath(__DIR__.'/cache'));
 
 foreach (['csl', 'usm'] as $apiType) {
     if (!PROFILE_CACHE_PATH || !is_writable(PROFILE_CACHE_PATH."/$apiType")) {
-        die("没有对文件缓存目录 /cache/$apiType 的写入权限");
+        die_with_utf8_encoding("[插件错误][insane-profile-cache] 没有对文件缓存目录 /cache/$apiType 的写入权限");
     }
 }
 
 return function (Dispatcher $events) {
-
-    Hook::addMenuItem('admin', 5, [
-        'title' => '文件缓存',
-        'link'  => 'admin/generate-profile-cache',
-        'icon'  => 'fa-file-archive-o'
-    ]);
 
     $events->subscribe(UpdateFileCache::class);
     $events->subscribe(DeleteFileCache::class);
