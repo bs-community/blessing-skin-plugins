@@ -1,6 +1,6 @@
 {
   "name": "static-file-cdn",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "title": "静态文件 CDN",
   "description": "允许自定义皮肤站从何处加载静态（CSS/JavaScript）资源文件。",
   "author": "printempw",
