@@ -8,6 +8,8 @@
 
 namespace Blessing\BatchImport;
 
+use Cache;
+
 class Utils
 {
     public static function isValidTexture($path) {
@@ -48,7 +50,7 @@ class Utils
             }
         }
 
-        session(['import-file-num' => $file_num]);
+        Cache::forever('import-file-num', $file_num);
 
         closedir($resource);
 
@@ -56,20 +58,19 @@ class Utils
     }
 
     public static function prepareImportTempDir() {
-        if (session()->has('import-tmp-dir')) {
-            $tmp_dir = session('import-tmp-dir');
+        if (Cache::has('import-tmp-dir')) {
+            $tmp_dir = Cache::get('import-tmp-dir');
         } else {
             $tmp_dir = storage_path('import-tmp-dir-'.time());
 
-            session(['import-tmp-dir' => $tmp_dir]);
-            session()->save();
+            Cache::forever('import-tmp-dir', $tmp_dir);
         }
 
-        if (!is_dir($tmp_dir)) {
+        if (! is_dir($tmp_dir)) {
             mkdir($tmp_dir);
         }
 
-        $dir = session('import-dir');
+        $dir = Cache::get('import-dir');
         $resource = opendir($dir);
 
         // copy files from src to temp dir

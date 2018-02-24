@@ -1,10 +1,4 @@
 <?php
-/**
- * @Author: printempw
- * @Date:   2016-11-13 12:37:40
- * @Last Modified by:   printempw
- * @Last Modified time: 2017-01-13 22:15:52
- */
 
 use App\Services\Hook;
 use App\Models\Texture;
@@ -27,8 +21,9 @@ return function (Dispatcher $events) {
                 case 'check-dir':
                     if (file_exists($request->input('dir'))) {
                         if (is_writable($request->input('dir'))) {
-                            session(['import-dir' => $request->input('dir')]);
-                            session(['import-gbk' => $request->input('gbk')]);
+
+                            Cache::forever('import-dir', $request->input('dir'));
+                            Cache::forever('import-gbk', $request->input('gbk') === 'true');
 
                             return json('目录权限正确', 0);
                         } else {
@@ -47,7 +42,7 @@ return function (Dispatcher $events) {
 
                 case 'start-import':
 
-                    $tmp_dir  = session('import-tmp-dir');
+                    $tmp_dir  = Cache::get('import-tmp-dir');
                     $resource = opendir($tmp_dir);
                     $imported = 0;
 
@@ -60,9 +55,13 @@ return function (Dispatcher $events) {
 
                             if (MyUtils::isValidTexture($full_path)) {
 
-                                if (session('import-gbk')) {
-                                    // damn GBK
-                                    $filename = mb_convert_encoding($filename, 'UTF-8', 'GBK');
+                                if (Cache::get('import-gbk')) {
+                                    try {
+                                        // damn GBK
+                                        $filename = iconv('gbk', 'utf-8', $filename);
+                                    } catch (\Exception $e) {
+                                        Log::error("Can't convert filename [$filename] to UTF-8", [$e]);
+                                    }
                                 }
 
                                 $hash = hash_file('sha256', $full_path);
@@ -75,11 +74,11 @@ return function (Dispatcher $events) {
                                 if (Texture::where('hash', $hash)->get()->isEmpty()) {
 
                                     DB::table('textures')->insert([
-                                        'name'      => $filename,
+                                        'name'      => str_replace('.png', '', $filename),
                                         'type'      => $_POST['type'],
                                         'likes'     => 0,
                                         'hash'      => $hash,
-                                        'size'      => filesize($new_path) / 1024,
+                                        'size'      => ceil(filesize($new_path) / 1024),
                                         'uploader'  => $_POST['uploader'],
                                         'public'    => '1',
                                         'upload_at' => Utils::getTimeFormatted()
@@ -109,14 +108,17 @@ return function (Dispatcher $events) {
 
                 case 'get-progress':
 
-                    $total = session('import-file-num');
+                    $total = Cache::get('import-file-num');
 
-                    if (!is_dir(session('import-tmp-dir'))) {
-                        session()->forget('import-tmp-dir');
-                        return '缓存文件夹不存在，请重新执行导入操作';
+                    if (! is_dir(Cache::get('import-tmp-dir'))) {
+
+                        $progress = 100;
+                        Cache::forget('import-tmp-dir');
+                        // return '缓存文件夹不存在，请重新执行导入操作';
+                        return json(compact('total', 'total', 'progress'));
                     }
 
-                    $remain = MyUtils::getFileNum(session('import-tmp-dir'));
+                    $remain = MyUtils::getFileNum(Cache::get('import-tmp-dir'));
 
                     $progress = ($total - $remain) / $total * 100;
 

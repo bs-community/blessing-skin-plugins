@@ -2,18 +2,18 @@
 
 @section('step-content')
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-6">
         <div class="box box-primary">
             <div class="box-header with-border">
                 <h3 class="box-title">导入选项</h3>
             </div><!-- /.box-header -->
 
             <div class="box-body">
-                <p>所选目录：<code>{{ session('import-dir') }}</code></p>
+                <p>所选目录：<code>{{ Cache::get('import-dir') }}</code></p>
 
                 <p>目录下有效文件（长宽比为 2 或 1）数：
                     <code> {{
-                        $file_num = Blessing\BatchImport\Utils::prepareImportSource(session('import-dir'))
+                        $file_num = Blessing\BatchImport\Utils::prepareImportSource(Cache::get('import-dir'))
                     }} </code>
                 </p>
 
