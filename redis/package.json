@@ -1,6 +1,6 @@
 {
   "name": "redis",
-  "version": "1.0",
+  "version": "1.0.0",
   "title": "Redis",
   "description": "Redis 是一个开源、支持网络、基于内存、键值对存储数据库。使用 Redis 作为皮肤站的缓存、Session 驱动，可配合 BS Super Cache 使用",
   "author": "printempw",

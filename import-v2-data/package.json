@@ -5,6 +5,5 @@
   "description": "导入 Blessing Skin Server v2.x 的站点数据（用户、皮肤）到 v3.x",
   "author": "printempw",
   "url": "https://blessing.studio/",
-  "namespace": "Blessing\\ImportV2Data",
-  "config": ""
+  "namespace": "Blessing\\ImportV2Data"
 }

@@ -1,10 +1,9 @@
 {
   "name": "hello-dolly",
-  "version": "1.0",
+  "version": "1.0.0",
   "title": "HelloDolly::general.hello-dolly",
   "description": "HelloDolly::general.description",
   "author": "Matt Mullenweg",
   "url": "https://blessing.studio/",
-  "namespace": "HelloDolly",
-  "config": ""
+  "namespace": "HelloDolly"
 }
