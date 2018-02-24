@@ -24,10 +24,10 @@ class CachePlayerJson
      */
     public function cachePlayerJson(GetPlayerJson $event)
     {
-        $key = "json-{$event->player->pid}-{$event->api_type}";
+        $key = "json-{$event->player->pid}-{$event->apiType}";
 
         $content = Cache::rememberForever($key, function () use ($event) {
-            return $event->player->generateJsonProfile($event->api_type);
+            return $event->player->generateJsonProfile($event->apiType);
         });
 
         return $content;

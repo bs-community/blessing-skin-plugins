@@ -25,11 +25,11 @@ class CachePlayerExists
      */
     public function cachePlayerExists(CheckPlayerExists $event)
     {
-        $key = "notfound-{$event->player_name}";
+        $key = "notfound-{$event->playerName}";
 
         // if the player name haven't been marked as notfound
-        if ($event->player_name && is_null(Cache::get($key))) {
-            $player = Player::where('player_name', $event->player_name)->first();
+        if ($event->playerName && is_null(Cache::get($key))) {
+            $player = Player::where('player_name', $event->playerName)->first();
 
             if (!$player) {
                 // cache if player does not exist
