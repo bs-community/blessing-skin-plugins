@@ -70,17 +70,30 @@ class ReportController extends Controller
 
         switch ($request->get('operation')) {
             case 'ban':
-                User::find($report->uploader)->setPermission(User::BANNED);
-                $report->update(['status' => REPORT_STATUS_RESOLVED]);
+                $uploader = User::find($report->uploader);
 
-                return json('被举报的上传者已被封禁', 0);
+                if (app('user.current')->permission > $uploader->permission) {
+                    User::find($report->uploader)->setPermission(User::BANNED);
+                    $report->update(['status' => REPORT_STATUS_RESOLVED]);
+
+                    return json('被举报的上传者已被封禁', 0);
+                } else {
+                    return json('你没有权限封禁该用户', 1);
+                }
+
                 break;
 
             case 'delete':
-                Texture::find($report->tid)->delete();
-                $report->update(['status' => REPORT_STATUS_RESOLVED]);
 
-                return json('被举报的材质已被删除', 0);
+                if (app('user.current')->permission > User::find($report->uploader)->permission) {
+                    Texture::find($report->tid)->delete();
+                    $report->update(['status' => REPORT_STATUS_RESOLVED]);
+
+                    return json('被举报的材质已被删除', 0);
+                } else {
+                    return json('你没有权限删除该用户上传的材质', 1);
+                }
+
                 break;
 
             case 'reject':

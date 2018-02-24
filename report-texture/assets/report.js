@@ -63,12 +63,11 @@ var report = {
             dataType: 'json',
             data: { id: id, operation: 'ban' },
             success: function (result) {
-                $('#report-'+id+' #status').text('处理完毕');
-
                 if (result.errno == 0) {
+                    $('#report-'+id+' #status').text('处理完毕');
                     toastr.success(result.msg);
                 } else {
-                    toastr.warn(result.msg);
+                    toastr.warning(result.msg);
                 }
             },
             error: showAjaxError
@@ -81,12 +80,11 @@ var report = {
             dataType: 'json',
             data: { id: id, operation: 'delete' },
             success: function (result) {
-                $('#report-'+id+' #status').text('处理完毕');
-
                 if (result.errno == 0) {
+                    $('#report-'+id+' #status').text('处理完毕');
                     toastr.success(result.msg);
                 } else {
-                    toastr.warn(result.msg);
+                    toastr.warning(result.msg);
                 }
             },
             error: showAjaxError
@@ -99,12 +97,11 @@ var report = {
             dataType: 'json',
             data: { id: id, operation: 'reject' },
             success: function (result) {
-                $('#report-'+id+' #status').text('已被拒绝');
-
                 if (result.errno == 0) {
+                    $('#report-'+id+' #status').text('已被拒绝');
                     toastr.success(result.msg);
                 } else {
-                    toastr.warn(result.msg);
+                    toastr.warning(result.msg);
                 }
             },
             error: showAjaxError
