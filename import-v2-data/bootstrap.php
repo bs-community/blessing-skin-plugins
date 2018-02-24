@@ -12,7 +12,9 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 return function (Dispatcher $events) {
 
-    Hook::addMenuItem('admin', 7, [
+    app()->singleton('legacy_db_helper', Blessing\ImportV2Data\Database::class);
+
+    Hook::addMenuItem('admin', 5, [
         'title' => '导入数据',
         'link'  => 'setup/migrations',
         'icon'  => 'fa-undo'

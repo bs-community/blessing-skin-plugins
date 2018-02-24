@@ -2,7 +2,6 @@
 
 namespace Blessing\ImportV2Data;
 
-use Database;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Validator;
@@ -11,12 +10,11 @@ use App\Services\Repositories\UserRepository;
 
 class ImportController extends Controller
 {
-    public function __construct(UserRepository $users)
+    public function __construct()
     {
-        $user = $users->getCurrentUser();
-
-        if ($user->getPermission() != User::SUPER_ADMIN)
+        if (app('user.current')->getPermission() != User::SUPER_ADMIN) {
             abort(403, '此页面仅超级管理员可访问');
+        }
     }
 
     public function welcome()
@@ -36,7 +34,7 @@ class ImportController extends Controller
             'texture_name_pattern' => 'required'
         ]);
 
-        if (!Database::hasTable($request->input('v2_table_name'))) {
+        if (! app('legacy_db_helper')->hasTable($request->input('v2_table_name'))) {
             return back()->withErrors("数据表 {$_POST['v2_table_name']} 不存在");
         }
 

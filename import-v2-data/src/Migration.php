@@ -12,7 +12,6 @@ use Log;
 use Utils;
 use Option;
 use Storage;
-use Database;
 use App\Models\User;
 use App\Models\Player;
 use App\Models\Closet;
@@ -37,7 +36,7 @@ class Migration
         $texture_duplicated = 0;
 
         // use db helper instead of fat ORM in some operations :(
-        $db = Database::table($options['table_name'], true);
+        $db = app('legacy_db_helper')->table($options['table_name'], true);
 
         $score = Option::get('user_initial_score');
 
