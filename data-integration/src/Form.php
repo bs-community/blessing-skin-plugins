@@ -1,15 +1,8 @@
 <?php
-/**
- * @Author: printempw
- * @Date:   2017-01-08 10:00:47
- * @Last Modified by:   printempw
- * @Last Modified time: 2017-01-08 10:03:16
- */
 
 namespace DataIntegration;
 
 use Option;
-use App\Services\Database;
 use InvalidArgumentException;
 
 class Form

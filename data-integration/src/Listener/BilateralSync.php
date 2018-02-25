@@ -1,16 +1,10 @@
 <?php
-/**
- * @Author: printempw
- * @Date:   2016-10-25 21:36:18
- * @Last Modified by:   printempw
- * @Last Modified time: 2017-01-08 09:58:59
- */
 
 namespace DataIntegration\Listener;
 
-use Database;
 use DataIntegration\Log;
 use DataIntegration\Utils;
+use DataIntegration\Database;
 use DataIntegration\Synchronizer;
 use DataIntegration\Events\SyncTriggered;
 use Illuminate\Contracts\Events\Dispatcher;

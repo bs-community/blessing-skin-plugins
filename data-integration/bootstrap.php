@@ -3,6 +3,10 @@
 use DataIntegration\Utils;
 use DataIntegration\Listener;
 
+// TODO:
+// 数据对接插件应该被拆分成两个插件
+// 一个用于游戏内登录插件（Authme 等），直接修改 users 表添加 username 字段即可
+// 另一个用于与论坛对接（Discuz 等），需要在数据库中双向同步
 return function () {
     Utils::init();
 
@@ -22,7 +26,7 @@ return function () {
     App::singleton('db.target', function() {
         $config = unserialize(option('da_connection'));
 
-        $db = new App\Services\Database($config);
+        $db = new DataIntegration\Database($config);
         return $db->table($config['table'], true);
     });
 

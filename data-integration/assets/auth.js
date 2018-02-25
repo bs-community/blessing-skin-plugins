@@ -1,10 +1,3 @@
-/*
-* @Author: printempw
-* @Date:   2017-01-06 23:00:05
-* @Last Modified by:   printempw
-* @Last Modified time: 2017-01-06 23:01:45
-*/
-
 'use strict';
 
 $('#register-button-2').click(function() {
@@ -23,7 +16,7 @@ $('#register-button-2').click(function() {
     } else if (password == "") {
         showMsg(trans('auth.emptyPassword'));
         $('#password').focus();
-    } else if (password.length < 8 || password.length > 16) {
+    } else if (password.length < 8 || password.length > 32) {
         showMsg(trans('auth.invalidPassword'), 'warning');
         $('#password').focus();
     } else if ($('#confirm-pwd').val() == "") {

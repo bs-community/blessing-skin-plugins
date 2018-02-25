@@ -1,16 +1,9 @@
 <?php
-/**
- * @Author: printempw
- * @Date:   2016-10-29 21:46:46
- * @Last Modified by:   printempw
- * @Last Modified time: 2017-01-08 11:57:21
- */
 
 namespace DataIntegration\Synchronizer;
 
 use DB;
 use Utils;
-use Database;
 use DataIntegration\Log;
 
 class Authme extends LoginSystemSynchronizer
@@ -58,14 +51,19 @@ class Authme extends LoginSystemSynchronizer
     public function syncFromSelf($username)
     {
         $result = app('users')->get($username, 'username');
+        $tableName = unserialize(option('da_connection'))['table'];
 
-        app('db.target')->insert([
+        $newRecord = [
             $this->columns['username'] => $username,
-            // realname field for Authme
-            'realname' => $username,
             $this->columns['password'] => $result->password,
             $this->columns['ip']       => $result->ip
-        ]);
+        ];
+
+        if (app('db.target')->fetchArray("SHOW COLUMNS FROM `$tableName` LIKE 'realname'")) {
+            $newRecord['realname'] = $username;
+        }
+
+        app('db.target')->insert($newRecord);
 
         Log::info("[DataIntegration][$username] Add a new user to Authme database.");
     }

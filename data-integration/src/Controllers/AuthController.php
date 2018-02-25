@@ -1,10 +1,4 @@
 <?php
-/**
- * @Author: printempw
- * @Date:   2017-01-06 22:05:19
- * @Last Modified by:   printempw
- * @Last Modified time: 2017-01-08 10:14:47
- */
 
 namespace DataIntegration\Controllers;
 
@@ -30,11 +24,11 @@ class AuthController extends BaseController
 
         $this->validate($request, [
             'email'       => 'required|email',
-            'password'    => 'required|min:8|max:16',
+            'password'    => 'required|min:8|max:32',
             'player_name' => 'required|'.(option('allow_chinese_playername') ? 'pname_chinese' : 'playername')
         ]);
 
-        if (!option('user_can_register')) {
+        if (! option('user_can_register')) {
             return json(trans('auth.register.close'), 7);
         }
 
@@ -67,7 +61,7 @@ class AuthController extends BaseController
                 $user->username     = $username;
             });
 
-            if (!$user) {
+            if (! $user) {
                 return json(trans('auth.register.registered'), 5);
             }
 

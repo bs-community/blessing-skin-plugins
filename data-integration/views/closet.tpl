@@ -23,7 +23,7 @@
             <!-- Left col -->
             <div class="col-md-8">
                 <!-- Custom tabs -->
-                <div class="nav-tabs-custom">
+                <div class="nav-tabs-custom" id="closet-container">
                     <!-- Tabs within a box -->
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#skin-category" class="category-switch" data-toggle="tab">{{ trans('general.skin') }}</a></li>
@@ -57,6 +57,7 @@
 
                     <div class="box-footer">
                         <button class="btn btn-primary" onclick="javascript:setTextureOfUniquePlayer()">{{ trans('user.closet.use-as.button') }}</button>
+                        <button class="btn btn-default pull-right" id="closet-reset">{{ trans('user.closet.use-as.reset') }}</button>
                     </div><!-- /.box-footer -->
                 </div>
             </div>
@@ -70,7 +71,11 @@
 @section('script')
 <script>
     function setTextureOfUniquePlayer() {
-        if (selectedTextures['skin'] == undefined && selectedTextures['cape'] == undefined) {
+        var $indicator = $('#textures-indicator');
+        var skin = $indicator.data('skin'),
+            cape = $indicator.data('cape');
+
+        if (!skin && !cape) {
             toastr.info(trans('user.emptySelectedTexture'));
         } else {
             $.ajax({
@@ -79,8 +84,8 @@
                 dataType: "json",
                 data: {
                     'pid': {{ $player->pid }},
-                    'tid[skin]': selectedTextures['skin'],
-                    'tid[cape]': selectedTextures['cape']
+                    'tid[skin]': skin,
+                    'tid[cape]': cape
                 },
                 success: function (json) {
                     if (json.errno == 0) {
@@ -98,8 +103,11 @@
         }
     }
 
-    $(document).ready(TexturePreview.init3dPreview);
-    // Auto resize canvas to fit responsive design
-    $(window).resize(TexturePreview.init3dPreview);
+    $(document).ready(function () {
+        $.msp.config.skinUrl = defaultSteveSkin;
+        initSkinViewer();
+        registerAnimationController();
+        registerWindowResizeHandler();
+    });
 </script>
 @endsection

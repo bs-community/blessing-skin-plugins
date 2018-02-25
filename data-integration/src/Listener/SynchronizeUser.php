@@ -1,10 +1,4 @@
 <?php
-/**
- * @Author: printempw
- * @Date:   2016-10-25 21:36:18
- * @Last Modified by:   printempw
- * @Last Modified time: 2017-01-07 22:49:05
- */
 
 namespace DataIntegration\Listener;
 
@@ -30,7 +24,7 @@ class SynchronizeUser
     {
         $events->listen(Events\CheckPlayerExists::class, function ($event) {
             Log::info("[DataIntegration] Triggered by event CheckPlayerExists");
-            app('synchronizer')->sync($event->player_name);
+            app('synchronizer')->sync($event->playerName);
         }, static::PRIORITY);
 
         $events->listen(Events\UserTryToLogin::class, function ($event) {

@@ -1,10 +1,4 @@
 <?php
-/**
- * @Author: printempw
- * @Date:   2016-11-16 21:38:33
- * @Last Modified by:   printempw
- * @Last Modified time: 2017-01-08 09:58:19
- */
 
 namespace DataIntegration\Listener;
 
@@ -23,15 +17,15 @@ class DisableMultiPlayer
     public function subscribe(Dispatcher $events)
     {
         $events->listen(Events\PlayerWillBeAdded::class, function($event) {
-            exit(json('启用数据对接时无法添加新角色。', 1)->getContent());
+            exit(json('启用数据对接时无法添加新角色', 1)->getContent());
         });
 
         $events->listen(Events\PlayerWillBeDeleted::class, function($event) {
-            exit(json('启用数据对接时无法删除角色。', 1)->getContent());
+            exit(json('启用数据对接时无法删除角色', 1)->getContent());
         });
 
         $events->listen(Events\PlayerWillBeDeleted::class, function($event) {
-            exit(json('启用数据对接时无法删除角色。', 1)->getContent());
+            exit(json('启用数据对接时无法删除角色', 1)->getContent());
         });
 
         $events->listen([
