@@ -24,6 +24,9 @@ return function (Dispatcher $events) {
         });
     }
 
+    // TODO:
+    // 当用户修改邮箱时应该要求验证新邮箱有效性，否则可能会出现无法登录的情况。
+    // 不过我现在没有时间就暂时搁置了，有缘再说吧。
     $events->subscribe(Listener\BanInvalidatedUser::class);
     $events->subscribe(Listener\AddValidationRoute::class);
     $events->subscribe(Listener\RefreshValidation::class);
