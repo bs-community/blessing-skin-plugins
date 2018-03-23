@@ -21,7 +21,7 @@ class ReportController extends Controller
         $reporter = app('user.current')->uid;
 
         if (Report::where('reporter', $reporter)->where('tid', $tid)->first()) {
-            return json('你已经举报过该材质了，请耐心等待管理员处理，你可以在用户中心查看举报的处理进度', 1);
+            return json(trans('Blessing\Report::config.reported'), 1);
         }
 
         $report = new Report;
@@ -35,7 +35,7 @@ class ReportController extends Controller
 
         $report->save();
 
-        return json('举报已提交，请等待管理员处理', 0);
+        return json(trans('Blessing\Report::config.submited_report'), 0);
     }
 
     public function showMyReports()
@@ -65,7 +65,7 @@ class ReportController extends Controller
         $report = Report::find($request->get('id'));
 
         if (! $report) {
-            return json('不存在该举报记录');
+            return json(trans('Blessing\Report::config.not_exist'));
         }
 
         switch ($request->get('operation')) {
@@ -76,9 +76,9 @@ class ReportController extends Controller
                     User::find($report->uploader)->setPermission(User::BANNED);
                     $report->update(['status' => REPORT_STATUS_RESOLVED]);
 
-                    return json('被举报的上传者已被封禁', 0);
+                    return json(trans('Blessing\Report::config.blocked'), 0);
                 } else {
-                    return json('你没有权限封禁该用户', 1);
+                    return json(trans('Blessing\Report::config.no_permission_block'), 1);
                 }
 
                 break;
@@ -89,9 +89,9 @@ class ReportController extends Controller
                     Texture::find($report->tid)->delete();
                     $report->update(['status' => REPORT_STATUS_RESOLVED]);
 
-                    return json('被举报的材质已被删除', 0);
+                    return json(trans('Blessing\Report::config.deleted_reported_texture'), 0);
                 } else {
-                    return json('你没有权限删除该用户上传的材质', 1);
+                    return json(trans('Blessing\Report::config.no_permission_delete'), 1);
                 }
 
                 break;
@@ -99,7 +99,7 @@ class ReportController extends Controller
             case 'reject':
                 $report->update(['status' => REPORT_STATUS_REJECTED]);
 
-                return json('已拒绝该举报', 0);
+                return json(trans('Blessing\Report::config.was_rejected'), 0);
                 break;
 
             default:

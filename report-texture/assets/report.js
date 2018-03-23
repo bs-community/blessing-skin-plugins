@@ -3,7 +3,7 @@
 $('.col-md-4 .box-primary .box-header').append(
     '<div class="box-tools pull-right" style="position: initial; cursor: pointer;">'+
         '<span id="report-texture" class="label label-warning">'+
-            '<i class="fa fa-flag" aria-hidden="true"></i> 举报'+
+            '<i class="fa fa-flag" aria-hidden="true"></i> ' + trans('texture_report.Report')+
         '</span>'+
     '</div>'
 );
@@ -17,7 +17,7 @@ function reportTexture(tid) {
         dataType: 'json',
         data: { tid: tid, reason: reason },
         beforeSend: function() {
-            $('.modal-footer button').html('<i class="fa fa-spinner fa-spin"></i> 正在提交').prop('disabled', 'disabled');
+            $('.modal-footer button').html('<i class="fa fa-spinner fa-spin"></i>' + trans('texture_report.submitting')).prop('disabled', 'disabled');
         },
         success: function (result) {
             $('.modal').modal('hide')
@@ -37,7 +37,7 @@ $('body').on('click', '#report-texture', function () {
     var tid = location.pathname.match(/skinlib\/show\/(\d*)/)[1];
 
     if (! tid) {
-        return alert('TID 无效');
+        return alert(trans('texture_report.invaild_TID'));
     }
 
     $('.modal').each(function () {
@@ -46,11 +46,11 @@ $('body').on('click', '#report-texture', function () {
 
     var dom =
     '<div class="form-group" id="report-form">'+
-        '<label for="tid">请填写举报原因：</label>'+
-        '<input id="tid" class="form-control" type="text" placeholder="色情、暴力内容等">'+
+        '<label for="tid">' + trans('texture_report.report_reason') +'</label>'+
+        '<input id="tid" class="form-control" type="text" placeholder= ' + trans('texture_report.example_report_reason') + '>'+
     '</div>';
 
-    showModal(dom, '举报材质 TID: ' + tid, 'default', {
+    showModal(dom,  trans('report.TID') +':'+ tid, 'default', {
         callback: 'reportTexture(' + tid + ')'
     });
 });
@@ -64,7 +64,7 @@ var report = {
             data: { id: id, operation: 'ban' },
             success: function (result) {
                 if (result.errno == 0) {
-                    $('#report-'+id+' #status').text('处理完毕');
+                    $('#report-'+id+' #status').text(trans('texture_report.status.done'));
                     toastr.success(result.msg);
                 } else {
                     toastr.warning(result.msg);
@@ -81,7 +81,7 @@ var report = {
             data: { id: id, operation: 'delete' },
             success: function (result) {
                 if (result.errno == 0) {
-                    $('#report-'+id+' #status').text('处理完毕');
+                    $('#report-'+id+' #status').text(trans('texture_report.status.done'));
                     toastr.success(result.msg);
                 } else {
                     toastr.warning(result.msg);
@@ -98,7 +98,7 @@ var report = {
             data: { id: id, operation: 'reject' },
             success: function (result) {
                 if (result.errno == 0) {
-                    $('#report-'+id+' #status').text('已被拒绝');
+                    $('#report-'+id+' #status').text(trans('texture_report.status.rejected'));
                     toastr.success(result.msg);
                 } else {
                     toastr.warning(result.msg);
