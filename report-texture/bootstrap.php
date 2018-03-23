@@ -37,7 +37,7 @@ return function (Dispatcher $events) {
     ]);
 
     Hook::addMenuItem('admin', 3, [
-        'title' => trans('Blessing\Report::conifg.manage_report'),
+        'title' => trans('Blessing\Report::config.manage_report'),
         'link'  => 'admin/reports',
         'icon'  => 'fa-flag'
     ]);
