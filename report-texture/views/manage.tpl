@@ -1,6 +1,6 @@
 @extends('admin.master')
 
-@section('title', '举报管理')
+@section('title', trans('Blessing\Report::config.report-texture'))
 
 @section('content')
 
@@ -11,7 +11,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            举报管理
+            trans('Blessing\Report::config.report-texture')
         </h1>
     </section>
 
@@ -22,13 +22,13 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>材质 ID</th>
-                            <th>上传者</th>
-                            <th>举报人</th>
-                            <th>原因</th>
-                            <th>状态</th>
-                            <th>举报时间</th>
-                            <th data-placement="left" title="更多操作请进入用户管理或皮肤库中进行">操作</th>
+                            <th>trans('Blessing\Report::config.texture-id')</th>
+                            <th>trans('Blessing\Report::config.uploader')</th>
+                            <th>trans('Blessing\Report::config.reporter')</th>
+                            <th>trans('Blessing\Report::config.reason')</th>
+                            <th>trans('Blessing\Report::config.status')</th>
+                            <th>trans('Blessing\Report::config.report_time')</th>
+                            <th data-placement="left" title="trans('Blessing\Report::config.more_action')">trans('Blessing\Report::config.action')</th>
                         </tr>
                     </thead>
 
@@ -62,15 +62,15 @@
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">处理方式  <span class="caret"></span></button>
                                         <ul class="dropdown-menu">
-                                            <li><a href="javascript:report.ban({{ $report->id }});">封禁上传者</a></li>
-                                            <li><a href="javascript:report.delete({{ $report->id }});">删除该材质</a></li>
-                                            <li><a href="javascript:report.reject({{ $report->id }});">拒绝该举报</a></li>
+                                            <li><a href="javascript:report.ban({{ $report->id }});">trans('Blessing\Report::config.block')</a></li>
+                                            <li><a href="javascript:report.delete({{ $report->id }});">trans('Blessing\Report::config.delete')</a></li>
+                                            <li><a href="javascript:report.reject({{ $report->id }});">trans('Blessing\Report::config.reject')</a></li>
                                         </ul>
                                     </div>
                                 </td>
                             </tr>
                         @empty
-                            <p>未收到任何举报</p>
+                            <p>trans('Blessing\Report::config.none_report')</p>
                         @endforelse
                     </tbody>
                 </table>
