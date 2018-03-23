@@ -1,6 +1,6 @@
 @extends('user.master')
 
-@section('title', trans('Blessing\Report::config.my_report'))
+@section('title', trans('Blessing\Report::config.title'))
 
 @section('content')
 
@@ -11,7 +11,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            trans('Blessing\Report::config.my_report')
+            {{trans('Blessing\Report::config.my_report')}}
         </h1>
     </section>
 
@@ -22,12 +22,12 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>trans('Blessing\Report::config.texture-id')</th>
-                            <th>trans('Blessing\Report::config.reporter')</th>
-                            <th>trans('Blessing\Report::config.reason')</th>
-                            <th>trans('Blessing\Report::config.status')</th>
-                            <th>trans('Blessing\Report::config.report_time')</th>
-                            {{-- <th>trans('Blessing\Report::config.action')</th> --}}
+                            <th>{{trans('Blessing\Report::config.texture_id')}}</th>
+                            <th>{{trans('Blessing\Report::config.reporter')}}</th>
+                            <th>{{trans('Blessing\Report::config.reason')}}</th>
+                            <th>{{trans('Blessing\Report::config.status')}}</th>
+                            <th>{{trans('Blessing\Report::config.report_time')}}</th>
+                            {{-- <th>trans('Blessing\Report::config.action')}}</th> --}}
                         </tr>
                     </thead>
 
@@ -50,11 +50,11 @@
                                 <td>{{ report_status($report->status) }}</td>
                                 <td>{{ $report->report_at }}</td>
                                 {{-- <td>
-                                    <a class="btn btn-sm btn-warning" href="javascript:cancelReport({{ $report->id }})">trans('Blessing\Report::config.cancle')</a>
+                                    <a class="btn btn-sm btn-warning" href="javascript:cancelReport({{ $report->id }})">{{trans('Blessing\Report::config.cancle')}}</a>
                                 </td> --}}
                             </tr>
                         @empty
-                            <p>trans('Blessing\Report::config.my_none_report')</p>
+                            <p>{{trans('Blessing\Report::config.my_none_report')}}</p>
                         @endforelse
                     </tbody>
                 </table>

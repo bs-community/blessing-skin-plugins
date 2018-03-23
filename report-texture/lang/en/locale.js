@@ -1,9 +1,15 @@
-/*
-* @Author: printempw
-* @Date:   2017-01-17 22:17:48
-* @Last Modified by:   dz_paji add support for multi-language.
-* @Last Modified time: 2018-03-17 06:45:00
-*/
+$.locales['en'].texture_report = {
+    my_report: 'My Report',
+    manage_report: 'Manage Report',
+    Report: 'Report this',
+    submitting: 'Submitting...',
+    TID: 'Texture TID',
+    invaild_TID: 'Invaild TID',
+    report_reason: 'Please fill in the report reason',
+    example_report_reason: 'porn,violent...',
 
-$.extend($.locales['en'], {
-});
+    status = {
+        done: 'Done',
+        rejected: 'Rejected'
+    },
+};
