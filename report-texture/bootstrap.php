@@ -26,7 +26,7 @@ return function (Dispatcher $events) {
         'admin/reports*'
     ]);
 
-     Hook::registerPluginTransScripts('report-texture');
+    Hook::registerPluginTransScripts('report-texture');
 
     $index = (plugin('data-integration') && plugin('data-integration')->isEnabled()) ? 2 : 3;
 

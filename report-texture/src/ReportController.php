@@ -35,7 +35,7 @@ class ReportController extends Controller
 
         $report->save();
 
-        return json(trans('Blessing\Report::config.submited_report'), 0);
+        return json(trans('Blessing\Report::config.submitted_report'), 0);
     }
 
     public function showMyReports()
@@ -78,7 +78,7 @@ class ReportController extends Controller
 
                     return json(trans('Blessing\Report::config.blocked'), 0);
                 } else {
-                    return json(trans('Blessing\Report::config.no_permission_block'), 1);
+                    return json(trans('Blessing\Report::config.no_permission_2_block'), 1);
                 }
 
                 break;
@@ -89,9 +89,9 @@ class ReportController extends Controller
                     Texture::find($report->tid)->delete();
                     $report->update(['status' => REPORT_STATUS_RESOLVED]);
 
-                    return json(trans('Blessing\Report::config.deleted_reported_texture'), 0);
+                    return json(trans('Blessing\Report::config.texture_deleted'), 0);
                 } else {
-                    return json(trans('Blessing\Report::config.no_permission_delete'), 1);
+                    return json(trans('Blessing\Report::config.no_permission_2_delete'), 1);
                 }
 
                 break;
@@ -99,7 +99,7 @@ class ReportController extends Controller
             case 'reject':
                 $report->update(['status' => REPORT_STATUS_REJECTED]);
 
-                return json(trans('Blessing\Report::config.was_rejected'), 0);
+                return json(trans('Blessing\Report::config.be_rejected'), 0);
                 break;
 
             default:

@@ -4,33 +4,33 @@ uploader: Uploaded by
 reporter: Reported by
 reason: Reason
 status: Status
-report_time: Report Time
-more_action: For more actions, please visit User Edit or Skin Library
-action: Action
-block: Block uploader
-delete: Delete texture
+reported_time: Reported Time
+detail: Visit User Edit or Skin Library for more details.
+operation: Operation(s)
+block: Block this user
+delete: Delete this texture
 reject: Reject this report
-none_report: Nothing to display
+none: Nothing to display.
 treatment:  Treatment
 
 my_report: My report
-cancle: Cancle report
-my_none_report: It seems you didn't report anything~
+cancel: Cancel this report
+none_report: You didn't submit any report.
 
-manage_report: Manage Report
+manage_report: Manage Report(s)
 
-solving: Solving
-solved: Solved
+pending: Pending
+resolved: Resolved
 rejected: Rejected
 null_user: User doesn't exist
 
-reported: You have already reported this texture. Please wait for administrator to handle it. To check the progress of the report, please visit User Center.
-submited_report: The report was submited. Please wait for administrator to handle it.
+reported: You have already reported this texture. Please wait for the administrator to handle it. If you want to check the progress of the report, please visit User Center.
+submitted_report: The report submits successfully. Please wait for the administrator to handle it.
 not_exist: This report doesn't exist
 blocked: Uploader was blocked.
-no_permission_block: You don't have permission to block this user.
-deleted_reported_texture: The reported texture was deleted.
-no_permission_delete: You don't have enough permission to delete this texture.
-was_rejected: This report was rejected.
+no_permission_2_block: You don't have permission to block this user.
+texture_deleted: The texture was deleted.
+no_permission_2_delete: You don't have permission to delete this texture.
+be_rejected: This report was rejected.
 
-describe: User can report the public texture in skin library. Administrator can get notification in Admin Panel and choose how to solve it.
+description: The users will be able to report the public texture in the skin library. And the administrator can be noticed in Admin Panel and choose different treatment.

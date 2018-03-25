@@ -2,7 +2,7 @@
   "name": "report-texture",
   "version": "1.0.3",
   "title": "Blessing\\Report::config.title",
-  "description": "Blessing\\Report::config.describe",
+  "description": "Blessing\\Report::config.description",
   "author": "printempw",
   "url": "https://blessing.studio/",
   "namespace": "Blessing\\Report"

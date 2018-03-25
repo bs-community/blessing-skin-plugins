@@ -5,10 +5,10 @@ define('REPORT_STATUS_REJECTED', 2);
 function report_status($code) {
     switch ($code) {
         case REPORT_STATUS_PENDING:
-            return trans('Blessing\Report::config.solving');
+            return trans('Blessing\Report::config.pending');
             break;
         case REPORT_STATUS_RESOLVED:
-            return trans('Blessing\Report::config.solved');
+            return trans('Blessing\Report::config.resolved');
             break;
         case REPORT_STATUS_REJECTED:
             return trans('Blessing\Report::config.rejected');
