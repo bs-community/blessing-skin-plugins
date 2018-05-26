@@ -15,7 +15,7 @@ class RefreshValidation
     {
         $events->listen(UserProfileUpdated::class, function($event) {
             if ($event->type == "email") {
-                DB::table(RV_TABLE_NAME)->where('id', $event->user->uid)->update(['validated' => '0']);
+                DB::table(RV_TABLE_NAME)->where('uid', $event->user->uid)->update(['validated' => '0']);
             }
         });
     }

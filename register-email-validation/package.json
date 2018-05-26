@@ -1,6 +1,6 @@
 {
   "name": "register-email-validation",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "title": "注册邮箱验证",
   "description": "用户注册后需点击发送至验证邮箱的链接后才可正常使用",
   "author": "printempw",
