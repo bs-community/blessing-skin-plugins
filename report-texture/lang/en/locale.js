@@ -1,4 +1,4 @@
-$.locales['en'].reportTexture = {
+$.locales['en'].report_texture = {
     myReport: 'My Report',
     manageReport: 'Manage Report',
     reportThis: 'Report this',

@@ -1,4 +1,4 @@
-$.locales['zh_CN'].reportTexture = {
+$.locales['zh_CN'].report_texture = {
     myReport: '我的举报',
     manageReport: '举报管理',
     reportThis: '举报该材质',

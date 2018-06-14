@@ -65,7 +65,7 @@ class ReportController extends Controller
         $report = Report::find($request->get('id'));
 
         if (! $report) {
-            return json(trans('Blessing\Report::config.not_exist'));
+            return json(trans('Blessing\Report::config.nonexistent_report'));
         }
 
         switch ($request->get('operation')) {
@@ -78,7 +78,7 @@ class ReportController extends Controller
 
                     return json(trans('Blessing\Report::config.blocked'), 0);
                 } else {
-                    return json(trans('Blessing\Report::config.no_permission_2_block'), 1);
+                    return json(trans('Blessing\Report::config.permission_denied_user'), 1);
                 }
 
                 break;
@@ -91,7 +91,7 @@ class ReportController extends Controller
 
                     return json(trans('Blessing\Report::config.texture_deleted'), 0);
                 } else {
-                    return json(trans('Blessing\Report::config.no_permission_2_delete'), 1);
+                    return json(trans('Blessing\Report::config.permission_denied_texture'), 1);
                 }
 
                 break;
@@ -99,7 +99,7 @@ class ReportController extends Controller
             case 'reject':
                 $report->update(['status' => REPORT_STATUS_REJECTED]);
 
-                return json(trans('Blessing\Report::config.be_rejected'), 0);
+                return json(trans('Blessing\Report::config.rejected'), 0);
                 break;
 
             default:

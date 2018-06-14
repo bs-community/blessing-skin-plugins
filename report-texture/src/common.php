@@ -5,13 +5,13 @@ define('REPORT_STATUS_REJECTED', 2);
 function report_status($code) {
     switch ($code) {
         case REPORT_STATUS_PENDING:
-            return trans('Blessing\Report::config.pending');
+            return trans('Blessing\Report::config.status_pending');
             break;
         case REPORT_STATUS_RESOLVED:
-            return trans('Blessing\Report::config.resolved');
+            return trans('Blessing\Report::config.status_resolved');
             break;
         case REPORT_STATUS_REJECTED:
-            return trans('Blessing\Report::config.rejected');
+            return trans('Blessing\Report::config.status_rejected');
             break;
         default:
             return null;
@@ -23,6 +23,6 @@ function report_uid_to_nickname($uid) {
     if ($user) {
         return $user->getNickName();
     } else {
-        return trans('Blessing/Report::config.null_user');
+        return trans('Blessing/Report::config.nonexistent_user');
     }
 }
