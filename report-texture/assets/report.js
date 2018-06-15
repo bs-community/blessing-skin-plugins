@@ -37,7 +37,7 @@ $('body').on('click', '#report-texture', function () {
     var tid = location.pathname.match(/skinlib\/show\/(\d*)/)[1];
 
     if (! tid) {
-        return alert(trans('report_texture.invaildTID'));
+        return alert(trans('report_texture.invalidTID'));
     }
 
     $('.modal').each(function () {

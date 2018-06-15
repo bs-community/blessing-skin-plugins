@@ -4,11 +4,11 @@ $.locales['en'].report_texture = {
     reportThis: 'Report this',
     submitting: 'Submitting...',
     TID: 'Texture TID',
-    invaildTID: 'Invaild TID',
+    invalidTID: 'Invalid TID',
     reportReason: 'Please fill in the report reason',
     reportReasonExample: 'porn,violent...',
 
-    status = {
+    status :{
         Resolved: 'Resolved',
         rejected: 'Rejected'
     },

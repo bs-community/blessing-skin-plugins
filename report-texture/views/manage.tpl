@@ -27,8 +27,8 @@
                             <th>{{trans('Blessing\Report::config.reporter')}}</th>
                             <th>{{trans('Blessing\Report::config.reason')}}</th>
                             <th>{{trans('Blessing\Report::config.status')}}</th>
-                            <th>{{trans('Blessing\Report::config.reported_time')}}</th>
-                            <th data-placement="left" title="{{trans('Blessing\Report::config.detail')}}">{{trans('Blessing\Report::config.operation')}}</th>
+                            <th>{{trans('Blessing\Report::config.time')}}</th>
+                            <th data-placement="left" title="{{trans('Blessing\Report::config.details')}}">{{trans('Blessing\Report::config.operation')}}</th>
                         </tr>
                     </thead>
 
@@ -70,7 +70,7 @@
                                 </td>
                             </tr>
                         @empty
-                            <p>{{trans('Blessing\Report::config.none_report')}}</p>
+                            <p>{{trans('Blessing\Report::config.none')}}</p>
                         @endforelse
                     </tbody>
                 </table>

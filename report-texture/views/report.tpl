@@ -11,7 +11,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            {{trans('Blessing\Report::config.my_report')}}
+            {{trans('Blessing\Report::config.user_reports')}}
         </h1>
     </section>
 
@@ -50,11 +50,11 @@
                                 <td>{{ report_status($report->status) }}</td>
                                 <td>{{ $report->report_at }}</td>
                                 {{-- <td>
-                                    <a class="btn btn-sm btn-warning" href="javascript:cancelReport({{ $report->id }})">{{trans('Blessing\Report::config.cancel')}}</a>
+                                    <a class="btn btn-sm btn-warning" href="javascript:cancelReport({{ $report->id }})">{{trans('Blessing\Report::config.user_cancel')}}</a>
                                 </td> --}}
                             </tr>
                         @empty
-                            <p>{{trans('Blessing\Report::config.none_report')}}</p>
+                            <p>{{trans('Blessing\Report::config.user_none_report')}}</p>
                         @endforelse
                     </tbody>
                 </table>
