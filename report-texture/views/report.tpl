@@ -26,7 +26,7 @@
                             <th>{{trans('Blessing\Report::config.reporter')}}</th>
                             <th>{{trans('Blessing\Report::config.reason')}}</th>
                             <th>{{trans('Blessing\Report::config.status')}}</th>
-                            <th>{{trans('Blessing\Report::config.reported_time')}}</th>
+                            <th>{{trans('Blessing\Report::config.time')}}</th>
                             {{-- <th>trans('Blessing\Report::config.action')}}</th> --}}
                         </tr>
                     </thead>
