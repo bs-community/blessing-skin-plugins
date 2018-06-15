@@ -31,13 +31,13 @@ return function (Dispatcher $events) {
     $index = (plugin('data-integration') && plugin('data-integration')->isEnabled()) ? 2 : 3;
 
     Hook::addMenuItem('user', $index, [
-        'title' => trans('Blessing\Report::config.user_reports'),
+        'title' => trans('Blessing\Report::config.User_Reports'),
         'link'  => 'user/report',
         'icon'  => 'fa-flag'
     ]);
 
     Hook::addMenuItem('admin', 3, [
-        'title' => trans('Blessing\Report::config.manage_report'),
+        'title' => trans('Blessing\Report::config.Manage_Reports'),
         'link'  => 'admin/reports',
         'icon'  => 'fa-flag'
     ]);

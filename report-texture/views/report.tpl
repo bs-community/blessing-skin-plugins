@@ -11,7 +11,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            {{trans('Blessing\Report::config.user_reports')}}
+            {{trans('Blessing\Report::config.User_Reports')}}
         </h1>
     </section>
 
@@ -54,7 +54,7 @@
                                 </td> --}}
                             </tr>
                         @empty
-                            <p>{{trans('Blessing\Report::config.user_none_report')}}</p>
+                            <p>{{trans('Blessing\Report::config.user_non_report')}}</p>
                         @endforelse
                     </tbody>
                 </table>

@@ -28,7 +28,7 @@
                             <th>{{trans('Blessing\Report::config.reason')}}</th>
                             <th>{{trans('Blessing\Report::config.status')}}</th>
                             <th>{{trans('Blessing\Report::config.time')}}</th>
-                            <th data-placement="left" title="{{trans('Blessing\Report::config.details')}}">{{trans('Blessing\Report::config.operation')}}</th>
+                            <th data-placement="left" title="{{trans('Blessing\Report::config.details')}}">{{trans('Blessing\Report::config.operations')}}</th>
                         </tr>
                     </thead>
 

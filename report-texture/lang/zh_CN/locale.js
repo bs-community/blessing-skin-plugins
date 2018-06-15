@@ -1,6 +1,6 @@
-$.locales['zh_CN'].report_texture = {
-    myReport: '我的举报',
-    manageReport: '举报管理',
+$.locales['zh_CN'].reportTexture = {
+    MyReport: '我的举报',
+    ManageReport: '举报管理',
     reportThis: '举报该材质',
     submitting:'提交中...',
     TID: '材质 TID',
@@ -8,7 +8,7 @@ $.locales['zh_CN'].report_texture = {
     reportReason: '请填写举报原因',
     reportReasonExample: '色情，暴力内容等',
 
-    status = {
+    status: {
         resolved: '处理完毕',
         rejected: '已被拒绝'
     },

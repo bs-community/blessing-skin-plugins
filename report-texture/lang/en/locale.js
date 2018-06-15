@@ -1,15 +1,15 @@
-$.locales['en'].report_texture = {
-    myReport: 'My Report',
-    manageReport: 'Manage Report',
+$.locales['en'].reportTexture = {
+    MyReport: 'My Reports',
+    ManageReport: 'Manage Reports',
     reportThis: 'Report this',
     submitting: 'Submitting...',
     TID: 'Texture TID',
     invalidTID: 'Invalid TID',
     reportReason: 'Please fill in the report reason',
-    reportReasonExample: 'porn,violent...',
+    reportReasonExample: 'porn, violent...',
 
-    status :{
-        Resolved: 'Resolved',
+    status: {
+        resolved: 'Resolved',
         rejected: 'Rejected'
     },
 };
