@@ -26,18 +26,18 @@ return function (Dispatcher $events) {
         'admin/reports*'
     ]);
 
-    // Hook::registerPluginTransScripts('example-plugin');
+    Hook::registerPluginTransScripts('report-texture');
 
     $index = (plugin('data-integration') && plugin('data-integration')->isEnabled()) ? 2 : 3;
 
     Hook::addMenuItem('user', $index, [
-        'title' => '我的举报',
+        'title' => trans('Blessing\Report::config.my_report'),
         'link'  => 'user/report',
         'icon'  => 'fa-flag'
     ]);
 
     Hook::addMenuItem('admin', 3, [
-        'title' => '举报管理',
+        'title' => trans('Blessing\Report::config.manage_report'),
         'link'  => 'admin/reports',
         'icon'  => 'fa-flag'
     ]);

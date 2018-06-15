@@ -1,0 +1,38 @@
+title: Report Texture
+texture_id: Texture ID
+uploader: Uploaded by
+reporter: Reported by
+reason: Reason
+status: Status
+time: Reported Time
+details: Visit User Edit or Skin Library for more details.
+operation: Operation(s)
+block: Block this user
+delete: Delete this texture
+reject: Reject this report
+none: Nothing to display.
+treatment:  Treatment
+
+user_reports: My report(s)
+user_cancel: Cancel this report
+user_non_report: You didn't submit any report.
+
+manage_report: Manage Report(s)
+
+status_pending: Pending
+status_resolved: Resolved
+status_rejected: Rejected
+
+nonexistent_user: User doesn't exist
+nonexistent_report: This report doesn't exist
+
+reported: You have already reported this texture. Please wait for the administrator to handle it. If you want to check the progress of the report, please visit User Center.
+submitted_report: Your report submits successfully. Please wait for the administrator to handle it.
+blocked: Uploader was blocked.
+texture_deleted: The texture was deleted.
+rejected: This report was rejected.
+
+permission_denied_user: You don't have enough permission to block this user.
+permission_denied_texture: You don't have permission to delete this texture.
+
+description: The users will be able to report the public texture in the skin library. And the administrator can be noticed in Admin Panel and choose different treatment.
