@@ -1,0 +1,38 @@
+title: 举报材质
+texture_id: 材质ID
+uploader: 上传者
+reporter: 举报者
+reason: 原因
+status: 状况
+time: 举报时间
+details: 更多操作请进入用户管理或皮肤库中进行
+operations: 操作
+block: 封禁上传者
+delete: 删除材质
+reject: 拒绝该举报
+none: 未收到举报
+treatment: 处理方式
+
+user_reports: 我的举报
+user_cancel: 取消举报
+user_non_report: 你并没有举报任何材质哦~
+
+manage_reports: 举报管理
+
+status_pending: 正在处理
+status_resolved: 处理完成
+status_rejected: 已被拒绝
+
+nonexistent_user: 用户不存在
+nonexistent_report: 该举报不存在
+
+reported: 你已经举报过该材质了，请耐心等待管理员处理。你可以在用户中心查看举报的处理进度
+submitted_report: 举报已提交，请等待管理员处理
+texture_deleted: 被举报的材质已被删除
+blocked: 被举报的上传者已被封禁
+rejected: 该举报已被拒绝
+
+permission_denied_user: 你没有权限封禁上传者
+permission_denied_texture: 你没有权限删除该材质
+
+description: 用户可以举报皮肤库中的公开材质；管理员可在后台收到通知，并选择处理方式。

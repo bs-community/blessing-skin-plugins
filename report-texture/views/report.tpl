@@ -1,6 +1,6 @@
 @extends('user.master')
 
-@section('title', '我的举报')
+@section('title', trans('Blessing\Report::config.title'))
 
 @section('content')
 
@@ -11,7 +11,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            我的举报
+            {{trans('Blessing\Report::config.user_reports')}}
         </h1>
     </section>
 
@@ -22,12 +22,12 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>材质 ID</th>
-                            <th>上传者</th>
-                            <th>原因</th>
-                            <th>状态</th>
-                            <th>举报时间</th>
-                            {{-- <th>操作</th> --}}
+                            <th>{{trans('Blessing\Report::config.texture_id')}}</th>
+                            <th>{{trans('Blessing\Report::config.reporter')}}</th>
+                            <th>{{trans('Blessing\Report::config.reason')}}</th>
+                            <th>{{trans('Blessing\Report::config.status')}}</th>
+                            <th>{{trans('Blessing\Report::config.time')}}</th>
+                            {{-- <th>trans('Blessing\Report::config.action')}}</th> --}}
                         </tr>
                     </thead>
 
@@ -50,11 +50,11 @@
                                 <td>{{ report_status($report->status) }}</td>
                                 <td>{{ $report->report_at }}</td>
                                 {{-- <td>
-                                    <a class="btn btn-sm btn-warning" href="javascript:cancelReport({{ $report->id }})">取消举报</a>
+                                    <a class="btn btn-sm btn-warning" href="javascript:cancelReport({{ $report->id }})">{{trans('Blessing\Report::config.user_cancel')}}</a>
                                 </td> --}}
                             </tr>
                         @empty
-                            <p>你还没有提交任何举报哦</p>
+                            <p>{{trans('Blessing\Report::config.user_non_report')}}</p>
                         @endforelse
                     </tbody>
                 </table>
