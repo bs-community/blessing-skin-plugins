@@ -13,11 +13,11 @@ reject: Reject this report
 none: Nothing to display.
 treatment:  Treatment
 
-User_Reports: My Reports
+user_reports: My Reports
 user_cancel: Cancel this report
 user_non_report: You didn't submit any reports.
 
-Manage_Reports: Manage Reports
+manage_reports: Manage Reports
 
 status_pending: Pending
 status_resolved: Resolved

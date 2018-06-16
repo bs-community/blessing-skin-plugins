@@ -11,7 +11,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            {{trans('Blessing\Report::config.User_Reports')}}
+            {{trans('Blessing\Report::config.user_reports')}}
         </h1>
     </section>
 

@@ -13,11 +13,11 @@ reject: 拒绝该举报
 none: 未收到举报
 treatment: 处理方式
 
-User_Reports: 我的举报
+user_reports: 我的举报
 user_cancel: 取消举报
 user_non_report: 你并没有举报任何材质哦~
 
-Manage_Reports: 举报管理
+manage_reports: 举报管理
 
 status_pending: 正在处理
 status_resolved: 处理完成
