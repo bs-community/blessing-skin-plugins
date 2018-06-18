@@ -35,11 +35,15 @@ class SessionController extends Controller
             throw new IllegalArgumentException("指定的角色 [$result->name] 不存在");
         }
 
-        $identification = $player->user()->first()->email;
+        $identification = strtolower($player->user()->first()->email);
+
+        Log::info("Player name is [$player->player_name], belongs to user [$identification]");
 
         if ($cache = Cache::get("ID_$identification")) {
 
             $token = unserialize($cache);
+
+            Log::info("All access tokens issued for user [$identification] are as listed", [$token]);
 
             if ($token->accessToken != $accessToken) {
                 throw new IllegalArgumentException('无效的 AccessToken，请重新登录');
@@ -48,6 +52,9 @@ class SessionController extends Controller
             // 加入服务器
             Cache::forever("SERVER_$serverId", $selectedProfile);
         } else {
+
+            Log::info("No access token issued for user [$identification]", [$cache]);
+
             // 指定角色所属的用户没有签发任何令牌
             throw new IllegalArgumentException('未查找到有效的登录信息，请重新登录');
         }

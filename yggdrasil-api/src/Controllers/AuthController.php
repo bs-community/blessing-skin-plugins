@@ -51,7 +51,7 @@ class AuthController extends Controller
          * 注意，新版账户验证中 username 字段填的是邮箱，
          * 只有旧版的用户填的才是用户名（legacy = true）
          */
-        $identification = $request->get('username');
+        $identification = strtolower($request->get('username'));
         $user = $this->checkUserCredentials($request);
 
         // clientToken 原样返回，如果没提供就给客户端生成一个
@@ -197,7 +197,7 @@ class AuthController extends Controller
 
     public function signout(Request $request)
     {
-        $identification = $request->get('username');
+        $identification = strtolower($request->get('username'));
         $user = $this->checkUserCredentials($request, false);
 
         // 吊销所有令牌
@@ -220,7 +220,7 @@ class AuthController extends Controller
         // 据说不用检查 clientToken 与 accessToken 是否匹配
         if ($cache = Cache::get("TOKEN_$accessToken")) {
             $token = unserialize($cache);
-            $identification = $token->owner;
+            $identification = strtolower($token->owner);
 
             Cache::forget("ID_$identification");
             Cache::forget("TOKEN_$accessToken");
