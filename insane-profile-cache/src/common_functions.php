@@ -9,8 +9,12 @@ if (! function_exists('generateProfileFileCache')) {
         foreach (['usm', 'csl'] as $apiType) {
             $filename = PROFILE_CACHE_PATH."/$apiType/{$player->player_name}.json";
 
-            if (strncasecmp(PHP_OS, 'WIN', 3) == 0) {
-                $filename = iconv("utf-8", "gb2312", $filename);
+            try {
+                if (strncasecmp(PHP_OS, 'WIN', 3) == 0) {
+                    $filename = iconv('utf-8', 'gb2312', $filename);
+                }
+            } catch (Exception $e) {
+                Log::error("Failed to convert [$filename] from utf-8 to gb2312");
             }
 
             file_put_contents($filename, $player->getJsonProfile(
