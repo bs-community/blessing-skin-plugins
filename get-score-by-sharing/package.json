@@ -1,0 +1,10 @@
+{
+  "name": "get-score-by-sharing",
+  "version": "1.0.0",
+  "title": "上传奖励积分",
+  "description": "用户上传公开的皮肤、披风至皮肤库时可以获得积分奖励。",
+  "author": "printempw",
+  "url": "https://blessing.studio/",
+  "namespace": "GetScoreBySharing",
+  "config": "config.tpl"
+}
