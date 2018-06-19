@@ -39,11 +39,9 @@ class UserController extends BaseController
             return json("您已经绑定了角色名：$user->player_name");
         }
 
-        if (Validator::make(request()->all(), [
-            'playerName' => 'required|'.(option('allow_chinese_playername') ? 'pname_chinese' : 'playername')
-        ])->fails()) {
-            return json('请输入有效的角色名', 1);
-        }
+        $this->validate(request(), [
+            'playerName' => get_player_name_validation_rules()
+        ]);
 
         $player = Player::where('player_name', $playerName)->first();
 
@@ -64,11 +62,9 @@ class UserController extends BaseController
         $user = app('user.current');
         $newPlayerName = request()->get('newPlayerName');
 
-        if (Validator::make(request()->all(), [
-            'newPlayerName' => 'required|'.(option('allow_chinese_playername') ? 'pname_chinese' : 'playername')
-        ])->fails()) {
-            return json('请输入有效的角色名', 1);
-        }
+        $this->validate(request(), [
+            'newPlayerName' => get_player_name_validation_rules()
+        ]);
 
         $player = Player::where('player_name', $newPlayerName)->first();
 

@@ -29,7 +29,7 @@ class AuthController extends BaseController
         $this->validate($request, [
             'email'    => 'required|email',
             'password' => 'required|min:8|max:32',
-            'playerName' => 'required|'.(option('allow_chinese_playername') ? 'pname_chinese' : 'playername')
+            'playerName' => get_player_name_validation_rules()
         ]);
 
         if (! option('user_can_register')) {

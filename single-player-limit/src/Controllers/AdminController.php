@@ -51,12 +51,10 @@ class AdminController extends BaseController
         $uid = request()->get('uid');
         $newPlayerName = request()->get('newPlayerName');
 
-        if (Validator::make(request()->all(), [
+        $this->validate(request(), [
             'uid' => 'required',
-            'newPlayerName' => 'required|'.(option('allow_chinese_playername') ? 'pname_chinese' : 'playername')
-        ])->fails()) {
-            return json('参数不正确', 1);
-        }
+            'newPlayerName' => get_player_name_validation_rules()
+        ]);
 
         $user = User::find($uid);
 

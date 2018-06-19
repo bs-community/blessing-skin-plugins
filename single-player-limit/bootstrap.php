@@ -5,6 +5,15 @@ use App\Models\Player;
 use App\Services\Hook;
 use Illuminate\Contracts\Events\Dispatcher;
 
+function get_player_name_validation_rules() {
+    // 兼容旧版 BS 的验证规则
+    if (version_compare(config('app.version'), '3.4.0', '>')) {
+        return 'required|player_name|min:'.option('player_name_length_min').'|max:'.option('player_name_length_max');
+    } else {
+        return 'required|'.(option('allow_chinese_playername') ? 'pname_chinese' : 'playername');
+    }
+}
+
 return function (Dispatcher $events) {
 
     // 在 users 表上添加 player_name 字段
