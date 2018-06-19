@@ -4,9 +4,17 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 return function (Dispatcher $events) {
 
-    if (! Option::has('score_award_per_texture')) {
-        Option::set('score_award_per_texture', 100);
-        Option::set('take_back_scores_after_deletion', true);
+    // 加载设置项
+    $options = [
+        'score_award_per_like' => 50,
+        'score_award_per_texture' => 100,
+        'take_back_scores_after_deletion' => true
+    ];
+
+    foreach ($options as $key => $value) {
+        if (! Option::has($key)) {
+            Option::set($key, $value);
+        }
     }
 
     // 当用户上传公开材质至皮肤库时奖励积分
@@ -35,6 +43,22 @@ return function (Dispatcher $events) {
                     option('score_award_per_texture'), 'minus'
                 );
             }
+        }
+    });
+
+    // 用户收藏皮肤库中的材质时奖励上传者积分
+    App\Models\Texture::updated(function ($t) {
+        $uploader = app('users')->get($t->uploader)->fresh();
+
+        // 收藏私密材质或者自己上传的材质不给积分
+        if ($t->public != 1 || $t->uploader == app('user.current')->uid || !option('score_award_per_like')) {
+            return;
+        }
+
+        if (request()->is('user/closet/add')) {
+            $uploader->setScore(option('score_award_per_like'), 'plus');
+        } else if (request()->is('user/closet/remove')) {
+            $uploader->setScore(option('score_award_per_like'), 'minus');
         }
     });
 

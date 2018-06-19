@@ -1,6 +1,6 @@
 @extends('admin.master')
 
-@section('title', '上传奖励积分')
+@section('title', '分享奖励积分')
 
 @section('content')
 
@@ -9,7 +9,7 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      上传材质奖励积分
+      分享皮肤、披风获得奖励积分
     </h1>
   </section>
 
@@ -21,6 +21,7 @@
         $form = Option::form('config', '配置', function ($form) {
           $form->group('score_award_per_texture', '每上传一个材质奖励')->text('score_award_per_texture')->addon('积分');
           $form->checkbox('take_back_scores_after_deletion', '回收积分')->label('删除上传的材质后收回奖励积分');
+          $form->group('score_award_per_like', '材质每被收藏一次奖励上传者')->text('score_award_per_like')->addon('积分');
         })->handle(); ?>
 
         {!! $form->render() !!}
