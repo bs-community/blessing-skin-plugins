@@ -3,7 +3,6 @@
 namespace Yggdrasil\Controllers;
 
 use Cache;
-use Exception;
 use App\Models\User;
 use App\Models\Player;
 use Yggdrasil\Utils\Log;
@@ -18,70 +17,6 @@ use Yggdrasil\Exceptions\ForbiddenOperationException;
 
 class AuthController extends Controller
 {
-    public function hello(Request $request)
-    {
-        // Default skin domain whitelist:
-        // - Specified by option 'site_url'
-        // - Extract host from current URL
-        $extra = option('ygg_skin_domain') === '' ? [] : explode(',', option('ygg_skin_domain'));
-        $skinDomains = array_map('trim', array_unique(array_merge($extra, [
-            parse_url(option('site_url'), PHP_URL_HOST),
-            $request->getHost()
-        ])));
-
-        $privateKey = openssl_pkey_get_private(option('ygg_private_key'));
-
-        if (! $privateKey) {
-            throw new IllegalArgumentException('无效的 RSA 私钥，请访问插件配置页重新设置');
-        }
-
-        $keyData = openssl_pkey_get_details($privateKey);
-
-        if ($keyData['bits'] < 4096) {
-            throw new IllegalArgumentException('RSA 私钥的长度至少为 4096，请访问插件配置页重新设置');
-        }
-
-        return json([
-            'meta' => [
-                'serverName' => option('site_name'),
-                'implementationName' => 'Yggdrasil API for Blessing Skin',
-                'implementationVersion' => plugin('yggdrasil-api')['version']
-            ],
-            'skinDomains' => $skinDomains,
-            'signaturePublickey' => $keyData['key']
-        ]);
-    }
-
-    public function generate()
-    {
-        try {
-            // 很多 PHP 主机都没有设置 openssl.cnf 这个配置文件，
-            // 导致 OpenSSL 扩展的密钥生成功能直接残废，
-            // 所以我只好随插件自带一个了。
-            $config = [
-                'private_key_bits' => 4096,
-                'private_key_type' => OPENSSL_KEYTYPE_RSA,
-                'config' => plugin('yggdrasil-api')->getPath().'/openssl.cnf'
-            ];
-
-            $res = openssl_pkey_new($config);
-
-            if (! $res) {
-                throw new Exception(openssl_error_string(), 1);
-            }
-
-            openssl_pkey_export($res, $privateKey, null, $config);
-
-            return json([
-                'errno' => 0,
-                'key' => $privateKey
-            ]);
-
-        } catch (Exception $e) {
-            return json('自动生成私钥时出错，请尝试手动设置私钥。错误信息：'.$e->getMessage(), 1);
-        }
-    }
-
     public function authenticate(Request $request)
     {
         /**

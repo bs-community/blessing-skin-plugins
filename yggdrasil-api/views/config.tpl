@@ -51,10 +51,33 @@
     <div class="row">
       <div class="col-md-6">
         {!! $commonForm->render() !!}
+
+        <div class="box box-default">
+          <div class="box-header with-border">
+            <h3 class="box-title">导入服务器的【角色名 ⇆ UUID】映射表</h3>
+          </div><!-- /.box-header -->
+          <div class="box-body">
+            <div class="callout callout-info">
+              如果你正在将现有的 Minecraft 服务器迁移至使用本外置登录方案，请在这里导入你服务器的 `usercache.json` 文件，以防止出现 UUID 冲突的问题。
+              如果你不知道这个怎么用，请仔细阅读 <a href="http://t.cn/RrAK4F8">「Wiki - 0x05 从登录插件迁移至本方案」</a>。
+            </div>
+
+            <input id="usercache-json-file" type="file" accept="application/json" />
+          </div><!-- /.box-body -->
+        </div><!-- /.box -->
       </div>
 
       <div class="col-md-6">
         {!! $keypairForm->render() !!}
+
+        <div class="box box-default">
+          <div class="box-header with-border">
+            <h3 class="box-title">本站已保存的映射表情况</h3>
+          </div><!-- /.box-header -->
+          <div class="box-body">
+            <p>目前本站已存储了 {{ DB::table('uuid')->count() }} 条【角色名 ⇆ UUID】的映射，你可以去本站数据库中的 <code>{{ DB::getTablePrefix().'uuid' }}</code> 表进行管理。</p>
+          </div><!-- /.box-body -->
+        </div><!-- /.box -->
       </div>
     </div>
   </section><!-- /.content -->
@@ -63,27 +86,5 @@
 @endsection
 
 @section('script')
-<script type="text/javascript">
-  'use strict';function _asyncToGenerator(a){return function(){var b=a.apply(this,arguments);return new Promise(function(c,d){function e(f,g){try{var h=b[f](g),i=h.value}catch(j){return void d(j)}return h.done?void c(i):Promise.resolve(i).then(function(j){e('next',j)},function(j){e('throw',j)})}return e('next')})}}$('[name=generate-key]').click(_asyncToGenerator(regeneratorRuntime.mark(function a(){var b,c,d,e;return regeneratorRuntime.wrap(function(g){for(;;)switch(g.prev=g.next){case 0:return g.prev=0,g.next=3,fetch({type:'POST',url:url('admin/plugins/config/yggdrasil-api/generate')});case 3:b=g.sent,c=b.errno,d=b.msg,e=b.key,0===c?(toastr.success('\u6210\u529F\u751F\u6210\u4E86\u4E00\u4E2A\u65B0\u7684 4096 bit OpenSSL RSA \u79C1\u94A5'),$('td.value textarea').val(e),$('input[value=keypair]').parent().submit()):swal({type:'warning',html:d}),g.next=13;break;case 10:g.prev=10,g.t0=g['catch'](0),showAjaxError(g.t0);case 13:case'end':return g.stop();}},a,this,[[0,10]])})));
-
-  // $('[name=generate-key]').click(async function () {
-  //   try {
-  //     const { errno, msg, key } = await fetch({
-  //       type: 'POST',
-  //       url: url('admin/plugins/config/yggdrasil-api/generate')
-  //     });
-  //
-  //     if (errno === 0) {
-  //       toastr.success('成功生成了一个新的 4096 bit OpenSSL RSA 私钥');
-  //
-  //       $('td.value textarea').val(key);
-  //       $('input[value=keypair]').parent().submit();
-  //     } else {
-  //       swal({ type: 'warning', html: msg });
-  //     }
-  //   } catch (error) {
-  //     showAjaxError(error);
-  //   }
-  // });
-</script>
+<script src="{{ plugin_assets('yggdrasil-api', 'assets/config.js') }}"></script>
 @endsection

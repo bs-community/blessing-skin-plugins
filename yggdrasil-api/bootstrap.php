@@ -41,9 +41,16 @@ return function (Dispatcher $events) {
 
     // App\Http\Middleware\RedirectIfUrlEndsWithSlash
     Hook::addRoute(function ($router) {
-        $router->any('api/yggdrasil', 'Yggdrasil\Controllers\AuthController@hello');
+        $router->any('api/yggdrasil', 'Yggdrasil\Controllers\ConfigController@hello');
 
-        $router->post('admin/plugins/config/yggdrasil-api/generate', 'Yggdrasil\Controllers\AuthController@generate')->middleware(['web', 'auth', 'admin']);
+        $router->group([
+            'middleware' => ['web', 'auth', 'admin'],
+            'namespace'  => 'Yggdrasil\Controllers',
+            'prefix' => 'admin/plugins/config/yggdrasil-api'
+        ], function ($router) {
+            $router->post('import', 'ConfigController@import');
+            $router->post('generate', 'ConfigController@generate');
+        });
 
         $router->group([
             'middleware' => ['web'],
