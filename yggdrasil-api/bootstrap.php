@@ -43,6 +43,8 @@ return function (Dispatcher $events) {
     Hook::addRoute(function ($router) {
         $router->any('api/yggdrasil', 'Yggdrasil\Controllers\AuthController@hello');
 
+        $router->post('admin/plugins/config/yggdrasil-api/generate', 'Yggdrasil\Controllers\AuthController@generate')->middleware(['web', 'auth', 'admin']);
+
         $router->group([
             'middleware' => ['web'],
             'namespace'  => 'Yggdrasil\Controllers',
