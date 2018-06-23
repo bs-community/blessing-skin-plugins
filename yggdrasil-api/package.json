@@ -1,8 +1,8 @@
 {
   "name": "yggdrasil-api",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "title": "Yggdrasil API",
-  "description": "为皮肤站添加自定义 Yggdrasil API 支持，可配合 authlib-injector 等登录系统使用（此版插件不再支持 authlib-agent，详情请阅读：http://t.cn/R9us7o1）。强烈建议使用 HTTPS，因为 Yggdrasil API 的密码为明文传输。",
+  "description": "为皮肤站添加自定义 Yggdrasil API 支持，可配合 authlib-injector 等软件使用实现外置登录功能。启用之前请仔细阅读使用说明 👉 http://t.cn/RrUySTY",
   "author": "printempw",
   "url": "https://github.com/printempw/yggdrasil-api/",
   "namespace": "Yggdrasil",
