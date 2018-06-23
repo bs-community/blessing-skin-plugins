@@ -161,6 +161,28 @@ class Uuid
     }
 
     /**
+     * Generate a UUID with the algorithm specified by the `uuid_algorithm` option.
+     *
+     * @param  string $playerName
+     * @return Uuid
+     */
+    public static function generateMinecraftUuid($playerName)
+    {
+        if (option('uuid_algorithm') == 'v3') {
+            // @see https://gist.github.com/games647/2b6a00a8fc21fd3b88375f03c9e2e603
+            $data = hex2bin(md5("OfflinePlayer:" . $playerName));
+            $data[6] = chr(ord($data[6]) & 0x0f | 0x30);
+            $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
+
+            return static::import(bin2hex($data));
+        } else if (option('uuid_algorithm') == 'v4') {
+            return static::generate(4);
+        }
+
+        throw new Exception('The value of uuid_algorithm option is invalid.');
+    }
+
+    /**
      * Generates a Version 1 UUID.
      * These are derived from the time at which they were generated.
      *

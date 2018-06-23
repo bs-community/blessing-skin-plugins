@@ -105,7 +105,7 @@ class Profile
 
         if (! $result) {
             // 分配新的 UUID
-            $result = UUID::generate()->clearDashes();
+            $result = UUID::generateMinecraftUuid($name)->clearDashes();
             DB::table('uuid')->insert(['name' => $name, 'uuid' => $result]);
 
             Log::info("New uuid [$result] allocated to player [$name]");

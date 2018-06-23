@@ -16,8 +16,14 @@ return function (Dispatcher $events) {
         });
     }
 
+    // 从旧版升级上来的默认继续使用旧的 UUID 生成算法
+    if (DB::table('uuid')->count() > 0 && !Option::has('uuid_algorithm')) {
+        Option::set('uuid_algorithm', 'v4');
+    }
+
     // 初始化配置项
     $items = [
+        'uuid_algorithm' => 'v3',
         'ygg_token_expire_1' => '600',
         'ygg_token_expire_2' => '1200',
         'ygg_rate_limit' => '1000',
