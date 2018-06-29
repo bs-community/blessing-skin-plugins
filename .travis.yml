@@ -11,6 +11,7 @@ addons:
 before_install:
 - export TZ='Asia/Shanghai'
 - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then travis_terminate 0; fi
+- phpenv global 7.1.11
 - openssl aes-256-cbc -K $encrypted_8150ab04d2e0_key -iv $encrypted_8150ab04d2e0_iv -in .travis/travis.key.enc -out ~/.ssh/id_rsa -d
 - chmod 600 ~/.ssh/id_rsa
 - chmod +x .travis/deploy.sh
