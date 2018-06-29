@@ -1,10 +1,11 @@
 'use strict';
 
-const gulp  = require('gulp'),
-      fs    = require('fs'),
-      path  = require('path'),
-      merge = require('merge-stream'),
-      zip   = require('gulp-zip');
+const gulp     = require('gulp'),
+      fs       = require('fs'),
+      path     = require('path'),
+      merge    = require('merge-stream'),
+      zip      = require('gulp-zip'),
+      execSync = require("child_process").execSync;
 
 const distPath    = '.dist';
 const pluginsPath = './';
@@ -23,6 +24,16 @@ function getPluginFolders(dir) {
 
 gulp.task('release', () => {
     let folders = getPluginFolders(pluginsPath);
+
+    for (const folder of folders) {
+        if (fs.existsSync(path.join(folder, 'composer.json'))) {
+            console.log(`[${folder}] installing composer packages`);
+            
+            execSync('composer install', {
+                cwd: path.join(process.cwd(), folder)
+            });
+        }
+    }
 
     let tasks = folders.map(folder => {
         let version = require(`./${folder}/package.json`).version;
