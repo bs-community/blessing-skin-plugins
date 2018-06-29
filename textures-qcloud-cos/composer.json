@@ -1,0 +1,5 @@
+{
+    "require": {
+        "freyo/flysystem-qcloud-cos-v5": "^1.1"
+    }
+}
