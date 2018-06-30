@@ -13,9 +13,12 @@ use App\Models\Texture;
  */
 function generate_avatar($hash, $size)
 {
-    $path = storage_path("textures/$hash");
-
-    $png = Minecraft::generateAvatarFromSkin($path, $size);
+    // Should be compatible with BS <= 3.4.0
+    if (version_compare(config('app.version'), '3.4.0', '>')) {
+        $png = Minecraft::generateAvatarFromSkin(Storage::disk('textures')->read($hash), $size);
+    } else {
+        $png = Minecraft::generateAvatarFromSkin(storage_path("textures/$hash"), $size);
+    }
 
     ob_start();
     imagepng($png);
