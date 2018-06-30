@@ -20,6 +20,11 @@ return function (Dispatcher $events) {
     // 初始化配置项
     ygg_init_options();
 
+    // 初次使用自动生成私钥
+    if (option('ygg_private_key') == '') {
+        option(['ygg_private_key' => ygg_generate_rsa_keys()['private']]);
+    }
+
     // 记录访问详情
     $request = app('request');
     if ($request->is('api/yggdrasil/*')) {
