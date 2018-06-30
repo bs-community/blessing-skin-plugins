@@ -17,7 +17,7 @@
 
   <?php
     $commonForm = Option::form('common', '常规配置', function($form) {
-      $form->select('uuid_algorithm', 'UUID 生成算法')
+      $form->select('ygg_uuid_algorithm', 'UUID 生成算法')
         ->option('v3', 'Version 3: 与原盗版用户 UUID 一致【推荐】')
         ->option('v4', 'Version 4: 随机生成【想要同时兼容盗版登录的不要选】')
         ->hint('选择 Version 3 以获得对原盗版服务器的最佳兼容性。');

@@ -49,7 +49,7 @@ if (! function_exists('ygg_init_options')) {
     function ygg_init_options()
     {
         $items = [
-            'uuid_algorithm' => 'v3',
+            'ygg_uuid_algorithm' => 'v3',
             'ygg_token_expire_1' => '600',
             'ygg_token_expire_2' => '1200',
             'ygg_rate_limit' => '1000',
