@@ -72,6 +72,16 @@
       </div>
 
       <div class="col-md-6">
+        <div class="box box-success">
+          <div class="box-header with-border">
+            <h3 class="box-title"><i class="fa fa-star"></i> API Root</h3>
+          </div><!-- /.box-header -->
+          <div class="box-body">
+            <p>本站的 Yggdrasil API 地址：<code>{!! url('api/yggdrasil') !!}</code></p>
+            <p>请确认以上 URL 能够正常访问后再 <a href="http://t.cn/RrEcYfk">进行 authlib-injector 的配置</a>。</p>
+          </div><!-- /.box-body -->
+        </div><!-- /.box -->
+
         {!! $keypairForm->render() !!}
 
         <div class="box box-default">
