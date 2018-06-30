@@ -4,7 +4,7 @@ namespace SinglePlayerLimit\Controllers;
 
 use Validator;
 use App\Models\User;
-use App\Http\Controllers\AuthController as BaseController;
+use App\Http\Controllers\AdminController as BaseController;
 
 class AdminController extends BaseController
 {

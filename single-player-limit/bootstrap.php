@@ -29,8 +29,9 @@ return function (Dispatcher $events) {
 
     $events->listen(Events\UserAuthenticated::class, function ($event) {
         $user = $event->user;
+        $request = app('request');
 
-        if (request()->is('user/bind-player-name')) {
+        if ($request->is('user/bind-player-name')) {
             if ($user->player_name) {
                 return redirect('user')->send();
             }
@@ -39,7 +40,7 @@ return function (Dispatcher $events) {
         }
 
         // 要求绑定唯一角色名
-        if (! $user->player_name) {
+        if (!$user->player_name && $request->method() == 'GET' && !$request->is('admin/plugins/data')) {
             return redirect('user/bind-player-name')->send();
         }
 

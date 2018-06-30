@@ -5,22 +5,18 @@ namespace SinglePlayerLimit\Controllers;
 use Log;
 use Validator;
 use App\Models\Player;
-use App\Http\Controllers\AuthController as BaseController;
+use App\Http\Controllers\UserController as BaseController;
 
 class UserController extends BaseController
 {
     public function index()
     {
+        // 以前的我 TMD 为什么把 UserController::$user 设置成了 private ……
         $user = app('user.current');
-        $rate = option('score_per_storage');
-
-        $storage['used'] = $user->getStorageUsed();
-        $storage['total'] = ($rate == 0) ? 'UNLIMITED' : $storage['used'] + floor($user->getScore() / $rate);
-        $storage['percentage'] = $storage['total'] ? $storage['used'] / $storage['total'] * 100 : 100;
 
         return view('SinglePlayerLimit::user')->with([
             'user' => $user,
-            'storage' => $storage,
+            'storage' => $this->calculatePercentageUsed($user->getStorageUsed(), option('score_per_storage')),
             'player' => Player::where('player_name', $user->player_name)->first()
         ]);
     }
