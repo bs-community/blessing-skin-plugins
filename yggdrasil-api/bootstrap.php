@@ -5,16 +5,12 @@ use Yggdrasil\Utils\Log as MyLog;
 use Illuminate\Contracts\Events\Dispatcher;
 use Yggdrasil\Exceptions\IllegalArgumentException;
 
+require __DIR__.'/src/Utils/helpers.php';
+
 return function (Dispatcher $events) {
 
     // 创建数据表
-    if (! Schema::hasTable('uuid')) {
-        Schema::create('uuid', function ($table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('uuid', 255);
-        });
-    }
+    ygg_init_db_tables();
 
     // 从旧版升级上来的默认继续使用旧的 UUID 生成算法
     if (DB::table('uuid')->count() > 0 && !Option::has('uuid_algorithm')) {
@@ -22,21 +18,7 @@ return function (Dispatcher $events) {
     }
 
     // 初始化配置项
-    $items = [
-        'uuid_algorithm' => 'v3',
-        'ygg_token_expire_1' => '600',
-        'ygg_token_expire_2' => '1200',
-        'ygg_rate_limit' => '1000',
-        'ygg_skin_domain' => '',
-        'ygg_search_profile_max' => '5',
-        'ygg_verbose_log' => 'true'
-    ];
-
-    foreach ($items as $key => $value) {
-        if (! Option::has($key)) {
-            Option::set($key, $value);
-        }
-    }
+    ygg_init_options();
 
     // 记录访问详情
     $request = app('request');
@@ -45,7 +27,6 @@ return function (Dispatcher $events) {
         MyLog::info($request->method(), [$request->path(), $request->json()->all()]);
     }
 
-    // App\Http\Middleware\RedirectIfUrlEndsWithSlash
     Hook::addRoute(function ($router) {
         $router->any('api/yggdrasil', 'Yggdrasil\Controllers\ConfigController@hello');
 

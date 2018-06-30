@@ -52,28 +52,10 @@ class ConfigController extends Controller
     public function generate()
     {
         try {
-            // 很多 PHP 主机都没有设置 openssl.cnf 这个配置文件，
-            // 导致 OpenSSL 扩展的密钥生成功能直接残废，
-            // 所以我只好随插件自带一个了。
-            $config = [
-                'private_key_bits' => 4096,
-                'private_key_type' => OPENSSL_KEYTYPE_RSA,
-                'config' => plugin('yggdrasil-api')->getPath().'/assets/openssl.cnf'
-            ];
-
-            $res = openssl_pkey_new($config);
-
-            if (! $res) {
-                throw new Exception(openssl_error_string(), 1);
-            }
-
-            openssl_pkey_export($res, $privateKey, null, $config);
-
             return json([
                 'errno' => 0,
-                'key' => $privateKey
+                'key' => ygg_generate_rsa_keys()['private']
             ]);
-
         } catch (Exception $e) {
             return json('自动生成私钥时出错，请尝试手动设置私钥。错误信息：'.$e->getMessage(), 1);
         }
