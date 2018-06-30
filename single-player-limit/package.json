@@ -1,10 +1,13 @@
 {
   "name": "single-player-limit",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "title": "单角色限制",
   "description": "限制一个用户至多只能拥有一个角色，详见插件配置页。",
   "author": "printempw",
   "url": "https://blessing.studio/",
   "namespace": "SinglePlayerLimit",
-  "config": "config.tpl"
+  "config": "config.tpl",
+  "require": {
+    "blessing-skin-server": "^3.4.0"
+  }
 }
