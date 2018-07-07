@@ -25,16 +25,6 @@ function getPluginFolders(dir) {
 gulp.task('release', () => {
     let folders = getPluginFolders(pluginsPath);
 
-    for (const folder of folders) {
-        if (fs.existsSync(path.join(folder, 'composer.json'))) {
-            console.log(`[${folder}] installing composer packages`);
-            
-            execSync('composer install', {
-                cwd: path.join(process.cwd(), folder)
-            });
-        }
-    }
-
     let tasks = folders.map(folder => {
         let version = require(`./${folder}/package.json`).version;
         let archiveFileName = `${folder}_v${version}.zip`;
@@ -48,6 +38,14 @@ gulp.task('release', () => {
         }
 
         console.log(`[${folder}][${version}] version change detected, processing`);
+
+        if (fs.existsSync(path.join(folder, 'composer.json'))) {
+            console.log(`[${folder}][${version}] installing composer packages`);
+
+            execSync('composer install', {
+                cwd: path.join(process.cwd(), folder)
+            });
+        }
 
         return gulpStream
                 .pipe(zip(archiveFileName))
