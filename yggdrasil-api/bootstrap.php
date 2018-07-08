@@ -32,6 +32,14 @@ return function (Dispatcher $events) {
         MyLog::info($request->method(), [$request->path(), $request->json()->all()]);
     }
 
+    // 向用户中心首页添加「快速配置启动器」板块
+    if (option('ygg_show_config_section')) {
+        $events->listen(App\Events\RenderingHeader::class, function ($event) {
+            $event->addContent('<script src="https://cdn.bootcss.com/clipboard.js/2.0.1/clipboard.min.js"></script>');
+        });
+        Hook::addScriptFileToPage(plugin('yggdrasil-api')->assets('assets/dnd.js'), ['user']);
+    }
+
     Hook::addRoute(function ($router) {
         $router->any('api/yggdrasil', 'Yggdrasil\Controllers\ConfigController@hello');
 

@@ -56,9 +56,10 @@ if (! function_exists('ygg_init_options')) {
             'ygg_skin_domain' => '',
             'ygg_search_profile_max' => '5',
             'ygg_verbose_log' => 'true',
-            'ygg_private_key' => ''
+            'ygg_private_key' => '',
+            'ygg_show_config_section' => 'true'
         ];
-    
+
         foreach ($items as $key => $value) {
             if (! Option::has($key)) {
                 Option::set($key, $value);
