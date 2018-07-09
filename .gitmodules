@@ -1,3 +1,9 @@
 [submodule "yggdrasil-api"]
 	path = yggdrasil-api
 	url = https://github.com/printempw/yggdrasil-api.git
+[submodule "skin-utilities"]
+	path = skin-utilities
+	url = https://github.com/bs-community/skin-utilities.git
+[submodule "multi-index-style"]
+	path = multi-index-style
+	url = https://github.com/bs-community/multi-index-style.git
