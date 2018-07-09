@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "chalk": "^2.4.1",
     "gulp": "^3.9.1",
     "gulp-zip": "^4.1.0",
     "merge-stream": "^1.0.1"
