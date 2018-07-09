@@ -62,9 +62,9 @@
             <h3 class="box-title">导入服务器的【角色名 ⇆ UUID】映射表</h3>
           </div><!-- /.box-header -->
           <div class="box-body">
-            <div class="callout callout-info">
-              如果你正在将现有的 Minecraft 服务器迁移至使用本外置登录方案，请在这里导入你服务器的 `usercache.json` 文件，以防止出现 UUID 冲突的问题。
-              如果你不知道这个怎么用，请仔细阅读 <a href="http://t.cn/RrAK4F8">「Wiki - 0x05 从登录插件迁移至本方案」</a>。
+            <div class="callout callout-warning">
+              一般情况下，你只需要将 UUID 生成算法设置为 <code>Version 3</code> 即可实现对盗版／登录插件的兼容。
+              如果你知道你在做什么，那么请参考<a href="http://t.cn/RdOYNpM">「Wiki - 0x05 从登录插件迁移至本方案 - [高级功能] 一键导入 UUID」</a>谨慎使用。
             </div>
 
             <input id="usercache-json-file" type="file" accept="application/json" />
