@@ -24,9 +24,12 @@ class Profile
         return $sign;
     }
 
-    public function serialize($unsigned = true)
+    public function serialize($unsigned = null)
     {
-        $unsigned = is_null(request('unsigned')) || request('unsigned') === 'true';
+        // 如果没显示指定 `unsigned` 参数就从 URL 中推断
+        if (is_null($unsigned)) {
+            $unsigned = is_null(request('unsigned')) || request('unsigned') === 'true';
+        }
 
         $textures = [
             'timestamp' => round(microtime(true) * 1000),

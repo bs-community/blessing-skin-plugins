@@ -81,8 +81,11 @@ class SessionController extends Controller
                 // 检查完成后马上删除缓存键值对
                 Cache::forget("SERVER_$serverId");
 
-                Log::info("Player [$name] was in the server [$serverId], returning his profile", [$profile->serialize()]);
-                return response()->json()->setContent($profile);
+                // 这里返回的 Profile 必须带材质的数据签名
+                $response = $profile->serialize(false);
+
+                Log::info("Player [$name] was in the server [$serverId], returning his profile", [$response]);
+                return response()->json()->setContent($response);
             }
         }
 
