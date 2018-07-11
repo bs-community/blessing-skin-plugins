@@ -42,13 +42,15 @@ class ProfileController extends Controller
 
     public function searchProfile(Request $request)
     {
-        $profiles = [];
+        $names = array_unique($request->json()->all());
 
-        if (count($request->json()) > option('ygg_search_profile_max')) {
+        if (count($names) > option('ygg_search_profile_max')) {
             throw new ForbiddenOperationException(sprintf('一次最多只能查询 %s 个角色哦', option('ygg_search_profile_max')));
         }
 
-        foreach ($request->json() as $name) {
+        $profiles = [];
+
+        foreach ($names as $name) {
             $player = Player::where('player_name', $name)->first();
 
             if ($player) {
