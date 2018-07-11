@@ -26,13 +26,17 @@ class SessionController extends Controller
         $result = DB::table('uuid')->where('uuid', $selectedProfile)->first();
 
         if (! $result) {
-            throw new IllegalArgumentException("无效的 Profile UUID [$selectedProfile]，它不属于任何角色");
+            // 据说 Mojang 在这种情况下是会返回 403 的，我就照做好了
+            throw new ForbiddenOperationException("无效的 Profile UUID [$selectedProfile]，它不属于任何角色");
         }
 
         $player = Player::where('player_name', $result->name)->first();
 
         if (! $player) {
-            throw new IllegalArgumentException("指定的角色 [$result->name] 不存在");
+            // 删除已失效的 UUID 映射（e.g. 其对应的角色已被删除）
+            DB::table('uuid')->where('uuid', $selectedProfile)->delete();
+
+            throw new ForbiddenOperationException("无效的 Profile UUID [$selectedProfile]，它不属于任何角色");
         }
 
         $identification = strtolower($player->user()->first()->email);
@@ -46,7 +50,7 @@ class SessionController extends Controller
             Log::info("All access tokens issued for user [$identification] are as listed", [$token]);
 
             if ($token->accessToken != $accessToken) {
-                throw new IllegalArgumentException('无效的 AccessToken，请重新登录');
+                throw new ForbiddenOperationException('无效的 AccessToken，请重新登录');
             }
 
             // 加入服务器
@@ -56,7 +60,7 @@ class SessionController extends Controller
             Log::info("No access token issued for user [$identification]", [$cache]);
 
             // 指定角色所属的用户没有签发任何令牌
-            throw new IllegalArgumentException('未查找到有效的登录信息，请重新登录');
+            throw new ForbiddenOperationException('未查找到有效的登录信息，请重新登录');
         }
 
         Log::info("Player [$selectedProfile] successfully joined the server [$serverId]");

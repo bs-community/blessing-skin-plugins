@@ -163,7 +163,7 @@ class AuthController extends Controller
             Log::info('Given access token matches the client token');
             return response('')->setStatusCode(204);
         } else {
-            throw new IllegalArgumentException('提供的 AccessToken 无效');
+            throw new ForbiddenOperationException('提供的 AccessToken 无效');
         }
     }
 
