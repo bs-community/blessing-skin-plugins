@@ -105,8 +105,23 @@ return function (Dispatcher $events) {
         })->all();
     });
 
-    // 替换材质上传页面，提供「自动应用皮肤」功能
-    View::alias('SinglePlayerLimit::upload', 'skinlib.upload');
+    // 在这些页面上把当前用户绑定的角色 pid 暴露至前端
+    if (request()->is('skinlib/upload', 'user/closet')) {
+        $events->listen(App\Events\RenderingFooter::class, function ($event) {
+            $pid = Player::where('player_name', app('user.current')->player_name)->first()->pid;
+
+            $event->addContent("<script>blessing.userBoundPid = $pid;</script>");
+        });
+    }
+
+    // 在用户注册页面添加「绑定角色名」表单
+    Hook::addScriptFileToPage(plugin('single-player-limit')->assets('assets/register.js'), ['auth/register']);
+
+    // 在材质上传页面添加「自动应用皮肤」功能
+    Hook::addScriptFileToPage(plugin('single-player-limit')->assets('assets/upload.js'), ['skinlib/upload']);
+
+    // 让衣柜中选中的材质直接应用到绑定角色上
+    Hook::addScriptFileToPage(plugin('single-player-limit')->assets('assets/closet.js'), ['user/closet']);
 
     // 添加路由
     Hook::addRoute(function ($router) {
@@ -114,7 +129,6 @@ return function (Dispatcher $events) {
             'middleware' => ['web'],
             'namespace'  => 'SinglePlayerLimit\Controllers',
         ], function ($router) {
-            $router->get('auth/register',  'AuthController@register');
             $router->post('auth/register', 'AuthController@handleRegister');
         });
 
@@ -123,7 +137,6 @@ return function (Dispatcher $events) {
             'namespace'  => 'SinglePlayerLimit\Controllers',
         ], function ($router) {
             $router->any('user', 'UserController@index');
-            $router->any('user/closet', 'UserController@closet');
             $router->get('user/bind-player-name', 'UserController@showBindPage');
             $router->post('user/bind-player-name', 'UserController@bindPlayerName');
             $router->post('user/change-player-name', 'UserController@changePlayerName');

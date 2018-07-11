@@ -12,15 +12,6 @@ use App\Http\Controllers\AuthController as BaseController;
 
 class AuthController extends BaseController
 {
-    public function register()
-    {
-        if (option('user_can_register')) {
-            return view('SinglePlayerLimit::register');
-        } else {
-            throw new PrettyPageException(trans('auth.register.close'), 7);
-        }
-    }
-
     public function handleRegister(Request $request, UserRepository $users)
     {
         if (! $this->checkCaptcha($request))
@@ -30,6 +21,8 @@ class AuthController extends BaseController
             'email'    => 'required|email',
             'password' => 'required|min:8|max:32',
             'playerName' => get_player_name_validation_rules()
+        ], [
+            'playerName.required' => '绑定角色名不能为空'
         ]);
 
         if (! option('user_can_register')) {

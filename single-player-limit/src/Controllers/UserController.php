@@ -76,12 +76,4 @@ class UserController extends BaseController
         return json("绑定的角色名成功修改为 $newPlayerName", 0);
     }
 
-    public function closet()
-    {
-        return view('SinglePlayerLimit::closet', [
-            'user' => app('user.current'),
-            'player' => Player::where('player_name', app('user.current')->player_name)->first()
-        ]);
-    }
-
 }
