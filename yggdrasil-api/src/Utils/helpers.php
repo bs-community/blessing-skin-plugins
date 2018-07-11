@@ -50,8 +50,8 @@ if (! function_exists('ygg_init_options')) {
     {
         $items = [
             'ygg_uuid_algorithm' => 'v3',
-            'ygg_token_expire_1' => '600',
-            'ygg_token_expire_2' => '1200',
+            'ygg_token_expire_1' => '259200', // 3 days
+            'ygg_token_expire_2' => '604800', // 7 days
             'ygg_rate_limit' => '1000',
             'ygg_skin_domain' => '',
             'ygg_search_profile_max' => '5',
@@ -63,6 +63,18 @@ if (! function_exists('ygg_init_options')) {
         foreach ($items as $key => $value) {
             if (! Option::has($key)) {
                 Option::set($key, $value);
+            }
+        }
+
+        $originalDefaultValue = [
+            'ygg_token_expire_1' => '600',
+            'ygg_token_expire_2' => '1200'
+        ];
+
+        // 原来的令牌过期时间默认值太低了，调高点
+        foreach ($originalDefaultValue as $key => $value) {
+            if (Option::get($key) == $value) {
+                Option::set($key, $items[$key]);
             }
         }
     }
