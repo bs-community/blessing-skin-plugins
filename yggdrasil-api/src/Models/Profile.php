@@ -26,7 +26,7 @@ class Profile
 
     public function serialize($unsigned = true)
     {
-        $unsigned = request()->get('unsigned') === 'true';
+        $unsigned = is_null(request('unsigned')) || request('unsigned') === 'true';
 
         $textures = [
             'timestamp' => round(microtime(true) * 1000),
