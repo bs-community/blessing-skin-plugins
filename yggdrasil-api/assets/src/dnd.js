@@ -21,7 +21,7 @@ let dom = `
   </div><!-- /.box -->
 `;
 
-$('#sign-button').closest('.col-md-8').append(dom);
+$('section.content > .row > .col-md-8').append(dom);
 
 let clipboard = new ClipboardJS('#dnd-button');
 
