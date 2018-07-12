@@ -10,6 +10,13 @@ use DataIntegration\Listener;
 return function () {
     Utils::init();
 
+    if (version_compare(config('app.version'), '3.5.0', '<')) {
+        die(
+            '[错误] 数据对接插件要求 Blessing Skin 版本最低为 v3.5.0，你当前的版本为 v'.config('app.version').'。<br>'.
+            '[错误] 请在插件目录下删除 data-integration 数据对接插件以消除这条错误提示。'
+        );
+    }
+
     if (option('da_adapter') == "") return;
 
     // bind synchronizer to container
@@ -32,7 +39,6 @@ return function () {
 
     App::instance('db.self', DB::table('users'));
 
-    Event::subscribe(Listener\DisableMultiPlayer::class);
     Event::subscribe(Listener\SynchronizeUser::class);
     Event::subscribe(Listener\EncryptPassword::class);
 

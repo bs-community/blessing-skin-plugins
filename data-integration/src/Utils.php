@@ -1,10 +1,4 @@
 <?php
-/**
- * @Author: printempw
- * @Date:   2016-10-30 14:14:37
- * @Last Modified by:   printempw
- * @Last Modified time: 2017-01-07 22:50:04
- */
 
 namespace DataIntegration;
 
@@ -18,13 +12,6 @@ class Utils
 {
     public static function init()
     {
-        // Add username column
-        if (! Schema::hasColumn('users', 'username')) {
-            Schema::table('users', function ($table) {
-                $table->string('username')->default('')->comment = "Added by data-integration plugin.";
-            });
-        }
-
         // load options
         $items = [
             'da_adapter' => '',
@@ -66,30 +53,9 @@ class Utils
     public static function getUniquePlayer(User $user)
     {
         // do nothing if username is not defined
-        if (!$user->username) return false;
+        if (!$user->player_name) return false;
 
-        $player = $user->players->where('player_name', $user->username)->first();
-
-        if (!$player)
-            $player = self::addUniquePlayer($user);
-
-        return $player;
-    }
-
-    public static function addUniquePlayer(User $user)
-    {
-        // do nothing if username is not defined
-        if (!$user->username) return false;
-
-        $player = new Player;
-
-        $player->uid           = $user->uid;
-        $player->player_name   = $user->username;
-        $player->preference    = "default";
-        $player->last_modified = \Utils::getTimeFormatted();
-        $player->save();
-
-        event(new \App\Events\PlayerWasAdded($player));
+        $player = $user->players->where('player_name', $user->player_name)->first();
 
         return $player;
     }

@@ -6,5 +6,9 @@
   "author": "printempw",
   "url": "https://blessing.studio/",
   "namespace": "DataIntegration",
-  "config": "config.tpl"
+  "config": "config.tpl",
+  "require": {
+    "blessing-skin-server": "^3.5.0",
+    "single-player-limit": "^1.0.4"
+  }
 }
