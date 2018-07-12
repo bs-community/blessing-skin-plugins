@@ -1,0 +1,6 @@
+{
+    "require-dev": {
+        "barryvdh/laravel-debugbar": "^2.3",
+        "illuminate/support": "5.2.*"
+    }
+}
