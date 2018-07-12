@@ -44,10 +44,14 @@ class CacheAvatarPreview
      */
     protected function generateAvatar($hash, $size)
     {
-        $png = \Minecraft::generateAvatarFromSkin(
-            storage_path("textures/$hash"),
-            $size
-        );
+        // Should be compatible with BS <= 3.4.0
+        if (version_compare(config('app.version'), '3.4.0', '>')) {
+            $res = Storage::disk('textures')->read($hash);
+        } else {
+            $res = storage_path("textures/$hash");
+        }
+
+        $png = \Minecraft::generateAvatarFromSkin($res, $size);
 
         ob_start();
         imagepng($png);
