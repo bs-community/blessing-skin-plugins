@@ -186,5 +186,5 @@
   blessing.currentPlayerName = '{{ $player['player_name'] }}';
   blessing.allowChangePlayerName = {!! json_encode((bool) option('allow_change_player_name')) !!};
 </script>
-<script src="{{ plugin_assets('single-player-limit', 'assets/user.js') }}"></script>
+<script src="{{ plugin_assets('single-player-limit', 'assets/dist/user.js') }}"></script>
 @endsection

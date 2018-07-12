@@ -117,5 +117,5 @@
 @endsection
 
 @section('script')
-<script src="{{ plugin_assets('single-player-limit', 'assets/config.js') }}"></script>
+<script src="{{ plugin_assets('single-player-limit', 'assets/dist/config.js') }}"></script>
 @endsection

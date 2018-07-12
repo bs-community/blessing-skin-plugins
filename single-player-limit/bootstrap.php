@@ -115,13 +115,13 @@ return function (Dispatcher $events) {
     }
 
     // 在用户注册页面添加「绑定角色名」表单
-    Hook::addScriptFileToPage(plugin('single-player-limit')->assets('assets/register.js'), ['auth/register']);
+    Hook::addScriptFileToPage(plugin('single-player-limit')->assets('assets/dist/register.js'), ['auth/register']);
 
     // 在材质上传页面添加「自动应用皮肤」功能
-    Hook::addScriptFileToPage(plugin('single-player-limit')->assets('assets/upload.js'), ['skinlib/upload']);
+    Hook::addScriptFileToPage(plugin('single-player-limit')->assets('assets/dist/upload.js'), ['skinlib/upload']);
 
     // 让衣柜中选中的材质直接应用到绑定角色上
-    Hook::addScriptFileToPage(plugin('single-player-limit')->assets('assets/closet.js'), ['user/closet']);
+    Hook::addScriptFileToPage(plugin('single-player-limit')->assets('assets/dist/closet.js'), ['user/closet']);
 
     // 添加路由
     Hook::addRoute(function ($router) {

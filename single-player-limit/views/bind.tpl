@@ -46,5 +46,5 @@
 @endsection
 
 @section('script')
-<script src="{{ plugin_assets('single-player-limit', 'assets/bind.js') }}"></script>
+<script src="{{ plugin_assets('single-player-limit', 'assets/dist/bind.js') }}"></script>
 @endsection
