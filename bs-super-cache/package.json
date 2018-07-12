@@ -1,10 +1,13 @@
 {
   "name": "bs-super-cache",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "title": "BS Super Cache",
   "description": "缓存皮肤预览图、头像、玩家 Json，优化站点性能。",
   "author": "printempw",
   "url": "https://blessing.studio/",
   "namespace": "SuperCache",
-  "config": "config.tpl"
+  "config": "config.tpl",
+  "require": {
+    "blessing-skin-server": "^3.2.0"
+  }
 }
