@@ -1,5 +1,15 @@
 # 更新日志
 
+## v2.1.3
+- 修复 `/authserver/validate` 错误的返回值导致启动器无法刷新令牌的问题
+- 修复 `/authserver/authenticate` 与 `/authserver/signout` 请求频率限制失效的问题
+- 修复 `/api/profiles/minecraft` 不能正确处理重复的查询的问题
+- 修复签到后用户中心「快速配置启动器」板块消失的问题
+- 修复默认的令牌过期时间过短的问题
+- 不再推荐普通用户使用「导入服务器 `usercache.json`」功能
+- 未指定 `unsigned` 参数请求玩家 profile 时响应不再默认包含数据签名
+- 添加 Parcel 前端构建流程
+
 ## v2.1.2
 - 用户中心首页新增「快速配置启动器」板块（可在插件配置页关闭）
 - 支持 [DnD 拖拽方式添加 Yggdrasil 认证服务器](http://t.cn/RdKTDAz)
