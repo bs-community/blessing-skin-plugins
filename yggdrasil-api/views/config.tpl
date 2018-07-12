@@ -101,5 +101,5 @@
 @endsection
 
 @section('script')
-<script src="{{ plugin_assets('yggdrasil-api', 'assets/config.js') }}"></script>
+<script src="{{ plugin_assets('yggdrasil-api', 'assets/dist/config.js') }}"></script>
 @endsection

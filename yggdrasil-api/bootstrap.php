@@ -37,7 +37,7 @@ return function (Dispatcher $events) {
         $events->listen(App\Events\RenderingHeader::class, function ($event) {
             $event->addContent('<script src="https://cdn.bootcss.com/clipboard.js/2.0.1/clipboard.min.js"></script>');
         });
-        Hook::addScriptFileToPage(plugin('yggdrasil-api')->assets('assets/dnd.js'), ['user']);
+        Hook::addScriptFileToPage(plugin('yggdrasil-api')->assets('assets/dist/dnd.js'), ['user']);
     }
 
     Hook::addRoute(function ($router) {
