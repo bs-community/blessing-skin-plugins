@@ -1,6 +1,6 @@
 {
   "name": "laravel-debugbar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "title": "Laravel Debugbar",
   "description": "启用 Laravel 调试栏，详细信息见 GitHub barryvdh/laravel-debugbar。注意：切勿在调试以外的情况下开启本插件，否则可能造成敏感信息泄露。",
   "author": "printempw",
