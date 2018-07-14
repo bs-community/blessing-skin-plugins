@@ -19,7 +19,11 @@ const excludePath = [
 
 function getPluginFolders(dir) {
     return fs.readdirSync(dir).filter(
-        filename => (fs.statSync(path.join(dir, filename)).isDirectory() && !excludePath.includes(filename))
+        filename => (
+            fs.statSync(path.join(dir, filename)).isDirectory() &&
+            fs.existsSync(path.join(dir, filename, 'package.json')) &&
+            !excludePath.includes(filename)
+        )
     );
 }
 
