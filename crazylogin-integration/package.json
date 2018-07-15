@@ -1,0 +1,14 @@
+{
+  "name": "crazylogin-integration",
+  "version": "1.0.0",
+  "title": "CrazyLogin 数据对接",
+  "description": "与 CrazyLogin 进行数据对接，让玩家可以使用皮肤站的账号密码登录游戏。",
+  "author": "printempw",
+  "url": "https://blessing.studio/",
+  "namespace": "Integration\\CrazyLogin",
+  "config": "config.tpl",
+  "require": {
+    "blessing-skin-server": "^3.4.0",
+    "single-player-limit": "^1.0.4"
+  }
+}
