@@ -17,7 +17,7 @@
   <section class="content">
     <div class="row">
       <div class="col-md-6">
-        
+
         <?php
           $redis = Option::form('redis', 'Redis 连接配置', function($form) {
             $instruction = <<<EOT
@@ -31,6 +31,7 @@ COS_CONNECT_TIMEOUT=60
 COS_BUCKET=
 COS_REGION=ap-guangzhou
 COS_CDN=
+COSV5_READ_FROM_CDN=true
 COS_SCHEME=https
 
 各配置项的填写请参阅：

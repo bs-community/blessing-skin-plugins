@@ -16,6 +16,7 @@ return function (Dispatcher $events) {
         'connect_timeout' => menv('COS_CONNECT_TIMEOUT', 60),
         'bucket'          => menv('COS_BUCKET'),
         'cdn'             => menv('COS_CDN'),
+        'read_from_cdn'   => menv('COSV5_READ_FROM_CDN', true),
         'scheme'          => menv('COS_SCHEME', 'https'),
     ];
 
