@@ -22,7 +22,7 @@ class SyncWithAuthme
             'player_name' => DB::raw('`realname`'),
             'nickname' => DB::raw('`realname`'),
             'score' => option('user_initial_score'),
-            'permission' => '1',
+            'permission' => '0',
             'register_at' => Utils::getTimeFormatted(),
             'last_sign_at' => Utils::getTimeFormatted(time() - 86400)
         ]);
