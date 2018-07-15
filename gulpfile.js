@@ -48,8 +48,6 @@ gulp.task('release', () => {
 
         console.log(`[${chalk.cyan(folder)}][${chalk.yellow(version)}] version change detected, processing`);
 
-        buildPlugin(folder);
-
         return gulpStream
                 .pipe(zip(archiveFileName))
                 .pipe(gulp.dest(distPath));
@@ -58,37 +56,46 @@ gulp.task('release', () => {
     return merge(tasks);
 });
 
-function buildPlugin(folder) {
-    let packageInfo = require(`./${folder}/package.json`);
-    let execOption = {
-        cwd: path.join(process.cwd(), folder),
-        stdio: 'inherit'
-    }
+gulp.task('build', () => {
 
-    let prefix = `[${chalk.cyan(folder)}][${chalk.yellow(packageInfo.version)}]`;
+    getPluginFolders(pluginsPath).map(folder => {
+        let packageInfo = require(`./${folder}/package.json`);
+        let archiveFileName = `${folder}_v${packageInfo.version}.zip`;
 
-    // Composer
-    if (fs.existsSync(path.join(folder, 'composer.json'))) {
-        console.log(`${prefix} installing composer packages`);
+        if (fs.existsSync(path.join(distPath, archiveFileName))) {
+            return;
+        }
 
-        execSync('composer install', execOption);
-    }
+        let execOption = {
+            cwd: path.join(process.cwd(), folder),
+            stdio: 'inherit'
+        }
 
-    // Yarn or Npm
-    if (fs.existsSync(path.join(folder, 'yarn.lock'))) {
-        console.log(`${prefix} installing yarn packages`);
+        let prefix = `[${chalk.cyan(folder)}][${chalk.yellow(packageInfo.version)}]`;
 
-        execSync('yarn', execOption);
-    } else if (fs.existsSync(path.join(folder, 'package-lock.json'))) {
-        console.log(`${prefix} installing npm packages`);
+        // Composer
+        if (fs.existsSync(path.join(folder, 'composer.json'))) {
+            console.log(`${prefix} installing composer packages`);
 
-        execSync('npm install', execOption);
-    }
+            execSync('composer install', execOption);
+        }
 
-    // Exec npm build script
-    if (packageInfo.scripts && packageInfo.scripts.build) {
-        console.log(`${prefix} executing build script`);
+        // Yarn or Npm
+        if (fs.existsSync(path.join(folder, 'yarn.lock'))) {
+            console.log(`${prefix} installing yarn packages`);
 
-        execSync('npm run build', execOption);
-    }
-}
+            execSync('yarn', execOption);
+        } else if (fs.existsSync(path.join(folder, 'package-lock.json'))) {
+            console.log(`${prefix} installing npm packages`);
+
+            execSync('npm install', execOption);
+        }
+
+        // Exec npm build script
+        if (packageInfo.scripts && packageInfo.scripts.build) {
+            console.log(`${prefix} executing build script`);
+
+            execSync('npm run build', execOption);
+        }
+    });
+});
