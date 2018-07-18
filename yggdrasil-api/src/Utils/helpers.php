@@ -55,7 +55,6 @@ if (! function_exists('ygg_init_options')) {
             'ygg_rate_limit' => '1000',
             'ygg_skin_domain' => '',
             'ygg_search_profile_max' => '5',
-            'ygg_verbose_log' => 'true',
             'ygg_private_key' => '',
             'ygg_show_config_section' => 'true'
         ];
@@ -76,6 +75,12 @@ if (! function_exists('ygg_init_options')) {
             if (Option::get($key) == $value) {
                 Option::set($key, $items[$key]);
             }
+        }
+
+        if (! menv('YGG_VERBOSE_LOG')) {
+            // 删就完事儿了
+            @unlink(Yggdrasil\Utils\Log::getLogPath());
+            @unlink(storage_path('logs/yggdrasil.log'));
         }
     }
 }

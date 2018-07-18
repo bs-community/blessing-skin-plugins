@@ -20,18 +20,25 @@ class Log extends Facade
 
     public static function __callStatic($method, $args)
     {
-        // 修改日志记录文件至 storage/logs/yggdrasil.log
         $monolog = parent::__callStatic('getMonolog', []);
         $monolog->popHandler();
         $monolog->pushHandler(
-            (new StreamHandler(storage_path('logs/yggdrasil.log')))->setFormatter(
+            (new StreamHandler(static::getLogPath()))->setFormatter(
                 new LineFormatter(null, null, true, true)
             )
         );
 
         // 仅当选项开启时记录日志
-        if (option('ygg_verbose_log')) {
+        if (menv('YGG_VERBOSE_LOG')) {
             return parent::__callStatic($method, $args);
         }
+    }
+
+    public static function getLogPath()
+    {
+        $dbConfig = config('database.connections.'.config('database.default'));
+        $mask = substr(md5(implode(',', array_values($dbConfig))), 0, 8);
+
+        return storage_path("logs/yggdrasil-$mask.log");
     }
 }
