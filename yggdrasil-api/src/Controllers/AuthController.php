@@ -24,6 +24,7 @@ class AuthController extends Controller
          * 只有旧版的用户填的才是用户名（legacy = true）
          */
         $identification = strtolower($request->get('username'));
+        Log::info("User [$identification] is try to authenticate with", [$request->except(['username', 'password'])]);
         $user = $this->checkUserCredentials($request);
 
         // clientToken 原样返回，如果没提供就给客户端生成一个
@@ -42,9 +43,8 @@ class AuthController extends Controller
         // 实例化并存储 Token
         $token = new Token($clientToken, $accessToken);
         $token->owner = $identification;
+        Log::info("New access token [$accessToken] generated for user [$identification]");
         $this->storeToken($token, $identification);
-
-        Log::info("New token [$accessToken] generated and stored for user [$identification]");
 
         // 准备响应
         $availableProfiles = $this->getAvailableProfiles($user);
@@ -68,6 +68,8 @@ class AuthController extends Controller
             $result['selectedProfile'] = $availableProfiles[0];
         }
 
+        Log::info("User [$identification] authenticated successfully", [compact('availableProfiles')]);
+
         return json($result);
     }
 
@@ -76,7 +78,7 @@ class AuthController extends Controller
         $clientToken = $request->get('clientToken');
         $accessToken = UUID::format($request->get('accessToken'));
 
-        Log::info("Try to refresh access token with client token [$clientToken]");
+        Log::info("Try to refresh access token [$accessToken] with client token [$clientToken]");
 
         // 先不刷新，尝试从缓存中取出旧的 Token 实例
         if ($cache = Cache::get("TOKEN_$accessToken")) {
@@ -97,6 +99,8 @@ class AuthController extends Controller
         if (! $user) {
             throw new ForbiddenOperationException('令牌绑定的用户不存在，请重新登录');
         }
+
+        Log::info("The given access token is owned by user [$token->owner]");
 
         $availableProfiles = $this->getAvailableProfiles($user);
 
@@ -137,13 +141,15 @@ class AuthController extends Controller
 
         // 上面那一大票检测完了，最后再刷新令牌
         Cache::forget("TOKEN_$accessToken");
+        Log::info("The old access token [$accessToken] is now revoked");
+
         $token->accessToken = UUID::generate()->clearDashes();
+        Log::info("New token [$token->accessToken] generated for user [$user->email]");
         $this->storeToken($token, $token->owner);
 
-        Log::info("New token [{$token->accessToken}] generated and stored for user [{$user->email}]");
+        Log::info("Access token refreshed [$accessToken] => [$token->accessToken]");
 
         $result['accessToken'] = UUID::format($token->accessToken);
-
         return json($result);
     }
 
@@ -151,6 +157,8 @@ class AuthController extends Controller
     {
         $clientToken = UUID::format($request->get('clientToken'));
         $accessToken = UUID::format($request->get('accessToken'));
+
+        Log::info("Check if an access token is valid", compact('clientToken', 'accessToken'));
 
         if ($cache = Cache::get("TOKEN_$accessToken")) {
             $token = unserialize($cache);
@@ -160,7 +168,8 @@ class AuthController extends Controller
             }
 
             // 未提供 clientToken 且 accessToken 有效时
-            Log::info('Given access token matches the client token');
+            Log::info('Given access token is valid and matches the client token');
+
             return response('')->setStatusCode(204);
         } else {
             throw new ForbiddenOperationException('提供的 AccessToken 无效');
@@ -170,6 +179,7 @@ class AuthController extends Controller
     public function signout(Request $request)
     {
         $identification = strtolower($request->get('username'));
+        Log::info("User [$identification] is try to signout");
         $user = $this->checkUserCredentials($request, false);
 
         // 吊销所有令牌
@@ -181,6 +191,7 @@ class AuthController extends Controller
         }
 
         Log::info("User [$identification] signed out, all tokens revoked");
+
         return response('')->setStatusCode(204);
     }
 
@@ -188,6 +199,8 @@ class AuthController extends Controller
     {
         $clientToken = UUID::format($request->get('clientToken'));
         $accessToken = UUID::format($request->get('accessToken'));
+
+        Log::info("Try to invalidate an access token", compact('clientToken', 'accessToken'));
 
         // 据说不用检查 clientToken 与 accessToken 是否匹配
         if ($cache = Cache::get("TOKEN_$accessToken")) {
@@ -197,9 +210,9 @@ class AuthController extends Controller
             Cache::forget("ID_$identification");
             Cache::forget("TOKEN_$accessToken");
 
-            Log::info("Access token [$accessToken] was successful revoked");
+            Log::info("Access token [$accessToken] was successfully revoked");
         } else {
-            Log::info("Invalid access token [$accessToken]");
+            Log::error("Invalid access token [$accessToken], nothing to do");
         }
 
         // 据说无论操作是否成功都应该返回 204
@@ -257,5 +270,10 @@ class AuthController extends Controller
         Cache::put("TOKEN_{$token->accessToken}", serialize($token), $timeToFullyExpired);
         // TODO: 实现一个用户可以签发多个 Token
         Cache::put("ID_$identification", serialize($token), $timeToFullyExpired);
+
+        Log::info("Serialized token stored to cache with expiry time $timeToFullyExpired minutes", [
+            'keys' => ["TOKEN_{$token->accessToken}", "ID_$identification"],
+            'token' => $token
+        ]);
     }
 }

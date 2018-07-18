@@ -1,9 +1,7 @@
 <?php
 
 use App\Services\Hook;
-use Yggdrasil\Utils\Log as MyLog;
 use Illuminate\Contracts\Events\Dispatcher;
-use Yggdrasil\Exceptions\IllegalArgumentException;
 
 require __DIR__.'/src/Utils/helpers.php';
 
@@ -26,10 +24,8 @@ return function (Dispatcher $events) {
     }
 
     // 记录访问详情
-    $request = app('request');
-    if ($request->is('api/yggdrasil/*')) {
-        MyLog::info('============================================================');
-        MyLog::info($request->method(), [$request->path(), $request->json()->all()]);
+    if (request()->is('api/yggdrasil/*')) {
+        ygg_log_http_request_and_response();
     }
 
     // 向用户中心首页添加「快速配置启动器」板块
@@ -40,6 +36,7 @@ return function (Dispatcher $events) {
         Hook::addScriptFileToPage(plugin('yggdrasil-api')->assets('assets/dist/dnd.js'), ['user']);
     }
 
+    // 添加 API 路由
     Hook::addRoute(function ($router) {
         $router->any('api/yggdrasil', 'Yggdrasil\Controllers\ConfigController@hello');
 

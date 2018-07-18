@@ -21,7 +21,7 @@ class SessionController extends Controller
         $selectedProfile = UUID::format($request->get('selectedProfile'));
         $serverId = $request->get('serverId');
 
-        Log::info("Player [$selectedProfile] is trying to join server [$serverId] with token [$accessToken]");
+        Log::info("Player [$selectedProfile] is trying to join server [$serverId] with access token [$accessToken]");
 
         $result = DB::table('uuid')->where('uuid', $selectedProfile)->first();
 
@@ -41,7 +41,7 @@ class SessionController extends Controller
 
         $identification = strtolower($player->user()->first()->email);
 
-        Log::info("Player name is [$player->player_name], belongs to user [$identification]");
+        Log::info("Player [$selectedProfile]'s name is [$player->player_name], belongs to user [$identification]");
 
         if ($cache = Cache::get("ID_$identification")) {
 
@@ -84,11 +84,12 @@ class SessionController extends Controller
             if ($name === $profile->name) {
                 // 检查完成后马上删除缓存键值对
                 Cache::forget("SERVER_$serverId");
+                Log::info("Player [$name] was in the server [$serverId]");
 
                 // 这里返回的 Profile 必须带材质的数据签名
                 $response = $profile->serialize(false);
+                Log::info("Returning player [$name]'s profile", [$response]);
 
-                Log::info("Player [$name] was in the server [$serverId], returning his profile", [$response]);
                 return response()->json()->setContent($response);
             }
         }

@@ -40,7 +40,7 @@ class YggdrasilException extends \Exception
         $this->cause = $cause;
         $this->errorMessage = $message;
 
-        Log::error(static::class.": $message", [$this->statusCode, $cause]);
+        Log::info(sprintf('%s %s %s', $_SERVER['SERVER_PROTOCOL'], $this->statusCode, $this->error), compact('message', 'cause'));
 
         $this->render()->send();
         exit;

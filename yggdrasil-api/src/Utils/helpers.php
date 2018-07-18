@@ -1,5 +1,7 @@
 <?php
 
+use Yggdrasil\Utils\Log;
+
 if (! function_exists('ygg_generate_rsa_keys')) {
 
     function ygg_generate_rsa_keys($config = [])
@@ -82,5 +84,20 @@ if (! function_exists('ygg_init_options')) {
             @unlink(Yggdrasil\Utils\Log::getLogPath());
             @unlink(storage_path('logs/yggdrasil.log'));
         }
+    }
+}
+
+if (! function_exists('ygg_log_http_request_and_response')) {
+
+    function ygg_log_http_request_and_response()
+    {
+        Log::info('============================================================');
+        Log::info(request()->method(), [request()->path()]);
+
+        Event::listen('kernel.handled', function ($request, $response) {
+            $statusCode = $response->getStatusCode();
+            $statusText = Symfony\Component\HttpFoundation\Response::$statusTexts[$statusCode];
+            Log::info(sprintf('HTTP/%s %s %s', $response->getProtocolVersion(), $statusCode, $statusText));
+        });
     }
 }
