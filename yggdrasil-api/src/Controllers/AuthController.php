@@ -70,6 +70,12 @@ class AuthController extends Controller
 
         Log::info("User [$identification] authenticated successfully", [compact('availableProfiles')]);
 
+        ygg_log([
+            'action' => 'authenticate',
+            'user_id' => $user->uid,
+            'parameters' => json_encode($request->except('username', 'password'))
+        ]);
+
         return json($result);
     }
 
@@ -149,6 +155,12 @@ class AuthController extends Controller
 
         Log::info("Access token refreshed [$accessToken] => [$token->accessToken]");
 
+        ygg_log([
+            'action' => 'refresh',
+            'user_id' => $user->uid,
+            'parameters' => json_encode($request->except('accessToken'))
+        ]);
+
         $result['accessToken'] = UUID::format($token->accessToken);
         return json($result);
     }
@@ -169,6 +181,12 @@ class AuthController extends Controller
 
             // 未提供 clientToken 且 accessToken 有效时
             Log::info('Given access token is valid and matches the client token');
+
+            ygg_log([
+                'action' => 'validate',
+                'user_id' => app('users')->get($token->owner, 'email')->uid,
+                'parameters' => json_encode($request->except('accessToken'))
+            ]);
 
             return response('')->setStatusCode(204);
         } else {
@@ -192,6 +210,11 @@ class AuthController extends Controller
 
         Log::info("User [$identification] signed out, all tokens revoked");
 
+        ygg_log([
+            'action' => 'signout',
+            'user_id' => $user->uid
+        ]);
+
         return response('')->setStatusCode(204);
     }
 
@@ -209,6 +232,12 @@ class AuthController extends Controller
 
             Cache::forget("ID_$identification");
             Cache::forget("TOKEN_$accessToken");
+
+            ygg_log([
+                'action' => 'invalidate',
+                'user_id' => app('users')->get($token->owner, 'email')->uid,
+                'parameters' => json_encode($request->json()->all())
+            ]);
 
             Log::info("Access token [$accessToken] was successfully revoked");
         } else {

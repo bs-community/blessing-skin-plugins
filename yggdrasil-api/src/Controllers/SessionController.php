@@ -65,6 +65,13 @@ class SessionController extends Controller
 
         Log::info("Player [$selectedProfile] successfully joined the server [$serverId]");
 
+        ygg_log([
+            'action' => 'join',
+            'user_id' => $player->uid,
+            'player_id' => $player->pid,
+            'parameters' => json_encode($request->except('accessToken'))
+        ]);
+
         return response('')->setStatusCode(204);
     }
 
@@ -89,6 +96,13 @@ class SessionController extends Controller
                 // 这里返回的 Profile 必须带材质的数据签名
                 $response = $profile->serialize(false);
                 Log::info("Returning player [$name]'s profile", [$response]);
+
+                ygg_log(array_merge([
+                    'action' => 'has_joined',
+                    'user_id' => $profile->player->uid,
+                    'player_id' => $profile->player->pid,
+                    'parameters' => json_encode($request->except('username'))
+                ], ($ip ? compact('ip') : [])));
 
                 return response()->json()->setContent($response);
             }

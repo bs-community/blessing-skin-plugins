@@ -43,6 +43,18 @@ if (! function_exists('ygg_init_db_tables')) {
                 $table->string('uuid', 255);
             });
         }
+
+        if (! Schema::hasTable('ygg_log')) {
+            Schema::create('ygg_log', function ($table) {
+                $table->increments('id');
+                $table->string('action');
+                $table->integer('user_id');
+                $table->integer('player_id');
+                $table->string('parameters')->default('');
+                $table->string('ip')->default('');
+                $table->dateTime('time');
+            });
+        }
     }
 }
 
@@ -99,5 +111,22 @@ if (! function_exists('ygg_log_http_request_and_response')) {
             $statusText = Symfony\Component\HttpFoundation\Response::$statusTexts[$statusCode];
             Log::info(sprintf('HTTP/%s %s %s', $response->getProtocolVersion(), $statusCode, $statusText));
         });
+    }
+}
+
+if (! function_exists('ygg_log')) {
+
+    function ygg_log($params)
+    {
+        $data = array_merge([
+            'action' => 'undefined',
+            'user_id' => 0,
+            'player_id' => 0,
+            'parameters' => '[]',
+            'ip' => Utils::getClientIp(),
+            'time' => Utils::getTimeFormatted()
+        ], $params);
+
+        return DB::table('ygg_log')->insert($data);
     }
 }
