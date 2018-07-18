@@ -4,6 +4,7 @@ namespace Yggdrasil\Controllers;
 
 use DB;
 use Exception;
+use Datatables;
 use Yggdrasil\Utils\Log;
 use Yggdrasil\Utils\UUID;
 use Yggdrasil\Models\Token;
@@ -47,6 +48,35 @@ class ConfigController extends Controller
             'skinDomains' => $skinDomains,
             'signaturePublickey' => $keyData['key']
         ]);
+    }
+
+    public function log()
+    {
+        return view('Yggdrasil::log');
+    }
+
+    public function logData()
+    {
+        $query = DB::table('ygg_log')
+            ->join('users', 'ygg_log.user_id', '=', 'users.uid')
+            ->leftJoin('players', 'ygg_log.player_id', '=', 'players.pid')
+            ->select('id', 'action', 'user_id', 'email', 'player_id', 'players.player_name', 'parameters', 'ygg_log.ip', 'time');
+
+        return Datatables::of($query)->make(true);
+    }
+
+    public function getRecentActivities()
+    {
+        // 获取最近的 5 条活动记录
+        $entries = DB::table('ygg_log')
+            ->leftJoin('players', 'ygg_log.player_id', '=', 'players.pid')
+            ->select('action', 'player_name', 'ip', 'time')
+            ->where('user_id', app('user.current')->uid)
+            ->orderBy('time', 'desc')
+            ->take(5)
+            ->get();
+
+        return json($entries);
     }
 
     public function generate()

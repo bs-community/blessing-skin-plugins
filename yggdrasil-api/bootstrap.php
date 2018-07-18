@@ -36,9 +36,35 @@ return function (Dispatcher $events) {
         Hook::addScriptFileToPage(plugin('yggdrasil-api')->assets('assets/dist/dnd.js'), ['user']);
     }
 
+    // 向用户中心首页添加「最近活动」板块
+    if (option('ygg_show_activities_section')) {
+        Hook::addScriptFileToPage(plugin('yggdrasil-api')->assets('assets/dist/recent.js'), ['user']);
+    }
+
+    // 向管理后台菜单添加「Yggdrasil 日志」项目
+    Hook::addMenuItem('admin', 3, [
+        'title' => 'Yggdrasil 日志',
+        'link'  => 'admin/yggdrasil-log',
+        'icon'  => 'fa-history'
+    ]);
+
     // 添加 API 路由
     Hook::addRoute(function ($router) {
-        $router->any('api/yggdrasil', 'Yggdrasil\Controllers\ConfigController@hello');
+
+        $router->group([
+            'namespace'  => 'Yggdrasil\Controllers'
+        ], function ($router) {
+            $router->any('api/yggdrasil', 'ConfigController@hello');
+            $router->get('user/get-recent-activities', 'ConfigController@getRecentActivities')->middleware(['web', 'auth']);
+        });
+
+        $router->group([
+            'middleware' => ['web', 'auth', 'admin'],
+            'namespace'  => 'Yggdrasil\Controllers'
+        ], function ($router) {
+            $router->get('admin/yggdrasil-log', 'ConfigController@log');
+            $router->get('admin/yggdrasil-log/data', 'ConfigController@logData');
+        });
 
         $router->group([
             'middleware' => ['web', 'auth', 'admin'],
