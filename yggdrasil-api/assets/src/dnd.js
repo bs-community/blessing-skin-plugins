@@ -13,7 +13,6 @@ let dom = `
       <button id="dnd-button"
         class="btn btn-primary"
         draggable="true"
-        ondragstart="dndButtonHandler(event);"
         data-clipboard-text="${ url('api/yggdrasil') }"
       >将此按钮拖动至启动器</button>
       <a class="btn" target="_blank" href="http://t.cn/RrEcYfk">启动器配置教程</a>
@@ -35,9 +34,10 @@ clipboard.on('error', e => {
   $('#dnd-button').attr('title', '无法访问剪贴板，请手动复制。').tooltip('show');
 });
 
-function dndButtonHandler(event) {
-  var yggdrasilApiRoot = url('api/yggdrasil');
-  var uri = 'authlib-injector:yggdrasil-server:' + encodeURIComponent(yggdrasilApiRoot);
-  event.dataTransfer.setData('text/plain', uri);
-  event.dataTransfer.dropEffect = 'copy';
-}
+$('body').on('dragstart', '#dnd-button', e => {
+  let yggdrasilApiRoot = url('api/yggdrasil');
+  let uri = 'authlib-injector:yggdrasil-server:' + encodeURIComponent(yggdrasilApiRoot);
+
+  e.originalEvent.dataTransfer.setData('text/plain', uri);
+  e.originalEvent.dataTransfer.dropEffect = 'copy';
+});
