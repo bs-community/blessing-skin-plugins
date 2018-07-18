@@ -42,7 +42,7 @@
       'name' => 'submit-key',
       'class' => 'pull-right',
       'text' => '保存私钥'
-    ])->addMessage('使用下方的按钮来自动生成符合格式的私钥。<br>如需自定义用于签名的私钥，请参阅 <a href="http://t.cn/RHKr8aB">Wiki - 签名密钥对</a>。')->handle();
+    ])->addMessage('使用下方的按钮来自动生成符合格式的私钥。<br>如需自定义用于签名的私钥，请参阅 <a href="https://github.com/yushijinhun/authlib-injector/wiki/%E7%AD%BE%E5%90%8D%E5%AF%86%E9%92%A5%E5%AF%B9">Wiki - 签名密钥对</a>。')->handle();
 
     if (! openssl_pkey_get_private(option('ygg_private_key'))) {
       $keypairForm->addMessage('无效的私钥，请检查后重新配置。', 'danger');
@@ -64,7 +64,7 @@
           <div class="box-body">
             <div class="callout callout-warning">
               一般情况下，你只需要将 UUID 生成算法设置为 <code>Version 3</code> 即可实现对盗版／登录插件的兼容。
-              如果你知道你在做什么，那么请参考<a href="http://t.cn/RdOYNpM">「Wiki - 0x05 从登录插件迁移至本方案 - [高级功能] 一键导入 UUID」</a>谨慎使用。
+              如果你知道你在做什么，那么请参考<a href="https://github.com/bs-community/yggdrasil-api/wiki/0x05-%E4%BB%8E%E7%99%BB%E5%BD%95%E6%8F%92%E4%BB%B6%E8%BF%81%E7%A7%BB%E8%87%B3%E6%9C%AC%E6%96%B9%E6%A1%88#-%E9%AB%98%E7%BA%A7%E5%8A%9F%E8%83%BD-%E4%B8%80%E9%94%AE%E5%AF%BC%E5%85%A5-uuid">「Wiki - 0x05 从登录插件迁移至本方案 - [高级功能] 一键导入 UUID」</a>谨慎使用。
             </div>
 
             <input id="usercache-json-file" type="file" accept="application/json" />
@@ -79,7 +79,7 @@
           </div><!-- /.box-header -->
           <div class="box-body">
             <p>本站的 Yggdrasil API 地址：<code>{!! url('api/yggdrasil') !!}</code></p>
-            <p>请确认以上 URL 能够正常访问后再 <a href="http://t.cn/RrEcYfk">进行 authlib-injector 的配置</a>。</p>
+            <p>请确认以上 URL 能够正常访问后再 <a href="https://github.com/bs-community/yggdrasil-api/wiki/0x03-%E9%85%8D%E5%90%88-authlib-injector-%E4%BD%BF%E7%94%A8">进行 authlib-injector 的配置</a>。</p>
           </div><!-- /.box-body -->
         </div><!-- /.box -->
 

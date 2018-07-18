@@ -15,7 +15,7 @@ let dom = `
         draggable="true"
         data-clipboard-text="${ url('api/yggdrasil') }"
       >将此按钮拖动至启动器</button>
-      <a class="btn" target="_blank" href="http://t.cn/RrEcYfk">启动器配置教程</a>
+      <a class="btn" target="_blank" href="https://github.com/bs-community/yggdrasil-api/wiki/0x03-%E9%85%8D%E5%90%88-authlib-injector-%E4%BD%BF%E7%94%A8#%EF%B8%8F-%E9%85%8D%E7%BD%AE%E5%90%AF%E5%8A%A8%E5%99%A8">启动器配置教程</a>
     </div>
   </div><!-- /.box -->
 `;
