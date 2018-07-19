@@ -1,12 +1,9 @@
 <?php
 
-use App\Services\Hook;
-use Illuminate\Contracts\Events\Dispatcher;
-
-return function (Dispatcher $events) {
+return function () {
     $disk = [
         'driver' => 'cosv5',
-        'region'          => menv('COS_REGION', 'ap-guangzhou'),
+        'region'          => menv('COS_REGION', 'ap-shanghai'),
         'credentials'     => [
             'appId'       => menv('COS_APP_ID'),
             'secretId'    => menv('COS_SECRET_ID'),
@@ -16,7 +13,7 @@ return function (Dispatcher $events) {
         'connect_timeout' => menv('COS_CONNECT_TIMEOUT', 60),
         'bucket'          => menv('COS_BUCKET'),
         'cdn'             => menv('COS_CDN'),
-        'read_from_cdn'   => menv('COSV5_READ_FROM_CDN', true),
+        'read_from_cdn'   => menv('COS_READ_FROM_CDN', true),
         'scheme'          => menv('COS_SCHEME', 'https'),
     ];
 
