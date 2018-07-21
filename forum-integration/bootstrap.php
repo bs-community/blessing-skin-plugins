@@ -23,14 +23,21 @@ return function () {
     // 绑定 Query Builder 至容器，方便之后直接调用
     App::instance('db.local', DB::connection()->table('users'));
     App::singleton('db.remote', function () {
-        $config = array_merge(
-            forum_get_default_db_config(),
-            unserialize(option('forum_db_config'))
-        );
+        $config = @unserialize(option('forum_db_config'));
 
-        config(['database.connections.remote' => $config]);
-        return DB::connection('remote')->table($config['table']);
+        config(['database.connections.remote' => array_merge(
+            forum_get_default_db_config(), (array) $config
+        )]);
+
+        return DB::connection('remote')->table(array_get($config, 'table'));
     });
+
+    try {
+        app('db.remote')->getConnection()->getPdo();
+    } catch (Exception $e) {
+        // 目标数据库没配置好之前啥也不干
+        return;
+    }
 
     // 兼容动态 salt，以及监听事件同步用户数据
     Event::subscribe(Listener\HashAlgorithms::class);
