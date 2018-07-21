@@ -3,7 +3,7 @@
 let dom = `
   <div class="box box-warning">
     <div class="box-header with-border">
-      <h3 class="box-title">外置登录系统 - 最近活动</h3>
+      <h3 class="box-title">你的近期活动</h3>
     </div><!-- /.box-header -->
     <div class="box-body">
       <table class="table table-hover">
@@ -57,7 +57,9 @@ $(document).ready(async () => {
     if (entries.length === 0) {
       $('#recent-activities').append('<tr><td>无最近活动记录</td></tr>');
     }
-  } catch (error) {
-    showAjaxError(error);
+  } catch (err) {
+    $('#recent-activities').append('<tr><td>无法获取最近活动记录</td></tr>');
+
+    throw err;
   }
 });
