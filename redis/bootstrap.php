@@ -1,20 +1,22 @@
 <?php
-/**
- * @Author: printempw
- * @Date:   2016-12-31 14:10:18
- * @Last Modified by:   printempw
- * @Last Modified time: 2016-12-31 15:05:56
- */
 
-use Illuminate\Contracts\Events\Dispatcher;
+return function () {
+    // 兼容 BS <= 3.4.0
+    if (menv('REDIS_SCHEME') == 'unix') {
+        $config = array_replace(config('database.redis.default'), [
+            'scheme' => 'unix',
+            'path' => menv('REDIS_SOCKET_PATH'),
+        ]);
 
-return function (Dispatcher $events) {
+        config(['database.redis.default' => $config]);
+    }
 
     try {
         if (Predis::connection()->ping()) {
-            config(['cache.default' => 'redis']);
+            config(['cache.default'  => 'redis']);
             config(['session.driver' => 'redis']);
         }
     } catch (Exception $e) {
+        //
     }
 };
