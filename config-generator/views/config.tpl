@@ -15,7 +15,6 @@
     <section class="content-header">
         <h1>
             {{ trans('Blessing\ConfigGenerator::config.generate-config') }}
-            <small>Configuration Generator</small>
         </h1>
     </section>
 
