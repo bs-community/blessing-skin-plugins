@@ -27,7 +27,14 @@ class CacheSkinPreview
         $key = "preview-{$event->texture->tid}-{$event->size}";
 
         $content = Cache::rememberForever($key, function () use ($event) {
-            $png = $this->generateTexturePreview(
+
+            if (version_compare(config('app.version'), '3.4.0', '>')) {
+                $methodName = 'generateTexturePreview';
+            } else {
+                $methodName = 'generateTexturePreviewLegacy';
+            }
+
+            $png = $this->{$methodName}(
                 $event->texture->type,
                 $event->texture->hash,
                 $event->size
