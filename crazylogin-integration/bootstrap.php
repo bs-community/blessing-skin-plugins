@@ -11,6 +11,12 @@ return function (Dispatcher $events) {
         abort(500, '[错误] 必须安装「单角色限制」插件才能使用 CrazyLogin 数据对接（删除本插件以消除此错误）。');
     }
 
+    // 修改 SQLite 数据库中的表字段需要 doctrine/dbal 依赖，
+    // 可是要让这破东西支持旧版 PHP 很麻烦，所以我懒得搞了。
+    if (config('database.default') == 'sqlite') {
+        abort(500, '[错误] CrazyLogin 数据对接不支持 SQLite 数据库（删除本插件以消除此错误）。');
+    }
+
     // 在皮肤站 users 表上添加 CrazyLogin 需要的字段
     crazylogin_init_table();
 

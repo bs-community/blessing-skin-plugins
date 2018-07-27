@@ -33,7 +33,7 @@ CRAZYLOGIN_ENCRYPTOR = CrazyCrypt1
 
 ```yaml
 database:
-  # 本插件对 SQLite 的支持还不完善，出问题后果自负
+  # 注意：本插件不支持 SQLite 数据库
   saveType: MYSQL
   MYSQL:
     # 皮肤站数据库的主机、端口、用户名、密码、数据库名
