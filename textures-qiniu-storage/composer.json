@@ -1,0 +1,5 @@
+{
+    "require": {
+        "zgldh/qiniu-laravel-storage": "^0.9.2"
+    }
+}
