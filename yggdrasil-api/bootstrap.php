@@ -28,6 +28,26 @@ return function (Dispatcher $events) {
         ygg_log_http_request_and_response();
     }
 
+    // 保证用户修改角色名后 UUID 一致
+    $callback = function ($model) {
+        $new = $model->getAttribute('player_name');
+        $original = $model->getOriginal('player_name');
+
+        if (!$original || $original === $new) return;
+
+        // 要是能执行到这里就说明新的角色名已经没人在用了
+        // 所以残留着的 UUID 映射删掉也没问题
+        DB::table('uuid')->where('name', $new)->delete();
+        DB::table('uuid')->where('name', $original)->update(['name' => $new]);
+    };
+
+    // 兼容「单角色限制」插件
+    if (plugin('single-player-limit') && plugin('single-player-limit')->isEnabled()) {
+        App\Models\User::updating($callback);
+    } else {
+        App\Models\Player::updating($callback);
+    }
+
     // 向用户中心首页添加「快速配置启动器」板块
     if (option('ygg_show_config_section')) {
         $events->listen(App\Events\RenderingHeader::class, function ($event) {
