@@ -27,6 +27,9 @@ return function (Dispatcher $events) {
         Option::set('allow_change_player_name', true);
     }
 
+    // 本插件与「使用角色名注册」选项不兼容
+    Option::set('register_with_player_name', false);
+
     $events->listen(Events\UserAuthenticated::class, function ($event) {
         $user = $event->user;
         $request = app('request');
@@ -145,6 +148,9 @@ return function (Dispatcher $events) {
                 return abort(403, '由于本站设置，角色管理页面已被禁用，请前往用户中心首页管理您的角色。');
             });
         });
+
+        // 兼容邮箱验证
+        $router->any('user/player/show', 'App\Http\Controllers\PlayerController@show')->middleware(['web', 'auth']);
 
         $router->group([
             'middleware' => ['web', 'auth', 'admin'],

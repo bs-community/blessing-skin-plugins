@@ -16,6 +16,11 @@
 
   <!-- Main content -->
   <section class="content">
+  @if (option('require_verification') && Schema::hasColumn('users', 'verified'))
+    @if (! $user->verified)
+      @include('common.email-verification')
+    @endif
+  @endif
   <div class="row">
     <div class="col-md-8">
     <div class="box box-primary">
