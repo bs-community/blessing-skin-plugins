@@ -1,0 +1,13 @@
+{
+  "name": "textures-aliyun-oss",
+  "version": "1.0.0",
+  "title": "阿里云对象存储 OSS",
+  "description": "将用户上传的材质存储文件至阿里云 OSS 中。需要 BS v3.5.0 及以上。",
+  "author": "printempw",
+  "url": "https://blessing.studio/",
+  "namespace": "TextureAliyunOSS",
+  "config": "config.tpl",
+  "require": {
+    "blessing-skin-server": "^3.5.0"
+  }
+}

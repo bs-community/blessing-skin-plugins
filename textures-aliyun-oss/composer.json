@@ -1,0 +1,5 @@
+{
+    "require": {
+        "jacobcyl/ali-oss-storage": "^2.1"
+    }
+}
