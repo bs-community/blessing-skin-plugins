@@ -3,6 +3,7 @@
 namespace Yggdrasil\Controllers;
 
 use Cache;
+use Schema;
 use App\Models\User;
 use App\Models\Player;
 use Yggdrasil\Utils\Log;
@@ -270,6 +271,13 @@ class AuthController extends Controller
 
         if ($checkBanned && $user->getPermission() == User::BANNED) {
             throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
+        }
+
+        // 兼容 BS 最新版的邮箱验证
+        if (Schema::hasColumn('users', 'verified')) {
+            if (option('require_verification') && !$user->verified) {
+                throw new ForbiddenOperationException('你还没有验证你的邮箱，请在通过皮肤站的邮箱验证后再尝试登录');
+            }
         }
 
         return $user;
