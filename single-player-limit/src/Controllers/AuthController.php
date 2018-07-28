@@ -20,21 +20,19 @@ class AuthController extends BaseController
         $this->validate($request, [
             'email'    => 'required|email',
             'password' => 'required|min:8|max:32',
-            'playerName' => get_player_name_validation_rules()
-        ], [
-            'playerName.required' => '绑定角色名不能为空'
+            'player_name' => get_player_name_validation_rules()
         ]);
 
         if (! option('user_can_register')) {
             return json(trans('auth.register.close'), 7);
         }
 
-        $playerName = $request->get('playerName');
+        $playerName = $request->get('player_name');
 
         event(new Events\CheckPlayerExists($playerName));
 
         if (Player::where('player_name', $playerName)->first()) {
-            return json('此角色名已被占用', 2);
+            return json(trans('user.player.add.repeated'), 2);
         }
 
         // If amount of registered accounts of IP is more than allowed amounts,
@@ -46,16 +44,16 @@ class AuthController extends BaseController
             // it will return a false value.
             $user = User::register(
                 $request->input('email'),
-                $request->input('password'), function($user) use ($request)
+                $request->input('password'), function($user) use ($request, $playerName)
             {
                 $user->ip           = Utils::getClientIp();
                 $user->score        = option('user_initial_score');
                 $user->register_at  = Utils::getTimeFormatted();
                 $user->last_sign_at = Utils::getTimeFormatted(time() - 86400);
                 $user->permission   = User::NORMAL;
-                $user->nickname     = $request->input('playerName');
+                $user->nickname     = $playerName;
                 // 同时填写本插件添加至 users 的字段
-                $user->player_name  = $request->input('playerName');
+                $user->player_name  = $playerName;
             });
 
             if (! $user) {
