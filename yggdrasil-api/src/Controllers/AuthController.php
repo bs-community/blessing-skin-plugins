@@ -274,10 +274,8 @@ class AuthController extends Controller
         }
 
         // 兼容 BS 最新版的邮箱验证
-        if (Schema::hasColumn('users', 'verified')) {
-            if (option('require_verification') && !$user->verified) {
-                throw new ForbiddenOperationException('你还没有验证你的邮箱，请在通过皮肤站的邮箱验证后再尝试登录');
-            }
+        if (option('require_verification') && $user->verified === false) {
+            throw new ForbiddenOperationException('你还没有验证你的邮箱，请在通过皮肤站的邮箱验证后再尝试登录');
         }
 
         return $user;
