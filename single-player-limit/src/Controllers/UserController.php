@@ -5,6 +5,7 @@ namespace SinglePlayerLimit\Controllers;
 use Log;
 use Validator;
 use App\Models\Player;
+use App\Events\UserAuthenticated;
 use App\Http\Controllers\UserController as BaseController;
 
 class UserController extends BaseController
@@ -72,6 +73,9 @@ class UserController extends BaseController
 
             Log::info("[SinglePlayerLimit] The player name of user [$user->email] has been changed to [$newPlayerName]");
         }
+
+        // 触发一下事件，把新的角色准备好
+        event(new UserAuthenticated($user));
 
         return json("绑定的角色名成功修改为 $newPlayerName", 0);
     }
