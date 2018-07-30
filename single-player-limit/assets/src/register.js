@@ -1,5 +1,6 @@
 'use strict';
 
+$('#register-form .icheck').hide();
 $('input#nickname').val('whatever').parent().hide();
 
 $('input#nickname').parent().after(`
@@ -12,7 +13,7 @@ $('input#nickname').parent().after(`
 var originalFetchFunctionSpl = fetch;
 
 fetch = function (param) {
-  param.data.playerName = $('#player-name').val();
+  param.data['player_name'] = $('#player-name').val();
 
   return originalFetchFunctionSpl(param);
 }
