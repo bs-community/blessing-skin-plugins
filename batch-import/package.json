@@ -2,9 +2,18 @@
   "name": "batch-import",
   "version": "1.1.0",
   "title": "批量导入",
-  "description": "从本地文件批量导入材质至皮肤库",
+  "description": "从本地文件批量导入材质至皮肤库，启用后请刷新页面从侧边栏进入。",
   "author": "printempw",
   "url": "https://blessing.studio/",
-  "namespace": "Blessing\\BatchImport",
-  "config": ""
+  "namespace": "BatchImport",
+  "require": {
+    "blessing-skin-server": "^3.4.0"
+  },
+  "scripts": {
+    "dev": "parcel watch assets/src/*.js -d assets/dist",
+    "build": "parcel build assets/src/*.js -d assets/dist --no-source-maps"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.9.6"
+  }
 }
