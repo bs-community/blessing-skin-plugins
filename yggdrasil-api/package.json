@@ -1,6 +1,6 @@
 {
   "name": "yggdrasil-api",
-  "version": "2.1.6",
+  "version": "2.1.7",
   "title": "Yggdrasil API",
   "description": "为皮肤站添加自定义 Yggdrasil API 支持，可配合 authlib-injector 等软件使用实现外置登录功能。启用之前请仔细阅读使用说明 👉 http://t.cn/RrUySTY",
   "author": "printempw",

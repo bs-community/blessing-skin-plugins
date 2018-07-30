@@ -1,5 +1,9 @@
 # 更新日志
 
+## v2.1.7
+- 修复用户修改角色名后 UUID 改变的问题 [#9](https://github.com/bs-community/blessing-skin-plugins/issues/9)（可能造成游戏内玩家数据重置）
+- 选择「与离线模式一致」的 UUID 生成算法时，角色名修改后 UUID 依然会改变
+
 ## v2.1.6
 - 支持最新版 BS 中的邮箱验证机制
 - 未验证邮箱的用户无法通过 Yggdrasil API 登录
