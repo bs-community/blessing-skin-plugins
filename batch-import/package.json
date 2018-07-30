@@ -1,6 +1,6 @@
 {
   "name": "batch-import",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "title": "批量导入",
   "description": "从本地文件批量导入材质至皮肤库，启用后请刷新页面从侧边栏进入。",
   "author": "printempw",
