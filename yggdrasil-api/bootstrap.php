@@ -41,11 +41,17 @@ return function (Dispatcher $events) {
         DB::table('uuid')->where('name', $original)->update(['name' => $new]);
     };
 
-    // 兼容「单角色限制」插件
-    if (plugin('single-player-limit') && plugin('single-player-limit')->isEnabled()) {
-        App\Models\User::updating($callback);
-    } else {
-        App\Models\Player::updating($callback);
+    // 仅当 UUID 生成算法为「随机生成」时保证修改角色名后 UUID 一致
+    // 因为另一种 UUID 生成算法要最大限度兼容盗版模式，所以不做修改
+    if (option('ygg_uuid_algorithm') == 'v4') {
+        // 兼容「单角色限制」插件
+        $plugin = plugin('single-player-limit');
+
+        if ($plugin && $plugin->isEnabled()) {
+            App\Models\User::updating($callback);
+        } else {
+            App\Models\Player::updating($callback);
+        }
     }
 
     // 向用户中心首页添加「快速配置启动器」板块
