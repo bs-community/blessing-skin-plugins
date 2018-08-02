@@ -108,37 +108,7 @@ class SessionController extends Controller
             }
         }
 
-        if ((boolean) option('ygg_mojang_forwarding')) {
-            $mojangResult = hasJoinedServerMojang($name, $serverId, $ip);
-            if ($mojangResult != null) return response()->json()->setContent($mojangResult);
-        }
-
         Log::info("Player [$name] was not in the server [$serverId]");
         return response('')->setStatusCode(204);
     }
-}
-
-function hasJoinedServerMojang($name, $serverId, $ip) {
-    $curl=curl_init();
-    curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    if ($ip != null) {
-        curl_setopt($curl, CURLOPT_URL, "https://sessionserver.mojang.com/session/minecraft/hasJoined?username=$name&serverId=$serverId&ip=$ip");
-    } else {
-        curl_setopt($curl, CURLOPT_URL, "https://sessionserver.mojang.com/session/minecraft/hasJoined?username=$name&serverId=$serverId");
-    }
-    $res = curl_exec($curl);
-
-    if (curl_errno($curl)) {
-        return null;
-        curl_close($curl);
-    }
-
-    $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    curl_close($curl);
-    if ($statusCode == 200) {
-        Log::info("Player [$name] was in the server [$serverId], record from Mojang offical session server");
-        return $res;
-    }
-    return null;
 }

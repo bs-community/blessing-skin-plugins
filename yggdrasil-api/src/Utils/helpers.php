@@ -71,8 +71,7 @@ if (! function_exists('ygg_init_options')) {
             'ygg_search_profile_max' => '5',
             'ygg_private_key' => '',
             'ygg_show_config_section' => 'true',
-            'ygg_show_activities_section' => 'true',
-            'ygg_mojang_forwarding' => 'false'
+            'ygg_show_activities_section' => 'true'
         ];
 
         foreach ($items as $key => $value) {
