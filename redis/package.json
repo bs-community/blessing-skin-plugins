@@ -1,6 +1,6 @@
 {
   "name": "redis",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "title": "Redis",
   "description": "使用 Redis 作为皮肤站的缓存、Session 驱动，可以提升站点性能，配合 BS Super Cache 使用效果最佳。",
   "author": "printempw",

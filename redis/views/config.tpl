@@ -24,7 +24,7 @@
             <div class="box-body table-responsive">
               <?php
                 $config = config('database.redis.default');
-                $server = $config['scheme'] == 'unix' ? "unix:{$config['path']}" : "tcp://{$config['host']}:{$config['port']}";
+                $server = array_get($config, 'scheme') == 'unix' ? "unix:{$config['path']}" : "tcp://{$config['host']}:{$config['port']}";
 
                 try {
                   Predis::connection()->ping();
