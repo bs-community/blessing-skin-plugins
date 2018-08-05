@@ -109,6 +109,10 @@ class AuthController extends Controller
 
         Log::info("The given access token is owned by user [$token->owner]");
 
+        if ($user->getPermission() == User::BANNED) {
+            throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
+        }
+
         $availableProfiles = $this->getAvailableProfiles($user);
 
         $result = [
@@ -183,9 +187,18 @@ class AuthController extends Controller
             // 未提供 clientToken 且 accessToken 有效时
             Log::info('Given access token is valid and matches the client token');
 
+            $user = app('users')->get($token->owner, 'email');
+
+            if ($user->getPermission() == User::BANNED) {
+                // 吊销被封用户的令牌
+                Cache::forget("TOKEN_$accessToken");
+
+                throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
+            }
+
             ygg_log([
                 'action' => 'validate',
-                'user_id' => app('users')->get($token->owner, 'email')->uid,
+                'user_id' => $user->uid,
                 'parameters' => json_encode($request->except('accessToken'))
             ]);
 

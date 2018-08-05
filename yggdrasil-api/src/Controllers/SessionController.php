@@ -4,6 +4,7 @@ namespace Yggdrasil\Controllers;
 
 use DB;
 use Cache;
+use App\Models\User;
 use App\Models\Player;
 use Yggdrasil\Utils\Log;
 use Yggdrasil\Utils\UUID;
@@ -51,6 +52,13 @@ class SessionController extends Controller
 
             if ($token->accessToken != $accessToken) {
                 throw new ForbiddenOperationException('无效的 AccessToken，请重新登录');
+            }
+
+            if ($player->user()->first()->getPermission() == User::BANNED) {
+                // 吊销被封用户的令牌
+                Cache::forget("TOKEN_$accessToken");
+
+                throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
             }
 
             // 加入服务器
