@@ -3,7 +3,7 @@
 use App\Services\Hook;
 use Illuminate\Contracts\Events\Dispatcher;
 
-require __DIR__.'/src/common.php';
+require __DIR__.'/src/helpers.php';
 
 return function (Dispatcher $events) {
 

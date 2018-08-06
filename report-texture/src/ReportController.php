@@ -30,7 +30,7 @@ class ReportController extends Controller
         $report->reason = $request->get('reason');
         $report->uploader = Texture::find($report->tid)->uploader;
         $report->reporter = $reporter;
-        $report->status = REPORT_STATUS_PENDING;
+        $report->status = Report::STATUS_PENDING;
         $report->report_at = Utils::getTimeFormatted();
 
         $report->save();
@@ -74,7 +74,7 @@ class ReportController extends Controller
 
                 if (app('user.current')->permission > $uploader->permission) {
                     User::find($report->uploader)->setPermission(User::BANNED);
-                    $report->update(['status' => REPORT_STATUS_RESOLVED]);
+                    $report->update(['status' => Report::STATUS_RESOLVED]);
 
                     return json(trans('ReportTexture::config.blocked'), 0);
                 } else {
@@ -87,7 +87,7 @@ class ReportController extends Controller
 
                 if (app('user.current')->permission > User::find($report->uploader)->permission) {
                     Texture::find($report->tid)->delete();
-                    $report->update(['status' => REPORT_STATUS_RESOLVED]);
+                    $report->update(['status' => Report::STATUS_RESOLVED]);
 
                     return json(trans('ReportTexture::config.texture_deleted'), 0);
                 } else {
@@ -97,7 +97,7 @@ class ReportController extends Controller
                 break;
 
             case 'reject':
-                $report->update(['status' => REPORT_STATUS_REJECTED]);
+                $report->update(['status' => Report::STATUS_REJECTED]);
 
                 return json(trans('ReportTexture::config.rejected'), 0);
                 break;

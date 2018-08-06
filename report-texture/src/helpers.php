@@ -1,18 +1,16 @@
 <?php
 
-define('REPORT_STATUS_PENDING', 0);
-define('REPORT_STATUS_RESOLVED', 1);
-define('REPORT_STATUS_REJECTED', 2);
+use ReportTexture\Report;
 
 function report_status($code) {
     switch ($code) {
-        case REPORT_STATUS_PENDING:
+        case Report::STATUS_PENDING:
             return trans('ReportTexture::config.status_pending');
             break;
-        case REPORT_STATUS_RESOLVED:
+        case Report::STATUS_RESOLVED:
             return trans('ReportTexture::config.status_resolved');
             break;
-        case REPORT_STATUS_REJECTED:
+        case Report::STATUS_REJECTED:
             return trans('ReportTexture::config.status_rejected');
             break;
         default:
