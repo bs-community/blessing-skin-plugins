@@ -1,11 +1,11 @@
 {
   "name": "report-texture",
   "version": "1.1.0",
-  "title": "Blessing\\Report::config.title",
-  "description": "Blessing\\Report::config.description",
+  "title": "ReportTexture::config.title",
+  "description": "ReportTexture::config.description",
   "author": "printempw",
   "url": "https://blessing.studio/",
-  "namespace": "Blessing\\Report",
+  "namespace": "ReportTexture",
   "scripts": {
     "dev": "parcel watch assets/src/*.js -d assets/dist",
     "build": "parcel build assets/src/*.js -d assets/dist --no-source-maps"

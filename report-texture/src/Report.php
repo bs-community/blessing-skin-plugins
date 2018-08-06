@@ -1,6 +1,6 @@
 <?php
 
-namespace Blessing\Report;
+namespace ReportTexture;
 
 use Illuminate\Database\Eloquent\Model;
 

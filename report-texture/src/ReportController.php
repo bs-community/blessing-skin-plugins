@@ -1,6 +1,6 @@
 <?php
 
-namespace Blessing\Report;
+namespace ReportTexture;
 
 use Utils;
 use App\Models\User;
@@ -21,7 +21,7 @@ class ReportController extends Controller
         $reporter = app('user.current')->uid;
 
         if (Report::where('reporter', $reporter)->where('tid', $tid)->first()) {
-            return json(trans('Blessing\Report::config.reported'), 1);
+            return json(trans('ReportTexture::config.reported'), 1);
         }
 
         $report = new Report;
@@ -35,7 +35,7 @@ class ReportController extends Controller
 
         $report->save();
 
-        return json(trans('Blessing\Report::config.submitted_report'), 0);
+        return json(trans('ReportTexture::config.submitted_report'), 0);
     }
 
     public function showMyReports()
@@ -43,7 +43,7 @@ class ReportController extends Controller
         $user = app('user.current');
         $reports = Report::where('reporter', $user->uid)->get();
 
-        return view('Blessing\Report::report')->with('user', $user)->with('reports', $reports);
+        return view('ReportTexture::report')->with('user', $user)->with('reports', $reports);
     }
 
     public function showReportsManage()
@@ -52,7 +52,7 @@ class ReportController extends Controller
         // 懒得做分页了，有缘再说
         $reports = Report::all();
 
-        return view('Blessing\Report::manage')->with('user', $user)->with('reports', $reports);
+        return view('ReportTexture::manage')->with('user', $user)->with('reports', $reports);
     }
 
     public function handleReports(Request $request)
@@ -65,7 +65,7 @@ class ReportController extends Controller
         $report = Report::find($request->get('id'));
 
         if (! $report) {
-            return json(trans('Blessing\Report::config.nonexistent_report'));
+            return json(trans('ReportTexture::config.nonexistent_report'));
         }
 
         switch ($request->get('operation')) {
@@ -76,9 +76,9 @@ class ReportController extends Controller
                     User::find($report->uploader)->setPermission(User::BANNED);
                     $report->update(['status' => REPORT_STATUS_RESOLVED]);
 
-                    return json(trans('Blessing\Report::config.blocked'), 0);
+                    return json(trans('ReportTexture::config.blocked'), 0);
                 } else {
-                    return json(trans('Blessing\Report::config.permission_denied_user'), 1);
+                    return json(trans('ReportTexture::config.permission_denied_user'), 1);
                 }
 
                 break;
@@ -89,9 +89,9 @@ class ReportController extends Controller
                     Texture::find($report->tid)->delete();
                     $report->update(['status' => REPORT_STATUS_RESOLVED]);
 
-                    return json(trans('Blessing\Report::config.texture_deleted'), 0);
+                    return json(trans('ReportTexture::config.texture_deleted'), 0);
                 } else {
-                    return json(trans('Blessing\Report::config.permission_denied_texture'), 1);
+                    return json(trans('ReportTexture::config.permission_denied_texture'), 1);
                 }
 
                 break;
@@ -99,7 +99,7 @@ class ReportController extends Controller
             case 'reject':
                 $report->update(['status' => REPORT_STATUS_REJECTED]);
 
-                return json(trans('Blessing\Report::config.rejected'), 0);
+                return json(trans('ReportTexture::config.rejected'), 0);
                 break;
 
             default:

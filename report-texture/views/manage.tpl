@@ -1,6 +1,6 @@
 @extends('admin.master')
 
-@section('title', trans('Blessing\Report::config.title'))
+@section('title', trans('ReportTexture::config.title'))
 
 @section('content')
 
@@ -11,7 +11,7 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-       {{ trans('Blessing\Report::config.title') }}
+       {{ trans('ReportTexture::config.title') }}
     </h1>
   </section>
 
@@ -22,13 +22,13 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              <th>{{trans('Blessing\Report::config.texture_id')}}</th>
-              <th>{{trans('Blessing\Report::config.uploader')}}</th>
-              <th>{{trans('Blessing\Report::config.reporter')}}</th>
-              <th>{{trans('Blessing\Report::config.reason')}}</th>
-              <th>{{trans('Blessing\Report::config.status')}}</th>
-              <th>{{trans('Blessing\Report::config.time')}}</th>
-              <th data-placement="left" title="{{trans('Blessing\Report::config.details')}}">{{trans('Blessing\Report::config.operations')}}</th>
+              <th>{{trans('ReportTexture::config.texture_id')}}</th>
+              <th>{{trans('ReportTexture::config.uploader')}}</th>
+              <th>{{trans('ReportTexture::config.reporter')}}</th>
+              <th>{{trans('ReportTexture::config.reason')}}</th>
+              <th>{{trans('ReportTexture::config.status')}}</th>
+              <th>{{trans('ReportTexture::config.time')}}</th>
+              <th data-placement="left" title="{{trans('ReportTexture::config.details')}}">{{trans('ReportTexture::config.operations')}}</th>
             </tr>
           </thead>
 
@@ -60,17 +60,17 @@
                 <td>{{ $report->report_at }}</td>
                 <td>
                   <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ trans('Blessing\Report::config.treatment') }}  <span class="caret"></span></button>
+                    <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ trans('ReportTexture::config.treatment') }}  <span class="caret"></span></button>
                     <ul class="dropdown-menu">
-                      <li><a href="javascript:;" onclick="moderation.ban({{ $report->id }});">{{trans('Blessing\Report::config.block')}}</a></li>
-                      <li><a href="javascript:;" onclick="moderation.delete({{ $report->id }});">{{trans('Blessing\Report::config.delete')}}</a></li>
-                      <li><a href="javascript:;" onclick="moderation.reject({{ $report->id }});">{{trans('Blessing\Report::config.reject')}}</a></li>
+                      <li><a href="javascript:;" onclick="moderation.ban({{ $report->id }});">{{trans('ReportTexture::config.block')}}</a></li>
+                      <li><a href="javascript:;" onclick="moderation.delete({{ $report->id }});">{{trans('ReportTexture::config.delete')}}</a></li>
+                      <li><a href="javascript:;" onclick="moderation.reject({{ $report->id }});">{{trans('ReportTexture::config.reject')}}</a></li>
                     </ul>
                   </div>
                 </td>
               </tr>
             @empty
-              <p>{{trans('Blessing\Report::config.none')}}</p>
+              <p>{{trans('ReportTexture::config.none')}}</p>
             @endforelse
           </tbody>
         </table>

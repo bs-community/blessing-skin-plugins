@@ -30,13 +30,13 @@ return function (Dispatcher $events) {
     $index = (plugin('data-integration') && plugin('data-integration')->isEnabled()) ? 2 : 3;
 
     Hook::addMenuItem('user', $index, [
-        'title' => trans('Blessing\Report::config.user_reports'),
+        'title' => trans('ReportTexture::config.user_reports'),
         'link'  => 'user/report',
         'icon'  => 'fa-flag'
     ]);
 
     Hook::addMenuItem('admin', 3, [
-        'title' => trans('Blessing\Report::config.manage_reports'),
+        'title' => trans('ReportTexture::config.manage_reports'),
         'link'  => 'admin/reports',
         'icon'  => 'fa-flag'
     ]);
@@ -44,7 +44,7 @@ return function (Dispatcher $events) {
     Hook::addRoute(function ($router) {
         $router->group([
             'middleware' => ['web', 'auth'],
-            'namespace'  => 'Blessing\Report',
+            'namespace'  => 'ReportTexture',
         ], function ($router) {
             $router->get('user/report', 'ReportController@showMyReports');
             $router->post('skinlib/report', 'ReportController@report');

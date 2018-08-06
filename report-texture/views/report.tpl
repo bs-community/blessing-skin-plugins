@@ -1,6 +1,6 @@
 @extends('user.master')
 
-@section('title', trans('Blessing\Report::config.title'))
+@section('title', trans('ReportTexture::config.title'))
 
 @section('content')
 
@@ -11,7 +11,7 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      {{trans('Blessing\Report::config.user_reports')}}
+      {{trans('ReportTexture::config.user_reports')}}
     </h1>
   </section>
 
@@ -22,12 +22,12 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              <th>{{trans('Blessing\Report::config.texture_id')}}</th>
-              <th>{{trans('Blessing\Report::config.reporter')}}</th>
-              <th>{{trans('Blessing\Report::config.reason')}}</th>
-              <th>{{trans('Blessing\Report::config.status')}}</th>
-              <th>{{trans('Blessing\Report::config.time')}}</th>
-              {{-- <th>trans('Blessing\Report::config.action')}}</th> --}}
+              <th>{{trans('ReportTexture::config.texture_id')}}</th>
+              <th>{{trans('ReportTexture::config.reporter')}}</th>
+              <th>{{trans('ReportTexture::config.reason')}}</th>
+              <th>{{trans('ReportTexture::config.status')}}</th>
+              <th>{{trans('ReportTexture::config.time')}}</th>
+              {{-- <th>trans('ReportTexture::config.action')}}</th> --}}
             </tr>
           </thead>
 
@@ -50,11 +50,11 @@
                 <td>{{ report_status($report->status) }}</td>
                 <td>{{ $report->report_at }}</td>
                 {{-- <td>
-                  <a class="btn btn-sm btn-warning" href="javascript:cancelReport({{ $report->id }})">{{trans('Blessing\Report::config.user_cancel')}}</a>
+                  <a class="btn btn-sm btn-warning" href="javascript:cancelReport({{ $report->id }})">{{trans('ReportTexture::config.user_cancel')}}</a>
                 </td> --}}
               </tr>
             @empty
-              <p>{{trans('Blessing\Report::config.user_non_report')}}</p>
+              <p>{{trans('ReportTexture::config.user_non_report')}}</p>
             @endforelse
           </tbody>
         </table>
