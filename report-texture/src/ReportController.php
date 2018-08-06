@@ -66,45 +66,50 @@ class ReportController extends Controller
             return json(trans('general.illegal-parameters'));
         }
 
+        // 检查操作权限
+        if ($request->get('operation') != 'reject') {
+            $resp = $this->checkPermission($report);
+            if ($resp) return $resp;
+        }
+
         switch ($request->get('operation')) {
             case 'ban':
-                $uploader = User::find($report->uploader);
 
-                // 检查权限
-                if (app('user.current')->permission > $uploader->permission) {
-                    // 封禁用户
-                    User::find($report->uploader)->setPermission(User::BANNED);
-                    $report->update(['status' => Report::STATUS_RESOLVED]);
+                User::find($report->uploader)->setPermission(User::BANNED);
+                $report->update(['status' => Report::STATUS_RESOLVED]);
+                return json(trans('ReportTexture::general.moderation.banned'), 0);
 
-                    return json(trans('ReportTexture::general.moderation.banned'), 0);
-                } else {
-                    return json(trans('ReportTexture::general.moderation.permission-denied.ban'), 1);
-                }
+            case 'private':
 
-                break;
+                Texture::find($report->tid)->setPrivacy(false);
+                $report->update(['status' => Report::STATUS_RESOLVED]);
+                return json(trans('ReportTexture::general.moderation.private'), 0);
 
             case 'delete':
 
-                if (app('user.current')->permission > User::find($report->uploader)->permission) {
-                    Texture::find($report->tid)->delete();
-                    $report->update(['status' => Report::STATUS_RESOLVED]);
-
-                    return json(trans('ReportTexture::general.moderation.deleted'), 0);
-                } else {
-                    return json(trans('ReportTexture::general.moderation.permission-denied.delete'), 1);
-                }
-
-                break;
+                Texture::find($report->tid)->delete();
+                $report->update(['status' => Report::STATUS_RESOLVED]);
+                return json(trans('ReportTexture::general.moderation.deleted'), 0);
 
             case 'reject':
-                $report->update(['status' => Report::STATUS_REJECTED]);
 
+                $report->update(['status' => Report::STATUS_REJECTED]);
                 return json(trans('ReportTexture::general.moderation.rejected'), 0);
-                break;
 
             default:
                 # code...
                 break;
+        }
+    }
+
+    protected function checkPermission(Report $report)
+    {
+        $current = app('user.current');
+        $uploader = User::find($report->uploader);
+
+        // 如果上传者的权限与当前操作者同级或者更高
+        if ($current->permission <= $uploader->permission) {
+            return json(trans('ReportTexture::general.moderation.permission-denied'), 1);
         }
     }
 }

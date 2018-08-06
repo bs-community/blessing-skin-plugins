@@ -22,7 +22,8 @@ status:
 
 operations:
   title: Moderate
-  block: Ban the uploader
+  ban: Ban the uploader
+  private: Set as private texture
   delete: Delete this texture
   reject: Reject this report
 
@@ -35,9 +36,8 @@ report:
   duplicate: You have already reported this texture. Please wait for the moderators to deal with it. You can also check the status of your report at User Center.
 
 moderation:
-  deleted: The texture was deleted.
   banned: The uploader was banned.
+  private: The texture was set to private.
+  deleted: The texture was deleted.
   rejected: This report was rejected.
-  permission-denied:
-    ban: You have no permission to ban this user.
-    delete: You have no permission to delete this texture.
+  permission-denied: You have no permission to perform action on this user.

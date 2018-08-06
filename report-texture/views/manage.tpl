@@ -64,7 +64,8 @@
                   <div class="btn-group">
                     <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ trans('ReportTexture::general.operations.title') }}  <span class="caret"></span></button>
                     <ul class="dropdown-menu">
-                      <li><a href="javascript:;" onclick="moderation.ban(   {{ $report->id }});">{{ trans('ReportTexture::general.operations.block')  }}</a></li>
+                      <li><a href="javascript:;" onclick="moderation.ban({{ $report->id }});">{{ trans('ReportTexture::general.operations.ban') }}</a></li>
+                      <li><a href="javascript:;" onclick="moderation.private({{ $report->id }});">{{ trans('ReportTexture::general.operations.private') }}</a></li>
                       <li><a href="javascript:;" onclick="moderation.delete({{ $report->id }});">{{ trans('ReportTexture::general.operations.delete') }}</a></li>
                       <li><a href="javascript:;" onclick="moderation.reject({{ $report->id }});">{{ trans('ReportTexture::general.operations.reject') }}</a></li>
                     </ul>
