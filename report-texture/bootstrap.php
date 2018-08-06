@@ -21,9 +21,8 @@ return function (Dispatcher $events) {
         });
     }
 
-    Hook::addScriptFileToPage(plugin('report-texture')->assets('assets/report.js'), [
-        'skinlib/show/*',
-        'admin/reports*'
+    Hook::addScriptFileToPage(plugin('report-texture')->assets('assets/dist/report.js'), [
+        'skinlib/show/*'
     ]);
 
     Hook::registerPluginTransScripts('report-texture');
