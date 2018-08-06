@@ -1,16 +1,20 @@
 {
   "name": "report-texture",
   "version": "1.1.0",
-  "title": "ReportTexture::config.title",
-  "description": "ReportTexture::config.description",
+  "title": "举报材质",
+  "description": "用户可以举报皮肤库中的公开材质；管理员可在后台收到通知，并选择处理方式。",
   "author": "printempw",
   "url": "https://blessing.studio/",
   "namespace": "ReportTexture",
   "scripts": {
-    "dev": "parcel watch assets/src/*.js -d assets/dist",
-    "build": "parcel build assets/src/*.js -d assets/dist --no-source-maps"
+    "build": "babel assets/src --out-dir assets/dist"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.9.6"
+    "babel-cli": "^6.26.0",
+    "babel-minify": "^0.4.3",
+    "babel-preset-env": "^1.7.0"
+  },
+  "babel": {
+    "presets": ["env", "minify"]
   }
 }
