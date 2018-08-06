@@ -9,7 +9,7 @@ const moderation = {
 
 async function moderate(id, operation) {
   const statusText = trans(
-    'reportTexture.status.' + (operation === 'reject' ? 'rejected' : 'resolved')
+    'report.status.' + (operation === 'reject' ? 'rejected' : 'resolved')
   );
 
   try {

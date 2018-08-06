@@ -21,21 +21,19 @@ class ReportController extends Controller
         $reporter = app('user.current')->uid;
 
         if (Report::where('reporter', $reporter)->where('tid', $tid)->first()) {
-            return json(trans('ReportTexture::config.reported'), 1);
+            return json(trans('ReportTexture::general.report.duplicate'), 1);
         }
 
         $report = new Report;
-
         $report->tid = $tid;
         $report->reason = $request->get('reason');
         $report->uploader = Texture::find($report->tid)->uploader;
         $report->reporter = $reporter;
         $report->status = Report::STATUS_PENDING;
         $report->report_at = Utils::getTimeFormatted();
-
         $report->save();
 
-        return json(trans('ReportTexture::config.submitted_report'), 0);
+        return json(trans('ReportTexture::general.report.success'), 0);
     }
 
     public function showMyReports()
@@ -43,7 +41,7 @@ class ReportController extends Controller
         $user = app('user.current');
         $reports = Report::where('reporter', $user->uid)->get();
 
-        return view('ReportTexture::report')->with('user', $user)->with('reports', $reports);
+        return view('ReportTexture::report', compact('user', 'reports'));
     }
 
     public function showReportsManage()
@@ -52,7 +50,7 @@ class ReportController extends Controller
         // 懒得做分页了，有缘再说
         $reports = Report::all();
 
-        return view('ReportTexture::manage')->with('user', $user)->with('reports', $reports);
+        return view('ReportTexture::manage', compact('user', 'reports'));
     }
 
     public function handleReports(Request $request)
@@ -65,20 +63,22 @@ class ReportController extends Controller
         $report = Report::find($request->get('id'));
 
         if (! $report) {
-            return json(trans('ReportTexture::config.nonexistent_report'));
+            return json(trans('general.illegal-parameters'));
         }
 
         switch ($request->get('operation')) {
             case 'ban':
                 $uploader = User::find($report->uploader);
 
+                // 检查权限
                 if (app('user.current')->permission > $uploader->permission) {
+                    // 封禁用户
                     User::find($report->uploader)->setPermission(User::BANNED);
                     $report->update(['status' => Report::STATUS_RESOLVED]);
 
-                    return json(trans('ReportTexture::config.blocked'), 0);
+                    return json(trans('ReportTexture::general.moderation.banned'), 0);
                 } else {
-                    return json(trans('ReportTexture::config.permission_denied_user'), 1);
+                    return json(trans('ReportTexture::general.moderation.permission-denied.ban'), 1);
                 }
 
                 break;
@@ -89,9 +89,9 @@ class ReportController extends Controller
                     Texture::find($report->tid)->delete();
                     $report->update(['status' => Report::STATUS_RESOLVED]);
 
-                    return json(trans('ReportTexture::config.texture_deleted'), 0);
+                    return json(trans('ReportTexture::general.moderation.deleted'), 0);
                 } else {
-                    return json(trans('ReportTexture::config.permission_denied_texture'), 1);
+                    return json(trans('ReportTexture::general.moderation.permission-denied.delete'), 1);
                 }
 
                 break;
@@ -99,7 +99,7 @@ class ReportController extends Controller
             case 'reject':
                 $report->update(['status' => Report::STATUS_REJECTED]);
 
-                return json(trans('ReportTexture::config.rejected'), 0);
+                return json(trans('ReportTexture::general.moderation.rejected'), 0);
                 break;
 
             default:

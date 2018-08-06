@@ -3,7 +3,7 @@
 $('.col-md-4 .box-primary .box-header').append(`
   <div class="box-tools pull-right" style="position: initial; cursor: pointer;">
     <span id="report-texture" class="label label-warning">
-      <i class="fa fa-flag" aria-hidden="true"></i> ${ trans('reportTexture.reportThis') }
+      <i class="fa fa-flag" aria-hidden="true"></i> ${ trans('report.reportThisTexture') }
     </span>
   </div>
 `);
@@ -12,7 +12,7 @@ $('body').on('click', '#report-texture', () => {
   const tid = location.pathname.match(/skinlib\/show\/(\d*)/)[1];
 
   if (! tid) {
-    return alert(trans('reportTexture.invalidTID'));
+    return alert(trans('report.invalidTid'));
   }
 
   $('.modal').each(function () {
@@ -21,12 +21,12 @@ $('body').on('click', '#report-texture', () => {
 
   const dom = `
     <div class="form-group" id="report-form">
-      <label for="tid">${ trans('reportTexture.reportReason') }</label>
-      <input id="tid" class="form-control" type="text" placeholder="${ trans('reportTexture.reportReasonExample') }">
+      <label for="tid">${ trans('report.reason') }</label>
+      <input id="tid" class="form-control" type="text" placeholder="${ trans('report.reasonPlaceholder') }">
     </div>
   `;
 
-  showModal(dom, `${trans('reportTexture.TID')}: ${tid}`, 'default', {
+  showModal(dom, `${trans('report.tid')}: ${tid}`, 'default', {
     callback: `reportTexture(${ tid })`
   });
 });
@@ -42,7 +42,7 @@ async function reportTexture(tid) {
       data: { tid, reason },
       beforeSend: () => {
         $('.modal-footer button').html(
-          `<i class="fa fa-spinner fa-spin"></i> ${ trans('reportTexture.submitting') }`
+          `<i class="fa fa-spinner fa-spin"></i> ${ trans('report.submitting') }`
         ).prop('disabled', true);
       }
     });

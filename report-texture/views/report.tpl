@@ -1,6 +1,6 @@
 @extends('user.master')
 
-@section('title', trans('ReportTexture::config.title'))
+@section('title', trans('ReportTexture::general.menu.user'))
 
 @section('content')
 
@@ -11,7 +11,7 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      {{trans('ReportTexture::config.user_reports')}}
+      {{trans('ReportTexture::general.menu.user')}}
     </h1>
   </section>
 
@@ -22,12 +22,11 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              <th>{{trans('ReportTexture::config.texture_id')}}</th>
-              <th>{{trans('ReportTexture::config.reporter')}}</th>
-              <th>{{trans('ReportTexture::config.reason')}}</th>
-              <th>{{trans('ReportTexture::config.status')}}</th>
-              <th>{{trans('ReportTexture::config.time')}}</th>
-              {{-- <th>trans('ReportTexture::config.action')}}</th> --}}
+              <th>{{trans('ReportTexture::general.thead.texture_id')}}</th>
+              <th>{{trans('ReportTexture::general.thead.reporter')}}</th>
+              <th>{{trans('ReportTexture::general.thead.reason')}}</th>
+              <th>{{trans('ReportTexture::general.thead.status')}}</th>
+              <th>{{trans('ReportTexture::general.thead.time')}}</th>
             </tr>
           </thead>
 
@@ -49,12 +48,9 @@
                 <td>{{ $report->reason }}</td>
                 <td>{{ report_status($report->status) }}</td>
                 <td>{{ $report->report_at }}</td>
-                {{-- <td>
-                  <a class="btn btn-sm btn-warning" href="javascript:cancelReport({{ $report->id }})">{{trans('ReportTexture::config.user_cancel')}}</a>
-                </td> --}}
               </tr>
             @empty
-              <p>{{trans('ReportTexture::config.user_non_report')}}</p>
+              <p>{{trans('ReportTexture::general.empty.user')}}</p>
             @endforelse
           </tbody>
         </table>

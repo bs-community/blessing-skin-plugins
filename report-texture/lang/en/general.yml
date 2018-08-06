@@ -1,0 +1,43 @@
+title: Report Texture
+description: Users may report public textures in skinlib that they believe violate the content policy. Site moderators can remove the inappropriate content or block the uploader due to the user reports at admin panel.
+
+menu:
+  user: My Reports
+  admin: Reports
+
+thead:
+  tid: Texture ID
+  uploader: Uploader
+  reporter: Reported By
+  reason: Reason
+  status: Status
+  time: Reported At
+  more: To perform further actions, please visit user manage page or skin library.
+  operations: Operations
+
+status:
+  pending: Pending
+  resolved: Resolved
+  rejected: Rejected
+
+operations:
+  title: Moderate
+  block: Ban the uploader
+  delete: Delete this texture
+  reject: Reject this report
+
+empty:
+  user: You haven't submitted any reports.
+  admin: No report has been submitted.
+
+report:
+  success: Report submitted. Please wait for the moderators to deal with it.
+  duplicate: You have already reported this texture. Please wait for the moderators to deal with it. You can also check the status of your report at User Center.
+
+moderation:
+  deleted: The texture was deleted.
+  banned: The uploader was banned.
+  rejected: This report was rejected.
+  permission-denied:
+    ban: You have no permission to ban this user.
+    delete: You have no permission to delete this texture.

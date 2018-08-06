@@ -30,13 +30,13 @@ return function (Dispatcher $events) {
     $index = (plugin('data-integration') && plugin('data-integration')->isEnabled()) ? 2 : 3;
 
     Hook::addMenuItem('user', $index, [
-        'title' => trans('ReportTexture::config.user_reports'),
+        'title' => 'ReportTexture::general.menu.user',
         'link'  => 'user/report',
         'icon'  => 'fa-flag'
     ]);
 
     Hook::addMenuItem('admin', 3, [
-        'title' => trans('ReportTexture::config.manage_reports'),
+        'title' => 'ReportTexture::general.menu.admin',
         'link'  => 'admin/reports',
         'icon'  => 'fa-flag'
     ]);

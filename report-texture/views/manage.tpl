@@ -1,6 +1,6 @@
 @extends('admin.master')
 
-@section('title', trans('ReportTexture::config.title'))
+@section('title', trans('ReportTexture::general.menu.admin'))
 
 @section('content')
 
@@ -11,7 +11,7 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-       {{ trans('ReportTexture::config.title') }}
+       {{ trans('ReportTexture::general.menu.admin') }}
     </h1>
   </section>
 
@@ -22,13 +22,15 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              <th>{{trans('ReportTexture::config.texture_id')}}</th>
-              <th>{{trans('ReportTexture::config.uploader')}}</th>
-              <th>{{trans('ReportTexture::config.reporter')}}</th>
-              <th>{{trans('ReportTexture::config.reason')}}</th>
-              <th>{{trans('ReportTexture::config.status')}}</th>
-              <th>{{trans('ReportTexture::config.time')}}</th>
-              <th data-placement="left" title="{{trans('ReportTexture::config.details')}}">{{trans('ReportTexture::config.operations')}}</th>
+              <th>{{ trans('ReportTexture::general.thead.tid') }}</th>
+              <th>{{ trans('ReportTexture::general.thead.uploader') }}</th>
+              <th>{{ trans('ReportTexture::general.thead.reporter') }}</th>
+              <th>{{ trans('ReportTexture::general.thead.reason') }}</th>
+              <th>{{ trans('ReportTexture::general.thead.status') }}</th>
+              <th>{{ trans('ReportTexture::general.thead.time') }}</th>
+              <th>{{ trans('ReportTexture::general.thead.operations') }}
+                <i class="fa fa-question-circle" title="{{ trans('ReportTexture::general.thead.more') }}" data-toggle="tooltip" data-placement="left"></i>
+              </th>
             </tr>
           </thead>
 
@@ -60,17 +62,17 @@
                 <td>{{ $report->report_at }}</td>
                 <td>
                   <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ trans('ReportTexture::config.treatment') }}  <span class="caret"></span></button>
+                    <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ trans('ReportTexture::general.operations.title') }}  <span class="caret"></span></button>
                     <ul class="dropdown-menu">
-                      <li><a href="javascript:;" onclick="moderation.ban({{ $report->id }});">{{trans('ReportTexture::config.block')}}</a></li>
-                      <li><a href="javascript:;" onclick="moderation.delete({{ $report->id }});">{{trans('ReportTexture::config.delete')}}</a></li>
-                      <li><a href="javascript:;" onclick="moderation.reject({{ $report->id }});">{{trans('ReportTexture::config.reject')}}</a></li>
+                      <li><a href="javascript:;" onclick="moderation.ban(   {{ $report->id }});">{{ trans('ReportTexture::general.operations.block')  }}</a></li>
+                      <li><a href="javascript:;" onclick="moderation.delete({{ $report->id }});">{{ trans('ReportTexture::general.operations.delete') }}</a></li>
+                      <li><a href="javascript:;" onclick="moderation.reject({{ $report->id }});">{{ trans('ReportTexture::general.operations.reject') }}</a></li>
                     </ul>
                   </div>
                 </td>
               </tr>
             @empty
-              <p>{{trans('ReportTexture::config.none')}}</p>
+              <p>{{ trans('ReportTexture::general.empty.admin') }}</p>
             @endforelse
           </tbody>
         </table>
@@ -82,6 +84,5 @@
 @endsection
 
 @section('script')
-<script>$('thead tr th:last-child').tooltip('show');</script>
 <script src="{{ plugin_assets('report-texture', 'assets/dist/moderation.js') }}"></script>
 @endsection
