@@ -11,7 +11,7 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-       {{ trans('ReportTexture::general.menu.admin') }}
+      {{ trans('ReportTexture::general.menu.admin') }}
     </h1>
   </section>
 

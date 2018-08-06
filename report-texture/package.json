@@ -6,6 +6,7 @@
   "author": "printempw",
   "url": "https://blessing.studio/",
   "namespace": "ReportTexture",
+  "config": "config.tpl",
   "scripts": {
     "build": "babel assets/src --out-dir assets/dist"
   },

@@ -21,9 +21,17 @@ return function (Dispatcher $events) {
         });
     }
 
-    Hook::addScriptFileToPage(plugin('report-texture')->assets('assets/dist/report.js'), [
-        'skinlib/show/*'
-    ]);
+    report_init_options();
+
+    if (request()->is('skinlib/show/*')) {
+        $events->listen(App\Events\RenderingFooter::class, function ($event) {
+            $value = filter_var(option('reporter_score_modification'), FILTER_VALIDATE_INT);
+            $value = $value === false ? 0 : $value;
+
+            $event->addContent("<script>blessing.reporterScoreModification = $value;</script>");
+            $event->addContent('<script src="'.plugin('report-texture')->assets('assets/dist/report.js').'"></script>');
+        });
+    }
 
     Hook::registerPluginTransScripts('report-texture');
 

@@ -18,17 +18,26 @@ class ReportController extends Controller
         ]);
 
         $tid = $request->get('tid');
-        $reporter = app('user.current')->uid;
+        $reporter = app('user.current');
 
-        if (Report::where('reporter', $reporter)->where('tid', $tid)->first()) {
+        if (Report::where('reporter', $reporter->uid)->where('tid', $tid)->first()) {
             return json(trans('ReportTexture::general.report.duplicate'), 1);
         }
+
+        $score = report_get_option_as_int('reporter_score_modification');
+
+        if ($score < 0 && $reporter->score < -$score) {
+            return json('积分不足', 1);
+        }
+
+        // 奖励或者暂扣积分（因为 $score 可以是负数所以这里统一用 plus）
+        $reporter->setScore($score, 'plus');
 
         $report = new Report;
         $report->tid = $tid;
         $report->reason = $request->get('reason');
         $report->uploader = Texture::find($report->tid)->uploader;
-        $report->reporter = $reporter;
+        $report->reporter = $reporter->uid;
         $report->status = Report::STATUS_PENDING;
         $report->report_at = Utils::getTimeFormatted();
         $report->save();
@@ -76,22 +85,29 @@ class ReportController extends Controller
             case 'ban':
 
                 User::find($report->uploader)->setPermission(User::BANNED);
-                $report->update(['status' => Report::STATUS_RESOLVED]);
+                $this->resolveReport($report);
                 return json(trans('ReportTexture::general.moderation.banned'), 0);
 
             case 'private':
 
                 Texture::find($report->tid)->setPrivacy(false);
-                $report->update(['status' => Report::STATUS_RESOLVED]);
+                $this->resolveReport($report);
                 return json(trans('ReportTexture::general.moderation.private'), 0);
 
             case 'delete':
 
                 Texture::find($report->tid)->delete();
-                $report->update(['status' => Report::STATUS_RESOLVED]);
+                $this->resolveReport($report);
                 return json(trans('ReportTexture::general.moderation.deleted'), 0);
 
             case 'reject':
+
+                if ($reporter = User::find($report->reporter))  {
+                    // 如果用户举报材质时获得了奖励积分，那么现在就将其收回
+                    if (($score = report_get_option_as_int('reporter_score_modification')) > 0) {
+                        $reporter->setScore($score, 'minus');
+                    }
+                }
 
                 $report->update(['status' => Report::STATUS_REJECTED]);
                 return json(trans('ReportTexture::general.moderation.rejected'), 0);
@@ -111,5 +127,24 @@ class ReportController extends Controller
         if ($current->permission <= $uploader->permission) {
             return json(trans('ReportTexture::general.moderation.permission-denied'), 1);
         }
+    }
+
+    protected function resolveReport(Report $report)
+    {
+        $reporter = User::find($report->reporter);
+
+        if ($reporter) {
+            // 返还用户提交举报时扣除的积分
+            if (($score = report_get_option_as_int('reporter_score_modification')) < 0) {
+                $reporter->setScore(-$score, 'plus');
+            }
+
+            // 举报通过后奖励积分
+            if (($reward = report_get_option_as_int('reporter_reward_score')) > 0) {
+                $reporter->setScore($reward, 'plus');
+            }
+        }
+
+        $report->update(['status' => Report::STATUS_RESOLVED]);
     }
 }

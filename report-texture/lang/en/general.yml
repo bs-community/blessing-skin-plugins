@@ -32,8 +32,8 @@ empty:
   admin: No report has been submitted.
 
 report:
-  success: Report submitted. Please wait for the moderators to deal with it.
-  duplicate: You have already reported this texture. Please wait for the moderators to deal with it. You can also check the status of your report at User Center.
+  success: Thanks for your reporting! The site moderators will review it as soon as possible.
+  duplicate: You have already reported this texture. The site moderators will review it as soon as possible. You can also check the status of your report at User Center.
 
 moderation:
   banned: The uploader was banned.
@@ -41,3 +41,13 @@ moderation:
   deleted: The texture was deleted.
   rejected: This report was rejected.
   permission-denied: You have no permission to perform action on this user.
+
+config:
+  title: Configuration
+  invalid-int: The option value is not a valid integer.
+  options:
+    reporter_score_modification:
+      title: Scores for Submitting an Report
+      description: Set a positive integer value to reward user who submits new reports. Set to a negative value will require scores for submitting reports, and the suspended scores will be available if user's report was resolved. Set to 0 to disable.
+    reporter_reward_score:
+      title: Reward the Reporter with Scores If Report Resolved

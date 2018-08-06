@@ -41,3 +41,13 @@ moderation:
   deleted: 被举报的材质已被删除
   rejected: 该举报已被拒绝
   permission-denied: 你没有权限对该用户进行此操作
+
+config:
+  title: 配置
+  invalid-int: 配置项不是有效的整数值
+  options:
+    reporter_score_modification:
+      title: 提交举报所需积分
+      description: 举报材质时【奖励】或者【扣除】举报者一定的积分。设置为正数表示奖励相应积分，设置为负数时表示扣除相应积分，设置为 0 可关闭本功能。举报时扣除积分可以一定程度上减少恶意举报，如果举报通过后，扣除的积分将会被返还。你也可以在举报管理页面手动对举报者的积分进行修改。
+    reporter_reward_score:
+      title: 举报通过后奖励积分
