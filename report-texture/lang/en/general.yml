@@ -51,3 +51,6 @@ config:
       description: Set a positive integer value to reward user who submits new reports. Set to a negative value will require scores for submitting reports, and the suspended scores will be available if user's report was resolved. Set to 0 to disable.
     reporter_reward_score:
       title: Reward the Reporter with Scores If Report Resolved
+    content_policy:
+      title: Content Policy
+      description: Display content policy at texture uploading page, set to empty to disable. Styling with Markdown is supported. You can also specify a different content policy for each language. To edit a specific language's corresponding content policy, please switch to that language and submit your edit.

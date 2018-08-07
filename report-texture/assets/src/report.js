@@ -36,6 +36,18 @@ $('body').on('click', '#report-texture', () => {
     dom += `<div class="callout callout-info"><p>${ notice }</p></div>`;
   }
 
+  if (typeof showContentPolicy !== 'undefined') {
+    dom += `
+      <div class="callout callout-warning">
+        <p>
+          ${ trans('report.contentPolicyNotice', {
+            link: `<a href="javascript:;" onclick="showContentPolicy()">${ trans('report.contentPolicy') }</a>`
+          }) }
+        </p>
+      </div>
+    `;
+  }
+
   showModal(dom, `${trans('report.tid')}: ${tid}`, 'default', {
     callback: `reportTexture(${ tid })`
   });

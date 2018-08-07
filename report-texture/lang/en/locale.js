@@ -13,4 +13,6 @@ $.locales['en'].report = {
     resolved: 'Resolved',
     rejected: 'Rejected'
   },
+  contentPolicy: 'Content Policy',
+  contentPolicyNotice: 'Before submitting a report, please read our :link.'
 };

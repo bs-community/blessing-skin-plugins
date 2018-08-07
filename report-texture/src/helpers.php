@@ -7,7 +7,8 @@ if (! function_exists('report_init_options')) {
     function report_init_options() {
         $items = [
             'reporter_score_modification' => 0,
-            'reporter_reward_score' => 0
+            'reporter_reward_score' => 0,
+            'content_policy' => ''
         ];
 
         foreach ($items as $key => $value) {

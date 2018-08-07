@@ -13,4 +13,6 @@ $.locales['zh_CN'].report = {
     resolved: '处理完毕',
     rejected: '已被拒绝'
   },
+  contentPolicy: '内容政策',
+  contentPolicyNotice: '举报之前，请先查阅本站的 :link。'
 };

@@ -10,6 +10,11 @@ use App\Http\Controllers\Controller;
 
 class ReportController extends Controller
 {
+    public function showContentPolicy()
+    {
+        return app('parsedown')->text(option_localized('content_policy'));
+    }
+
     public function report(Request $request)
     {
         $this->validate($request, [

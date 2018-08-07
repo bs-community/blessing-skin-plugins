@@ -33,6 +33,13 @@ return function (Dispatcher $events) {
         });
     }
 
+    if (option('content_policy')) {
+        Hook::addScriptFileToPage(
+            plugin('report-texture')->assets('assets/dist/content-policy.js'),
+            ['skinlib/upload', 'skinlib/show/*']
+        );
+    }
+
     Hook::registerPluginTransScripts('report-texture');
 
     $index = (plugin('data-integration') && plugin('data-integration')->isEnabled()) ? 2 : 3;
@@ -55,6 +62,7 @@ return function (Dispatcher $events) {
             'namespace'  => 'ReportTexture',
         ], function ($router) {
             $router->get('user/report', 'ReportController@showMyReports');
+            $router->get('skinlib/content-policy', 'ReportController@showContentPolicy');
             $router->post('skinlib/report', 'ReportController@report');
 
             $router->get('admin/reports', 'ReportController@showReportsManage')->middleware(['admin']);
