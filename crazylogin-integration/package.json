@@ -1,8 +1,8 @@
 {
   "name": "crazylogin-integration",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "title": "CrazyLogin 数据对接",
-  "description": "与 CrazyLogin 进行数据对接，让玩家可以使用皮肤站的账号密码登录游戏。",
+  "description": "与 CrazyLogin 进行数据对接，让玩家可以使用皮肤站的账号密码登录游戏。启用之前请仔细阅读使用说明 👉 http://t.cn/RDE4tQn",
   "author": "printempw",
   "url": "https://blessing.studio/",
   "namespace": "Integration\\CrazyLogin",

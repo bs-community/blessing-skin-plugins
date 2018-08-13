@@ -29,7 +29,7 @@
               if (! $markdown) {
                 echo "<p>无法加载插件根目录下的 README.md</p>";
               } else {
-                echo app('parsedown')->text($markdown);
+                echo app('parsedown')->text(mb_substr($markdown, 18));
               }
             ?>
           </div>

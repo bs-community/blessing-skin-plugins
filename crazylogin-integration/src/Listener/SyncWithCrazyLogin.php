@@ -21,7 +21,6 @@ class SyncWithCrazyLogin
             'player_name' => DB::raw('`name`'),
             'nickname' => DB::raw('`name`'),
             'score' => option('user_initial_score'),
-            'permission' => '0',
             'register_at' => Utils::getTimeFormatted(),
             'last_sign_at' => Utils::getTimeFormatted(time() - 86400)
         ]);
