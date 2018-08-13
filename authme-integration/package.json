@@ -1,8 +1,8 @@
 {
   "name": "authme-integration",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "title": "Authme 数据对接",
-  "description": "与 Authme 进行数据对接，让玩家可以使用皮肤站的账号密码登录游戏。",
+  "description": "与 Authme 进行数据对接，让玩家可以使用皮肤站的账号密码登录游戏。启用之前请仔细阅读使用说明 👉 http://t.cn/RDEUFQS",
   "author": "printempw",
   "url": "https://blessing.studio/",
   "namespace": "Integration\\Authme",

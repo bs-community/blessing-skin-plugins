@@ -3,6 +3,8 @@
 通过本插件，Authme 可以使用皮肤站数据库的 `users` 表存储数据，玩家可以直接使用皮肤站上绑定的角色名与密码登录游戏。
 可以让玩家统一从皮肤站注册账号，防止游戏内恶意注册。也可配合邀请码插件等一起使用。
 
+其他数据对接插件：[CrazyLogin 数据对接](https://github.com/bs-community/blessing-skin-plugins/tree/master/crazylogin-integration)，[论坛数据对接](https://github.com/bs-community/blessing-skin-plugins/tree/master/forum-integration)。
+
 **注意：本插件依赖[「单角色限制」](https://github.com/bs-community/blessing-skin-plugins/tree/master/single-player-limit)插件，使用之前请务必启用该插件。**
 
 ### 配置皮肤站
@@ -19,13 +21,15 @@ Authme `config.yml` 中 `passwordHash` 填的是什么，皮肤站 `.env` 里的
 
 其他的懒得支持了，有需要的话可以联系我。
 
+**注意：本插件仅支持 MySQL 数据库。推荐配合 Authme 5.4.0 及以上版本使用。**
+
 ### 配置 Authme
 
 打开 Authme 插件配置文件 `config.yml`，修改以下几项：
 
 ```yaml
 DataSource:
-  # 本插件对 SQLite 的支持还不完善，出问题后果自负
+  # 本插件仅支持 MySQL 数据库
   backend: 'MYSQL'
   # 皮肤站数据库的主机、端口、用户名、密码、数据库名
   mySQLHost: '127.0.0.1'

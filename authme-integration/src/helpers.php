@@ -42,6 +42,24 @@ if (! function_exists('authme_init_table')) {
             return;
         }
 
+        $dbh = DB::connection()->getPdo();
+
+        // 允许以下字段为空，防止登录插件 INSERT 时出现问题
+        // 已知 Authme 5.3.2 及以下会出现此问题，5.4.0 及以上正常
+        $statements = [
+            'ALTER TABLE `users` MODIFY `email` varchar(100) NULL',
+            'ALTER TABLE `users` MODIFY `score` int(11) NULL',
+            'ALTER TABLE `users` MODIFY `ip` varchar(32) NULL',
+            'ALTER TABLE `users` MODIFY `last_sign_at` datetime NULL',
+            'ALTER TABLE `users` MODIFY `register_at` datetime NULL',
+        ];
+
+        foreach ($statements as $sql) {
+            $prefix = get_db_config()['prefix'];
+            $sql = str_replace('users', "{$prefix}users", $sql);
+            $dbh->exec($sql);
+        }
+
         Schema::table('users', function ($table) use ($exists) {
             $exists['username']   || $table->string('username')->nullable();
             $exists['realname']   || $table->string('realname')->nullable();
@@ -63,22 +81,7 @@ if (! function_exists('authme_init_table')) {
             DB::table('users')->update(['username' => DB::raw('LOWER(`player_name`)')]);
             DB::table('users')->update(['regip' => DB::raw('`ip`')]);
         } catch (Exception $e) {
-            app(Illuminate\Foundation\Exceptions\Handler::class)->report($e);
-        }
-    }
-}
-
-if (! function_exists('authme_deinit_table')) {
-
-    function authme_deinit_table()
-    {
-        // SQLite 的行为有点不一样，这里可能会出问题
-        try {
-            Schema::table('users', function ($table) {
-                $table->dropColumn(authme_get_columns());
-            });
-        } catch (Exception $e) {
-            app(Illuminate\Foundation\Exceptions\Handler::class)->report($e);
+            app(Illuminate\Contracts\Debug\ExceptionHandler::class)->report($e);
         }
     }
 }
