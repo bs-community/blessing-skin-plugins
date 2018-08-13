@@ -43,8 +43,15 @@ return function (Dispatcher $events) {
         }
 
         // 要求绑定唯一角色名
-        if (!$user->player_name && $request->method() == 'GET' && !$request->is('admin/plugins/data')) {
-            return redirect('user/bind-player-name')->send();
+        if (! $user->player_name) {
+            if ($request->method() == 'POST') {
+                response('[单角色限制] 请刷新页面绑定角色名')->send();
+                exit;
+            }
+
+            if ($request->method() == 'GET') {
+                return redirect('user/bind-player-name')->send();
+            }
         }
 
         // 确保用户拥有该角色

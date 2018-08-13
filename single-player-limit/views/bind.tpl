@@ -25,7 +25,7 @@
     <form method="post" id="login-form">
       <div class="form-group has-feedback">
         <input id="player-name" type="text" class="form-control" placeholder="角色名">
-        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
 
       <div id="msg" class="callout callout-warning hide"></div>
