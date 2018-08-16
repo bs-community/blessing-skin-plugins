@@ -34,6 +34,8 @@ const actions = {
   has_joined: '进入服务器'
 }
 
+const xss = $.fn.dataTable.render.text().filter;
+
 $(document).ready(async () => {
   try {
     const entries = await fetch({
@@ -47,8 +49,8 @@ $(document).ready(async () => {
       $('#recent-activities').append(`
         <tr>
           <td>${actions[entry.action]}</td>
-          <td>${entry.player_name ? entry.player_name : 'N/A'}</td>
-          <td>${entry.ip}</td>
+          <td>${entry.player_name ? xss(entry.player_name) : 'N/A'}</td>
+          <td>${xss(entry.ip)}</td>
           <td>${entry.time}</td>
         </tr>
       `);

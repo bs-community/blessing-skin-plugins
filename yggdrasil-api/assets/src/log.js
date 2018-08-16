@@ -39,11 +39,12 @@ const logTableColumnDefs = [
     data: 'parameters',
     searchable: false,
     orderable: false,
-    render: data => `<a onclick="alert('${data.replace(/"/g, '&quot;')}');">点击查看</a>`
+    render: () => `<a class="show" href="javascript:;">点击查看</a>`
   },
   {
     targets: 5,
     data: 'ip',
+    render: $.fn.dataTable.render.text(),
     orderable: false
   },
   {
@@ -52,8 +53,11 @@ const logTableColumnDefs = [
   }
 ];
 
-$('#ygg-log-table').DataTable({
+$.yggLogTable = $('#ygg-log-table').DataTable({
   ajax: url('admin/yggdrasil-log/data'),
   scrollY: ($('.content-wrapper').height() - $('.content-header').outerHeight()) * 0.6,
   columnDefs: logTableColumnDefs
+}).on('click', 'a.show', function () {
+  let data = $.yggLogTable.row($(this).parents('tr')).data();
+  swal({ type: 'info', text: data.parameters });
 }).on('xhr.dt', handleDataTablesAjaxError);
