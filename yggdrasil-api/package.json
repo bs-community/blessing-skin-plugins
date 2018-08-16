@@ -7,14 +7,18 @@
   "url": "https://github.com/printempw/yggdrasil-api/",
   "namespace": "Yggdrasil",
   "config": "config.tpl",
-  "scripts": {
-    "dev": "parcel watch assets/src/*.js -d assets/dist",
-    "build": "parcel build assets/src/*.js -d assets/dist --no-source-maps"
-  },
   "require": {
     "blessing-skin-server": "^3.4.0"
   },
+  "scripts": {
+    "build": "babel assets/src --out-dir assets/dist"
+  },
   "devDependencies": {
-    "parcel-bundler": "^1.9.6"
+    "babel-cli": "^6.26.0",
+    "babel-minify": "^0.4.3",
+    "babel-preset-env": "^1.7.0"
+  },
+  "babel": {
+    "presets": ["env", "minify"]
   }
 }
