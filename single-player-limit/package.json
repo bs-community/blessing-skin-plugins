@@ -1,6 +1,6 @@
 {
   "name": "single-player-limit",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "title": "单角色限制",
   "description": "限制一个用户至多只能拥有一个角色，详见插件配置页。",
   "author": "printempw",
