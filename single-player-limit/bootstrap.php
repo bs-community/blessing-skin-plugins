@@ -133,6 +133,9 @@ return function (Dispatcher $events) {
     // 让衣柜中选中的材质直接应用到绑定角色上
     Hook::addScriptFileToPage(plugin('single-player-limit')->assets('assets/dist/closet.js'), ['user/closet']);
 
+    // 隐藏站点配置页面中的「使用角色名注册」选项
+    Hook::addScriptFileToPage(plugin('single-player-limit')->assets('assets/dist/options.js'), ['admin/options']);
+
     // 添加路由
     Hook::addRoute(function ($router) {
         $router->group([
