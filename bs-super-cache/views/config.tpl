@@ -25,6 +25,7 @@
           <div class="box-body table-responsive no-padding">
             <form method="post">
               <input type="hidden" name="option" value="config">
+              {{ csrf_field() }}
               <div class="box-body">
                 <?php
                 if (isset($_GET['flush'])) {
