@@ -16,6 +16,6 @@ return function (Dispatcher $events) {
 
     Hook::addRoute(function ($router) {
         // pass it to a controller instead of a closure for route cache
-        $router->get('/user/config', 'Blessing\ConfigGenerator\ConfigController@show')->middleware(['web', 'auth']);
+        $router->view('/user/config', 'Blessing\ConfigGenerator::config')->middleware(['web', 'auth']);
     });
 };

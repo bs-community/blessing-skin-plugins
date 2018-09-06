@@ -7,6 +7,6 @@
   "url": "https://blessing.studio/",
   "namespace": "Blessing\\ConfigGenerator",
   "require": {
-    "blessing-skin-server": "^3.2.0"
+    "blessing-skin-server": "^4.0.0"
   }
 }
