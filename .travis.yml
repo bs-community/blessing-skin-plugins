@@ -14,7 +14,6 @@ before_install:
 - phpenv global 7.1.11
 - openssl aes-256-cbc -K $encrypted_8150ab04d2e0_key -iv $encrypted_8150ab04d2e0_iv -in .travis/travis.key.enc -out ~/.ssh/id_rsa -d
 - chmod 600 ~/.ssh/id_rsa
-- chmod +x .travis/deploy.sh
 - git config --global user.name "printempw"
 - git config --global user.email "h@prinzeugen.net"
 - git clone git@git.coding.net:printempw/bs-plugins-archive.git .dist
