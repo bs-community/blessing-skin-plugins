@@ -27,5 +27,8 @@ script:
 - gulp release
 - gulp publish
 
-after_success:
-- .travis/deploy.sh
+deploy:
+  provider: script
+  script: bash .travis/deploy.sh
+  on:
+    branch: master
