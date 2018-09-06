@@ -1,10 +1,4 @@
 <?php
-/**
- * @Author: printempw
- * @Date:   2017-01-18 13:08:04
- * @Last Modified by:   printempw
- * @Last Modified time: 2017-01-18 17:27:18
- */
 
 namespace Blessing\CDN;
 
@@ -18,7 +12,7 @@ class ModifyStaticFileUrl
 
         if ($response instanceof Response && option('cdn_address')) {
             $response->setContent(str_replace(
-                url('resources/assets'),
+                url('public'),
                 option('cdn_address'),
                 $response->getContent()
             ));
