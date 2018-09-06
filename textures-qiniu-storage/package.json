@@ -6,7 +6,7 @@
   "author": "printempw",
   "url": "https://blessing.studio/",
   "namespace": "TextureQiniuStorage",
-  "config": "config.tpl",
+  "config": "config.blade.php",
   "require": {
     "blessing-skin-server": "^4.0.0"
   }
