@@ -1,9 +1,12 @@
 {
   "name": "hello-dolly",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "title": "HelloDolly::general.hello-dolly",
   "description": "HelloDolly::general.description",
   "author": "Matt Mullenweg",
   "url": "https://blessing.studio/",
-  "namespace": "HelloDolly"
+  "namespace": "HelloDolly",
+  "require": {
+    "blessing-skin-server": "^3.2.0 || ^4.0.0"
+  }
 }
