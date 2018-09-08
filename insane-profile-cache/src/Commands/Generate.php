@@ -31,7 +31,7 @@ class Generate extends Command
         $this->info('Cleaning...');
         // Delete all cache file first
         cleanProfileFileCache();
-        $this->info('Expired cache deleted. Caculating...');
+        $this->info('Expired cache deleted. Calculating...');
 
         $players = Player::all();
 

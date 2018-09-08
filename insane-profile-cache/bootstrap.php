@@ -2,7 +2,7 @@
 
 use App\Models\Player;
 use App\Services\Hook;
-use App\Services\Storage;
+use App\Exceptions\PrettyPageException;
 use Illuminate\Contracts\Events\Dispatcher;
 use InsaneProfileCache\Listener\DeleteFileCache;
 use InsaneProfileCache\Listener\UpdateFileCache;
@@ -13,7 +13,7 @@ define('PROFILE_CACHE_PATH', realpath(__DIR__.'/cache'));
 
 foreach (['csl', 'usm'] as $apiType) {
     if (!PROFILE_CACHE_PATH || !is_writable(PROFILE_CACHE_PATH."/$apiType")) {
-        die_with_utf8_encoding("[插件错误][insane-profile-cache] 没有对文件缓存目录 /cache/$apiType 的写入权限");
+        throw new PrettyPageException("[插件错误][insane-profile-cache] 没有对文件缓存目录 /cache/$apiType 的写入权限");
     }
 }
 
