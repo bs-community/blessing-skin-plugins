@@ -11,7 +11,7 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      {{ trans('ReportTexture::general.menu.user') }}
+      @lang('ReportTexture::general.menu.user')
     </h1>
   </section>
 
@@ -22,11 +22,11 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              <th>{{ trans('ReportTexture::general.thead.tid') }}</th>
-              <th>{{ trans('ReportTexture::general.thead.uploader') }}</th>
-              <th>{{ trans('ReportTexture::general.thead.reason') }}</th>
-              <th>{{ trans('ReportTexture::general.thead.status') }}</th>
-              <th>{{ trans('ReportTexture::general.thead.time') }}</th>
+              <th>@lang('ReportTexture::general.thead.tid')</th>
+              <th>@lang('ReportTexture::general.thead.uploader')</th>
+              <th>@lang('ReportTexture::general.thead.reason')</th>
+              <th>@lang('ReportTexture::general.thead.status')</th>
+              <th>@lang('ReportTexture::general.thead.time')</th>
             </tr>
           </thead>
 
@@ -50,7 +50,7 @@
                 <td>{{ $report->report_at }}</td>
               </tr>
             @empty
-              <p>{{ trans('ReportTexture::general.empty.user') }}</p>
+              <p>@lang('ReportTexture::general.empty.user')</p>
             @endforelse
           </tbody>
         </table>

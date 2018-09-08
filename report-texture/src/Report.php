@@ -12,7 +12,7 @@ class Report extends Model
 
     public $timestamps = false;
 
-    protected $fillable   = ['status'];
+    protected $fillable = ['status'];
 
     public function scopeLike($query, $field, $value)
     {

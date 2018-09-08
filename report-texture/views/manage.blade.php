@@ -11,7 +11,7 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      {{ trans('ReportTexture::general.menu.admin') }}
+      @lang('ReportTexture::general.menu.admin')
     </h1>
   </section>
 
@@ -22,14 +22,14 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              <th>{{ trans('ReportTexture::general.thead.tid') }}</th>
-              <th>{{ trans('ReportTexture::general.thead.uploader') }}</th>
-              <th>{{ trans('ReportTexture::general.thead.reporter') }}</th>
-              <th>{{ trans('ReportTexture::general.thead.reason') }}</th>
-              <th>{{ trans('ReportTexture::general.thead.status') }}</th>
-              <th>{{ trans('ReportTexture::general.thead.time') }}</th>
-              <th>{{ trans('ReportTexture::general.thead.operations') }}
-                <i class="fa fa-question-circle" title="{{ trans('ReportTexture::general.thead.more') }}" data-toggle="tooltip" data-placement="left"></i>
+              <th>@lang('ReportTexture::general.thead.tid')</th>
+              <th>@lang('ReportTexture::general.thead.uploader')</th>
+              <th>@lang('ReportTexture::general.thead.reporter')</th>
+              <th>@lang('ReportTexture::general.thead.reason')</th>
+              <th>@lang('ReportTexture::general.thead.status')</th>
+              <th>@lang('ReportTexture::general.thead.time')</th>
+              <th>@lang('ReportTexture::general.thead.operations')
+                <i class="fa fa-question-circle" title="@lang('ReportTexture::general.thead.more')" data-toggle="tooltip" data-placement="left"></i>
               </th>
             </tr>
           </thead>
@@ -62,18 +62,18 @@
                 <td>{{ $report->report_at }}</td>
                 <td>
                   <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ trans('ReportTexture::general.operations.title') }}  <span class="caret"></span></button>
+                    <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@lang('ReportTexture::general.operations.title')  <span class="caret"></span></button>
                     <ul class="dropdown-menu">
-                      <li><a href="javascript:;" onclick="moderation.ban({{ $report->id }});">{{ trans('ReportTexture::general.operations.ban') }}</a></li>
-                      <li><a href="javascript:;" onclick="moderation.private({{ $report->id }});">{{ trans('ReportTexture::general.operations.private') }}</a></li>
-                      <li><a href="javascript:;" onclick="moderation.delete({{ $report->id }});">{{ trans('ReportTexture::general.operations.delete') }}</a></li>
-                      <li><a href="javascript:;" onclick="moderation.reject({{ $report->id }});">{{ trans('ReportTexture::general.operations.reject') }}</a></li>
+                      <li><a href="javascript:;" onclick="moderation.ban({{ $report->id }});">@lang('ReportTexture::general.operations.ban')</a></li>
+                      <li><a href="javascript:;" onclick="moderation.private({{ $report->id }});">@lang('ReportTexture::general.operations.private')</a></li>
+                      <li><a href="javascript:;" onclick="moderation.delete({{ $report->id }});">@lang('ReportTexture::general.operations.delete')</a></li>
+                      <li><a href="javascript:;" onclick="moderation.reject({{ $report->id }});">@lang('ReportTexture::general.operations.reject')</a></li>
                     </ul>
                   </div>
                 </td>
               </tr>
             @empty
-              <p>{{ trans('ReportTexture::general.empty.admin') }}</p>
+              <p>@lang('ReportTexture::general.empty.admin')</p>
             @endforelse
           </tbody>
         </table>

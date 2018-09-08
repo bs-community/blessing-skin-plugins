@@ -2,7 +2,6 @@
 
 namespace ReportTexture;
 
-use Utils;
 use App\Models\User;
 use App\Models\Texture;
 use Illuminate\Http\Request;
@@ -12,7 +11,7 @@ class ReportController extends Controller
 {
     public function showContentPolicy()
     {
-        return app('parsedown')->text(option_localized('content_policy'));
+        return ['text' => app('parsedown')->text(option_localized('content_policy'))];
     }
 
     public function report(Request $request)
@@ -23,7 +22,7 @@ class ReportController extends Controller
         ]);
 
         $tid = $request->get('tid');
-        $reporter = app('user.current');
+        $reporter = auth()->user();
 
         if (Report::where('reporter', $reporter->uid)->where('tid', $tid)->first()) {
             return json(trans('ReportTexture::general.report.duplicate'), 1);
@@ -44,7 +43,7 @@ class ReportController extends Controller
         $report->uploader = Texture::find($report->tid)->uploader;
         $report->reporter = $reporter->uid;
         $report->status = Report::STATUS_PENDING;
-        $report->report_at = Utils::getTimeFormatted();
+        $report->report_at = get_datetime_string();
         $report->save();
 
         return json(trans('ReportTexture::general.report.success'), 0);
@@ -52,7 +51,7 @@ class ReportController extends Controller
 
     public function showMyReports()
     {
-        $user = app('user.current');
+        $user = auth()->user();
         $reports = Report::where('reporter', $user->uid)->get();
 
         return view('ReportTexture::report', compact('user', 'reports'));
@@ -60,7 +59,7 @@ class ReportController extends Controller
 
     public function showReportsManage()
     {
-        $user = app('user.current');
+        $user = auth()->user();
         // 懒得做分页了，有缘再说
         $reports = Report::all();
 
@@ -125,7 +124,7 @@ class ReportController extends Controller
 
     protected function checkPermission(Report $report)
     {
-        $current = app('user.current');
+        $current = auth()->user();
         $uploader = User::find($report->uploader);
 
         // 如果上传者的权限与当前操作者同级或者更高

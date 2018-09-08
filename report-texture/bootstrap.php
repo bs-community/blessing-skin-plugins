@@ -36,7 +36,7 @@ return function (Dispatcher $events) {
     if (option('content_policy')) {
         Hook::addScriptFileToPage(
             plugin('report-texture')->assets('assets/dist/content-policy.js'),
-            ['skinlib/upload', 'skinlib/show/*']
+            ['skinlib/upload']
         );
     }
 

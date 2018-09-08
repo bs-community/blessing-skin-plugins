@@ -9,11 +9,11 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      {{ trans('ReportTexture::general.title') }}
+      @lang('ReportTexture::general.title')
     </h1>
   </section>
 
-  <?php
+  @php
     $trans = trans('ReportTexture::general.config');
 
     $form = Option::form('config', $trans['title'], function ($form) use ($trans) {
@@ -35,7 +35,7 @@
     })->handle(function () {
       option(['content_policy_'.config('app.locale') => request('content_policy')]);
     });
-  ?>
+  @endphp
 
   <!-- Main content -->
   <section class="content">
