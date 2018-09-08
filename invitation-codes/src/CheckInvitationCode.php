@@ -10,10 +10,6 @@ class CheckInvitationCode extends AuthController
 {
     public function handle($request, Closure $next)
     {
-        if (! $this->checkCaptcha($request)) {
-            return json(trans('auth.validation.captcha'), 1);
-        }
-
         $this->validate($request, [
             'invitationCode' => 'required'
         ], [

@@ -47,7 +47,7 @@ return function (Dispatcher $events) {
         // 用户注册后标记该邀请码为已使用
         DB::table('invitation_codes')->where('code', session('using_invitation_code'))->update([
             'used_by' => $event->user->uid,
-            'used_at' => Utils::getTimeFormatted()
+            'used_at' => get_datetime_string()
         ]);
     });
 };
