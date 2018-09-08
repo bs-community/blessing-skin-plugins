@@ -5,8 +5,6 @@
 * @Last Modified time: 2017-01-02 14:19:32
 */
 
-$.extend($.locales['zh_CN'], {
-    'examplePlugin': {
-        test: "JavaScript i18n test: 简体中文"
-    }
-});
+window.__bs_i18n__.examplePlugin = {
+    test: "JavaScript i18n test: 简体中文"
+};

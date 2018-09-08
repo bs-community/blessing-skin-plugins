@@ -21,7 +21,7 @@
 
   <!-- Main content -->
   <section class="content">
-    <?php
+    @php
       /**
        * 通过 OptionForm，你可以仅使用几行代码生成一个配置页面
        */
@@ -68,7 +68,7 @@
 
         ')->disabled();
       })->addMessage('更多示例请查看 app/Http/Controllers/AdminController 源码，蟹蟹')->handle();
-    ?>
+    @endphp
 
     {{-- 在 Blade 模板引擎中渲染表单 --}}
     {!! $form->render() !!}
@@ -78,7 +78,7 @@
         <h3 class="box-title">README.md（此文件在插件根目录下）</h3>
       </div><!-- /.box-header -->
       <div class="box-body table-responsive">
-        <?php
+        @php
           $path = app('plugins')->getPlugin('example-plugin')->getPath()."/README.md";
           $markdown = @file_get_contents($path);
 
@@ -87,7 +87,7 @@
           } else {
             echo app('parsedown')->text($markdown);
           }
-        ?>
+        @endphp
       </div>
     </div>
 

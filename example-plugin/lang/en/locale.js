@@ -5,10 +5,6 @@
 * @Last Modified time: 2017-01-02 14:19:26
 */
 
-"use strict";
-
-$.extend($.locales['en'], {
-    'examplePlugin': {
-        test: "JavaScript i18n test: English"
-    }
-});
+window.__bs_i18n__.examplePlugin = {
+    test: "JavaScript i18n test: English"
+};

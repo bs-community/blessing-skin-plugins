@@ -17,7 +17,7 @@ use Illuminate\Contracts\Events\Dispatcher;
  * 在这个闭包里你可以做任何准备工作，所有的代码都会在请求被处理之前执行
  * 包括不限于动态修改 config、修改 option、监听事件、绑定对象至服务容器等
  *
- * @see  https://laravel-china.org/docs/5.1/container
+ * @see  https://laravel-china.org/docs/5.6/container
  */
 return function (Dispatcher $events) {
 
@@ -31,7 +31,7 @@ return function (Dispatcher $events) {
      * $className 是事件的完整类名，所有的事件均可在 app/Events 目录下找到，它们都已被映射至 App\Events 命名空间
      * $callback 是当事件被执行时你要执行的操作，必须是一个有效的 callback 类型，譬如一个闭包（匿名函数）
      *
-     * @see  https://laravel-china.org/docs/5.1/events
+     * @see  https://laravel-china.org/docs/5.6/events
      */
     $events->listen(App\Events\RenderingHeader::class, function($event) {
         /**
@@ -107,7 +107,7 @@ return function (Dispatcher $events) {
     Hook::addRoute(function ($router) {
         /**
          * 这只是一个最简单的路由定义（传递了闭包作为参数），其他用法请参照
-         * @see  https://laravel-china.org/docs/5.1/routing
+         * @see  https://laravel-china.org/docs/5.6/routing
          */
         $router->get('/user/example', function() {
             // 改变浏览器/皮肤站的语言设置再访问此链接
