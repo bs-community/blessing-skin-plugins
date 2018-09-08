@@ -17,7 +17,7 @@
   <section class="content">
     <div class="row">
       <div class="col-md-6">
-        @php
+        <?php
             $instruction = <<<EOT
 **注意：本插件仅支持 COS v5，如你正在使用旧版本的 COS，请联系腾讯云客服升级版本。**
 
@@ -40,13 +40,13 @@ COS_SCHEME=https
 CDN 地址 `COS_CDN` 必须以 `http(s)://` 开头。
 
 EOT;
-        @endphp
+        ?>
         <div class="box">
           <div class="box-header with-border">
             <h3 class="box-title">COS 连接配置</h3>
           </div><!-- /.box-header -->
           <div class="box-body table-responsive">
-            @php
+            <?php
               try {
                 Storage::disk('textures')->put('connectivity_test', 'test');
                 Storage::disk('textures')->delete('connectivity_test');
@@ -56,8 +56,8 @@ EOT;
                 echo '<div class="callout callout-danger">无法连接至腾讯云 COS，请检查你的配置。<br>错误信息：'.$e->getMessage().'</div>';
               }
 
-              echo (new Parsedown())->text($instruction);
-            @endphp
+              echo app('parsedown')->text($instruction);
+            ?>
           </div>
         </div>
       </div>

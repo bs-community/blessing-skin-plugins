@@ -17,7 +17,7 @@
   <section class="content">
     <div class="row">
       <div class="col-md-6">
-        @php
+        <?php
             $instruction = <<<EOT
 请在皮肤站的 `.env` 配置文件中添加并填写以下条目：
 
@@ -35,13 +35,13 @@ OSS_SSL=true
 # OSS_IS_CNAME=false
 ```
 EOT;
-        @endphp
+        ?>
         <div class="box">
           <div class="box-header with-border">
             <h3 class="box-title">OSS 连接配置</h3>
           </div><!-- /.box-header -->
           <div class="box-body table-responsive">
-            @php
+            <?php
               try {
                 Storage::disk('textures')->put('connectivity_test', 'test');
                 Storage::disk('textures')->delete('connectivity_test');
@@ -51,8 +51,8 @@ EOT;
                 echo '<div class="callout callout-danger">无法连接至阿里云 OSS，请检查你的配置。<br>错误信息：'.$e->getMessage().'</div>';
               }
 
-              echo (new Parsedown())->text($instruction);
-            @endphp
+              echo app('parsedown')->text($instruction);
+            ?>
           </div>
         </div>
       </div>
