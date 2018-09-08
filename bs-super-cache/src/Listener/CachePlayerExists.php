@@ -21,7 +21,7 @@ class CachePlayerExists
      * Handle the event.
      *
      * @param  CheckPlayerExists  $event
-     * @return void
+     * @return bool
      */
     public function cachePlayerExists(CheckPlayerExists $event)
     {

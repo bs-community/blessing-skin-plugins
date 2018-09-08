@@ -1,13 +1,14 @@
 <?php
 
 use SuperCache\Listener;
+use App\Exceptions\PrettyPageException;
 use Illuminate\Contracts\Events\Dispatcher;
 
 return function (Dispatcher $events) {
     $cache_path = storage_path('framework/cache');
 
     if (!is_writable($cache_path)) {
-        die_with_utf8_encoding("[BS Super Cache] 错误：$cache_path 不可写，请检查目录权限。");
+        throw new PrettyPageException("[BS Super Cache] 错误：$cache_path 不可写，请检查目录权限。");
     }
 
     $options = [
