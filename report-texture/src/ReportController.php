@@ -140,12 +140,12 @@ class ReportController extends Controller
 
         if ($reporter) {
             // 返还用户提交举报时扣除的积分
-            if ((($score = report_get_option_as_int('reporter_score_modification')) < 0) && ($report->status == Report::STATUS_PENDING)) {
+            if (($score = report_get_option_as_int('reporter_score_modification')) < 0) {
                 $reporter->setScore(-$score, 'plus');
             }
 
             // 举报通过后奖励积分
-            if ((($reward = report_get_option_as_int('reporter_reward_score')) > 0) && ($report->status == Report::STATUS_PENDING)) {
+            if (($reward = report_get_option_as_int('reporter_reward_score')) > 0) {
                 $reporter->setScore($reward, 'plus');
             }
         }
