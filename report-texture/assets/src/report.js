@@ -1,6 +1,6 @@
 'use strict';
 
-window.bsEmitter.on('mounted', () => {
+blessing.event.on('mounted', () => {
     $('.col-md-4 .box-primary .box-header').append(`
       <div class="box-tools pull-right" style="position: initial; cursor: pointer;">
         <span id="report-texture" class="label label-warning">
@@ -50,7 +50,7 @@ $('body').on('click', '#report-texture', () => {
     `;
   }
 
-  showModal(dom, `${trans('report.tid')}: ${tid}`, 'default', {
+  blessing.notify.showModal(dom, `${trans('report.tid')}: ${tid}`, 'default', {
     callback: `reportTexture(${ tid })`
   });
 });
@@ -62,7 +62,7 @@ async function reportTexture(tid) {
       `<i class="fas fa-spinner fa-spin"></i> ${ trans('report.submitting') }`
   ).prop('disabled', true);
 
-  const { errno, msg } = await bsAjax.post('/skinlib/report', { tid, reason });
+  const { errno, msg } = await blessing.fetch.post('/skinlib/report', { tid, reason });
   $('.modal').modal('hide');
   swal({ type: errno === 0 ? 'success' : 'warning', text: msg });
 }

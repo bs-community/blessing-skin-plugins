@@ -1,6 +1,6 @@
 'use strict';
 
-window.bsEmitter.on('mounted', ({ el }) => {
+blessing.event.on('mounted', ({ el }) => {
     $(el).find('.row').first().before(
         `<div class="form-group has-feedback">
             <input id="invitation-code" type="text" class="form-control" placeholder="邀请码">
@@ -10,6 +10,6 @@ window.bsEmitter.on('mounted', ({ el }) => {
 });
 
 // 插入邀请码的值
-window.bsEmitter.on('beforeFetch', request => {
+blessing.event.on('beforeFetch', request => {
     request.data.invitationCode = $('#invitation-code').val();
 });

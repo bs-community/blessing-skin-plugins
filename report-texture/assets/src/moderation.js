@@ -12,7 +12,7 @@ async function moderate(id, operation) {
     'report.status.' + (operation === 'reject' ? 'rejected' : 'resolved')
   );
 
-  const { errno, msg } = await bsAjax.post('/admin/reports', { id, operation });
+  const { errno, msg } = await blessing.fetch.post('/admin/reports', { id, operation });
   if (errno === 0) {
       $(`#report-${id} #status`).text(statusText);
       toastr.success(msg);

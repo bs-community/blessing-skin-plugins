@@ -1,6 +1,6 @@
 'use strict';
 
-window.bsEmitter.on('mounted', () => {
+blessing.event.on('mounted', () => {
     $('.box-primary > .box-footer > .btn-primary').after(`
       <span onclick="showContentPolicy()" class="label bg-yellow" style="cursor: pointer; margin-left: 14px;">
         <i class="fas fa-exclamation-circle" aria-hidden="true"></i> ${ trans('report.contentPolicy') }
@@ -9,6 +9,6 @@ window.bsEmitter.on('mounted', () => {
 });
 
 async function showContentPolicy() {
-  const { text } = await bsAjax.get('/skinlib/content-policy');
-  showModal(text, trans('report.contentPolicy'));
+  const { text } = await blessing.fetch.get('/skinlib/content-policy');
+  blessing.notify.showModal(text, trans('report.contentPolicy'));
 }
