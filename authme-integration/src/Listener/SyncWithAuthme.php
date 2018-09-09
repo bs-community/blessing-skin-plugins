@@ -3,7 +3,6 @@
 namespace Integration\Authme\Listener;
 
 use DB;
-use Utils;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Events\UserTryToLogin;
@@ -22,8 +21,8 @@ class SyncWithAuthme
             'player_name' => DB::raw('`realname`'),
             'nickname' => DB::raw('`realname`'),
             'score' => option('user_initial_score'),
-            'register_at' => Utils::getTimeFormatted(),
-            'last_sign_at' => Utils::getTimeFormatted(time() - 86400)
+            'register_at' => get_datetime_string(),
+            'last_sign_at' => get_datetime_string(time() - 86400)
         ]);
 
         // 在 Authme 那边注册的用户虽然有定义了 player_name
