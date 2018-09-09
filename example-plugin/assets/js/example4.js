@@ -5,6 +5,6 @@
 * @Last Modified time: 2017-01-08 16:04:47
 */
 
-'use strict';
+'use strict'
 
-console.warn("示例：我将被最先加载，因为我优先级最高");
+console.warn('示例：我将被最先加载，因为我优先级最高')

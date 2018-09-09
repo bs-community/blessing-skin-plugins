@@ -15,4 +15,4 @@ blessing.i18n.report = {
   },
   contentPolicy: 'Content Policy',
   contentPolicyNotice: 'Before submitting a report, please read our :link.'
-};
+}
