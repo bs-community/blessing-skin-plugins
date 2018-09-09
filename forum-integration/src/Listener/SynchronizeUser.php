@@ -2,7 +2,6 @@
 
 namespace Integration\Forum\Listener;
 
-use Utils;
 use App\Events;
 use App\Models\User;
 use App\Models\Player;
@@ -121,8 +120,8 @@ class SynchronizeUser
         $user->password     = $result->password;
         $user->ip           = $result->regip;
         $user->score        = option('user_initial_score');
-        $user->register_at  = Utils::getTimeFormatted();
-        $user->last_sign_at = Utils::getTimeFormatted(time() - 86400);
+        $user->register_at  = get_datetime_string();
+        $user->last_sign_at = get_datetime_string(time() - 86400);
         $user->permission   = User::NORMAL;
         $user->nickname     = $result->username;
         $user->player_name  = $result->username;
@@ -139,7 +138,7 @@ class SynchronizeUser
             $player->uid           = $user->uid;
             $player->player_name   = $user->player_name;
             $player->preference    = 'default';
-            $player->last_modified = Utils::getTimeFormatted();
+            $player->last_modified = get_datetime_string();
             $player->save();
             event(new Events\PlayerWasAdded($player));
         }
