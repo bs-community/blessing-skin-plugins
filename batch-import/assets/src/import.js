@@ -59,24 +59,13 @@ function renderImportResult(result) {
 }
 
 async function sendChunkImportRequest(begin, end) {
-  try {
-    const result = await fetch({
-      type: 'POST',
-      url: url('admin/batch-import/chunk-import'),
-      dataType: 'json',
-      data: {
+    for (let index = begin; index <= end; index++) {
+        $(`tr#entry-${index} > #status`).html(`<i class="fa fa-spinner fa-spin"></i> 导入中`);
+    }
+
+    return await blessing.fetch.post('/admin/batch-import/chunk-import', {
         begin, end,
         type: getQueryString('type'),
         uploader: getQueryString('uploader')
-      },
-      beforeSend: () => {
-        for (let index = begin; index <= end; index++) {
-          $(`tr#entry-${index} > #status`).html(`<i class="fa fa-spinner fa-spin"></i> 导入中`);
-        }
-      }
     });
-    return result;
-  } catch (error) {
-    showAjaxError(error);
-  }
 }

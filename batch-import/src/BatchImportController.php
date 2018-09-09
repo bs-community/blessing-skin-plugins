@@ -6,7 +6,6 @@ use DB;
 use Log;
 use File;
 use Cache;
-use Utils;
 use Exception;
 use App\Models\User;
 use App\Models\Texture;
@@ -140,7 +139,7 @@ class BatchImportController extends Controller
                 'size'      => ceil(filesize($path) / 1024),
                 'uploader'  => $option['uploader'],
                 'public'    => 1,
-                'upload_at' => Utils::getTimeFormatted()
+                'upload_at' => get_datetime_string()
             ]);
         } catch (Exception $e) {
             return $e->getMessage();
