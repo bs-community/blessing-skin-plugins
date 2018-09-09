@@ -3,7 +3,6 @@
 namespace Integration\CrazyLogin\Listener;
 
 use DB;
-use Utils;
 use App\Models\User;
 use App\Events\UserTryToLogin;
 use App\Events\UserAuthenticated;
@@ -21,8 +20,8 @@ class SyncWithCrazyLogin
             'player_name' => DB::raw('`name`'),
             'nickname' => DB::raw('`name`'),
             'score' => option('user_initial_score'),
-            'register_at' => Utils::getTimeFormatted(),
-            'last_sign_at' => Utils::getTimeFormatted(time() - 86400)
+            'register_at' => get_datetime_string(),
+            'last_sign_at' => get_datetime_string(time() - 86400)
         ]);
 
         // 在 CrazyLogin 那边注册的用户虽然有定义了 player_name
