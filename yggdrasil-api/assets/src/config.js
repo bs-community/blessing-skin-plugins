@@ -112,9 +112,9 @@ $('body').on('click', '.fileinput-upload-button', async () => {
     const { errno, msg } = await blessing.fetch.walkFetch(request);
 
     if (errno === 0) {
-        await swal({ type: 'success', html: msg });
+        await swal({ type: 'success', text: msg });
         location.reload();
     } else {
-        swal({ type: 'warning', html: msg });
+        swal({ type: 'warning', text: msg });
     }
 });
