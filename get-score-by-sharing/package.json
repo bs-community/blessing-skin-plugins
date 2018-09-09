@@ -1,10 +1,13 @@
 {
   "name": "get-score-by-sharing",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "title": "分享奖励积分",
   "description": "用户上传公开的皮肤、披风至皮肤库时可以获得积分奖励。用户将皮肤库中的材质收藏到衣柜时，上传者也会获得积分奖励。",
   "author": "printempw",
   "url": "https://blessing.studio/",
   "namespace": "GetScoreBySharing",
-  "config": "config.tpl"
+  "config": "config.blade.php",
+  "require": {
+    "blessing-skin-server": "^4.0.0"
+  }
 }

@@ -51,7 +51,7 @@ return function (Dispatcher $events) {
         $uploader = app('users')->get($t->uploader)->fresh();
 
         // 收藏私密材质或者自己上传的材质不给积分
-        if ($t->public != 1 || $t->uploader == app('user.current')->uid || !option('score_award_per_like')) {
+        if ($t->public != 1 || $t->uploader == auth()->id() || !option('score_award_per_like')) {
             return;
         }
 
@@ -70,12 +70,15 @@ return function (Dispatcher $events) {
 
         $score = option('score_award_per_texture');
 
-        $content = <<<EOT
-$('#msg').after(
-    '<div id="msg-2" class="callout callout-success">上传公开材质至皮肤库可以获得 $score 积分奖励。</div>'
-);
+        $content = /** @lang JavaScript */
+            <<<EOT
+blessing.event.on('mounted', () => {
+    $('.box-primary > .box-body').append(
+        '<div id="msg-2" class="callout callout-success">上传公开材质至皮肤库可以获得 $score 积分奖励。</div>'
+    );
+})
 
-$('body').on('ifToggled', '#private', function () {
+$('body').on('ifToggled', '[type=checkbox]', function () {
     $(this).prop('checked') ? $('#msg-2').hide() : $('#msg-2').show();
 });
 EOT;

@@ -17,12 +17,13 @@
   <section class="content">
     <div class="row">
       <div class="col-md-6">
-        <?php
+        @php
         $form = Option::form('config', '配置', function ($form) {
           $form->group('score_award_per_texture', '每上传一个材质奖励')->text('score_award_per_texture')->addon('积分');
           $form->checkbox('take_back_scores_after_deletion', '回收积分')->label('删除上传的材质后收回奖励积分');
           $form->group('score_award_per_like', '材质每被收藏一次奖励上传者')->text('score_award_per_like')->addon('积分');
-        })->handle(); ?>
+        })->handle();
+        @endphp
 
         {!! $form->render() !!}
       </div>
