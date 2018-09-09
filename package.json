@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "test": "standard"
+  },
   "standard": {
     "ignore": [
       "**/dist/",
