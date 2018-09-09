@@ -1,4 +1,4 @@
-window.__bs_i18n__.report = {
+blessing.i18n.report = {
   reportThisTexture: 'Report This Texture',
   submitting: 'Submitting...',
   tid: 'Texture ID',

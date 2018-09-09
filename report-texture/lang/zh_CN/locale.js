@@ -1,4 +1,4 @@
-window.__bs_i18n__.report = {
+blessing.i18n.report = {
   reportThisTexture: '举报该材质',
   submitting: '正在提交',
   tid: '材质 TID',

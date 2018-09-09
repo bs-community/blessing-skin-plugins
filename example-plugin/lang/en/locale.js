@@ -5,6 +5,6 @@
 * @Last Modified time: 2017-01-02 14:19:26
 */
 
-window.__bs_i18n__.examplePlugin = {
+blessing.i18n.examplePlugin = {
     test: "JavaScript i18n test: English"
 };
