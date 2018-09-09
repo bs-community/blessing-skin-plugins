@@ -1,5 +1,8 @@
 # 更新日志
 
+## v3.0.0-beta.0
+- 支持 Blessing Skin v4.0.0
+
 ## v2.1.8
 - 阻止被封禁的用户使用未过期的 Access Token 进入服务器
 

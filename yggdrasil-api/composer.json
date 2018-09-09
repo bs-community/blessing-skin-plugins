@@ -1,0 +1,5 @@
+{
+  "require": {
+    "printempw/laravel-datatables-lite": "^1.0"
+  }
+}

@@ -124,8 +124,8 @@ if (! function_exists('ygg_log')) {
             'user_id' => 0,
             'player_id' => 0,
             'parameters' => '[]',
-            'ip' => Utils::getClientIp(),
-            'time' => Utils::getTimeFormatted()
+            'ip' => get_client_ip(),
+            'time' => get_datetime_string()
         ], $params);
 
         return DB::table('ygg_log')->insert($data);

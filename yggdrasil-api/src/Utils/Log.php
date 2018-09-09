@@ -20,8 +20,7 @@ class Log extends Facade
 
     public static function __callStatic($method, $args)
     {
-        $monolog = parent::__callStatic('getMonolog', []);
-        $monolog->popHandler();
+        $monolog = parent::__callStatic('channel', ['single']);
         $monolog->pushHandler(
             (new StreamHandler(static::getLogPath()))->setFormatter(
                 new LineFormatter(null, null, true, true)

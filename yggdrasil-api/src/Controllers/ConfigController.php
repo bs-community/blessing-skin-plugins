@@ -50,11 +50,6 @@ class ConfigController extends Controller
         ]);
     }
 
-    public function log()
-    {
-        return view('Yggdrasil::log');
-    }
-
     public function logData()
     {
         $query = DB::table('ygg_log')
@@ -71,12 +66,12 @@ class ConfigController extends Controller
         $entries = DB::table('ygg_log')
             ->leftJoin('players', 'ygg_log.player_id', '=', 'players.pid')
             ->select('action', 'player_name', 'ip', 'time')
-            ->where('user_id', app('user.current')->uid)
+            ->where('user_id', auth()->id())
             ->orderBy('time', 'desc')
             ->take(5)
             ->get();
 
-        return json($entries);
+        return $entries;
     }
 
     public function generate()
