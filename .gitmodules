@@ -4,3 +4,6 @@
 [submodule "multi-index-style"]
 	path = multi-index-style
 	url = https://github.com/bs-community/multi-index-style.git
+[submodule "present-with-textures"]
+	path = present-with-textures
+	url = https://github.com/bs-community/present-with-textures
