@@ -2,7 +2,6 @@
 
 use App\Models\Player;
 use App\Services\Hook;
-use App\Services\Storage;
 use Illuminate\Contracts\Events\Dispatcher;
 use InsaneProfileCache\Listener\DeleteFileCache;
 use InsaneProfileCache\Listener\UpdateFileCache;
@@ -18,21 +17,18 @@ foreach (['csl', 'usm'] as $apiType) {
 }
 
 return function (Dispatcher $events) {
-
     $events->subscribe(UpdateFileCache::class);
     $events->subscribe(DeleteFileCache::class);
 
     $events->listen('Illuminate\Console\Events\ArtisanStarting', function ($event) {
         $event->artisan->resolveCommands([
             'InsaneProfileCache\Commands\Clean',
-            'InsaneProfileCache\Commands\Generate'
+            'InsaneProfileCache\Commands\Generate',
         ]);
     });
 
     Hook::addRoute(function ($router) {
-
         $router->get('/admin/generate-profile-cache', function () {
-
             if (isset($_GET['continue'])) {
                 // Delete all cache file first
                 cleanProfileFileCache();
@@ -45,11 +41,10 @@ return function (Dispatcher $events) {
                     $indicator++;
                 }
 
-                return "在目录 ".PROFILE_CACHE_PATH." 下成功生成了 $indicator 个缓存文件。";
+                return '在目录 '.PROFILE_CACHE_PATH." 下成功生成了 $indicator 个缓存文件。";
             }
 
             return view('InsaneProfileCache::generate');
         })->middleware(['web', 'auth', 'admin']);
-
     });
 };

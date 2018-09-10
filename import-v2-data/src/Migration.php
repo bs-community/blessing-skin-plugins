@@ -8,14 +8,14 @@
 
 namespace Blessing\ImportV2Data;
 
+use App\Models\Closet;
+use App\Models\Player;
+use App\Models\Texture;
+use App\Models\User;
 use Log;
-use Utils;
 use Option;
 use Storage;
-use App\Models\User;
-use App\Models\Player;
-use App\Models\Closet;
-use App\Models\Texture;
+use Utils;
 
 class Migration
 {
@@ -23,16 +23,16 @@ class Migration
     {
         @set_time_limit(0);
 
-        $prefix        = config('database.connections.mysql.prefix');
+        $prefix = config('database.connections.mysql.prefix');
 
-        $v3_users      = $prefix."users";
-        $v3_players    = $prefix."players";
-        $v3_closets    = $prefix."closets";
-        $v3_textures   = $prefix."textures";
+        $v3_users = $prefix.'users';
+        $v3_players = $prefix.'players';
+        $v3_closets = $prefix.'closets';
+        $v3_textures = $prefix.'textures';
 
-        $user_imported      = 0;
-        $user_duplicated    = 0;
-        $texture_imported   = 0;
+        $user_imported = 0;
+        $user_duplicated = 0;
+        $texture_imported = 0;
         $texture_duplicated = 0;
 
         // use db helper instead of fat ORM in some operations :(
@@ -48,17 +48,17 @@ class Migration
             $name = str_replace('{username}', $row['username'], $options['texture_name_pattern']);
 
             if (Player::where('player_name', $row['username'])->get()->isEmpty()) {
-                $user = new User;
+                $user = new User();
 
-                $user->email        = '';
-                $user->nickname     = $row['username'];
-                $user->score        = $score;
-                $user->password     = $row['password'];
-                $user->avatar       = '0';
-                $user->ip           = $row['ip'];
-                $user->permission   = '0';
+                $user->email = '';
+                $user->nickname = $row['username'];
+                $user->score = $score;
+                $user->password = $row['password'];
+                $user->avatar = '0';
+                $user->ip = $row['ip'];
+                $user->permission = '0';
                 $user->last_sign_at = Utils::getTimeFormatted(time() - 86400);
-                $user->register_at  = Utils::getTimeFormatted();
+                $user->register_at = Utils::getTimeFormatted();
 
                 $user->save();
 
@@ -67,24 +67,24 @@ class Migration
                 $textures = [];
 
                 foreach ($models as $model) {
-                    if ($row["hash_$model"] != "") {
+                    if ($row["hash_$model"] != '') {
                         $name = str_replace('{model}', $model, $name);
 
                         $res = Texture::where('hash', $row["hash_$model"])->first();
 
                         if (!$res) {
-                            $t = new Texture;
+                            $t = new Texture();
                             // file size in bytes
                             $size = Storage::disk('textures')->has($row["hash_$model"]) ? Storage::disk('textures')->size($row["hash_$model"]) : 0;
 
-                            $t->name      = $name;
-                            $t->type      = $model;
-                            $t->likes     = 1;
-                            $t->hash      = $row["hash_$model"];
-                            $t->size      = ceil($size / 1024);
-                            $t->uploader  = $user->uid;
-                            $t->public    = $options['public'];
-                            $t->upload_at = $row['last_modified'] ? : Utils::getTimeFormatted();
+                            $t->name = $name;
+                            $t->type = $model;
+                            $t->likes = 1;
+                            $t->hash = $row["hash_$model"];
+                            $t->size = ceil($size / 1024);
+                            $t->uploader = $user->uid;
+                            $t->public = $options['public'];
+                            $t->upload_at = $row['last_modified'] ?: Utils::getTimeFormatted();
 
                             $t->save();
 
@@ -92,22 +92,22 @@ class Migration
 
                             $texture_imported++;
 
-                            Log::info("[DataImport] Texture ".$row["hash_$model"]." saved.");
+                            Log::info('[DataImport] Texture '.$row["hash_$model"].' saved.');
                         } else {
                             $textures[$model] = $res->tid;
                             $texture_duplicated++;
 
-                            Log::info("[DataImport] Texture ".$row["hash_$model"]." duplicated.");
+                            Log::info('[DataImport] Texture '.$row["hash_$model"].' duplicated.');
                         }
                     }
                 }
 
-                $p = new Player;
+                $p = new Player();
 
-                $p->uid           = $user->uid;
-                $p->player_name   = $row['username'];
-                $p->preference    = $row['preference'];
-                $p->last_modified = $row['last_modified'] ? : Utils::getTimeFormatted();
+                $p->uid = $user->uid;
+                $p->player_name = $row['username'];
+                $p->preference = $row['preference'];
+                $p->last_modified = $row['last_modified'] ?: Utils::getTimeFormatted();
 
                 $c = new Closet($user->uid);
 
@@ -117,11 +117,11 @@ class Migration
                     $property = "tid_$model";
                     $p->$property = $tid;
 
-                    $items[] = array(
+                    $items[] = [
                         'tid'    => $tid,
                         'name'   => $name,
-                        'add_at' => $row['last_modified'] ? : Utils::getTimeFormatted()
-                    );
+                        'add_at' => $row['last_modified'] ?: Utils::getTimeFormatted(),
+                    ];
                 }
 
                 $c->setTextures(json_encode($items));
@@ -135,19 +135,17 @@ class Migration
 
                 Log::info("[DataImport] User {$row['username']} duplicated.");
             }
-
-
         }
 
         return [
             'user' => [
-                'imported' => $user_imported,
-                'duplicated' => $user_duplicated
+                'imported'   => $user_imported,
+                'duplicated' => $user_duplicated,
             ],
             'texture' => [
-                'imported' => $texture_imported,
-                'duplicated' => $texture_duplicated
-            ]
+                'imported'   => $texture_imported,
+                'duplicated' => $texture_duplicated,
+            ],
         ];
     }
 }

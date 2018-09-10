@@ -2,11 +2,10 @@
 
 namespace Blessing\ImportV2Data;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Validator;
-use App\Http\Controllers\Controller;
-use App\Services\Repositories\UserRepository;
 
 class ImportController extends Controller
 {
@@ -31,17 +30,17 @@ class ImportController extends Controller
     {
         $this->validate($request, [
             'v2_table_name'        => 'required|no_special_chars',
-            'texture_name_pattern' => 'required'
+            'texture_name_pattern' => 'required',
         ]);
 
-        if (! app('legacy_db_helper')->hasTable($request->input('v2_table_name'))) {
+        if (!app('legacy_db_helper')->hasTable($request->input('v2_table_name'))) {
             return back()->withErrors("数据表 {$_POST['v2_table_name']} 不存在");
         }
 
         $result = Migration::import([
-            'table_name' => $request->input('v2_table_name'),
+            'table_name'           => $request->input('v2_table_name'),
             'texture_name_pattern' => $request->input('texture_name_pattern'),
-            'public' => $request->input('import_as_private') ? '0' : '1'
+            'public'               => $request->input('import_as_private') ? '0' : '1',
         ]);
 
         return view('Blessing\ImportV2Data::finish')->with('result', $result);
@@ -54,5 +53,4 @@ class ImportController extends Controller
     {
         return $validator->errors()->all();
     }
-
 }

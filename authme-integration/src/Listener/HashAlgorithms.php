@@ -2,12 +2,11 @@
 
 namespace Integration\Authme\Listener;
 
-use Schema;
-use App\Models\User;
-use App\Events\UserTryToLogin;
-use App\Events\UserAuthenticated;
 use App\Events\EncryptUserPassword;
+use App\Events\UserTryToLogin;
+use App\Models\User;
 use Illuminate\Contracts\Events\Dispatcher;
+use Schema;
 
 class HashAlgorithms
 {
@@ -37,7 +36,9 @@ class HashAlgorithms
                 $event->identification
             )->first();
 
-            if (! $user) return;
+            if (!$user) {
+                return;
+            }
 
             $password = request('password');
 
@@ -55,7 +56,7 @@ class HashAlgorithms
     protected function adaptToDynamicSalt(Dispatcher $events)
     {
         // 在 users 表上添加 salt 字段
-        if (! Schema::hasColumn('users', 'salt')) {
+        if (!Schema::hasColumn('users', 'salt')) {
             Schema::table('users', function ($table) {
                 $table->string('salt', 6)->default('');
             });
@@ -69,7 +70,9 @@ class HashAlgorithms
                 $event->identification
             )->first();
 
-            if (! $user) return;
+            if (!$user) {
+                return;
+            }
 
             $password = request('password');
 
@@ -86,7 +89,7 @@ class HashAlgorithms
             $user = $event->user;
 
             // 生成并保存随机 salt
-            if (! $user->salt) {
+            if (!$user->salt) {
                 $user->salt = app('cipher')->generateSalt();
                 $user->save();
             }

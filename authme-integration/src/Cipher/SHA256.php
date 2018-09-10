@@ -33,11 +33,12 @@ class SHA256 extends BaseCipher
         // Hash formatted as $SHA$salt$hash
         return [
             'hash' => $parts[3],
-            'salt' => $parts[2]
+            'salt' => $parts[2],
         ];
     }
 
-    protected function generateSalt() {
+    protected function generateSalt()
+    {
         // Format /^[0-9a-f]{16}$/
         return bin2hex(random_bytes(8));
     }

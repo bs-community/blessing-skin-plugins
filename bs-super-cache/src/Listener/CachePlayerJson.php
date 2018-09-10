@@ -2,10 +2,9 @@
 
 namespace SuperCache\Listener;
 
-use Cache;
-use Storage;
 use App\Events\GetPlayerJson;
 use App\Events\PlayerProfileUpdated;
+use Cache;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class CachePlayerJson
@@ -19,7 +18,8 @@ class CachePlayerJson
     /**
      * Handle the event.
      *
-     * @param  GetPlayerJson  $event
+     * @param GetPlayerJson $event
+     *
      * @return void
      */
     public function cachePlayerJson(GetPlayerJson $event)
@@ -37,7 +37,7 @@ class CachePlayerJson
     {
         $keys = [
             "json-{$event->player->pid}-0",
-            "json-{$event->player->pid}-1"
+            "json-{$event->player->pid}-1",
         ];
 
         foreach ($keys as $key) {

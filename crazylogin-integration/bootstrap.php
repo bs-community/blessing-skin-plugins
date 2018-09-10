@@ -1,7 +1,7 @@
 <?php
 
-use Integration\CrazyLogin\Listener;
 use Illuminate\Contracts\Events\Dispatcher;
+use Integration\CrazyLogin\Listener;
 
 require __DIR__.'/src/helpers.php';
 

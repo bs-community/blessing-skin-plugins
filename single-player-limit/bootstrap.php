@@ -5,7 +5,8 @@ use App\Models\Player;
 use App\Services\Hook;
 use Illuminate\Contracts\Events\Dispatcher;
 
-function get_player_name_validation_rules() {
+function get_player_name_validation_rules()
+{
     // 兼容旧版 BS 的验证规则
     if (version_compare(config('app.version'), '3.4.0', '>')) {
         return 'required|player_name|min:'.option('player_name_length_min').'|max:'.option('player_name_length_max');
@@ -17,13 +18,13 @@ function get_player_name_validation_rules() {
 return function (Dispatcher $events) {
 
     // 在 users 表上添加 player_name 字段
-    if (! Schema::hasColumn('users', 'player_name')) {
+    if (!Schema::hasColumn('users', 'player_name')) {
         Schema::table('users', function ($table) {
-            $table->string('player_name')->default('')->comment = "Added by single-player-limit plugin.";
+            $table->string('player_name')->default('')->comment = 'Added by single-player-limit plugin.';
         });
     }
 
-    if (! Option::has('allow_change_player_name')) {
+    if (!Option::has('allow_change_player_name')) {
         Option::set('allow_change_player_name', true);
     }
 
@@ -43,7 +44,7 @@ return function (Dispatcher $events) {
         }
 
         // 要求绑定唯一角色名
-        if (! $user->player_name) {
+        if (!$user->player_name) {
             if ($request->method() == 'POST') {
                 response('[单角色限制] 请刷新页面绑定角色名')->send();
                 exit;
@@ -57,12 +58,12 @@ return function (Dispatcher $events) {
         // 确保用户拥有该角色
         $player = Player::where('player_name', $user->player_name)->first();
 
-        if (! $player) {
-            $player = new Player;
+        if (!$player) {
+            $player = new Player();
 
-            $player->uid           = $user->uid;
-            $player->player_name   = $user->player_name;
-            $player->preference    = 'default';
+            $player->uid = $user->uid;
+            $player->player_name = $user->player_name;
+            $player->preference = 'default';
             $player->last_modified = Utils::getTimeFormatted();
             $player->save();
 
@@ -93,7 +94,7 @@ return function (Dispatcher $events) {
     // 禁止用户添加或删除角色
     $events->listen([
         Events\PlayerWillBeAdded::class,
-        Events\PlayerWillBeDeleted::class
+        Events\PlayerWillBeDeleted::class,
     ], function ($event) {
         exit(json('由于本站设置，你无法添加或删除角色', 1)->getContent());
     });

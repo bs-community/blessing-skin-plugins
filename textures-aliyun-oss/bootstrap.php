@@ -10,7 +10,7 @@ return function () {
         'ssl'           => menv('OSS_SSL', true),
         'cdnDomain'     => menv('OSS_CDN_DOMAIN'),
         'isCName'       => menv('OSS_IS_CNAME', false),
-        'debug'         => false
+        'debug'         => false,
     ];
 
     app()->register(Jacobcyl\AliOSS\AliOssServiceProvider::class);

@@ -6,11 +6,12 @@ use Exception;
 use InvalidArgumentException;
 
 /**
- * Light-weight database helper
+ * Light-weight database helper.
  *
  * TODO: use Laravel's Query Builder instead of this piece of shit
  *
  * @see https://github.com/printempw/blessing-skin-server/blob/80c6998182f95fec6a7e21485a10ca255b4d3d45/app/Providers/BootServiceProvider.php
+ *
  * @author <h@prinzeugen.net>
  */
 class Database
@@ -27,14 +28,14 @@ class Database
      *
      * @var array
      */
-    private $database   = "";
+    private $database = '';
 
     /**
      * Name of table to do operations in.
      *
      * @var string
      */
-    private $tableName = "";
+    private $tableName = '';
 
     /**
      * Construct with a config array.
@@ -47,7 +48,7 @@ class Database
             $this->connection = self::prepareConnection($config);
         } catch (Exception $e) {
             // throw with message
-            throw new InvalidArgumentException("Could not connect to MySQL database. ".
+            throw new InvalidArgumentException('Could not connect to MySQL database. '.
                 $e->getMessage(), $e->getCode());
         }
 
@@ -58,10 +59,11 @@ class Database
     /**
      * Try to connect to the database with given config.
      *
-     * @param  array $config
-     * @return \mysqli
+     * @param array $config
      *
      * @throws InvalidArgumentException
+     *
+     * @return \mysqli
      */
     public static function prepareConnection($config = null)
     {
@@ -86,10 +88,9 @@ class Database
     public function table($tableName, $no_prefix = false)
     {
         if ($this->connection->real_escape_string($tableName) == $tableName) {
-
             $this->tableName = $no_prefix ? "{$this->database}.$tableName" : config('database.connections.mysql.prefix').$tableName;
-            return $this;
 
+            return $this;
         } else {
             throw new InvalidArgumentException('Table name contains invalid characters', 1);
         }
@@ -102,9 +103,9 @@ class Database
 
         $result = $this->connection->query($sql);
 
-        if ($this->connection->error)
-            throw new Exception("Database query error: ".$this->connection->error.", Statement: ".$sql, -1);
-
+        if ($this->connection->error) {
+            throw new Exception('Database query error: '.$this->connection->error.', Statement: '.$sql, -1);
+        }
         return $result;
     }
 
@@ -114,13 +115,14 @@ class Database
     }
 
     /**
-     * Select records from table
+     * Select records from table.
      *
-     * @param  string  $key
-     * @param  string  $value
-     * @param  array   $condition        See function `where`
-     * @param  string  $table            Which table to operate
-     * @param  bool    $dont_fetch_array Return resources if true
+     * @param string $key
+     * @param string $value
+     * @param array  $condition        See function `where`
+     * @param string $table            Which table to operate
+     * @param bool   $dont_fetch_array Return resources if true
+     *
      * @return array|resources
      */
     public function select($key, $value, $condition = null, $table = null, $dont_fetch_array = false)
@@ -138,16 +140,15 @@ class Database
         } else {
             return $this->fetchArray($sql);
         }
-
     }
 
     public function insert($data, $table = null)
     {
-        $keys   = "";
-        $values = "";
-        $table  = $table ?: $this->tableName;
+        $keys = '';
+        $values = '';
+        $table = $table ?: $this->tableName;
 
-        foreach($data as $key => $value) {
+        foreach ($data as $key => $value) {
             if ($value == end($data)) {
                 $keys .= '`'.$key.'`';
                 $values .= '"'.$value.'"';
@@ -158,6 +159,7 @@ class Database
         }
 
         $sql = "INSERT INTO $table ({$keys}) VALUES ($values)";
+
         return $this->query($sql);
     }
 
@@ -192,6 +194,7 @@ class Database
         $table = $table ?: $this->tableName;
 
         $sql = "SELECT * FROM $table WHERE $key='$value'";
+
         return $this->query($sql)->num_rows;
     }
 
@@ -200,20 +203,22 @@ class Database
         $table = $table ?: $this->tableName;
 
         $sql = "SELECT * FROM $table WHERE 1";
+
         return $this->query($sql)->num_rows;
     }
 
     /**
-     * Generate where statement
+     * Generate where statement.
      *
-     * @param  array $condition e.g. array('where'=>'username="shit"', 'limit'=>10, 'order'=>'uid')
+     * @param array $condition e.g. array('where'=>'username="shit"', 'limit'=>10, 'order'=>'uid')
+     *
      * @return string
      */
     private function where($condition)
     {
-        $statement = "";
+        $statement = '';
 
-        if (isset($condition['where']) && $condition['where'] != "") {
+        if (isset($condition['where']) && $condition['where'] != '') {
             $statement .= ' WHERE '.$condition['where'];
         }
         if (isset($condition['order'])) {
@@ -228,9 +233,8 @@ class Database
 
     public function __destruct()
     {
-        if (! is_null($this->connection)) {
+        if (!is_null($this->connection)) {
             $this->connection->close();
         }
     }
-
 }

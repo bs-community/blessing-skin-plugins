@@ -6,13 +6,13 @@ return function (Dispatcher $events) {
 
     // 加载设置项
     $options = [
-        'score_award_per_like' => 50,
-        'score_award_per_texture' => 100,
-        'take_back_scores_after_deletion' => true
+        'score_award_per_like'            => 50,
+        'score_award_per_texture'         => 100,
+        'take_back_scores_after_deletion' => true,
     ];
 
     foreach ($options as $key => $value) {
-        if (! Option::has($key)) {
+        if (!Option::has($key)) {
             Option::set($key, $value);
         }
     }
@@ -57,14 +57,14 @@ return function (Dispatcher $events) {
 
         if (request()->is('user/closet/add')) {
             $uploader->setScore(option('score_award_per_like'), 'plus');
-        } else if (request()->is('user/closet/remove')) {
+        } elseif (request()->is('user/closet/remove')) {
             $uploader->setScore(option('score_award_per_like'), 'minus');
         }
     });
 
     // 向皮肤库上传页面添加奖励说明
     $events->listen(App\Events\RenderingFooter::class, function ($event) {
-        if (! app('request')->is('skinlib/upload')) {
+        if (!app('request')->is('skinlib/upload')) {
             return;
         }
 

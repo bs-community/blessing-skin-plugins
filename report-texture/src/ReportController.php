@@ -2,11 +2,11 @@
 
 namespace ReportTexture;
 
-use Utils;
-use App\Models\User;
-use App\Models\Texture;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Texture;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Utils;
 
 class ReportController extends Controller
 {
@@ -18,8 +18,8 @@ class ReportController extends Controller
     public function report(Request $request)
     {
         $this->validate($request, [
-            'tid' => 'required',
-            'reason' => 'required'
+            'tid'    => 'required',
+            'reason' => 'required',
         ]);
 
         $tid = $request->get('tid');
@@ -38,7 +38,7 @@ class ReportController extends Controller
         // 奖励或者暂扣积分（因为 $score 可以是负数所以这里统一用 plus）
         $reporter->setScore($score, 'plus');
 
-        $report = new Report;
+        $report = new Report();
         $report->tid = $tid;
         $report->reason = $request->get('reason');
         $report->uploader = Texture::find($report->tid)->uploader;
@@ -70,20 +70,22 @@ class ReportController extends Controller
     public function handleReports(Request $request)
     {
         $this->validate($request, [
-            'id' => 'required',
-            'operation' => 'required'
+            'id'        => 'required',
+            'operation' => 'required',
         ]);
 
         $report = Report::find($request->get('id'));
 
-        if (! $report) {
+        if (!$report) {
             return json(trans('general.illegal-parameters'));
         }
 
         // 检查操作权限
         if ($request->get('operation') != 'reject') {
             $resp = $this->checkPermission($report);
-            if ($resp) return $resp;
+            if ($resp) {
+                return $resp;
+            }
         }
 
         switch ($request->get('operation')) {
@@ -91,23 +93,26 @@ class ReportController extends Controller
 
                 User::find($report->uploader)->setPermission(User::BANNED);
                 $this->resolveReport($report);
+
                 return json(trans('ReportTexture::general.moderation.banned'), 0);
 
             case 'private':
 
                 Texture::find($report->tid)->setPrivacy(false);
                 $this->resolveReport($report);
+
                 return json(trans('ReportTexture::general.moderation.private'), 0);
 
             case 'delete':
 
                 Texture::find($report->tid)->delete();
                 $this->resolveReport($report);
+
                 return json(trans('ReportTexture::general.moderation.deleted'), 0);
 
             case 'reject':
 
-                if ($reporter = User::find($report->reporter))  {
+                if ($reporter = User::find($report->reporter)) {
                     // 如果用户举报材质时获得了奖励积分，那么现在就将其收回
                     if (($score = report_get_option_as_int('reporter_score_modification')) > 0) {
                         $reporter->setScore($score, 'minus');
@@ -115,10 +120,11 @@ class ReportController extends Controller
                 }
 
                 $report->update(['status' => Report::STATUS_REJECTED]);
+
                 return json(trans('ReportTexture::general.moderation.rejected'), 0);
 
             default:
-                # code...
+                // code...
                 break;
         }
     }

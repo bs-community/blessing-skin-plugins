@@ -14,7 +14,7 @@ return function () {
     forum_init_options();
 
     // 在 users 表上添加 salt 字段
-    if (! Schema::hasColumn('users', 'salt')) {
+    if (!Schema::hasColumn('users', 'salt')) {
         Schema::table('users', function ($table) {
             $table->string('salt', 6)->default('');
         });

@@ -2,22 +2,22 @@
 
 namespace InvitationCodes;
 
-use DB;
-use Closure;
 use App\Http\Controllers\AuthController;
+use Closure;
+use DB;
 
 class CheckInvitationCode extends AuthController
 {
     public function handle($request, Closure $next)
     {
-        if (! $this->checkCaptcha($request)) {
+        if (!$this->checkCaptcha($request)) {
             return json(trans('auth.validation.captcha'), 1);
         }
 
         $this->validate($request, [
-            'invitationCode' => 'required'
+            'invitationCode' => 'required',
         ], [
-            'invitationCode.required' => '邀请码不能为空'
+            'invitationCode.required' => '邀请码不能为空',
         ]);
 
         $code = request('invitationCode');

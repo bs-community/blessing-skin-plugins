@@ -2,15 +2,14 @@
 
 namespace BatchImport;
 
-use DB;
-use Log;
-use File;
-use Cache;
-use Utils;
-use Exception;
-use App\Models\User;
-use App\Models\Texture;
 use App\Http\Controllers\Controller;
+use App\Models\Texture;
+use Cache;
+use DB;
+use Exception;
+use File;
+use Log;
+use Utils;
 
 class BatchImportController extends Controller
 {
@@ -30,7 +29,7 @@ class BatchImportController extends Controller
                 break;
         }
 
-        return "参数错误";
+        return '参数错误';
     }
 
     public function confirm()
@@ -41,7 +40,7 @@ class BatchImportController extends Controller
         );
 
         $preview = array_reduce(array_slice($files, 0, 50), function ($carry, $item) {
-            return $carry . basename($item) . "\n";
+            return $carry.basename($item)."\n";
         }, '');
 
         return view('BatchImport::confirm', compact('files', 'preview'));
@@ -57,7 +56,6 @@ class BatchImportController extends Controller
     public function checkImportDir()
     {
         if (file_exists(request('dir'))) {
-
             Cache::put('import-source-dir', request('dir'), 60);
             Cache::put('import-gbk', request('gbk') === 'true', 60);
 
@@ -73,7 +71,7 @@ class BatchImportController extends Controller
             'begin'    => 'required',
             'end'      => 'required',
             'type'     => 'required',
-            'uploader' => 'required'
+            'uploader' => 'required',
         ]);
 
         $dir = Cache::get('import-source-dir');
@@ -83,18 +81,17 @@ class BatchImportController extends Controller
         $uploader = request('uploader', 1);
         $files = $this->getAvailableFiles($dir, Cache::get('import-gbk'));
 
-        Log::info("[Batch Import] ===================================");
-        Log::info("[Batch Import] Start importing ...");
+        Log::info('[Batch Import] ===================================');
+        Log::info('[Batch Import] Start importing ...');
         Log::info("[Batch Import] Source dir: \"$dir\"");
-        Log::info("[Batch Import] Type: \"".request('type')."\", uploader: ".request('uploader'));
+        Log::info('[Batch Import] Type: "'.request('type').'", uploader: '.request('uploader'));
         Log::info("[Batch Import] Index range from [$begin] to [$end]");
 
         $imported = 0;
         $response = [];
 
         foreach (range($begin, $end) as $index) {
-
-            Log::info("[Batch Import][$index] Importing: \"".basename($files[$index])."\"");
+            Log::info("[Batch Import][$index] Importing: \"".basename($files[$index]).'"');
 
             $result = $this->doImportTexture($files[$index], compact('type', 'uploader'));
 
@@ -116,7 +113,8 @@ class BatchImportController extends Controller
     /**
      * @param string $file   Full path of file to import.
      * @param array  $option ["type" => "steve|alex|cape", "uploader" => uid]
-     * @return string|bool   Return true on success, reason string on failure.
+     *
+     * @return string|bool Return true on success, reason string on failure.
      */
     protected function doImportTexture($file, $option)
     {
@@ -124,11 +122,11 @@ class BatchImportController extends Controller
         $path = storage_path("textures/$hash");
 
         if (false === copy($file, $path)) {
-            return "文件复制失败";
+            return '文件复制失败';
         }
 
         if (Texture::where('hash', $hash)->first()) {
-            return "材质重复";
+            return '材质重复';
         }
 
         try {
@@ -140,7 +138,7 @@ class BatchImportController extends Controller
                 'size'      => ceil(filesize($path) / 1024),
                 'uploader'  => $option['uploader'],
                 'public'    => 1,
-                'upload_at' => Utils::getTimeFormatted()
+                'upload_at' => Utils::getTimeFormatted(),
             ]);
         } catch (Exception $e) {
             return $e->getMessage();

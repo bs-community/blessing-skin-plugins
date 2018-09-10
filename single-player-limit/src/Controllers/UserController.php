@@ -2,11 +2,10 @@
 
 namespace SinglePlayerLimit\Controllers;
 
-use Log;
-use Validator;
-use App\Models\Player;
 use App\Events\UserAuthenticated;
 use App\Http\Controllers\UserController as BaseController;
+use App\Models\Player;
+use Log;
 
 class UserController extends BaseController
 {
@@ -16,9 +15,9 @@ class UserController extends BaseController
         $user = app('user.current');
 
         return view('SinglePlayerLimit::user')->with([
-            'user' => $user,
+            'user'    => $user,
             'storage' => $this->calculatePercentageUsed($user->getStorageUsed(), option('score_per_storage')),
-            'player' => Player::where('player_name', $user->player_name)->first()
+            'player'  => Player::where('player_name', $user->player_name)->first(),
         ]);
     }
 
@@ -37,7 +36,7 @@ class UserController extends BaseController
         }
 
         $this->validate(request(), [
-            'playerName' => get_player_name_validation_rules()
+            'playerName' => get_player_name_validation_rules(),
         ]);
 
         $player = Player::where('player_name', $playerName)->first();
@@ -60,7 +59,7 @@ class UserController extends BaseController
         $newPlayerName = request()->get('newPlayerName');
 
         $this->validate(request(), [
-            'newPlayerName' => get_player_name_validation_rules()
+            'newPlayerName' => get_player_name_validation_rules(),
         ]);
 
         $player = Player::where('player_name', $newPlayerName)->first();
@@ -79,5 +78,4 @@ class UserController extends BaseController
 
         return json("绑定的角色名成功修改为 $newPlayerName", 0);
     }
-
 }

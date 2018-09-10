@@ -1,6 +1,6 @@
 <?php
 
-if (! function_exists('crazylogin_get_columns')) {
+if (!function_exists('crazylogin_get_columns')) {
     /**
      * @see https://github.com/ST-DDT/CrazyLogin/blob/master/src/main/resources/config.yml
      */
@@ -12,13 +12,12 @@ if (! function_exists('crazylogin_get_columns')) {
             'ips',
             'lastAction',
             'loginFails',
-            'passwordExpired'
+            'passwordExpired',
         ];
     }
 }
 
-if (! function_exists('crazylogin_init_table')) {
-
+if (!function_exists('crazylogin_init_table')) {
     function crazylogin_init_table()
     {
         $exists = [];
@@ -27,7 +26,7 @@ if (! function_exists('crazylogin_init_table')) {
         foreach (crazylogin_get_columns() as $column) {
             $exists[$column] = Schema::hasColumn('users', $column);
 
-            if (! $exists[$column]) {
+            if (!$exists[$column]) {
                 $initialized = false;
             }
         }
@@ -54,10 +53,10 @@ if (! function_exists('crazylogin_init_table')) {
         }
 
         Schema::table('users', function ($table) use ($exists) {
-            $exists['name']            || $table->string('name')->default('');
-            $exists['ips']             || $table->string('ips')->default('');
-            $exists['lastAction']      || $table->timestamp('lastAction')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
-            $exists['loginFails']      || $table->integer('loginFails')->default(0);
+            $exists['name'] || $table->string('name')->default('');
+            $exists['ips'] || $table->string('ips')->default('');
+            $exists['lastAction'] || $table->timestamp('lastAction')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+            $exists['loginFails'] || $table->integer('loginFails')->default(0);
             $exists['passwordExpired'] || $table->tinyInteger('passwordExpired')->default(0);
         });
 

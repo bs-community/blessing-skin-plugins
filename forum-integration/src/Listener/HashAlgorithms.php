@@ -2,9 +2,9 @@
 
 namespace Integration\Forum\Listener;
 
-use App\Models\User;
-use App\Events\UserTryToLogin;
 use App\Events\EncryptUserPassword;
+use App\Events\UserTryToLogin;
+use App\Models\User;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class HashAlgorithms
@@ -27,7 +27,9 @@ class HashAlgorithms
                 $event->authType == 'email' ? 'email' : 'player_name',
                 $event->identification
             )->first();
-            if (! $user) return;
+            if (!$user) {
+                return;
+            }
 
             $password = request('password');
 
@@ -44,7 +46,7 @@ class HashAlgorithms
             $user = $event->user;
 
             // 生成并保存随机 salt
-            if (! $user->salt) {
+            if (!$user->salt) {
                 $user->salt = forum_generate_random_salt();
                 $user->save();
             }

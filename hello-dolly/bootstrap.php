@@ -8,12 +8,10 @@
  * Originally created by Matt Mullenweg as a WordPress plugin,
  * migrated to Blessing Skin Server by printempw.
  */
-
 use Illuminate\Contracts\Events\Dispatcher;
 
 return function (Dispatcher $events) {
-
-    $events->listen(App\Events\RenderingFooter::class, function($event) {
+    $events->listen(App\Events\RenderingFooter::class, function ($event) {
         // This just echoes the chosen line, we'll position it later
         $chosen = hello_dolly_get_lyric();
 
@@ -30,14 +28,14 @@ EOT;
         $event->addContent($content);
     });
 
-    $events->listen(App\Events\RenderingHeader::class, function($event) {
+    $events->listen(App\Events\RenderingHeader::class, function ($event) {
         // We need some CSS to position the paragraph
         $event->addContent('<style> .dolly { display: inline; margin-left: 15px; } </style>');
     });
-
 };
 
-function hello_dolly_get_lyric() {
+function hello_dolly_get_lyric()
+{
     /** These are the lyrics to Hello Dolly */
     $lyrics = "Hello, Dolly
 Well, hello, Dolly
@@ -69,8 +67,8 @@ Dolly'll never go away
 Dolly'll never go away again";
 
     // Here we split it into lines
-    $lyrics = explode( "\n", $lyrics );
+    $lyrics = explode("\n", $lyrics);
 
     // And then randomly choose a line
-    return $lyrics[ mt_rand( 0, count( $lyrics ) - 1 ) ];
+    return $lyrics[mt_rand(0, count($lyrics) - 1)];
 }

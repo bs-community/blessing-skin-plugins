@@ -1,7 +1,7 @@
 <?php
 
-use Integration\Authme\Listener;
 use Illuminate\Contracts\Events\Dispatcher;
+use Integration\Authme\Listener;
 
 require __DIR__.'/src/helpers.php';
 

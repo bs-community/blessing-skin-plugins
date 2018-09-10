@@ -2,11 +2,11 @@
 
 namespace SuperCache\Listener;
 
-use Cache;
-use Storage;
-use App\Models\Texture;
 use App\Events\GetAvatarPreview;
+use App\Models\Texture;
+use Cache;
 use Illuminate\Contracts\Events\Dispatcher;
+use Storage;
 
 class CacheAvatarPreview
 {
@@ -18,7 +18,8 @@ class CacheAvatarPreview
     /**
      * Handle the event.
      *
-     * @param  GetAvatarPreview  $event
+     * @param GetAvatarPreview $event
+     *
      * @return void
      */
     public function cacheAvatarPreview(GetAvatarPreview $event)
@@ -38,8 +39,9 @@ class CacheAvatarPreview
     /**
      * Generate avatar from given texture and return raw image data.
      *
-     * @param  string $hash
-     * @param  int    $size
+     * @param string $hash
+     * @param int    $size
+     *
      * @return mixed
      */
     protected function generateAvatar($hash, $size)

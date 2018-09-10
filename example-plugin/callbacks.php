@@ -17,5 +17,5 @@ return [
     },
     App\Events\PluginWasDeleted::class => function () {
         Log::info('[ExamplePlugin] 啊啊啊啊啊啊啊我被删除啦 QwQ');
-    }
+    },
 ];

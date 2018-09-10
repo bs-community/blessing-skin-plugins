@@ -2,9 +2,9 @@
 
 namespace Integration\CrazyLogin\Listener;
 
-use App\Models\User;
-use App\Events\UserTryToLogin;
 use App\Events\EncryptUserPassword;
+use App\Events\UserTryToLogin;
+use App\Models\User;
 use Illuminate\Contracts\Events\Dispatcher;
 use Integration\CrazyLogin\Cipher\CrazyCrypt1;
 
@@ -40,7 +40,9 @@ class HashAlgorithms
                 $event->authType == 'email' ? 'email' : 'player_name',
                 $event->identification
             )->first();
-            if (! $user) return;
+            if (!$user) {
+                return;
+            }
 
             $password = request('password');
             $salt = config('secure.cipher') == 'CrazyCrypt1' ? $user->player_name : config('secure.salt');

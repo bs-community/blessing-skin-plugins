@@ -10,7 +10,7 @@ class UpdateFileCache
     {
         $events->listen([
             \App\Events\PlayerProfileUpdated::class,
-            \App\Events\PlayerWasAdded::class
+            \App\Events\PlayerWasAdded::class,
         ], function ($event) {
             generateProfileFileCache($event->player);
         });

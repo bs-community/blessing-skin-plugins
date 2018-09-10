@@ -2,13 +2,13 @@
 
 namespace Integration\Authme\Listener;
 
-use DB;
-use Utils;
-use Carbon\Carbon;
-use App\Models\User;
-use App\Events\UserTryToLogin;
 use App\Events\UserAuthenticated;
+use App\Events\UserTryToLogin;
+use App\Models\User;
+use Carbon\Carbon;
+use DB;
 use Illuminate\Contracts\Events\Dispatcher;
+use Utils;
 
 class SyncWithAuthme
 {
@@ -19,18 +19,20 @@ class SyncWithAuthme
     {
         // 初始化在 Authme 那边注册的用户
         DB::table('users')->where('player_name', '')->whereNotNull('realname')->update([
-            'player_name' => DB::raw('`realname`'),
-            'nickname' => DB::raw('`realname`'),
-            'score' => option('user_initial_score'),
-            'register_at' => Utils::getTimeFormatted(),
-            'last_sign_at' => Utils::getTimeFormatted(time() - 86400)
+            'player_name'  => DB::raw('`realname`'),
+            'nickname'     => DB::raw('`realname`'),
+            'score'        => option('user_initial_score'),
+            'register_at'  => Utils::getTimeFormatted(),
+            'last_sign_at' => Utils::getTimeFormatted(time() - 86400),
         ]);
 
         // 在 Authme 那边注册的用户虽然有定义了 player_name
         // 但是 players 表中没有相应的记录，所以使用角色名登录时会提示用户不存在
         $events->listen(UserTryToLogin::class, function ($event) {
             $user = User::where('player_name', $event->identification)->first();
-            if (! $user) return;
+            if (!$user) {
+                return;
+            }
             // 触发一下事件，让「单角色限制」插件那边帮我们把 player 准备好
             event(new UserAuthenticated($user));
         });

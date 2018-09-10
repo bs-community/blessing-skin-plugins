@@ -8,7 +8,7 @@ require __DIR__.'/src/helpers.php';
 return function (Dispatcher $events) {
 
     // Create tables
-    if (! Schema::hasTable('reports')) {
+    if (!Schema::hasTable('reports')) {
         Schema::create('reports', function ($table) {
             $table->increments('id');
             $table->integer('tid');
@@ -47,13 +47,13 @@ return function (Dispatcher $events) {
     Hook::addMenuItem('user', $index, [
         'title' => 'ReportTexture::general.menu.user',
         'link'  => 'user/report',
-        'icon'  => 'fa-flag'
+        'icon'  => 'fa-flag',
     ]);
 
     Hook::addMenuItem('admin', 3, [
         'title' => 'ReportTexture::general.menu.admin',
         'link'  => 'admin/reports',
-        'icon'  => 'fa-flag'
+        'icon'  => 'fa-flag',
     ]);
 
     Hook::addRoute(function ($router) {

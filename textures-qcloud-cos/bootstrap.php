@@ -2,7 +2,7 @@
 
 return function () {
     $disk = [
-        'driver' => 'cosv5',
+        'driver'          => 'cosv5',
         'region'          => menv('COS_REGION', 'ap-shanghai'),
         'credentials'     => [
             'appId'       => menv('COS_APP_ID'),

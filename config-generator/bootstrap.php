@@ -11,7 +11,7 @@ return function (Dispatcher $events) {
     Hook::addMenuItem('user', $index, [
         'title' => 'Blessing\ConfigGenerator::config.generate-config',
         'link'  => 'user/config',
-        'icon'  => 'fa-book'
+        'icon'  => 'fa-book',
     ]);
 
     Hook::addRoute(function ($router) {

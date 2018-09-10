@@ -1,7 +1,7 @@
 <?php
 
-use SuperCache\Listener;
 use Illuminate\Contracts\Events\Dispatcher;
+use SuperCache\Listener;
 
 return function (Dispatcher $events) {
     $cache_path = storage_path('framework/cache');
@@ -14,17 +14,25 @@ return function (Dispatcher $events) {
         'enable_avatar_cache'   => 'true',
         'enable_preview_cache'  => 'true',
         'enable_json_cache'     => 'true',
-        'enable_notfound_cache' => 'true'
+        'enable_notfound_cache' => 'true',
     ];
 
     foreach ($options as $key => $value) {
-        if (! Option::has($key)) {
+        if (!Option::has($key)) {
             Option::set($key, $value);
         }
     }
 
-    if (option('enable_json_cache'))     $events->subscribe(Listener\CachePlayerJson::class);
-    if (option('enable_preview_cache'))  $events->subscribe(Listener\CacheSkinPreview::class);
-    if (option('enable_notfound_cache')) $events->subscribe(Listener\CachePlayerExists::class);
-    if (option('enable_avatar_cache'))   $events->subscribe(Listener\CacheAvatarPreview::class);
+    if (option('enable_json_cache')) {
+        $events->subscribe(Listener\CachePlayerJson::class);
+    }
+    if (option('enable_preview_cache')) {
+        $events->subscribe(Listener\CacheSkinPreview::class);
+    }
+    if (option('enable_notfound_cache')) {
+        $events->subscribe(Listener\CachePlayerExists::class);
+    }
+    if (option('enable_avatar_cache')) {
+        $events->subscribe(Listener\CacheAvatarPreview::class);
+    }
 };

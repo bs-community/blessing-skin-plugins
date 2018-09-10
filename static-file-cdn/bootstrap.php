@@ -5,7 +5,6 @@
  * @Last Modified by:   printempw
  * @Last Modified time: 2017-01-18 17:26:44
  */
-
 use Illuminate\Contracts\Events\Dispatcher;
 
 return function (Dispatcher $events) {

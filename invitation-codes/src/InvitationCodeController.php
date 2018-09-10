@@ -2,9 +2,9 @@
 
 namespace InvitationCodes;
 
+use App\Http\Controllers\Controller;
 use DB;
 use Utils;
-use App\Http\Controllers\Controller;
 
 class InvitationCodeController extends Controller
 {
@@ -16,7 +16,7 @@ class InvitationCodeController extends Controller
 
         return view('InvitationCodes::generate', [
             'available' => DB::table('invitation_codes')->where('used_by', 0)->get(),
-            'used' => DB::table('invitation_codes')->where('used_by', '<>', 0)->get()
+            'used'      => DB::table('invitation_codes')->where('used_by', '<>', 0)->get(),
         ]);
     }
 
@@ -26,8 +26,8 @@ class InvitationCodeController extends Controller
 
         for ($i = 0; $i < $amount; $i++) {
             $codes[] = [
-                'code' => md5(time().rand()),
-                'generated_at' => Utils::getTimeFormatted()
+                'code'         => md5(time().rand()),
+                'generated_at' => Utils::getTimeFormatted(),
             ];
         }
 

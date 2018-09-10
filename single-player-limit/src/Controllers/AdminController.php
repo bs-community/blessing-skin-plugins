@@ -2,9 +2,8 @@
 
 namespace SinglePlayerLimit\Controllers;
 
-use Validator;
-use App\Models\User;
 use App\Http\Controllers\AdminController as BaseController;
+use App\Models\User;
 
 class AdminController extends BaseController
 {
@@ -12,17 +11,17 @@ class AdminController extends BaseController
     {
         $uid = request()->get('uid');
 
-        if (! $uid) {
+        if (!$uid) {
             return json('UID 无效', 1);
         }
 
         $user = User::find($uid);
 
-        if (! $user) {
+        if (!$user) {
             return json('用户不存在', 2);
         }
 
-        if (! $user->player_name) {
+        if (!$user->player_name) {
             return json('该用户尚未绑定角色名', 3);
         }
 
@@ -33,13 +32,13 @@ class AdminController extends BaseController
     {
         $playerName = request()->get('playerName');
 
-        if (! $playerName) {
+        if (!$playerName) {
             return json('角色名无效', 1);
         }
 
         $user = User::where('player_name', $playerName)->first();
 
-        if (! $user) {
+        if (!$user) {
             return json('没有用户绑定过这个角色名', 2);
         }
 
@@ -52,13 +51,13 @@ class AdminController extends BaseController
         $newPlayerName = request()->get('newPlayerName');
 
         $this->validate(request(), [
-            'uid' => 'required',
-            'newPlayerName' => get_player_name_validation_rules()
+            'uid'           => 'required',
+            'newPlayerName' => get_player_name_validation_rules(),
         ]);
 
         $user = User::find($uid);
 
-        if (! $user) {
+        if (!$user) {
             return json('用户不存在', 2);
         }
 

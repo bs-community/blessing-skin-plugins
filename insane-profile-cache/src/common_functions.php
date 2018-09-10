@@ -2,10 +2,9 @@
 
 use App\Models\Player;
 
-if (! function_exists('generateProfileFileCache')) {
-
-    function generateProfileFileCache(Player $player) {
-
+if (!function_exists('generateProfileFileCache')) {
+    function generateProfileFileCache(Player $player)
+    {
         foreach (['usm', 'csl'] as $apiType) {
             $filename = PROFILE_CACHE_PATH."/$apiType/{$player->player_name}.json";
 
@@ -26,9 +25,9 @@ if (! function_exists('generateProfileFileCache')) {
     }
 }
 
-if (! function_exists('cleanProfileFileCache')) {
-
-    function cleanProfileFileCache() {
+if (!function_exists('cleanProfileFileCache')) {
+    function cleanProfileFileCache()
+    {
         // Delete all cache file first
         foreach (['usm', 'csl'] as $apiType) {
             array_map('unlink', glob(PROFILE_CACHE_PATH."/$apiType/*"));

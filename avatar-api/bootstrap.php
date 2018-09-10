@@ -1,14 +1,14 @@
 <?php
 
-use App\Services\Hook;
 use App\Models\Player;
-use App\Models\Texture;
+use App\Services\Hook;
 
 /**
  * Return binary data of avatar image.
  *
- * @param  string $hash
- * @param  int    $size
+ * @param string $hash
+ * @param int    $size
+ *
  * @return mixed
  */
 function generate_avatar($hash, $size)
@@ -32,7 +32,7 @@ function generate_avatar($hash, $size)
 
 return function () {
     Hook::addRoute(function ($router) {
-        $router->get('/getavatar/{size}/{player_name}.png', function($size, $player_name) {
+        $router->get('/getavatar/{size}/{player_name}.png', function ($size, $player_name) {
             $player = Player::where('player_name', $player_name)->first();
 
             if ($player) {

@@ -2,11 +2,10 @@
 
 namespace SuperCache\Listener;
 
-use Cache;
-use Storage;
-use App\Models\Player;
-use App\Events\PlayerWasAdded;
 use App\Events\CheckPlayerExists;
+use App\Events\PlayerWasAdded;
+use App\Models\Player;
+use Cache;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class CachePlayerExists
@@ -20,7 +19,8 @@ class CachePlayerExists
     /**
      * Handle the event.
      *
-     * @param  CheckPlayerExists  $event
+     * @param CheckPlayerExists $event
+     *
      * @return void
      */
     public function cachePlayerExists(CheckPlayerExists $event)
@@ -48,5 +48,4 @@ class CachePlayerExists
     {
         Cache::forget("notfound-{$event->player->player_name}");
     }
-
 }

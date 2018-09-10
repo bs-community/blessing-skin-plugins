@@ -5,7 +5,7 @@ return function () {
     if (menv('REDIS_SCHEME') == 'unix') {
         $config = array_replace(config('database.redis.default'), [
             'scheme' => 'unix',
-            'path' => menv('REDIS_SOCKET_PATH'),
+            'path'   => menv('REDIS_SOCKET_PATH'),
         ]);
 
         config(['database.redis.default' => $config]);

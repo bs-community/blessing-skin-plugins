@@ -5,11 +5,10 @@
  * @Last Modified by:   printempw
  * @Last Modified time: 2017-01-14 21:04:13
  */
-
 use App\Services\Hook;
 use Illuminate\Contracts\Events\Dispatcher;
 
-/**
+/*
  * 你可以在这个闭包的参数列表中使用类型提示
  * Laravel 会自动从容器中解析出对应的依赖并自动注入
  * 使用依赖注入之前你首先需要了解 Laravel 的服务容器机制
@@ -21,7 +20,7 @@ use Illuminate\Contracts\Events\Dispatcher;
  */
 return function (Dispatcher $events) {
 
-    /**
+    /*
      * 监听事件并通过传入的事件实例修改相应内容
      *
      * 如何监听事件：
@@ -33,8 +32,8 @@ return function (Dispatcher $events) {
      *
      * @see  https://laravel-china.org/docs/5.1/events
      */
-    $events->listen(App\Events\RenderingHeader::class, function($event) {
-        /**
+    $events->listen(App\Events\RenderingHeader::class, function ($event) {
+        /*
          * 以下代码的作用是在皮肤站的 <head> 标签内添加一些内容
          */
         $event->addContent('<script>console.info("这是示例插件通过 RenderingHeader 事件打印的内容");</script>');
@@ -52,7 +51,7 @@ return function (Dispatcher $events) {
     Hook::addScriptFileToPage(plugin('example-plugin')->assets('assets/js/example3.js'), [
         // 这样的话只有管理面板和皮肤库才会加载 example3.js 这个文件。打开 F12 看看吧~
         'admin*',
-        'skinlib*'
+        'skinlib*',
     ]);
 
     // 第三个参数是优先级，越高越先加载
@@ -61,13 +60,13 @@ return function (Dispatcher $events) {
     // 注册插件目录下用于 JavaScript 的语言文件
     Hook::registerPluginTransScripts('example-plugin');
 
-    /**
+    /*
      * 你也可以通过 subscribe 方法把代码分离到多个 Listener 中
      * 插件根目录下 src 目录中的类文件会被自动加载，你可以直接使用（通过命名空间加载）
      */
     $events->subscribe(Blessing\ExamplePlugin\Listener\SeparatedTestListener::class);
 
-    /**
+    /*
      * App\Services\Hook 这个类是 Blessing Skin 插件开发的帮助类
      * 目前提供了「添加菜单项」、「添加路由」等的便利方法
      * 具体使用方法请参考 Hook 类方法的注释
@@ -91,10 +90,10 @@ return function (Dispatcher $events) {
         'link'  => 'user/example',
         // 菜单图标，详见 Font Awesome
         // @see http://fontawesome.io/icons/
-        'icon'  => 'fa-gift'
+        'icon'  => 'fa-gift',
     ]);
 
-    /**
+    /*
      * 如何添加一个路由：
      *
      * Hook::addRoute(callback $callback);
@@ -105,29 +104,28 @@ return function (Dispatcher $events) {
      * 注意：如果想要使用 Laravel 的路由缓存功能（php artisan route:cache）的话，请不要使用闭包路由。
      */
     Hook::addRoute(function ($router) {
-        /**
+        /*
          * 这只是一个最简单的路由定义（传递了闭包作为参数），其他用法请参照
          * @see  https://laravel-china.org/docs/5.1/routing
          */
-        $router->get('/user/example', function() {
+        $router->get('/user/example', function () {
             // 改变浏览器/皮肤站的语言设置再访问此链接
             // 翻译器会依据你当前的语言设置显示对应的内容
             return trans('Blessing\ExamplePlugin::general.hello');
         })->middleware(['web', 'auth']);
 
-        /**
+        /*
          * 你也可以定义一个路由组，并指定组内路由的一些参数
          */
         $router->group([
             'middleware' => ['web', 'auth'],
             'namespace'  => 'Blessing\ExamplePlugin',
         ], function ($router) {
-            /**
+            /*
              * 你也可以传递一个类似 SomeController@someMethod 格式的值
              * 注意这里的 TestController 是定义在插件的 src 目录下的
              */
             $router->get('/user/welcome/{name}', 'TestController@welcome');
         });
-
     });
 };
