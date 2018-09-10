@@ -2,8 +2,8 @@
 
 namespace Yggdrasil\Controllers;
 
+use Log;
 use App\Models\Player;
-use Yggdrasil\Utils\Log;
 use Yggdrasil\Utils\UUID;
 use Illuminate\Http\Request;
 use Yggdrasil\Models\Profile;
@@ -16,14 +16,14 @@ class ProfileController extends Controller
     {
         $profile = Profile::createFromUuid(UUID::format($uuid));
 
-        Log::info("Try to get profile of player with uuid [$uuid]");
+        Log::channel('ygg')->info("Try to get profile of player with uuid [$uuid]");
 
         if ($profile) {
-            Log::info("Returning profile for uuid [$uuid]", [$profile->serialize()]);
+            Log::channel('ygg')->info("Returning profile for uuid [$uuid]", [$profile->serialize()]);
             return response()->json()->setContent($profile);
         } else {
             // UUID 不存在就返回 204
-            Log::info("Profile not found for uuid [$uuid]");
+            Log::channel('ygg')->info("Profile not found for uuid [$uuid]");
             return response('')->setStatusCode(204);
         }
     }
@@ -46,7 +46,7 @@ class ProfileController extends Controller
     {
         $names = array_unique($request->json()->all());
 
-        Log::info('Search profiles by player names as listed', array_values($names));
+        Log::channel('ygg')->info('Search profiles by player names as listed', array_values($names));
 
         if (count($names) > option('ygg_search_profile_max')) {
             throw new ForbiddenOperationException(sprintf('一次最多只能查询 %s 个角色哦', option('ygg_search_profile_max')));

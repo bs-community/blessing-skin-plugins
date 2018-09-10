@@ -3,8 +3,8 @@
 namespace Yggdrasil\Models;
 
 use DB;
+use Log;
 use App\Models\Player;
-use Yggdrasil\Utils\Log;
 use Yggdrasil\Utils\UUID;
 use Yggdrasil\Exceptions\IllegalArgumentException;
 
@@ -111,7 +111,7 @@ class Profile
             $result = UUID::generateMinecraftUuid($name)->clearDashes();
             DB::table('uuid')->insert(['name' => $name, 'uuid' => $result]);
 
-            Log::info("New uuid [$result] allocated to player [$name]");
+            Log::channel('ygg')->info("New uuid [$result] allocated to player [$name]");
         } else {
             $result = $result->uuid;
         }

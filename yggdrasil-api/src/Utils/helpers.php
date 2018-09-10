@@ -1,6 +1,17 @@
 <?php
 
-use Yggdrasil\Utils\Log;
+use Log;
+
+if (! function_exists('ygg_log_path')) {
+
+    function ygg_log_path()
+    {
+        $dbConfig = config('database.connections.'.config('database.default'));
+        $mask = substr(md5(implode(',', array_values($dbConfig))), 0, 8);
+
+        return storage_path("logs/yggdrasil-$mask.log");
+    }
+}
 
 if (! function_exists('ygg_generate_rsa_keys')) {
 
@@ -94,7 +105,7 @@ if (! function_exists('ygg_init_options')) {
 
         if (! menv('YGG_VERBOSE_LOG')) {
             // 删就完事儿了
-            @unlink(Yggdrasil\Utils\Log::getLogPath());
+            @unlink(ygg_log_path());
             @unlink(storage_path('logs/yggdrasil.log'));
         }
     }
@@ -104,13 +115,13 @@ if (! function_exists('ygg_log_http_request_and_response')) {
 
     function ygg_log_http_request_and_response()
     {
-        Log::info('============================================================');
-        Log::info(request()->method(), [request()->path()]);
+        Log::channel('ygg')->info('============================================================');
+        Log::channel('ygg')->info(request()->method(), [request()->path()]);
 
         Event::listen('kernel.handled', function ($request, $response) {
             $statusCode = $response->getStatusCode();
             $statusText = Symfony\Component\HttpFoundation\Response::$statusTexts[$statusCode];
-            Log::info(sprintf('HTTP/%s %s %s', $response->getProtocolVersion(), $statusCode, $statusText));
+            Log::channel('ygg')->info(sprintf('HTTP/%s %s %s', $response->getProtocolVersion(), $statusCode, $statusText));
         });
     }
 }

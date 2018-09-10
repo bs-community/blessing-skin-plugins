@@ -3,10 +3,10 @@
 namespace Yggdrasil\Controllers;
 
 use DB;
+use Log;
 use Cache;
 use App\Models\User;
 use App\Models\Player;
-use Yggdrasil\Utils\Log;
 use Yggdrasil\Utils\UUID;
 use Illuminate\Http\Request;
 use Yggdrasil\Models\Profile;
@@ -22,7 +22,7 @@ class SessionController extends Controller
         $selectedProfile = UUID::format($request->get('selectedProfile'));
         $serverId = $request->get('serverId');
 
-        Log::info("Player [$selectedProfile] is trying to join server [$serverId] with access token [$accessToken]");
+        Log::channel('ygg')->info("Player [$selectedProfile] is trying to join server [$serverId] with access token [$accessToken]");
 
         $result = DB::table('uuid')->where('uuid', $selectedProfile)->first();
 
@@ -42,13 +42,13 @@ class SessionController extends Controller
 
         $identification = strtolower($player->user()->first()->email);
 
-        Log::info("Player [$selectedProfile]'s name is [$player->player_name], belongs to user [$identification]");
+        Log::channel('ygg')->info("Player [$selectedProfile]'s name is [$player->player_name], belongs to user [$identification]");
 
         if ($cache = Cache::get("ID_$identification")) {
 
             $token = unserialize($cache);
 
-            Log::info("All access tokens issued for user [$identification] are as listed", [$token]);
+            Log::channel('ygg')->info("All access tokens issued for user [$identification] are as listed", [$token]);
 
             if ($token->accessToken != $accessToken) {
                 throw new ForbiddenOperationException('无效的 AccessToken，请重新登录');
@@ -65,13 +65,13 @@ class SessionController extends Controller
             Cache::forever("SERVER_$serverId", $selectedProfile);
         } else {
 
-            Log::info("No access token issued for user [$identification]", [$cache]);
+            Log::channel('ygg')->info("No access token issued for user [$identification]", [$cache]);
 
             // 指定角色所属的用户没有签发任何令牌
             throw new ForbiddenOperationException('未查找到有效的登录信息，请重新登录');
         }
 
-        Log::info("Player [$selectedProfile] successfully joined the server [$serverId]");
+        Log::channel('ygg')->info("Player [$selectedProfile] successfully joined the server [$serverId]");
 
         ygg_log([
             'action' => 'join',
@@ -89,7 +89,7 @@ class SessionController extends Controller
         $serverId = $request->get('serverId');
         $ip = $request->get('ip');
 
-        Log::info("Checking if player [$name] has joined the server [$serverId] with IP [$ip]");
+        Log::channel('ygg')->info("Checking if player [$name] has joined the server [$serverId] with IP [$ip]");
 
         // 检查是否进行过 join 请求
         if ($selectedProfile = Cache::get("SERVER_$serverId")) {
@@ -99,11 +99,11 @@ class SessionController extends Controller
             if ($name === $profile->name) {
                 // 检查完成后马上删除缓存键值对
                 Cache::forget("SERVER_$serverId");
-                Log::info("Player [$name] was in the server [$serverId]");
+                Log::channel('ygg')->info("Player [$name] was in the server [$serverId]");
 
                 // 这里返回的 Profile 必须带材质的数据签名
                 $response = $profile->serialize(false);
-                Log::info("Returning player [$name]'s profile", [$response]);
+                Log::channel('ygg')->info("Returning player [$name]'s profile", [$response]);
 
                 ygg_log(array_merge([
                     'action' => 'has_joined',
@@ -116,7 +116,7 @@ class SessionController extends Controller
             }
         }
 
-        Log::info("Player [$name] was not in the server [$serverId]");
+        Log::channel('ygg')->info("Player [$name] was not in the server [$serverId]");
         return response('')->setStatusCode(204);
     }
 }

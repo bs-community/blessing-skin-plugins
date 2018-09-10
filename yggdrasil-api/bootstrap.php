@@ -9,6 +9,11 @@ return function (Dispatcher $events) {
 
     app()->register(Yajra\Datatables\DatatablesServiceProvider::class);
 
+    config(['logging.channels.ygg' => [
+        'driver' => 'single',
+        'path' => ygg_log_path()
+    ]]);
+
     // 创建数据表
     ygg_init_db_tables();
 

@@ -3,9 +3,9 @@
 namespace Yggdrasil\Controllers;
 
 use DB;
+use Log;
 use Exception;
 use Datatables;
-use Yggdrasil\Utils\Log;
 use Yggdrasil\Utils\UUID;
 use Yggdrasil\Models\Token;
 use Illuminate\Http\Request;
@@ -126,9 +126,9 @@ class ConfigController extends Controller
         $inserted = count($shouldBeInserted);
         $duplicated = count($duplicatedEntries);
 
-        Log::info("[UUID Import] $updated entries updated", [$shouldBeUpdated]);
-        Log::info("[UUID Import] $inserted entries inserted", [$shouldBeInserted]);
-        Log::info("[UUID Import] $duplicated entries duplicated", [$shouldBeInserted]);
+        Log::channel('ygg')->info("[UUID Import] $updated entries updated", [$shouldBeUpdated]);
+        Log::channel('ygg')->info("[UUID Import] $inserted entries inserted", [$shouldBeInserted]);
+        Log::channel('ygg')->info("[UUID Import] $duplicated entries duplicated", [$shouldBeInserted]);
 
         return json("导入成功，更新了 $updated 条映射，新增了 $inserted 条映射，有 $duplicated 条映射因重复而未导入。", 0);
     }
