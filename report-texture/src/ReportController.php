@@ -137,7 +137,7 @@ class ReportController extends Controller
     {
         $reporter = User::find($report->reporter);
 
-        if ($reporter) {
+        if ($reporter && $report->status == Report::STATUS_PENDING) {
             // 返还用户提交举报时扣除的积分
             if (($score = report_get_option_as_int('reporter_score_modification')) < 0) {
                 $reporter->setScore(-$score, 'plus');
