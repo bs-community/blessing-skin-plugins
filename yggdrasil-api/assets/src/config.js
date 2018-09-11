@@ -100,16 +100,10 @@ $('body').on('click', '.fileinput-upload-button', async () => {
   const form = new window.FormData()
   form.append('file', $('#usercache-json-file').prop('files')[0])
 
-  const request = new window.Request(`${blessing.base_url}/admin/plugins/config/yggdrasil-api/import`, {
-    body: form,
-    credentials: 'same-origin',
-    headers: {
-      Accept: 'application/json',
-      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-    },
-    method: 'POST'
-  })
-  const { errno, msg } = await blessing.fetch.walkFetch(request)
+  const { errno, msg } = await blessing.fetch.post(
+    '/admin/plugins/config/yggdrasil-api/import',
+    form
+  )
 
   if (errno === 0) {
     await swal({ type: 'success', text: msg })
