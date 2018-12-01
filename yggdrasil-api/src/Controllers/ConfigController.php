@@ -76,6 +76,13 @@ class ConfigController extends Controller
             ->take(5)
             ->get();
 
+        // 不显示 hasJoined 请求的来源 IP 地址
+        foreach ($entries as $entry) {
+            if ($entry->action == 'has_joined') {
+                $entry->ip = null;
+            }
+        }
+
         return json($entries);
     }
 

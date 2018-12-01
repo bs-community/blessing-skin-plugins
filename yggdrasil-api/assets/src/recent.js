@@ -50,7 +50,7 @@ $(document).ready(async () => {
         <tr>
           <td>${actions[entry.action]}</td>
           <td>${entry.player_name ? xss(entry.player_name) : 'N/A'}</td>
-          <td>${xss(entry.ip)}</td>
+          <td>${entry.ip ? xss(entry.ip) : 'N/A'}</td>
           <td>${entry.time}</td>
         </tr>
       `);
