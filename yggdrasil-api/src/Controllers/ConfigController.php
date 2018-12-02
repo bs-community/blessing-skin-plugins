@@ -39,15 +39,24 @@ class ConfigController extends Controller
             throw new IllegalArgumentException('RSA 私钥的长度至少为 4096，请访问插件配置页重新设置');
         }
 
-        return json([
+        $result = [
             'meta' => [
                 'serverName' => option('site_name'),
                 'implementationName' => 'Yggdrasil API for Blessing Skin',
-                'implementationVersion' => plugin('yggdrasil-api')['version']
+                'implementationVersion' => plugin('yggdrasil-api')['version'],
+                'links' => [
+                    'homepage' => url('/')
+                ]
             ],
             'skinDomains' => $skinDomains,
             'signaturePublickey' => $keyData['key']
-        ]);
+        ];
+
+        if (option('user_can_register')) {
+            $result['meta']['links']['register'] = url('auth/register');
+        }
+
+        return json($result);
     }
 
     public function log()
