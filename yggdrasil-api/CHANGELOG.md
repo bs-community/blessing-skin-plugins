@@ -3,6 +3,14 @@
 ## v3.0.0-beta.0
 - 支持 Blessing Skin v4.0.0
 
+## v2.1.10
+- 支持 API 地址指示 (ALI) [#18](https://github.com/yushijinhun/authlib-injector/issues/18)
+- 支持在元数据中包含验证服务器网址 [#25](https://github.com/yushijinhun/authlib-injector/issues/25)
+- 不再向用户展示 `hasJoined` 请求的来源 IP
+
+## v2.1.9
+- 修复可能的 XSS 漏洞
+
 ## v2.1.8
 - 阻止被封禁的用户使用未过期的 Access Token 进入服务器
 

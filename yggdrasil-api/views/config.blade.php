@@ -28,6 +28,7 @@
       $form->text('ygg_search_profile_max', '批量查询角色数量限制')->hint('一次请求中最多能查询几个角色');
       $form->checkbox('ygg_show_config_section', '显示快速配置板块')->label('在用户中心首页显示「快速配置启动器」板块');
       $form->checkbox('ygg_show_activities_section', '显示最近活动板块')->label('在用户中心首页显示「最近活动」板块');
+      $form->checkbox('ygg_enable_ali', 'API 地址指示')->label('开启「API 地址指示 (ALI)」功能');
     })->handle();
 
     $keypairForm = Option::form('keypair', '密钥对配置', function($form) {

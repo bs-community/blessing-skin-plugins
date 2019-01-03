@@ -116,4 +116,10 @@ return function (Dispatcher $events) {
             require __DIR__.'/routes.php';
         });
     });
+
+    // 全局添加 ALI HTTP 响应头
+    if (option('ygg_enable_ali')) {
+        $kernel = app()->make(Illuminate\Contracts\Http\Kernel::class);
+        $kernel->pushMiddleware(Yggdrasil\Middleware\AddApiIndicationHeader::class);
+    }
 };
