@@ -1,0 +1,14 @@
+{
+  "name": "forum-integration-flarum",
+  "version": "1.0.0",
+  "title": "Flarum论坛数据对接",
+  "description": "与 Flarum 论坛程序进行数据对接，让玩家可以使用论坛的账号密码登录皮肤站，反之亦可。启用之前请仔细阅读使用说明 👉 http://t.cn/RDEq0aH，插件由Ghost_chu修改以兼容Flarum",
+  "author": "printempw, Ghost_chu",
+  "url": "https://www.mcsunnyside.com",
+  "namespace": "Integration\\Forum",
+  "config": "config.tpl",
+  "require": {
+    "blessing-skin-server": "^3.4.0",
+    "single-player-limit": "^1.0.4"
+  }
+}
