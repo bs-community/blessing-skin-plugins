@@ -18,8 +18,8 @@ class SessionController extends Controller
 {
     public function joinServer(Request $request)
     {
-        $accessToken = UUID::format($request->get('accessToken'));
-        $selectedProfile = UUID::format($request->get('selectedProfile'));
+        $accessToken = $request->get('accessToken');
+        $selectedProfile = $request->get('selectedProfile');
         $serverId = $request->get('serverId');
 
         Log::info("Player [$selectedProfile] is trying to join server [$serverId] with access token [$accessToken]");

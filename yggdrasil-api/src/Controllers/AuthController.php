@@ -83,7 +83,7 @@ class AuthController extends Controller
     public function refresh(Request $request)
     {
         $clientToken = $request->get('clientToken');
-        $accessToken = UUID::format($request->get('accessToken'));
+        $accessToken = $request->get('accessToken');
 
         Log::info("Try to refresh access token [$accessToken] with client token [$clientToken]");
 
@@ -116,7 +116,7 @@ class AuthController extends Controller
         $availableProfiles = $this->getAvailableProfiles($user);
 
         $result = [
-            'accessToken' => UUID::format($token->accessToken),
+            'accessToken' => $token->accessToken,
             'clientToken' => $token->clientToken, // 原样返回
             'availableProfiles' => $availableProfiles
         ];
@@ -166,14 +166,14 @@ class AuthController extends Controller
             'parameters' => json_encode($request->except('accessToken'))
         ]);
 
-        $result['accessToken'] = UUID::format($token->accessToken);
+        $result['accessToken'] = $token->accessToken;
         return json($result);
     }
 
     public function validate(Request $request)
     {
-        $clientToken = UUID::format($request->get('clientToken'));
-        $accessToken = UUID::format($request->get('accessToken'));
+        $clientToken = $request->get('clientToken');
+        $accessToken = $request->get('accessToken');
 
         Log::info("Check if an access token is valid", compact('clientToken', 'accessToken'));
 
@@ -234,8 +234,8 @@ class AuthController extends Controller
 
     public function invalidate(Request $request)
     {
-        $clientToken = UUID::format($request->get('clientToken'));
-        $accessToken = UUID::format($request->get('accessToken'));
+        $clientToken = $request->get('clientToken');
+        $accessToken = $request->get('accessToken');
 
         Log::info("Try to invalidate an access token", compact('clientToken', 'accessToken'));
 
