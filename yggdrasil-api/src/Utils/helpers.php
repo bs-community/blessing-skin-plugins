@@ -1,5 +1,6 @@
 <?php
 
+use Yggdrasil\Models\Token;
 use Yggdrasil\Utils\Log;
 
 if (! function_exists('ygg_generate_rsa_keys')) {
@@ -130,5 +131,25 @@ if (! function_exists('ygg_log')) {
         ], $params);
 
         return DB::table('ygg_log')->insert($data);
+    }
+}
+
+if (! function_exists('ygg_lookup_token')) {
+
+    /**
+     * Lookup the specified token, or null if the token does not exist or have expired.
+     * The returned token is guaranteed to be refreshable, but it may not be valid.
+     */
+    function ygg_lookup_token($accessToken) {
+        $cache = Cache::get("TOKEN_$accessToken");
+        if ($cache) {
+            $token = unserialize($cache);
+            if ($token->isRefreshable()) {
+                return $token;
+            } else {
+                Cache::forget("TOKEN_$accessToken");
+            }
+        }
+        return null;
     }
 }
