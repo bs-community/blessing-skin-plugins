@@ -14,7 +14,7 @@ class ProfileController extends Controller
 {
     public function getProfileFromUuid($uuid)
     {
-        $profile = Profile::createFromUuid(UUID::format($uuid));
+        $profile = Profile::createFromUuid($uuid);
 
         Log::info("Try to get profile of player with uuid [$uuid]");
 
