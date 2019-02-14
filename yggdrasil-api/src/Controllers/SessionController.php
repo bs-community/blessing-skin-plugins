@@ -6,6 +6,7 @@ use DB;
 use Cache;
 use App\Models\User;
 use App\Models\Player;
+use Yggdrasil\Models\Token;
 use Yggdrasil\Utils\Log;
 use Yggdrasil\Utils\UUID;
 use Illuminate\Http\Request;
@@ -44,7 +45,7 @@ class SessionController extends Controller
 
         Log::info("Player [$selectedProfile]'s name is [$player->player_name], belongs to user [$identification]");
 
-        $token = ygg_lookup_token($accessToken);
+        $token = Token::lookup($accessToken);
         if ($token && $token->isValid()) {
 
             Log::info("All access tokens issued for user [$identification] are as listed", [$token]);

@@ -2,6 +2,8 @@
 
 namespace Yggdrasil\Models;
 
+use Cache;
+
 // 因为写一大堆 GET/SET 方法让我看着很不爽
 // 所以索性把类成员直接全部弄成 public 了
 // 反正就是个插件而已
@@ -40,5 +42,23 @@ class Token
             'owner' => $this->owner,
             'createdAt' => $this->createdAt
         ];
+    }
+
+    /**
+     * Lookup the specified token, or null if the token does not exist or has expired.
+     * The returned token is guaranteed to be refreshable, but it may not be valid.
+     */
+    public static function lookup(string $accessToken)
+    {
+        $cache = Cache::get("TOKEN_$accessToken");
+        if ($cache) {
+            $token = unserialize($cache);
+            if ($token->isRefreshable()) {
+                return $token;
+            } else {
+                Cache::forget("TOKEN_$accessToken");
+            }
+        }
+        return null;
     }
 }

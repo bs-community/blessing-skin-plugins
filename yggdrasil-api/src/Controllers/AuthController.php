@@ -87,7 +87,7 @@ class AuthController extends Controller
 
         Log::info("Try to refresh access token [$accessToken] with client token [$clientToken]");
 
-        $token = ygg_lookup_token($accessToken);
+        $token = Token::lookup($accessToken);
         if (! $token) {
             throw new ForbiddenOperationException('无效的 AccessToken，请重新登录');
         }
@@ -173,7 +173,7 @@ class AuthController extends Controller
 
         Log::info("Check if an access token is valid", compact('clientToken', 'accessToken'));
 
-        $token = ygg_lookup_token($accessToken);
+        $token = Token::lookup($accessToken);
         if ($token && $token->isValid()) {
 
             if ($clientToken && $clientToken !== $token->clientToken) {
