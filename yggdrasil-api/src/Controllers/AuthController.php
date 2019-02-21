@@ -87,18 +87,14 @@ class AuthController extends Controller
 
         Log::info("Try to refresh access token [$accessToken] with client token [$clientToken]");
 
-        // 先不刷新，尝试从缓存中取出旧的 Token 实例
-        if ($cache = Cache::get("TOKEN_$accessToken")) {
-            $token = unserialize($cache);
-
-            if ($clientToken && $token->clientToken !== $clientToken) {
-                Log::info("Expect client token to be [$token->clientToken]");
-                throw new ForbiddenOperationException('提供的 ClientToken 与 AccessToken 不匹配，请重新登录');
-            }
-        } else {
-            // 这里不需要检测令牌是否暂时失效
-            // 因为如果令牌完全失效就会被直接清除出缓存
+        $token = Token::lookup($accessToken);
+        if (! $token) {
             throw new ForbiddenOperationException('无效的 AccessToken，请重新登录');
+        }
+
+        if ($clientToken && $token->clientToken !== $clientToken) {
+            Log::info("Expect client token to be [$token->clientToken]");
+            throw new ForbiddenOperationException('提供的 ClientToken 与 AccessToken 不匹配，请重新登录');
         }
 
         $user = app('users')->get($token->owner, 'email');
@@ -177,22 +173,18 @@ class AuthController extends Controller
 
         Log::info("Check if an access token is valid", compact('clientToken', 'accessToken'));
 
-        if ($cache = Cache::get("TOKEN_$accessToken")) {
-            $token = unserialize($cache);
+        $token = Token::lookup($accessToken);
+        if ($token && $token->isValid()) {
 
             if ($clientToken && $clientToken !== $token->clientToken) {
                 throw new ForbiddenOperationException('提供的 ClientToken 与 AccessToken 不匹配，请重新登录');
             }
 
-            // 未提供 clientToken 且 accessToken 有效时
             Log::info('Given access token is valid and matches the client token');
 
             $user = app('users')->get($token->owner, 'email');
 
             if ($user->getPermission() == User::BANNED) {
-                // 吊销被封用户的令牌
-                Cache::forget("TOKEN_$accessToken");
-
                 throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
             }
 
