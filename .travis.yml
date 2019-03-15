@@ -31,6 +31,3 @@ script:
 - gulp build
 - gulp release
 - gulp publish
-
-after_success:
-- .travis/deploy.sh

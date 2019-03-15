@@ -1,9 +1,3 @@
 [submodule "yggdrasil-api"]
 	path = yggdrasil-api
 	url = https://github.com/bs-community/yggdrasil-api.git
-[submodule "multi-index-style"]
-	path = multi-index-style
-	url = https://github.com/bs-community/multi-index-style.git
-[submodule "present-with-textures"]
-	path = present-with-textures
-	url = https://github.com/bs-community/present-with-textures
