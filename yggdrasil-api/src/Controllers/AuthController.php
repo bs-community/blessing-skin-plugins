@@ -83,22 +83,18 @@ class AuthController extends Controller
     public function refresh(Request $request)
     {
         $clientToken = $request->get('clientToken');
-        $accessToken = UUID::format($request->get('accessToken'));
+        $accessToken = $request->get('accessToken');
 
         Log::channel('ygg')->info("Try to refresh access token [$accessToken] with client token [$clientToken]");
 
-        // 先不刷新，尝试从缓存中取出旧的 Token 实例
-        if ($cache = Cache::get("TOKEN_$accessToken")) {
-            $token = unserialize($cache);
-
-            if ($clientToken && $token->clientToken !== $clientToken) {
-                Log::channel('ygg')->info("Expect client token to be [$token->clientToken]");
-                throw new ForbiddenOperationException('提供的 ClientToken 与 AccessToken 不匹配，请重新登录');
-            }
-        } else {
-            // 这里不需要检测令牌是否暂时失效
-            // 因为如果令牌完全失效就会被直接清除出缓存
+        $token = Token::lookup($accessToken);
+        if (! $token) {
             throw new ForbiddenOperationException('无效的 AccessToken，请重新登录');
+        }
+
+        if ($clientToken && $token->clientToken !== $clientToken) {
+            Log::info("Expect client token to be [$token->clientToken]");
+            throw new ForbiddenOperationException('提供的 ClientToken 与 AccessToken 不匹配，请重新登录');
         }
 
         $user = app('users')->get($token->owner, 'email');
@@ -116,7 +112,7 @@ class AuthController extends Controller
         $availableProfiles = $this->getAvailableProfiles($user);
 
         $result = [
-            'accessToken' => UUID::format($token->accessToken),
+            'accessToken' => $token->accessToken,
             'clientToken' => $token->clientToken, // 原样返回
             'availableProfiles' => $availableProfiles
         ];
@@ -166,33 +162,29 @@ class AuthController extends Controller
             'parameters' => json_encode($request->except('accessToken'))
         ]);
 
-        $result['accessToken'] = UUID::format($token->accessToken);
+        $result['accessToken'] = $token->accessToken;
         return json($result);
     }
 
     public function validate(Request $request)
     {
-        $clientToken = UUID::format($request->get('clientToken'));
-        $accessToken = UUID::format($request->get('accessToken'));
+        $clientToken = $request->get('clientToken');
+        $accessToken = $request->get('accessToken');
 
         Log::channel('ygg')->info("Check if an access token is valid", compact('clientToken', 'accessToken'));
 
-        if ($cache = Cache::get("TOKEN_$accessToken")) {
-            $token = unserialize($cache);
+        $token = Token::lookup($accessToken);
+        if ($token && $token->isValid()) {
 
             if ($clientToken && $clientToken !== $token->clientToken) {
                 throw new ForbiddenOperationException('提供的 ClientToken 与 AccessToken 不匹配，请重新登录');
             }
 
-            // 未提供 clientToken 且 accessToken 有效时
-            Log::channel('ygg')->info('Given access token is valid and matches the client token');
+            Log::info('Given access token is valid and matches the client token');
 
             $user = app('users')->get($token->owner, 'email');
 
             if ($user->getPermission() == User::BANNED) {
-                // 吊销被封用户的令牌
-                Cache::forget("TOKEN_$accessToken");
-
                 throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
             }
 
@@ -234,8 +226,8 @@ class AuthController extends Controller
 
     public function invalidate(Request $request)
     {
-        $clientToken = UUID::format($request->get('clientToken'));
-        $accessToken = UUID::format($request->get('accessToken'));
+        $clientToken = $request->get('clientToken');
+        $accessToken = $request->get('accessToken');
 
         Log::channel('ygg')->info("Try to invalidate an access token", compact('clientToken', 'accessToken'));
 

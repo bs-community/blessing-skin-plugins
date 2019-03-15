@@ -7,7 +7,9 @@ use Log;
 use Cache;
 use App\Models\User;
 use App\Models\Player;
+use Yggdrasil\Utils\Log;
 use Yggdrasil\Utils\UUID;
+use Yggdrasil\Models\Token;
 use Illuminate\Http\Request;
 use Yggdrasil\Models\Profile;
 use Illuminate\Routing\Controller;
@@ -18,8 +20,8 @@ class SessionController extends Controller
 {
     public function joinServer(Request $request)
     {
-        $accessToken = UUID::format($request->get('accessToken'));
-        $selectedProfile = UUID::format($request->get('selectedProfile'));
+        $accessToken = $request->get('accessToken');
+        $selectedProfile = $request->get('selectedProfile');
         $serverId = $request->get('serverId');
 
         Log::channel('ygg')->info("Player [$selectedProfile] is trying to join server [$serverId] with access token [$accessToken]");
@@ -44,9 +46,8 @@ class SessionController extends Controller
 
         Log::channel('ygg')->info("Player [$selectedProfile]'s name is [$player->player_name], belongs to user [$identification]");
 
-        if ($cache = Cache::get("ID_$identification")) {
-
-            $token = unserialize($cache);
+        $token = Token::lookup($accessToken);
+        if ($token && $token->isValid()) {
 
             Log::channel('ygg')->info("All access tokens issued for user [$identification] are as listed", [$token]);
 
@@ -55,18 +56,12 @@ class SessionController extends Controller
             }
 
             if ($player->user()->first()->getPermission() == User::BANNED) {
-                // 吊销被封用户的令牌
-                Cache::forget("TOKEN_$accessToken");
-
                 throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
             }
 
             // 加入服务器
             Cache::forever("SERVER_$serverId", $selectedProfile);
         } else {
-
-            Log::channel('ygg')->info("No access token issued for user [$identification]", [$cache]);
-
             // 指定角色所属的用户没有签发任何令牌
             throw new ForbiddenOperationException('未查找到有效的登录信息，请重新登录');
         }
