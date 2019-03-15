@@ -2,7 +2,7 @@
 
 namespace Yggdrasil\Exceptions;
 
-use Yggdrasil\Utils\Log;
+use Log;
 
 class YggdrasilException extends \Exception
 {
@@ -40,7 +40,7 @@ class YggdrasilException extends \Exception
         $this->cause = $cause;
         $this->errorMessage = $message;
 
-        Log::info(sprintf('%s %s %s', $_SERVER['SERVER_PROTOCOL'], $this->statusCode, $this->error), compact('message', 'cause'));
+        Log::channel('ygg')->info(sprintf('%s %s %s', $_SERVER['SERVER_PROTOCOL'], $this->statusCode, $this->error), compact('message', 'cause'));
 
         $this->render()->send();
         exit;

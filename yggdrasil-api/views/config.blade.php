@@ -15,7 +15,7 @@
     </h1>
   </section>
 
-  <?php
+  @php
     $commonForm = Option::form('common', '常规配置', function($form) {
       $form->select('ygg_uuid_algorithm', 'UUID 生成算法')
         ->option('v3', 'Version 3: 与原盗版用户 UUID 一致【推荐】')
@@ -50,7 +50,7 @@
     } else {
       $keypairForm->addMessage('私钥有效。', 'success');
     }
-  ?>
+  @endphp
 
   <!-- Main content -->
   <section class="content">
@@ -102,5 +102,6 @@
 @endsection
 
 @section('script')
+<script src="https://cdn.bootcss.com/bootstrap-fileinput/4.4.8/js/fileinput.min.js"></script>
 <script src="{{ plugin_assets('yggdrasil-api', 'assets/dist/config.js') }}"></script>
 @endsection

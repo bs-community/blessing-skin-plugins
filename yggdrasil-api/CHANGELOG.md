@@ -1,5 +1,8 @@
 # 更新日志
 
+## v3.0.0-beta.0
+- 支持 Blessing Skin v4.0.0
+
 ## v2.1.10
 - 支持 API 地址指示 (ALI) [#18](https://github.com/yushijinhun/authlib-injector/issues/18)
 - 支持在元数据中包含验证服务器网址 [#25](https://github.com/yushijinhun/authlib-injector/issues/25)

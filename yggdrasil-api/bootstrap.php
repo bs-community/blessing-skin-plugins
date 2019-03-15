@@ -7,6 +7,13 @@ require __DIR__.'/src/Utils/helpers.php';
 
 return function (Dispatcher $events) {
 
+    app()->register(Yajra\Datatables\DatatablesServiceProvider::class);
+
+    config(['logging.channels.ygg' => [
+        'driver' => 'single',
+        'path' => ygg_log_path()
+    ]]);
+
     // 创建数据表
     ygg_init_db_tables();
 
@@ -88,7 +95,7 @@ return function (Dispatcher $events) {
             'middleware' => ['web', 'auth', 'admin'],
             'namespace'  => 'Yggdrasil\Controllers'
         ], function ($router) {
-            $router->get('admin/yggdrasil-log', 'ConfigController@log');
+            $router->view('admin/yggdrasil-log', 'Yggdrasil::log');
             $router->get('admin/yggdrasil-log/data', 'ConfigController@logData');
         });
 

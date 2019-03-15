@@ -4,6 +4,8 @@
 
 @section('content')
 
+<link href="https://cdn.bootcss.com/datatables/1.10.16/css/dataTables.bootstrap.min.css" rel="stylesheet">
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -38,5 +40,7 @@
 @endsection
 
 @section('script')
+<script src="https://cdn.bootcss.com/datatables/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.bootcss.com/datatables/1.10.16/js/dataTables.bootstrap.min.js"></script>
 <script src="{{ plugin_assets('yggdrasil-api', 'assets/dist/log.js') }}"></script>
 @endsection
