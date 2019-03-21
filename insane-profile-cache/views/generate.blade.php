@@ -33,7 +33,7 @@
         ?>
       </div>
       <div class="box-footer">
-        <a href="?continue" class="btn btn-primary">生成文件缓存</a>
+        <a href="/admin/generate-profile-cache?continue" class="btn btn-primary">生成文件缓存</a>
       </div>
     </div>
 

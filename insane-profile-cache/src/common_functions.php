@@ -7,7 +7,7 @@ if (! function_exists('generateProfileFileCache')) {
     function generateProfileFileCache(Player $player) {
 
         foreach (['usm', 'csl'] as $apiType) {
-            $filename = PROFILE_CACHE_PATH."/$apiType/{$player->player_name}.json";
+            $filename = PROFILE_CACHE_PATH."/$apiType/{$player->name}.json";
 
             try {
                 if (strncasecmp(PHP_OS, 'WIN', 3) == 0) {
