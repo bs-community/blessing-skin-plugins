@@ -3,7 +3,7 @@
 @section('title', trans('Blessing\ConfigGenerator::config.generate-config'))
 
 @section('style')
-<link rel="stylesheet" href="{{ plugin_assets('config-generator', 'assets/highlight/styles/arduino-light.css') }}">
+<link rel="stylesheet" href="{{ plugin_assets('config-generator', 'highlight/styles/arduino-light.css') }}">
 <style> pre { border: 0; } td[class='key'], td[class='value'] { border-top: 0 !important; } </style>
 @endsection
 
@@ -51,14 +51,6 @@
                                        </select>
                                     </td>
                                 </tr>
-
-                                <tr>
-                                    <td class="key">{{ trans('Blessing\ConfigGenerator::config.version') }}</td>
-                                    <td class="value">
-                                       <select class="form-control" id="version-select">
-                                       </select>
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </div><!-- /.box-body -->
@@ -85,7 +77,7 @@
                     </div><!-- /.box-header -->
                     <div class="box-body">
 
-<pre id="config-13_1-upper">
+<pre id="config-csl">
 {
     "enable": true,
     "loadlist": [
@@ -102,38 +94,14 @@
 }
 </pre>
 
-<pre id="config-13_1-lower" class="hljs ini" style="display: none;">
-# skinurls.txt
-<?php echo option('site_url'); ?>/skin/*.png
-http://skins.minecraft.net/MinecraftSkins/*.png
-
-# capeurls.txt
-<?php echo option('site_url'); ?>/cape/*.png
-</pre>
-
-<pre id="config-1_4-upper" style="display: none;">
+<pre id="config-usm" style="display: none;">
 {
     "rootURIs": [
-        "<?php echo option('site_url'); ?>/usm",
-        "http://www.skinme.cc/uniskin"
+        "<?php echo option('site_url'); ?>/usm"
     ],
     "legacySkinURIs": [],
     "legacyCapeURIs": []
 }
-</pre>
-
-<pre id="config-1_2-1_3" class="hljs ini" style="display: none;">
-# <?php echo option('site_name')."\n"; ?>
-Root: <?php echo option('site_url'); ?>/usm
-</pre>
-
-<pre id="config-1_2-lower" class="hljs ini" style="display: none;">
-# <?php echo option('site_name')."\n"; ?>
-Skin: <?php echo option('site_url'); ?>/skin/%s.png
-Cape: <?php echo option('site_url'); ?>/cape/%s.png
-# Mojang
-Skin: http://skins.minecraft.net/MinecraftSkins/%s.png
-Cape: http://skins.minecraft.net/MinecraftCloaks/%s.png
 </pre>
 
                     </div><!-- /.box-body -->
@@ -147,7 +115,7 @@ Cape: http://skins.minecraft.net/MinecraftCloaks/%s.png
 @endsection
 
 @section('script')
-<script type="text/javascript" src="{{ plugin_assets('config-generator', 'assets/highlight/highlight.min.js') }}"></script>
+<script type="text/javascript" src="{{ plugin_assets('config-generator', 'highlight/highlight.min.js') }}"></script>
 <script>
     $(document).ready(function() {
         $('pre').each(function(i, block) {
@@ -155,35 +123,12 @@ Cape: http://skins.minecraft.net/MinecraftCloaks/%s.png
         });
     });
 
-    function freshVersionSelect(element) {
-        $('#version-select').children().each(function() { $(this).remove(); });
-
-        if ($(element).val() == "csl") {
-            $('#version-select').append('<option value="13_1-upper">'+trans('configGenerator.csl13_1Upper')+'</option>');
-            $('#version-select').append('<option value="13_1-lower">'+trans('configGenerator.csl13_1Lower')+'</option>');
-        } else if ($(element).val() == "usm") {
-            $('#version-select').append('<option value="1_4-upper">'+trans('configGenerator.usm1_4Upper')+'</option>');
-            $('#version-select').append('<option value="1_2-1_3">'+trans('configGenerator.usm1_2To1_3')+'</option>');
-            $('#version-select').append('<option value="1_2-lower">'+trans('configGenerator.usm1_2Lower')+'</option>');
-        }
-
-        showConfig();
-    }
-
     function showConfig() {
-        $('#config-13_1-upper').hide();
-        $('#config-13_1-lower').hide();
-        $('#config-1_4-upper').hide();
-        $('#config-1_2-1_3').hide();
-        $('#config-1_2-lower').hide();
-        $('#config-'+$('#version-select').val()).show();
+        $('#config-csl').hide();
+        $('#config-usm').hide();
+        $('#config-'+$('#mod-select').val()).show();
     }
 
-    /**
-     * 创建并下载文件
-     * @param  {String} fileName 文件名
-     * @param  {String} content  文件内容
-     */
     function createAndDownloadFile(fileName, content) {
         var aTag = document.createElement('a');
         var blob = new Blob([content]);
@@ -200,13 +145,7 @@ Cape: http://skins.minecraft.net/MinecraftCloaks/%s.png
             "root": blessing.base_url + "/csl/"
         }));
     });
-
-    $('#mod-select').change(function () {
-        freshVersionSelect(this);
-    });
-    $('#version-select').change(showConfig);
-
-    freshVersionSelect('#mod-select');
+    $('#mod-select').change(showConfig);
 </script>
 
 @endsection
