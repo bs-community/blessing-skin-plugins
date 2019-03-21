@@ -1,10 +1,4 @@
 <?php
-/**
- * @Author: printempw
- * @Date:   2016-12-24 17:03:27
- * @Last Modified by:   printempw
- * @Last Modified time: 2016-12-24 17:35:16
- */
 
 namespace Blessing\ExamplePlugin\Listener;
 

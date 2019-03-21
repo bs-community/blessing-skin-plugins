@@ -7,7 +7,7 @@
 {{-- 使用 plugin_assets($pluginId, $relativeUri) 加载插件目录下的文件 --}}
 {{-- plugin($pluginId)->assets($relativeUri) 效果相同 --}}
 {{-- 请不要使用带固定的 插件所在目录名 路径的方式加载 --}}
-<script type="text/javascript" src="{{ plugin_assets('example-plugin', 'assets/js/example2.js') }}"></script>
+<script type="text/javascript" src="{{ plugin_assets('example-plugin', 'js/example2.js') }}"></script>
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -15,7 +15,6 @@
   <section class="content-header">
     <h1>
       示例插件
-      <small>Example Plugin</small>
     </h1>
   </section>
 

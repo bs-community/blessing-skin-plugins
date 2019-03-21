@@ -1,10 +1,4 @@
 <?php
-/**
- * @Author: printempw
- * @Date:   2016-12-24 16:31:44
- * @Last Modified by:   printempw
- * @Last Modified time: 2017-01-14 21:04:13
- */
 
 use App\Services\Hook;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -41,25 +35,26 @@ return function (Dispatcher $events) {
     });
 
     // 你也可以使用这种方法在页面上加载 CSS/JS 文件
-    Hook::addStyleFileToPage(plugin_assets('example-plugin', 'assets/css/example.css'));
+    Hook::addStyleFileToPage(plugin_assets('example-plugin', 'css/example.css'));
+
+    // 注册插件目录下用于 JavaScript 的语言文件
+    Hook::registerPluginTransScripts('example-plugin');
+
     // plugin($pluginId)->assets($relativeUri) 是等价写法
     // 你可以在任何地方使用 plugin($pluginId) 拿到插件实例
-    Hook::addScriptFileToPage(plugin('example-plugin')->assets('assets/js/example.js'));
+    Hook::addScriptFileToPage(plugin('example-plugin')->assets('js/example.js'));
 
     // 你也可以给 addStyleFileToPage 和 addScriptFileToPage 传递第二个参数
     // 该参数是一个包含字符串数组，只有符合其中定义的规则的页面才会被添加内容
     // 留空的话会在所有页面添加。规则中可以用 * 作为通配符。
-    Hook::addScriptFileToPage(plugin('example-plugin')->assets('assets/js/example3.js'), [
+    Hook::addScriptFileToPage(plugin('example-plugin')->assets('js/example3.js'), [
         // 这样的话只有管理面板和皮肤库才会加载 example3.js 这个文件。打开 F12 看看吧~
         'admin*',
         'skinlib*'
     ]);
 
     // 第三个参数是优先级，越高越先加载
-    Hook::addScriptFileToPage(plugin('example-plugin')->assets('assets/js/example4.js'), ['*'], 999);
-
-    // 注册插件目录下用于 JavaScript 的语言文件
-    Hook::registerPluginTransScripts('example-plugin');
+    Hook::addScriptFileToPage(plugin('example-plugin')->assets('js/example4.js'), ['*'], 999);
 
     /**
      * 你也可以通过 subscribe 方法把代码分离到多个 Listener 中
