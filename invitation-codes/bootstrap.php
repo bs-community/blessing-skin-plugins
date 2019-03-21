@@ -24,7 +24,7 @@ return function (Dispatcher $events) {
         ]);
     });
 
-    Hook::addScriptFileToPage(plugin('invitation-codes')->assets('assets/register.js'), [
+    Hook::addScriptFileToPage(plugin('invitation-codes')->assets('register.js'), [
         'auth/register'
     ]);
 

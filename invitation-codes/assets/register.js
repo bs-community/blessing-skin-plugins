@@ -11,5 +11,5 @@ blessing.event.on('mounted', ({ el }) => {
 
 // 插入邀请码的值
 blessing.event.on('beforeFetch', request => {
-  request.data.invitationCode = $('#invitation-code').val()
+  request.data.invitationCode = document.querySelector('#invitation-code').value
 })

@@ -9,7 +9,7 @@ class InvitationCodeController extends Controller
 {
     public function generate()
     {
-        if (request()->method() == 'POST' && request('amount')) {
+        if (request()->isMethod('post') && request('amount')) {
             $this->generateInvitationCodes(request('amount'));
         }
 

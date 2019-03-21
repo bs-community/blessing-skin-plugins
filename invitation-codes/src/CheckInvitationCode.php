@@ -4,17 +4,14 @@ namespace InvitationCodes;
 
 use DB;
 use Closure;
-use App\Http\Controllers\AuthController;
 
-class CheckInvitationCode extends AuthController
+class CheckInvitationCode
 {
     public function handle($request, Closure $next)
     {
-        $this->validate($request, [
-            'invitationCode' => 'required'
-        ], [
-            'invitationCode.required' => '邀请码不能为空'
-        ]);
+        if (! $request->input('invitationCode')) {
+            return json('邀请码不能为空', 1);
+        }
 
         $code = request('invitationCode');
         $result = DB::table('invitation_codes')->where('code', $code)->first();
