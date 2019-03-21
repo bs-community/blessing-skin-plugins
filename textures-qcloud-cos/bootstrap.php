@@ -3,18 +3,18 @@
 return function () {
     $disk = [
         'driver' => 'cosv5',
-        'region'          => menv('COS_REGION', 'ap-shanghai'),
+        'region'          => env('COS_REGION', 'ap-shanghai'),
         'credentials'     => [
-            'appId'       => menv('COS_APP_ID'),
-            'secretId'    => menv('COS_SECRET_ID'),
-            'secretKey'   => menv('COS_SECRET_KEY'),
+            'appId'       => env('COS_APP_ID'),
+            'secretId'    => env('COS_SECRET_ID'),
+            'secretKey'   => env('COS_SECRET_KEY'),
         ],
-        'timeout'         => menv('COS_TIMEOUT', 60),
-        'connect_timeout' => menv('COS_CONNECT_TIMEOUT', 60),
-        'bucket'          => menv('COS_BUCKET'),
-        'cdn'             => menv('COS_CDN'),
-        'read_from_cdn'   => menv('COS_READ_FROM_CDN', true),
-        'scheme'          => menv('COS_SCHEME', 'https'),
+        'timeout'         => env('COS_TIMEOUT', 60),
+        'connect_timeout' => env('COS_CONNECT_TIMEOUT', 60),
+        'bucket'          => env('COS_BUCKET'),
+        'cdn'             => env('COS_CDN'),
+        'read_from_cdn'   => env('COS_READ_FROM_CDN', true),
+        'scheme'          => env('COS_SCHEME', 'https'),
     ];
 
     app()->register(Freyo\Flysystem\QcloudCOSv5\ServiceProvider::class);

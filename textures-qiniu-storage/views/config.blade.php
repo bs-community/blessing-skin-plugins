@@ -39,7 +39,7 @@ EOT;
             <h3 class="box-title">七牛云存储连接配置</h3>
           </div><!-- /.box-header -->
           <div class="box-body table-responsive">
-            <?php
+            @php
               try {
                 Storage::disk('textures')->put('connectivity_test', 'test');
                 Storage::disk('textures')->delete('connectivity_test');
@@ -50,7 +50,7 @@ EOT;
               }
 
               echo app('parsedown')->text($instruction);
-            ?>
+            @endphp
           </div>
         </div>
       </div>

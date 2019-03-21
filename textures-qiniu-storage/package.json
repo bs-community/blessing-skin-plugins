@@ -1,13 +1,13 @@
 {
   "name": "textures-qiniu-storage",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "title": "七牛云存储",
-  "description": "将用户上传的材质存储文件至七牛云存储中。需要 BS v3.5.0 及以上。",
+  "description": "将用户上传的材质存储文件至七牛云存储中。",
   "author": "printempw",
   "url": "https://blessing.studio/",
   "namespace": "TextureQiniuStorage",
   "config": "config.blade.php",
   "require": {
-    "blessing-skin-server": "^3.5.0 || ^4.0.0"
+    "blessing-skin-server": "^4.0.0"
   }
 }
