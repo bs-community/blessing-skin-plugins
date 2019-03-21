@@ -50,7 +50,7 @@
       <div class="box-body">
         <div class="callout callout-info">
           <p>如果中文文件名乱码了，请返回上一页勾选「尝试消除乱码」选项。</p>
-          <p>如果勾选后乱码了，那就取消勾选试试。或者你也可以联系我寻求帮助。</p>
+          <p>如果勾选后乱码了，那就取消勾选试试。</p>
         </div>
         <textarea class="form-control" rows="20">{{ $preview }}</textarea>
       </div>

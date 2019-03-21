@@ -31,6 +31,6 @@
 @endsection
 
 @section('script')
-<script src="{{ plugin_assets('batch-import', 'assets/dist/check.js') }}"></script>
+<script src="{{ plugin_assets('batch-import', 'check.js') }}"></script>
 @stack('scripts')
 @endsection

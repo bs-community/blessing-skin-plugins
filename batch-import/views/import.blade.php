@@ -34,6 +34,6 @@
 
 @section('script')
 <script>let queue = {{ json_encode(array_keys($files)) }};</script>
-<script src="{{ plugin_assets('batch-import', 'assets/dist/import.js') }}"></script>
+<script src="{{ plugin_assets('batch-import', 'import.js') }}"></script>
 @stack('scripts')
 @endsection

@@ -2,10 +2,10 @@
 
 namespace BatchImport;
 
-use DB;
 use Log;
 use File;
 use Cache;
+use Storage;
 use Exception;
 use App\Models\User;
 use App\Models\Texture;
@@ -49,17 +49,14 @@ class BatchImportController extends Controller
     public function import()
     {
         $files = $this->getAvailableFiles(Cache::get('import-source-dir'));
-
         return view('BatchImport::import', compact('files'));
     }
 
     public function checkImportDir()
     {
         if (file_exists(request('dir'))) {
-
-            Cache::put('import-source-dir', request('dir'), 60);
-            Cache::put('import-gbk', request('gbk') === 'true', 60);
-
+            Cache::put('import-source-dir', request('dir'), 3600);
+            Cache::put('import-gbk', request('gbk') === 'true', 3600);
             return json('目录准备就绪', 0);
         } else {
             return json('指定目录不存在', 1);
@@ -120,30 +117,23 @@ class BatchImportController extends Controller
     protected function doImportTexture($file, $option)
     {
         $hash = hash_file('sha256', $file);
-        $path = storage_path("textures/$hash");
 
-        if (false === copy($file, $path)) {
+        if (! Storage::disk('textures')->put($hash, file_get_contents($file))) {
             return "文件复制失败";
         }
 
-        if (Texture::where('hash', $hash)->first()) {
+        if (Texture::where('hash', $hash)->count() > 0) {
             return "材质重复";
         }
 
-        try {
-            DB::table('textures')->insert([
-                'name'      => str_replace('.png', '', basename($file)),
-                'type'      => $option['type'],
-                'likes'     => 0,
-                'hash'      => $hash,
-                'size'      => ceil(filesize($path) / 1024),
-                'uploader'  => $option['uploader'],
-                'public'    => 1,
-                'upload_at' => get_datetime_string()
-            ]);
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
+        $texture = new Texture;
+        $texture->name = str_replace('.png', '', basename($file));
+        $texture->type = $option['type'];
+        $texture->hash = $hash;
+        $texture->size = ceil(filesize($file) / 1024);
+        $texture->uploader = $option['uploader'];
+        $texture->public = true;
+        $texture->save();
 
         return true;
     }
