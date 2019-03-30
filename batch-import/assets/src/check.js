@@ -14,6 +14,6 @@ async function checkImportDirAvailable () {
     window.location.href = '?step=2'
   } else {
     $('#next').text('下一步').prop('disabled', false)
-    swal({ type: 'warning', text: msg })
+    alert(msg)
   }
 }
