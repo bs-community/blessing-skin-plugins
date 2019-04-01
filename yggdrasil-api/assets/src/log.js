@@ -28,7 +28,7 @@ $.extend(true, $.fn.dataTable.defaults, {
   serverSide: true
 });
 
-(() => {
+{
   function url (path) {
     return `${blessing.base_url}/${path}`
   }
@@ -87,11 +87,11 @@ $.extend(true, $.fn.dataTable.defaults, {
   ]
 
   $.yggLogTable = $('#ygg-log-table').DataTable({
-    ajax: url('admin/yggdrasil-log/data'),
+    ajax: blessing.base_url + '/admin/yggdrasil-log/data',
     scrollY: ($('.content-wrapper').height() - $('.content-header').outerHeight()) * 0.6,
     columnDefs: logTableColumnDefs
   }).on('click', 'a.show', function () {
     const data = $.yggLogTable.row($(this).parents('tr')).data()
     swal({ type: 'info', text: data.parameters })
   })
-})()
+}

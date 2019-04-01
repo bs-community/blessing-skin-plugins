@@ -1,6 +1,6 @@
 'use strict';
 
-(() => {
+{
   const dom = `
       <div class="box box-warning">
         <div class="box-header with-border">
@@ -65,4 +65,4 @@
       throw err
     }
   })
-})()
+}

@@ -97,7 +97,7 @@ class AuthController extends Controller
             throw new ForbiddenOperationException('提供的 ClientToken 与 AccessToken 不匹配，请重新登录');
         }
 
-        $user = app('users')->get($token->owner, 'email');
+        $user = User::where('email', $token->owner)->first();
 
         if (! $user) {
             throw new ForbiddenOperationException('令牌绑定的用户不存在，请重新登录');
@@ -105,7 +105,7 @@ class AuthController extends Controller
 
         Log::channel('ygg')->info("The given access token is owned by user [$token->owner]");
 
-        if ($user->getPermission() == User::BANNED) {
+        if ($user->permission == User::BANNED) {
             throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
         }
 
@@ -126,7 +126,7 @@ class AuthController extends Controller
 
         // 当指定了 selectedProfile 时
         if ($selected = $request->get('selectedProfile')) {
-            if (! Player::where('player_name', $selected['name'])->first()) {
+            if (! Player::where('name', $selected['name'])->first()) {
                 throw new IllegalArgumentException('请求的角色不存在');
             }
 
@@ -182,9 +182,9 @@ class AuthController extends Controller
 
             Log::info('Given access token is valid and matches the client token');
 
-            $user = app('users')->get($token->owner, 'email');
+            $user = User::where('email', $token->owner)->first();
 
-            if ($user->getPermission() == User::BANNED) {
+            if ($user->permission == User::BANNED) {
                 throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
             }
 
@@ -241,7 +241,7 @@ class AuthController extends Controller
 
             ygg_log([
                 'action' => 'invalidate',
-                'user_id' => app('users')->get($token->owner, 'email')->uid,
+                'user_id' => User::where('email', $token->owner)->first()->uid,
                 'parameters' => json_encode($request->json()->all())
             ]);
 
@@ -264,7 +264,7 @@ class AuthController extends Controller
             throw new IllegalArgumentException('邮箱或者密码没填哦');
         }
 
-        $user = app('users')->get($identification, 'email');
+        $user = User::where('email', $identification)->first();
 
         if (! $user) {
             throw new ForbiddenOperationException("用户 [$identification] 不存在");
@@ -274,7 +274,7 @@ class AuthController extends Controller
             throw new ForbiddenOperationException('输入的邮箱与密码不匹配');
         }
 
-        if ($checkBanned && $user->getPermission() == User::BANNED) {
+        if ($checkBanned && $user->permission == User::BANNED) {
             throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
         }
 
@@ -290,12 +290,12 @@ class AuthController extends Controller
     {
         $profiles = [];
 
-        foreach ($user->players()->get() as $player) {
-            $uuid = Profile::getUuidFromName($player->player_name);
+        foreach ($user->players as $player) {
+            $uuid = Profile::getUuidFromName($player->name);
 
             $profiles[] = [
                 'id' => $uuid,
-                'name' => $player->player_name
+                'name' => $player->name
             ];
         }
 
@@ -305,7 +305,7 @@ class AuthController extends Controller
     // 推荐使用 Redis 作为缓存驱动
     protected function storeToken(Token $token, $identification)
     {
-        $timeToFullyExpired = option('ygg_token_expire_2') / 60;
+        $timeToFullyExpired = option('ygg_token_expire_2');
         // 使用 accessToken 作为缓存主键
         Cache::put("TOKEN_{$token->accessToken}", serialize($token), $timeToFullyExpired);
         // TODO: 实现一个用户可以签发多个 Token

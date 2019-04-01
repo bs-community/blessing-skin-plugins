@@ -42,5 +42,5 @@
 @section('script')
 <script src="https://cdn.bootcss.com/datatables/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.bootcss.com/datatables/1.10.16/js/dataTables.bootstrap.min.js"></script>
-<script src="{{ plugin_assets('yggdrasil-api', 'assets/dist/log.js') }}"></script>
+<script src="{{ plugin_assets('yggdrasil-api', 'dist/log.js') }}"></script>
 @endsection

@@ -43,7 +43,7 @@ class ConfigController extends Controller
             'meta' => [
                 'serverName' => option('site_name'),
                 'implementationName' => 'Yggdrasil API for Blessing Skin',
-                'implementationVersion' => plugin('yggdrasil-api')['version'],
+                'implementationVersion' => plugin('yggdrasil-api')->version,
                 'links' => [
                     'homepage' => url('/')
                 ]
@@ -64,7 +64,7 @@ class ConfigController extends Controller
         $query = DB::table('ygg_log')
             ->join('users', 'ygg_log.user_id', '=', 'users.uid')
             ->leftJoin('players', 'ygg_log.player_id', '=', 'players.pid')
-            ->select('id', 'action', 'user_id', 'email', 'player_id', 'players.player_name', 'parameters', 'ygg_log.ip', 'time');
+            ->select('id', 'action', 'user_id', 'email', 'player_id', 'players.name', 'parameters', 'ygg_log.ip', 'time');
 
         return Datatables::of($query)->make(true);
     }
@@ -74,7 +74,7 @@ class ConfigController extends Controller
         // 获取最近的 5 条活动记录
         $entries = DB::table('ygg_log')
             ->leftJoin('players', 'ygg_log.player_id', '=', 'players.pid')
-            ->select('action', 'player_name', 'ip', 'time')
+            ->select('action', 'players.name', 'ip', 'time')
             ->where('user_id', auth()->id())
             ->orderBy('time', 'desc')
             ->take(5)

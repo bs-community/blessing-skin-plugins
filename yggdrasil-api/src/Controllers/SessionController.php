@@ -7,7 +7,6 @@ use Log;
 use Cache;
 use App\Models\User;
 use App\Models\Player;
-use Yggdrasil\Utils\Log;
 use Yggdrasil\Utils\UUID;
 use Yggdrasil\Models\Token;
 use Illuminate\Http\Request;
@@ -33,7 +32,7 @@ class SessionController extends Controller
             throw new ForbiddenOperationException("无效的 Profile UUID [$selectedProfile]，它不属于任何角色");
         }
 
-        $player = Player::where('player_name', $result->name)->first();
+        $player = Player::where('name', $result->name)->first();
 
         if (! $player) {
             // 删除已失效的 UUID 映射（e.g. 其对应的角色已被删除）
@@ -44,7 +43,7 @@ class SessionController extends Controller
 
         $identification = strtolower($player->user()->first()->email);
 
-        Log::channel('ygg')->info("Player [$selectedProfile]'s name is [$player->player_name], belongs to user [$identification]");
+        Log::channel('ygg')->info("Player [$selectedProfile]'s name is [$player->name], belongs to user [$identification]");
 
         $token = Token::lookup($accessToken);
         if ($token && $token->isValid()) {
@@ -55,7 +54,7 @@ class SessionController extends Controller
                 throw new ForbiddenOperationException('无效的 AccessToken，请重新登录');
             }
 
-            if ($player->user()->first()->getPermission() == User::BANNED) {
+            if ($player->user->permission == User::BANNED) {
                 throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
             }
 

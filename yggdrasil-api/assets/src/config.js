@@ -6,12 +6,12 @@ $('[name=generate-key]').click(async () => {
   )
 
   if (errno === 0) {
-    toastr.success('成功生成了一个新的 4096 bit OpenSSL RSA 私钥')
+    alert('成功生成了一个新的 4096 bit OpenSSL RSA 私钥')
 
     $('td.value textarea').val(key)
     $('input[value=keypair]').parent().submit()
   } else {
-    swal({ type: 'warning', text: msg })
+    alert(msg)
   }
 })
 
@@ -97,7 +97,7 @@ $('#usercache-json-file').fileinput({
 })
 
 $('body').on('click', '.fileinput-upload-button', async () => {
-  const form = new window.FormData()
+  const form = new FormData()
   form.append('file', $('#usercache-json-file').prop('files')[0])
 
   const { errno, msg } = await blessing.fetch.post(
@@ -106,9 +106,9 @@ $('body').on('click', '.fileinput-upload-button', async () => {
   )
 
   if (errno === 0) {
-    await swal({ type: 'success', text: msg })
+    alert(msg)
     window.location.reload()
   } else {
-    swal({ type: 'warning', text: msg })
+    alert(msg)
   }
 })

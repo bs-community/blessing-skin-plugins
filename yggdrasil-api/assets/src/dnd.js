@@ -1,6 +1,6 @@
 'use strict';
 
-(() => {
+{
   const yggdrasilApiRoot = `${blessing.base_url}/api/yggdrasil`
 
   let dom = `
@@ -21,15 +21,15 @@
 
   blessing.event.on('mounted', () => $('section.content > .row > .col-md-8').append(dom))
 
-  let clipboard = new window.ClipboardJS('#dnd-button')
+  let clipboard = new ClipboardJS('#dnd-button')
 
-  clipboard.on('success', e => {
+  clipboard.on('success', () => {
     $('#dnd-button').attr('title', '已复制！').tooltip('show')
 
     setTimeout(() => $('#dnd-button').tooltip('destroy'), 1000)
   })
 
-  clipboard.on('error', e => {
+  clipboard.on('error', () => {
     $('#dnd-button').attr('title', '无法访问剪贴板，请手动复制。').tooltip('show')
   })
 
@@ -39,4 +39,4 @@
     e.originalEvent.dataTransfer.setData('text/plain', uri)
     e.originalEvent.dataTransfer.dropEffect = 'copy'
   })
-})()
+}

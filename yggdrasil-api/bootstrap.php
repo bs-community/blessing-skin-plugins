@@ -37,8 +37,8 @@ return function (Dispatcher $events) {
 
     // 保证用户修改角色名后 UUID 一致
     $callback = function ($model) {
-        $new = $model->getAttribute('player_name');
-        $original = $model->getOriginal('player_name');
+        $new = $model->getAttribute('name');
+        $original = $model->getOriginal('name');
 
         if (!$original || $original === $new) return;
 
@@ -51,14 +51,7 @@ return function (Dispatcher $events) {
     // 仅当 UUID 生成算法为「随机生成」时保证修改角色名后 UUID 一致
     // 因为另一种 UUID 生成算法要最大限度兼容盗版模式，所以不做修改
     if (option('ygg_uuid_algorithm') == 'v4') {
-        // 兼容「单角色限制」插件
-        $plugin = plugin('single-player-limit');
-
-        if ($plugin && $plugin->isEnabled()) {
-            App\Models\User::updating($callback);
-        } else {
-            App\Models\Player::updating($callback);
-        }
+        App\Models\Player::updating($callback);
     }
 
     // 向用户中心首页添加「快速配置启动器」板块
@@ -66,16 +59,16 @@ return function (Dispatcher $events) {
         $events->listen(App\Events\RenderingHeader::class, function ($event) {
             $event->addContent('<script src="https://cdn.bootcss.com/clipboard.js/2.0.1/clipboard.min.js"></script>');
         });
-        Hook::addScriptFileToPage(plugin('yggdrasil-api')->assets('assets/dist/dnd.js'), ['user']);
+        Hook::addScriptFileToPage(plugin('yggdrasil-api')->assets('dist/dnd.js'), ['user']);
     }
 
     // 向用户中心首页添加「最近活动」板块
     if (option('ygg_show_activities_section')) {
-        Hook::addScriptFileToPage(plugin('yggdrasil-api')->assets('assets/dist/recent.js'), ['user']);
+        Hook::addScriptFileToPage(plugin('yggdrasil-api')->assets('dist/recent.js'), ['user']);
     }
 
     // 向管理后台菜单添加「Yggdrasil 日志」项目
-    Hook::addMenuItem('admin', 3, [
+    Hook::addMenuItem('admin', 4, [
         'title' => 'Yggdrasil 日志',
         'link'  => 'admin/yggdrasil-log',
         'icon'  => 'fa-history'

@@ -1,7 +1,5 @@
 <?php
 
-use Log;
-
 if (! function_exists('ygg_log_path')) {
 
     function ygg_log_path()
@@ -104,7 +102,7 @@ if (! function_exists('ygg_init_options')) {
             }
         }
 
-        if (! menv('YGG_VERBOSE_LOG')) {
+        if (! env('YGG_VERBOSE_LOG')) {
             // 删就完事儿了
             @unlink(ygg_log_path());
             @unlink(storage_path('logs/yggdrasil.log'));

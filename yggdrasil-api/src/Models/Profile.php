@@ -5,6 +5,7 @@ namespace Yggdrasil\Models;
 use DB;
 use Log;
 use App\Models\Player;
+use App\Models\Texture;
 use Yggdrasil\Utils\UUID;
 use Yggdrasil\Exceptions\IllegalArgumentException;
 
@@ -123,7 +124,7 @@ class Profile
     {
         $result = DB::table('uuid')->where('uuid', $uuid)->first();
 
-        if ($result && ($player = Player::where('player_name', $result->name)->first())) {
+        if ($result && ($player = Player::where('name', $result->name)->first())) {
             return static::createFromPlayer($player);
         }
     }
@@ -132,9 +133,9 @@ class Profile
     {
         $profile = new static();
 
-        $profile->uuid = static::getUuidFromName($player->player_name);
-        $profile->name = $player->player_name;
-        $profile->model = $player->getPreference();
+        $profile->uuid = static::getUuidFromName($player->name);
+        $profile->name = $player->name;
+        $profile->model = Texture::find($player->tid_skin)->type == 'steve' ? 'default' : 'slim';
         $profile->player = $player;
         $profile->skin = $player->getTexture('skin');
         $profile->cape = $player->getTexture('cape');

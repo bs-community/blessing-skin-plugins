@@ -17,7 +17,7 @@ class Throttle
             throw new ForbiddenOperationException(sprintf('请求过于频繁，请等待 %d 秒后重试', ceil($retryAfter / 1000)));
         }
 
-        Cache::put($id, $currentTimeInMillisecond, 60);
+        Cache::put($id, $currentTimeInMillisecond, 3600);
 
         return $next($request);
     }

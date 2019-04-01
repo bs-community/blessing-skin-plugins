@@ -30,7 +30,7 @@ class ProfileController extends Controller
 
     public function getProfileFromName($name)
     {
-        $player = Player::where('player_name', $name)->first();
+        $player = Player::where('name', $name)->first();
 
         if (! $player) {
             // 角色不存在
@@ -55,7 +55,7 @@ class ProfileController extends Controller
         $profiles = [];
 
         foreach ($names as $name) {
-            $player = Player::where('player_name', $name)->first();
+            $player = Player::where('name', $name)->first();
 
             if ($player) {
                 $profile = Profile::createFromPlayer($player);

@@ -103,5 +103,5 @@
 
 @section('script')
 <script src="https://cdn.bootcss.com/bootstrap-fileinput/4.4.8/js/fileinput.min.js"></script>
-<script src="{{ plugin_assets('yggdrasil-api', 'assets/dist/config.js') }}"></script>
+<script src="{{ plugin_assets('yggdrasil-api', 'dist/config.js') }}"></script>
 @endsection
