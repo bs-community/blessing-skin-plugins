@@ -1,6 +1,6 @@
-import fs from 'fs'
-import childProcess from 'child_process'
-import crypto from 'crypto'
+const fs = require('fs')
+const childProcess = require('child_process')
+const crypto = require('crypto')
 
 function trans(plugin, key, locale) {
   const realKey = key.split('::')[1]

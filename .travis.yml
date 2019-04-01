@@ -15,7 +15,7 @@ install:
 
 script:
 - mkdir .dist
-- node --experimental-modules build.mjs
+- node build.js
 - cd .dist
 - git init
 - git add .
