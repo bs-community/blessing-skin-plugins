@@ -1,6 +1,8 @@
+// @ts-check
 const fs = require('fs')
 const childProcess = require('child_process')
 const crypto = require('crypto')
+const yaml = require('js-yaml')
 
 function trans(plugin, key, locale) {
   const realKey = key.split('::')[1]
