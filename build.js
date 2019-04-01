@@ -69,7 +69,7 @@ const meta = {
         url: '',
         shasum: crypto
           .createHash('sha1')
-          .update(fs.readFileSync(`.dist/${name}_${version}.zip`))
+          .update(fs.readFileSync(`.dist/${name}_${manifest.version}.zip`))
           .digest('hex')
       }
     }
