@@ -8,7 +8,6 @@
   "namespace": "Integration\\Authme",
   "config": "config.blade.php",
   "require": {
-    "blessing-skin-server": "^3.5.0 || ^4.0.0",
-    "single-player-limit": "^1.0.4 || ^2.0.0"
+    "blessing-skin-server": "^3.5.0"
   }
 }
