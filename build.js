@@ -40,7 +40,9 @@ plugins.forEach(name => {
   }
 
   childProcess.execSync('rm -rf node_modules assets/src')
-  childProcess.execSync('rm .gitignore')
+  try {
+    fs.unlinkSync('.gitignore')
+  } catch {}
 
   process.chdir(__dirname)
 
