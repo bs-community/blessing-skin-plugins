@@ -4,11 +4,6 @@ namespace Yggdrasil\Models;
 
 use Cache;
 
-// 因为写一大堆 GET/SET 方法让我看着很不爽
-// 所以索性把类成员直接全部弄成 public 了
-// 反正就是个插件而已
-// 什么属性私有化啊安全性啊可维护性啊
-// 我 才 不 管 呢
 class Token
 {
     public $owner;
