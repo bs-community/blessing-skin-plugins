@@ -27,7 +27,6 @@
       $form->text('ygg_skin_domain', '额外皮肤白名单域名')->description('只有在此列表中的材质才能被加载。【本站地址】和【当前访问地址】已经默认添加至白名单列表，需要添加的额外白名单域名请使用半角逗号 (,) 分隔');
       $form->text('ygg_search_profile_max', '批量查询角色数量限制')->hint('一次请求中最多能查询几个角色');
       $form->checkbox('ygg_show_config_section', '显示快速配置板块')->label('在用户中心首页显示「快速配置启动器」板块');
-      $form->checkbox('ygg_show_activities_section', '显示最近活动板块')->label('在用户中心首页显示「最近活动」板块');
       $form->checkbox('ygg_enable_ali', 'API 地址指示')->label('开启「API 地址指示 (ALI)」功能');
     })->handle();
 

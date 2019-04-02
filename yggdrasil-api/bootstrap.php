@@ -62,11 +62,6 @@ return function (Dispatcher $events) {
         Hook::addScriptFileToPage(plugin('yggdrasil-api')->assets('dist/dnd.js'), ['user']);
     }
 
-    // 向用户中心首页添加「最近活动」板块
-    if (option('ygg_show_activities_section')) {
-        Hook::addScriptFileToPage(plugin('yggdrasil-api')->assets('dist/recent.js'), ['user']);
-    }
-
     // 向管理后台菜单添加「Yggdrasil 日志」项目
     Hook::addMenuItem('admin', 4, [
         'title' => 'Yggdrasil 日志',
