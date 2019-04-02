@@ -146,9 +146,7 @@ class AuthController extends Controller
                 throw new ForbiddenOperationException('拉倒吧，请求的角色不是你的');
             }
 
-            if ($token->profileId == '') {
-                $token->profileId = $selected;
-            }
+            $token->profileId = $result['selectedProfile']['id'];
         } else {
             foreach ($availableProfiles as $profile) {
                 if ($profile['id'] == $token->profileId) {

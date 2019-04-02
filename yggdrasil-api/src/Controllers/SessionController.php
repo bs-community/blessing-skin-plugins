@@ -54,6 +54,10 @@ class SessionController extends Controller
                 throw new ForbiddenOperationException('无效的 AccessToken，请重新登录');
             }
 
+            if ($token->profileId != $selectedProfile) {
+                throw new ForbiddenOperationException('请求的角色与令牌绑定的角色不一致');
+            }
+
             if ($player->user->permission == User::BANNED) {
                 throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
             }
