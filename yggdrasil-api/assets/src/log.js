@@ -92,6 +92,6 @@ $.extend(true, $.fn.dataTable.defaults, {
     columnDefs: logTableColumnDefs
   }).on('click', 'a.show', function () {
     const data = $.yggLogTable.row($(this).parents('tr')).data()
-    swal({ type: 'info', text: data.parameters })
+    alert('附加参数：\n' + data.parameters)
   })
 }
