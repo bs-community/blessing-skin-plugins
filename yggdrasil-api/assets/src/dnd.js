@@ -1,9 +1,8 @@
-'use strict';
+'use strict'
 
 {
   const yggdrasilApiRoot = `${blessing.base_url}/api/yggdrasil`
-
-  let dom = `
+  const dom = `
       <div class="box box-success">
         <div class="box-header with-border">
           <h3 class="box-title">快速配置启动器</h3>
@@ -18,25 +17,26 @@
         </div>
       </div><!-- /.box -->
     `
+  const div = document.createElement('div')
+  div.innerHTML = dom
+  blessing.event.on('mounted', () =>
+    document
+      .querySelector('section.content > .row > .col-md-7')
+      .appendChild(div)
+  )
 
-  blessing.event.on('mounted', () => $('section.content > .row > .col-md-8').append(dom))
+  const clipboard = new ClipboardJS('#dnd-button')
+  clipboard.on('success', () => alert('已复制！'))
+  clipboard.on('error', () => alert('无法访问剪贴板，请手动复制。'))
 
-  let clipboard = new ClipboardJS('#dnd-button')
+  document.body.addEventListener('dragstart', e => {
+    if (e.target.id === 'dnd-button') {
+      const uri =
+        'authlib-injector:yggdrasil-server:' +
+        encodeURIComponent(yggdrasilApiRoot)
 
-  clipboard.on('success', () => {
-    $('#dnd-button').attr('title', '已复制！').tooltip('show')
-
-    setTimeout(() => $('#dnd-button').tooltip('destroy'), 1000)
-  })
-
-  clipboard.on('error', () => {
-    $('#dnd-button').attr('title', '无法访问剪贴板，请手动复制。').tooltip('show')
-  })
-
-  $('body').on('dragstart', '#dnd-button', e => {
-    const uri = 'authlib-injector:yggdrasil-server:' + encodeURIComponent(yggdrasilApiRoot)
-
-    e.originalEvent.dataTransfer.setData('text/plain', uri)
-    e.originalEvent.dataTransfer.dropEffect = 'copy'
+      e.dataTransfer.setData('text/plain', uri)
+      e.dataTransfer.dropEffect = 'copy'
+    }
   })
 }
