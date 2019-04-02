@@ -7,6 +7,7 @@ use Cache;
 class Token
 {
     public $owner;
+    public $profileId = '';
     public $createdAt;
     public $clientToken;
     public $accessToken;

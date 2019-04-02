@@ -44,8 +44,6 @@ class AuthController extends Controller
         // 实例化并存储 Token
         $token = new Token($clientToken, $accessToken);
         $token->owner = $identification;
-        Log::channel('ygg')->info("New access token [$accessToken] generated for user [$identification]");
-        $this->storeToken($token, $identification);
 
         // 准备响应
         $availableProfiles = $this->getAvailableProfiles($user);
@@ -67,7 +65,11 @@ class AuthController extends Controller
         // 当用户只有一个角色时自动帮他选择
         if (!empty($availableProfiles) && count($availableProfiles) == 1) {
             $result['selectedProfile'] = $availableProfiles[0];
+            $token->profileId = $availableProfiles[0]['id'];
         }
+
+        $this->storeToken($token, $identification);
+        Log::channel('ygg')->info("New access token [$accessToken] generated for user [$identification]");
 
         Log::channel('ygg')->info("User [$identification] authenticated successfully", [compact('availableProfiles')]);
 
@@ -117,7 +119,7 @@ class AuthController extends Controller
             'availableProfiles' => $availableProfiles
         ];
 
-        if (app('request')->get('requestUser')) {
+        if ($request->get('requestUser')) {
             $result['user'] = [
                 'id' => UUID::generate(5, $user->email, UUID::NS_DNS)->clearDashes(),
                 'properties' => []
@@ -130,6 +132,10 @@ class AuthController extends Controller
                 throw new IllegalArgumentException('请求的角色不存在');
             }
 
+            if ($token->profileId != '' && $selected != $token->profileId) {
+                throw new IllegalArgumentException('token 对应的角色与当前请求的角色不对');
+            }
+
             foreach ($availableProfiles as $profile) {
                 if ($profile['id'] == $selected['id']) {
                     $result['selectedProfile'] = $profile;
@@ -139,10 +145,15 @@ class AuthController extends Controller
             if (! isset($result['selectedProfile'])) {
                 throw new ForbiddenOperationException('拉倒吧，请求的角色不是你的');
             }
+
+            if ($token->profileId == '') {
+                $token->profileId = $selected;
+            }
         } else {
-            // 只有一个角色时自动选择
-            if (!empty($availableProfiles) && count($availableProfiles) == 1) {
-                $result['selectedProfile'] = $availableProfiles[0];
+            foreach ($availableProfiles as $profile) {
+                if ($profile['id'] == $token->profileId) {
+                    $result['selectedProfile'] = $profile;
+                }
             }
         }
 

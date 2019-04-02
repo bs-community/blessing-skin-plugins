@@ -7,7 +7,6 @@ use Log;
 use Exception;
 use Datatables;
 use Yggdrasil\Utils\UUID;
-use Yggdrasil\Models\Token;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Yggdrasil\Exceptions\NotFoundException;
