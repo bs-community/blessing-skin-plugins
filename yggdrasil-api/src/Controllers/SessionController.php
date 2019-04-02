@@ -41,7 +41,7 @@ class SessionController extends Controller
             throw new ForbiddenOperationException("无效的 Profile UUID [$selectedProfile]，它不属于任何角色");
         }
 
-        $identification = strtolower($player->user()->first()->email);
+        $identification = strtolower($player->user->email);
 
         Log::channel('ygg')->info("Player [$selectedProfile]'s name is [$player->name], belongs to user [$identification]");
 
