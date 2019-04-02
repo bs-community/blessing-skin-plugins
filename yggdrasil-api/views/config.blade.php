@@ -57,20 +57,6 @@
     <div class="row">
       <div class="col-md-6">
         {!! $commonForm->render() !!}
-
-        <div class="box box-default">
-          <div class="box-header with-border">
-            <h3 class="box-title">导入服务器的【角色名 ⇆ UUID】映射表</h3>
-          </div><!-- /.box-header -->
-          <div class="box-body">
-            <div class="callout callout-warning">
-              一般情况下，你只需要将 UUID 生成算法设置为 <code>Version 3</code> 即可实现对盗版／登录插件的兼容。
-              如果你知道你在做什么，那么请参考<a href="https://github.com/bs-community/yggdrasil-api/wiki/0x05-%E4%BB%8E%E7%99%BB%E5%BD%95%E6%8F%92%E4%BB%B6%E8%BF%81%E7%A7%BB%E8%87%B3%E6%9C%AC%E6%96%B9%E6%A1%88#-%E9%AB%98%E7%BA%A7%E5%8A%9F%E8%83%BD-%E4%B8%80%E9%94%AE%E5%AF%BC%E5%85%A5-uuid">「Wiki - 0x05 从登录插件迁移至本方案 - [高级功能] 一键导入 UUID」</a>谨慎使用。
-            </div>
-
-            <input id="usercache-json-file" type="file" accept="application/json" />
-          </div><!-- /.box-body -->
-        </div><!-- /.box -->
       </div>
 
       <div class="col-md-6">
@@ -102,6 +88,5 @@
 @endsection
 
 @section('script')
-<script src="https://cdn.bootcss.com/bootstrap-fileinput/4.4.8/js/fileinput.min.js"></script>
 <script src="{{ plugin_assets('yggdrasil-api', 'dist/config.js') }}"></script>
 @endsection
