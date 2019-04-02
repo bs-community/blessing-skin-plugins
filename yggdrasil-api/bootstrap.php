@@ -76,7 +76,6 @@ return function (Dispatcher $events) {
             'namespace'  => 'Yggdrasil\Controllers'
         ], function ($router) {
             $router->any('api/yggdrasil', 'ConfigController@hello');
-            $router->get('user/get-recent-activities', 'ConfigController@getRecentActivities')->middleware(['web', 'auth']);
         });
 
         $router->group([
@@ -92,7 +91,6 @@ return function (Dispatcher $events) {
             'namespace'  => 'Yggdrasil\Controllers',
             'prefix' => 'admin/plugins/config/yggdrasil-api'
         ], function ($router) {
-            $router->post('import', 'ConfigController@import');
             $router->post('generate', 'ConfigController@generate');
         });
 

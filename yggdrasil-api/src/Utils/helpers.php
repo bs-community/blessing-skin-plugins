@@ -89,24 +89,6 @@ if (! function_exists('ygg_init_options')) {
                 Option::set($key, $value);
             }
         }
-
-        $originalDefaultValue = [
-            'ygg_token_expire_1' => '600',
-            'ygg_token_expire_2' => '1200'
-        ];
-
-        // 原来的令牌过期时间默认值太低了，调高点
-        foreach ($originalDefaultValue as $key => $value) {
-            if (Option::get($key) == $value) {
-                Option::set($key, $items[$key]);
-            }
-        }
-
-        if (! env('YGG_VERBOSE_LOG')) {
-            // 删就完事儿了
-            @unlink(ygg_log_path());
-            @unlink(storage_path('logs/yggdrasil.log'));
-        }
     }
 }
 

@@ -68,27 +68,6 @@ class ConfigController extends Controller
         return Datatables::of($query)->make(true);
     }
 
-    public function getRecentActivities()
-    {
-        // 获取最近的 5 条活动记录
-        $entries = DB::table('ygg_log')
-            ->leftJoin('players', 'ygg_log.player_id', '=', 'players.pid')
-            ->select('action', 'players.name', 'ip', 'time')
-            ->where('user_id', auth()->id())
-            ->orderBy('time', 'desc')
-            ->take(5)
-            ->get();
-
-        // 不显示 hasJoined 请求的来源 IP 地址
-        foreach ($entries as $entry) {
-            if ($entry->action == 'has_joined') {
-                $entry->ip = null;
-            }
-        }
-
-        return json($entries);
-    }
-
     public function generate()
     {
         try {
@@ -99,52 +78,5 @@ class ConfigController extends Controller
         } catch (Exception $e) {
             return json('自动生成私钥时出错，请尝试手动设置私钥。错误信息：'.$e->getMessage(), 1);
         }
-    }
-
-    public function import(Request $request)
-    {
-        $json = @json_decode(file_get_contents($request->file('file')));
-
-        if (! $json) {
-            return json('不是有效的 JSON 文件。', 1);
-        }
-
-        $shouldBeUpdated = [];
-        $shouldBeInserted = [];
-        $duplicatedEntries = [];
-
-        foreach ($json as $entry) {
-            $entry = [
-                'name' => $entry->name,
-                'uuid' => UUID::format($entry->uuid)
-            ];
-
-            $result = DB::table('uuid')->where('name', $entry['name'])->first();
-
-            if ($result) {
-                if ($entry['uuid'] == $result->uuid) {
-                    $duplicatedEntries[] = $entry;
-                } else {
-                    $shouldBeUpdated[] = $entry;
-                    // Laravel 竟然没有自带批量 Update 数据库的方法，绝了
-                    DB::table('uuid')->where('name', $entry['name'])->update(['uuid' => $entry['uuid']]);
-                }
-            } else {
-                $shouldBeInserted[] = $entry;
-            }
-        }
-
-        // 在一个 SQL 里批量插入
-        DB::table('uuid')->insert($shouldBeInserted);
-
-        $updated = count($shouldBeUpdated);
-        $inserted = count($shouldBeInserted);
-        $duplicated = count($duplicatedEntries);
-
-        Log::channel('ygg')->info("[UUID Import] $updated entries updated", [$shouldBeUpdated]);
-        Log::channel('ygg')->info("[UUID Import] $inserted entries inserted", [$shouldBeInserted]);
-        Log::channel('ygg')->info("[UUID Import] $duplicated entries duplicated", [$shouldBeInserted]);
-
-        return json("导入成功，更新了 $updated 条映射，新增了 $inserted 条映射，有 $duplicated 条映射因重复而未导入。", 0);
     }
 }
