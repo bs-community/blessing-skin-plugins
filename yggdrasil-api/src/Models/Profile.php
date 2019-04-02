@@ -132,10 +132,14 @@ class Profile
     public static function createFromPlayer(Player $player)
     {
         $profile = new static();
+        $model = 'default';
+        if ($t = Texture::find($player->tid_skin)) {
+            $model = $t->type == 'steve' ? 'default' : 'slim';
+        }
 
         $profile->uuid = static::getUuidFromName($player->name);
         $profile->name = $player->name;
-        $profile->model = Texture::find($player->tid_skin)->type == 'steve' ? 'default' : 'slim';
+        $profile->model = $model;
         $profile->player = $player;
         $profile->skin = $player->getTexture('skin');
         $profile->cape = $player->getTexture('cape');
