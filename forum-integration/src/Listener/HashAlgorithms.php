@@ -3,15 +3,13 @@
 namespace Integration\Forum\Listener;
 
 use App\Models\User;
+use App\Models\Player;
 use App\Events\UserTryToLogin;
 use App\Events\EncryptUserPassword;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class HashAlgorithms
 {
-    /**
-     * @param Dispatcher $events
-     */
     public function subscribe(Dispatcher $events)
     {
         if (config('secure.cipher') == 'SALTED2MD5') {
@@ -23,10 +21,14 @@ class HashAlgorithms
     protected function adaptToDynamicSalt(Dispatcher $events)
     {
         $events->listen(UserTryToLogin::class, function ($event) {
-            $user = User::where(
-                $event->authType == 'email' ? 'email' : 'player_name',
-                $event->identification
-            )->first();
+            if ($event->authType == 'email') {
+                $user = User::where('email', $event->identification)->first();
+            } else {
+                $player = Player::where('name', $event->identification)->first();
+                $user = optional($player, function ($p) {
+                    return $p->user;
+                });
+            }
             if (! $user) return;
 
             $password = request('password');
@@ -49,7 +51,7 @@ class HashAlgorithms
                 $user->save();
             }
 
-            return app('cipher')->hash($event->rawPasswd, $user->salt);
+            return app('cipher')->hash($event->raw, $user->salt);
         });
     }
 }

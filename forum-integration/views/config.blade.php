@@ -20,7 +20,12 @@
       ->description('此项选择后，在用户数据（如用户名相同、用户名密码不同）冲突的情况下将以你选择的那一方为准，另一方的用户数据将被覆盖');
 
   })->handle()->always(function ($form) {
-    $config = @unserialize(option('forum_db_config'));
+    $config = request('forum_db_config');
+    if ($config) {
+      option(['forum_db_config' => serialize($config)]);
+    } else {
+      $config = @unserialize(option('forum_db_config'));
+    }
 
     config(['database.connections.remote' => array_merge(
       forum_get_default_db_config(), (array) $config

@@ -5,8 +5,10 @@ use Integration\Forum\Listener;
 require __DIR__.'/src/helpers.php';
 
 return function () {
-    // 初始化插件配置项
-    forum_init_options();
+    // 确保开启单角色限制
+    if (! option('single_player')) {
+        option(['single_player' => true]);
+    }
 
     // 在 users 表上添加 salt 字段
     if (! Schema::hasColumn('users', 'salt')) {
@@ -18,7 +20,7 @@ return function () {
     // 绑定 Query Builder 至容器，方便之后直接调用
     App::instance('db.local', DB::connection()->table('users'));
     App::singleton('db.remote', function () {
-        $config = @unserialize(option('forum_db_config'));
+        $config = @unserialize(option('forum_db_config', ''));
 
         config(['database.connections.remote' => array_merge(
             forum_get_default_db_config(), (array) $config

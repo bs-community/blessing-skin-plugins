@@ -9,9 +9,6 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 class SynchronizeUser
 {
-    /**
-     * @param Dispatcher $events
-     */
     public function subscribe(Dispatcher $events)
     {
         $events->listen([
@@ -25,10 +22,14 @@ class SynchronizeUser
     public function synchronize(Events\Event $event)
     {
         if ($event instanceof Events\UserTryToLogin) {
-            $user = User::where(
-                $event->authType == 'email' ? 'email' : 'player_name',
-                $event->identification
-            )->first();
+            if ($event->authType == 'email') {
+                $user = User::where('email', $event->identification)->first();
+            } else {
+                $player = Player::where('name', $event->identification)->first();
+                $user = optional($player, function ($p) {
+                    return $p->user;
+                });
+            }
 
             // 如果正在登录的用户在皮肤站数据库中不存在，就尝试从论坛数据库同步过来
             if (! $user) {
@@ -129,15 +130,17 @@ class SynchronizeUser
         $user->save();
         event(new Events\UserRegistered($user));
 
-        if ($player = Player::where('player_name', $user->player_name)->first()) {
+        $user->refresh();
+        if ($player = Player::where('name', $result->username)->first()) {
             // 保证角色为该用户所有
             $player->uid = $user->uid;
             $player->save();
         } else {
-            $player                = new Player;
-            $player->uid           = $user->uid;
-            $player->player_name   = $user->player_name;
-            $player->preference    = 'default';
+            $player = new Player;
+            $player->uid = $user->uid;
+            $player->name = $result->username;
+            $player->tid_skin = 0;
+            $player->tid_cape = 0;
             $player->last_modified = get_datetime_string();
             $player->save();
             event(new Events\PlayerWasAdded($player));
