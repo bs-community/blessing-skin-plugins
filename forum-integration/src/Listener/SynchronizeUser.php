@@ -53,7 +53,10 @@ class SynchronizeUser
         if (! $remoteUser) return;
 
         // 如果两边用户的密码或 salt 不同，就按照「重复处理」选项的定义来处理。
-        if ($user->password != $remoteUser->password || $user->salt != $remoteUser->salt) {
+        if (
+            $user->password != $remoteUser->password ||
+            (! empty($remoteUser->salt) && $user->salt != $remoteUser->salt)
+        ) {
             if (option('forum_duplicated_prefer') == 'remote') {
                 $user->password = $remoteUser->password;
                 $user->salt = $remoteUser->salt;
@@ -87,14 +90,24 @@ class SynchronizeUser
      */
     protected function syncFromLocal(User $user)
     {
-        app('db.remote')->insertGetId([
-            'username' => $user->player_name,
-            'email'    => $user->email,
-            'password' => $user->password,
-            'regip'    => $user->ip,
-            'regdate'  => time(),
-            'salt'     => $user->salt
-        ]);
+        if (config('secure.cipher') == 'PHP_PASSWORD_HASH') {
+            // 用这个加密算法说明正在使用 Flarum
+            app('db.remote')->insertGetId([
+                'username' => $user->player_name,
+                'email'    => $user->email,
+                'password' => $user->password
+            ]);
+        } elseif (config('secure.cipher') == 'SALTED2MD5') {
+            // 用这个加密算法说明正在使用 Discuz! 或 PhpWind
+            app('db.remote')->insertGetId([
+                'username' => $user->player_name,
+                'email'    => $user->email,
+                'password' => $user->password,
+                'regip'    => $user->ip,
+                'regdate'  => time(),
+                'salt'     => $user->salt
+            ]);
+        }
 
         return app('db.remote')->where('email', $user->email)->first();
     }
@@ -119,14 +132,14 @@ class SynchronizeUser
         $user               = new User;
         $user->email        = $result->email;
         $user->password     = $result->password;
-        $user->ip           = $result->regip;
+        $user->ip           = $result->regip ?? '255.255.255.255';
         $user->score        = option('user_initial_score');
         $user->register_at  = get_datetime_string();
         $user->last_sign_at = get_datetime_string(time() - 86400);
         $user->permission   = User::NORMAL;
         $user->nickname     = $result->username;
         $user->player_name  = $result->username;
-        $user->salt         = $result->salt;
+        $user->salt         = $result->salt ?? '';
         $user->save();
         event(new Events\UserRegistered($user));
 
