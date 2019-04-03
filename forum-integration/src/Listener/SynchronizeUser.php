@@ -95,7 +95,8 @@ class SynchronizeUser
             app('db.remote')->insertGetId([
                 'username' => $user->player_name,
                 'email'    => $user->email,
-                'password' => $user->password
+                'password' => $user->password,
+                'is_email_confirmed' => $user->verified
             ]);
         } elseif (config('secure.cipher') == 'SALTED2MD5') {
             // 用这个加密算法说明正在使用 Discuz! 或 PhpWind
