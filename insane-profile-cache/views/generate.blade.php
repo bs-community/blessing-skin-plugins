@@ -33,7 +33,7 @@
         ?>
       </div>
       <div class="box-footer">
-        <a href="/admin/generate-profile-cache?continue" class="btn btn-primary">生成文件缓存</a>
+        <a onclick="blessing.fetch.get('/admin/generate-profile-cache?continue').then(alert);" class="btn btn-primary">生成文件缓存</a>
       </div>
     </div>
 
