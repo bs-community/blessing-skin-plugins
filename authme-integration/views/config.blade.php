@@ -22,7 +22,7 @@
             <h3 class="box-title">README.md</h3>
           </div><!-- /.box-header -->
           <div class="box-body table-responsive">
-            <?php
+            @php
               $path = plugin('authme-integration')->getPath()."/README.md";
               $markdown = @file_get_contents($path);
 
@@ -31,7 +31,7 @@
               } else {
                 echo app('parsedown')->text(mb_substr($markdown, 14));
               }
-            ?>
+            @endphp
           </div>
         </div>
       </div>

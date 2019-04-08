@@ -42,25 +42,14 @@ if (! function_exists('authme_init_table')) {
             return;
         }
 
-        $dbh = DB::connection()->getPdo();
-
-        // 允许以下字段为空，防止登录插件 INSERT 时出现问题
-        // 已知 Authme 5.3.2 及以下会出现此问题，5.4.0 及以上正常
-        $statements = [
-            'ALTER TABLE `users` MODIFY `email` varchar(100) NULL',
-            'ALTER TABLE `users` MODIFY `score` int(11) NULL',
-            'ALTER TABLE `users` MODIFY `ip` varchar(32) NULL',
-            'ALTER TABLE `users` MODIFY `last_sign_at` datetime NULL',
-            'ALTER TABLE `users` MODIFY `register_at` datetime NULL',
-        ];
-
-        foreach ($statements as $sql) {
-            $prefix = get_db_config()['prefix'];
-            $sql = str_replace('users', "{$prefix}users", $sql);
-            $dbh->exec($sql);
-        }
-
         Schema::table('users', function ($table) use ($exists) {
+            // 允许以下字段为空，防止登录插件 INSERT 时出现问题
+            $table->string('email')->nullable()->change();
+            $table->integer('score')->nullable()->change();
+            $table->string('ip')->nullable()->change();
+            $table->dateTime('last_sign_at')->nullable()->change();
+            $table->dateTime('register_at')->nullable()->change();
+
             $exists['username']   || $table->string('username')->nullable();
             $exists['realname']   || $table->string('realname')->nullable();
             $exists['lastlogin']  || $table->bigInteger('lastlogin')->nullable();
@@ -77,9 +66,13 @@ if (! function_exists('authme_init_table')) {
         });
 
         try {
-            DB::table('users')->update(['realname' => DB::raw('`player_name`')]);
-            DB::table('users')->update(['username' => DB::raw('LOWER(`player_name`)')]);
-            DB::table('users')->update(['regip' => DB::raw('`ip`')]);
+            \App\Models\User::all()->each(function ($user) {
+                $playerName = $user->player_name;
+                $user->realname = $playerName;
+                $user->username = strtolower($playerName);
+                $user->regip = $user->ip;
+                $user->save();
+            });
         } catch (Exception $e) {
             app(Illuminate\Contracts\Debug\ExceptionHandler::class)->report($e);
         }

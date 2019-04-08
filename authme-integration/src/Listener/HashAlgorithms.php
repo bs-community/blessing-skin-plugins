@@ -17,7 +17,7 @@ class HashAlgorithms
     public function subscribe(Dispatcher $events)
     {
         if (config('secure.cipher') == 'SHA256') {
-            // Authme 的 SHA256 算法就是他妈的和别人不一样，狗屎
+            // Authme 的 SHA256 算法和别人不一样
             $this->adaptToAuthmeSha256($events);
         }
 
@@ -32,11 +32,14 @@ class HashAlgorithms
         app()->singleton('cipher', 'Integration\Authme\Cipher\SHA256');
 
         $events->listen(UserTryToLogin::class, function ($event) {
-            $user = User::where(
-                $event->authType == 'email' ? 'email' : 'player_name',
-                $event->identification
-            )->first();
-
+            if ($event->authType == 'email') {
+                $user = User::where('email', $event->identification)->first();
+            } else {
+                $player = Player::where('name', $event->identification)->first();
+                $user = optional($player, function ($p) {
+                    return $p->user;
+                });
+            }
             if (! $user) return;
 
             $password = request('password');
@@ -64,11 +67,14 @@ class HashAlgorithms
         app()->singleton('cipher', 'Integration\Authme\Cipher\\'.config('secure.cipher'));
 
         $events->listen(UserTryToLogin::class, function ($event) {
-            $user = User::where(
-                $event->authType == 'email' ? 'email' : 'player_name',
-                $event->identification
-            )->first();
-
+            if ($event->authType == 'email') {
+                $user = User::where('email', $event->identification)->first();
+            } else {
+                $player = Player::where('name', $event->identification)->first();
+                $user = optional($player, function ($p) {
+                    return $p->user;
+                });
+            }
             if (! $user) return;
 
             $password = request('password');
@@ -91,7 +97,7 @@ class HashAlgorithms
                 $user->save();
             }
 
-            return app('cipher')->hash($event->rawPasswd, $user->salt);
+            return app('cipher')->hash($event->raw, $user->salt);
         });
     }
 }

@@ -5,6 +5,7 @@ namespace Integration\Authme\Listener;
 use DB;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Player;
 use App\Events\UserTryToLogin;
 use App\Events\UserAuthenticated;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -17,27 +18,28 @@ class SyncWithAuthme
     public function subscribe(Dispatcher $events)
     {
         // 初始化在 Authme 那边注册的用户
-        DB::table('users')->where('player_name', '')->whereNotNull('realname')->update([
-            'player_name' => DB::raw('`realname`'),
-            'nickname' => DB::raw('`realname`'),
-            'score' => option('user_initial_score'),
-            'register_at' => get_datetime_string(),
-            'last_sign_at' => get_datetime_string(time() - 86400)
-        ]);
+        User::where('realname', '<>', '')
+            ->get()
+            ->filter(function ($user) {
+                return $user->players->count() == 0;
+            })
+            ->each(function ($user) {
+                $user->nickname = $user->realname;
+                $user->score = option('user_initial_score');
+                $user->register_at = get_datetime_string();
+                $user->last_sign_at = get_datetime_string(time() - 86400);
+                $user->save();
 
-        // 在 Authme 那边注册的用户虽然有定义了 player_name
-        // 但是 players 表中没有相应的记录，所以使用角色名登录时会提示用户不存在
-        $events->listen(UserTryToLogin::class, function ($event) {
-            $user = User::where('player_name', $event->identification)->first();
-            if (! $user) return;
-            // 触发一下事件，让「单角色限制」插件那边帮我们把 player 准备好
-            event(new UserAuthenticated($user));
-        });
+                $player = new Player;
+                $player->name = $user->realname;
+                $player->uid = $user->uid;
+                $player->tid_skin = 0;
+                $player->save();
+            });
 
         // 保证 BS 绑定的角色名与 Authme 同步
         $events->listen(UserAuthenticated::class, function ($event) {
             $user = $event->user;
-            // 字段 player_name 是由「单角色限制」插件维护的
             $user->realname = $user->player_name;
             $user->username = strtolower($user->player_name);
             $user->regdate = Carbon::parse($user->register_at)->timestamp * 1000;
