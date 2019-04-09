@@ -25,10 +25,10 @@ POST /api/yggdrasil/api/profiles/minecraft
 
 ## 使用方法
 
-请参阅本项目 [Wiki](https://github.com/printempw/yggdrasil-api/wiki)。
+请参阅本项目 [Wiki](https://github.com/bs-community/yggdrasil-api/wiki)。
 
 ## 版本说明
 
-本插件的更新日志可以在这里查看：[CHANGELOG](https://github.com/printempw/yggdrasil-api/blob/master/CHANGELOG.md)。
+本插件的更新日志可以在这里查看：[CHANGELOG](https://github.com/bs-community/yggdrasil-api/blob/master/CHANGELOG.md)。
 
 注意，v2.0.0 版本之后的插件不再支持 [authlib-agent](https://github.com/to2mbn/authlib-agent)。
