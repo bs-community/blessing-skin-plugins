@@ -23,6 +23,8 @@ function trans(plugin, key, locale) {
   return temp
 }
 
+const { packages } = JSON.parse(fs.readFileSync('./.dist/registry.json', 'utf-8'))
+
 const plugins = fs
   .readdirSync('.')
   .filter(name => !name.startsWith('.') && name !== 'node_modules')
@@ -31,12 +33,16 @@ const plugins = fs
 plugins.forEach(name => {
   process.chdir(name)
 
-  try {
-    fs.statSync('composer.json')
-    childProcess.spawnSync('composer', ['install'])
-  } catch {}
-
   const { scripts, version } = require(`./${name}/package.json`)
+
+  let package
+  if ((package = packages.find(pkg => pkg.name === name)) && package.version === version) {
+    console.log(`[${name}] Version not bumped. Skip building.`)
+    process.chdir(__dirname)
+    return
+  }
+  console.log(`[${name}] Building...`)
+
   if (scripts && scripts.build) {
     childProcess.spawnSync('yarn', ['build'])
   }
@@ -44,6 +50,11 @@ plugins.forEach(name => {
   childProcess.execSync('rm -rf node_modules assets/src')
   try {
     fs.unlinkSync('.gitignore')
+  } catch {}
+
+  try {
+    fs.statSync('composer.json')
+    childProcess.spawnSync('composer', ['install'])
   } catch {}
 
   process.chdir(__dirname)

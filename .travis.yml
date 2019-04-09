@@ -14,11 +14,9 @@ install:
 - yarn
 
 script:
-- mkdir .dist
+- git clone https://blessing-skin:$AZURE_TOKEN@dev.azure.com/blessing-skin/Plugins/_git/Plugins .dist
 - node build.js
 - cd .dist
-- git init
 - git add .
 - git commit -m "Publish"
-- git remote add origin https://blessing-skin:$AZURE_TOKEN@dev.azure.com/blessing-skin/Plugins/_git/Plugins
-- git push -f origin master
+- git push origin master
