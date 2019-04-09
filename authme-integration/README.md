@@ -1,7 +1,7 @@
 ## Authme 数据对接
 
 通过本插件，Authme 可以使用皮肤站数据库的 `users` 表存储数据，玩家可以直接使用皮肤站上绑定的角色名与密码登录游戏。
-可以让玩家统一从皮肤站注册账号，防止游戏内恶意注册。也可配合邀请码插件等一起使用。
+可以让玩家统一从皮肤站注册账号，防止游戏内恶意注册。
 
 ### 配置皮肤站
 
@@ -11,9 +11,9 @@ Authme `config.yml` 中 `passwordHash` 填的是什么，皮肤站 `.env` 里的
 
 目前支持的密码 Hash 算法如下：
 
-- `BCRYPT` Blessing Skin 默认的算法
+- `BCRYPT` Blessing Skin 默认的算法，可以兼容 Flarum 论坛程序
 - `SHA256` Authme 默认算法
-- `SALTED2MD5` 可以兼容 Discuz 等论坛程序
+- `SALTED2MD5` 可以兼容 Discuz!、Phpwind 论坛程序
 - `SALTEDSHA512`
 
 ### 配置 Authme

@@ -90,7 +90,7 @@ class SynchronizeUser
      */
     protected function syncFromLocal(User $user)
     {
-        if (config('secure.cipher') == 'PHP_PASSWORD_HASH') {
+        if (config('secure.cipher') == 'BCRYPT' || config('secure.cipher') == 'PHP_PASSWORD_HASH') {
             // 用这个加密算法说明正在使用 Flarum
             app('db.remote')->insertGetId([
                 'username' => $user->player_name,
