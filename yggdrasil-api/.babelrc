@@ -1,12 +1,16 @@
 {
   "presets": [
-    "babel-preset-minify",
     ["@babel/preset-env", {
+      "targets": {
+        "browsers": [
+          "> 1%",
+          "not dead",
+          "not ie 11",
+          "Chrome > 52"
+        ]
+      },
       "useBuiltIns": false,
       "loose": true
     }]
-  ],
-  "plugins": [
-    "@babel/plugin-transform-async-to-generator"
   ]
 }

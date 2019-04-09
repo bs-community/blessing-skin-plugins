@@ -5,7 +5,6 @@ namespace Yggdrasil\Controllers;
 use DB;
 use Log;
 use Exception;
-use Datatables;
 use Yggdrasil\Utils\UUID;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -58,14 +57,29 @@ class ConfigController extends Controller
         return json($result);
     }
 
-    public function logData()
+    public function logData(Request $request)
     {
+        $search = $request->input('search', '');
+        $sortField = $request->input('sortField', 'id');
+        $sortType = $request->input('sortType', 'asc');
+        $page = $request->input('page', 1);
+        $perPage = $request->input('perPage', 10);
+
         $query = DB::table('ygg_log')
             ->join('users', 'ygg_log.user_id', '=', 'users.uid')
             ->leftJoin('players', 'ygg_log.player_id', '=', 'players.pid')
-            ->select('id', 'action', 'user_id', 'email', 'player_id', 'players.name', 'parameters', 'ygg_log.ip', 'time');
+            ->select('id', 'action', 'user_id', 'email', 'player_id', 'players.name', 'parameters', 'ygg_log.ip', 'time')
+            ->where('email', 'like', '%'.$search.'%')
+            ->orWhere('players.name', 'like', '%'.$search.'%')
+            ->orWhere('ygg_log.ip', 'like', '%'.$search.'%')
+            ->orderBy($sortField, $sortType)
+            ->offset(($page - 1) * $perPage)
+            ->limit($perPage);
 
-        return Datatables::of($query)->make(true);
+        return [
+            'data' => $query->get(),
+            'totalRecords' => DB::table('ygg_log')->count()
+        ];
     }
 
     public function generate()

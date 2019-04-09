@@ -6,9 +6,6 @@ use Illuminate\Contracts\Events\Dispatcher;
 require __DIR__.'/src/Utils/helpers.php';
 
 return function (Dispatcher $events) {
-
-    app()->register(Yajra\Datatables\DatatablesServiceProvider::class);
-
     config(['logging.channels.ygg' => [
         'driver' => 'single',
         'path' => ygg_log_path()
@@ -56,9 +53,6 @@ return function (Dispatcher $events) {
 
     // 向用户中心首页添加「快速配置启动器」板块
     if (option('ygg_show_config_section')) {
-        $events->listen(App\Events\RenderingHeader::class, function ($event) {
-            $event->addContent('<script src="https://cdn.bootcss.com/clipboard.js/2.0.1/clipboard.min.js"></script>');
-        });
         Hook::addScriptFileToPage(plugin('yggdrasil-api')->assets('dist/dnd.js'), ['user']);
     }
 

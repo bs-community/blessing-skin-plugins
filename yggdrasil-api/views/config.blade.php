@@ -87,5 +87,5 @@
 @endsection
 
 @section('script')
-<script src="{{ plugin_assets('yggdrasil-api', 'dist/config.js') }}"></script>
+<script src="{{ plugin_assets('yggdrasil-api', 'src/config.js') }}"></script>
 @endsection
