@@ -18,5 +18,5 @@ script:
 - node build.js
 - cd .dist
 - git add .
-- git commit -m "Publish"
+- if [ "$(git status -s)" ]; then git commit -m "Publish"; fi
 - git push origin master
