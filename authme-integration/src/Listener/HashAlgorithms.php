@@ -17,6 +17,7 @@ class HashAlgorithms
     public function subscribe(Dispatcher $events)
     {
         if (config('secure.cipher') == 'SHA256') {
+            app()->singleton('cipher', \Integration\Authme\Cipher\SHA256::class);
             // Authme 的 SHA256 算法和别人不一样
             $this->adaptToAuthmeSha256($events);
         }
