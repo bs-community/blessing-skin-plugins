@@ -103,7 +103,7 @@ class BatchImportController extends Controller
             }
         }
 
-        $response['errno'] = 0;
+        $response['code'] = 0;
         Log::info("[Batch Import] Done, imported $imported textures.");
 
         return json($response);

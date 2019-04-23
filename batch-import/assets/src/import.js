@@ -26,7 +26,7 @@ async function importAll () {
   // 导入队列中的全部项目
   const result = await sendChunkImportRequest(queue[0], queue[queue.length - 1])
 
-  if (result.errno === 0) {
+  if (result.code === 0) {
     // 清除队列
     queue = []
     renderImportResult(result)
@@ -36,7 +36,7 @@ async function importAll () {
     )
   } else {
     $('#import-status').removeClass('callout-info').addClass('callout-warning').html(
-      `<p>出现错误：${result.msg}</p>`
+      `<p>出现错误：${result.message}</p>`
     )
   }
 }
