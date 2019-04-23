@@ -86,7 +86,7 @@ class ConfigController extends Controller
     {
         try {
             return json([
-                'errno' => 0,
+                'code' => 0,
                 'key' => ygg_generate_rsa_keys()['private']
             ]);
         } catch (Exception $e) {
