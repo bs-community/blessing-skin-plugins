@@ -33,7 +33,7 @@
 @endsection
 
 @section('script')
-<script>let queue = {{ json_encode(array_keys($files)) }};</script>
+<script>let queue = {{ json_encode(\Illuminate\Support\Arr::keys($files)) }};</script>
 <script src="{{ plugin_assets('batch-import', 'dist/import.js') }}"></script>
 @stack('scripts')
 @endsection

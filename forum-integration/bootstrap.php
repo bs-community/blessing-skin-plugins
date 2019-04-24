@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Arr;
 use Integration\Forum\Listener;
 
 require __DIR__.'/src/helpers.php';
@@ -26,7 +27,7 @@ return function () {
             forum_get_default_db_config(), (array) $config
         )]);
 
-        return DB::connection('remote')->table(array_get($config, 'table'));
+        return DB::connection('remote')->table(Arr::get($config, 'table'));
     });
 
     try {
