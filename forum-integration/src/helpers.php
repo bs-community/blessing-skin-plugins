@@ -7,10 +7,11 @@ if (! function_exists('forum_get_default_db_config')) {
         return [
             'driver' => 'mysql',
             'host' => '',
-            'port' => '',
+            'port' => '3306',
             'database' => '',
             'username' => '',
             'password' => '',
+            'table' => 'users',
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',
