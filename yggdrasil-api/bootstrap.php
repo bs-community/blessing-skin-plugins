@@ -89,7 +89,6 @@ return function (Dispatcher $events) {
         });
 
         $router->group([
-            'middleware' => ['web'],
             'namespace'  => 'Yggdrasil\Controllers',
             'prefix' => 'api/yggdrasil'
         ], function ($router) {
