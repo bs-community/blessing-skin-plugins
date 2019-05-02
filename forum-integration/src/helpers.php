@@ -6,11 +6,11 @@ if (! function_exists('forum_get_default_db_config')) {
     {
         return [
             'driver' => 'mysql',
-            'host' => '',
+            'host' => '127.0.0.1',
             'port' => '3306',
-            'database' => '',
-            'username' => '',
-            'password' => '',
+            'database' => 'forum',
+            'username' => 'default',
+            'password' => 'secret',
             'table' => 'users',
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
