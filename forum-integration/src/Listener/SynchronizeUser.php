@@ -93,10 +93,10 @@ class SynchronizeUser
         if (config('secure.cipher') == 'BCRYPT' || config('secure.cipher') == 'PHP_PASSWORD_HASH') {
             // 用这个加密算法说明正在使用 Flarum
             app('db.remote')->insertGetId([
-                'username' => $user->player_name,
+                'username' => $user->player_name ?? $user->nickname,
                 'email'    => $user->email,
                 'password' => $user->password,
-                'is_email_confirmed' => $user->verified
+                'is_email_confirmed' => (int) $user->verified
             ]);
         } elseif (config('secure.cipher') == 'SALTED2MD5') {
             // 用这个加密算法说明正在使用 Discuz! 或 PhpWind
