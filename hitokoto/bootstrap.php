@@ -1,13 +1,4 @@
 <?php
-/**
- * @Author: Little_Qiu
- * @Date:   2018-08-09 16:13:44
- * @Last Modified by:   dz_paji
- * @Last Modified time: 2018-10-23 18:18:44
- *
- * Show Hitokoto in the upper right corner of user center and admin panel.
- * Based on Hello Dolly by printempw.
- */
 
 use Illuminate\Contracts\Events\Dispatcher;
 
