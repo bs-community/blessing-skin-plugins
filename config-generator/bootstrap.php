@@ -4,11 +4,7 @@ use App\Services\Hook;
 use Illuminate\Contracts\Events\Dispatcher;
 
 return function (Dispatcher $events) {
-    Hook::registerPluginTransScripts('config-generator', ['user/config']);
-
-    $index = (plugin('data-integration') && plugin('data-integration')->isEnabled()) ? 2 : 3;
-
-    Hook::addMenuItem('user', $index, [
+    Hook::addMenuItem('user', 3, [
         'title' => 'Blessing\ConfigGenerator::config.generate-config',
         'link'  => 'user/config',
         'icon'  => 'fa-book'
