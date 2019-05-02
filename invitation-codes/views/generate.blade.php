@@ -47,6 +47,7 @@
           </div>
           <div class="box-footer">
             <form method="post">
+              @csrf
               <button type="submit" class="btn btn-primary pull-right">生成邀请码</button>
               <div class="input-group">
                 <span class="input-group-addon">数量：</span>
