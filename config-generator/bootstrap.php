@@ -4,7 +4,7 @@ use App\Services\Hook;
 use Illuminate\Contracts\Events\Dispatcher;
 
 return function (Dispatcher $events) {
-    Hook::registerPluginTransScripts('config-generator');
+    Hook::registerPluginTransScripts('config-generator', ['user/config']);
 
     $index = (plugin('data-integration') && plugin('data-integration')->isEnabled()) ? 2 : 3;
 
