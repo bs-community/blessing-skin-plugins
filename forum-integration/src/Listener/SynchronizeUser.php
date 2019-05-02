@@ -96,7 +96,8 @@ class SynchronizeUser
                 'username' => $user->player_name ?? $user->nickname,
                 'email'    => $user->email,
                 'password' => $user->password,
-                'is_email_confirmed' => (int) $user->verified
+                'is_email_confirmed' => (int) $user->verified,
+                'joined_at' => $user->register_at,
             ]);
         } elseif (config('secure.cipher') == 'SALTED2MD5') {
             // 用这个加密算法说明正在使用 Discuz! 或 PhpWind
