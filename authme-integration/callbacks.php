@@ -1,13 +1,11 @@
 <?php
 
-if (! function_exists('authme_get_columns')) {
-    /**
-     * @see https://github.com/AuthMe/AuthMeReloaded/blob/master/docs/config.md
-     */
-    function authme_get_columns()
-    {
-        return [
-            // 'id', 'password', 'ip', 'email'
+return [
+    App\Events\PluginWasEnabled::class => function () {
+        option(['single_player' => true]);
+
+        // 创建 AuthMe 所需的字段
+        $columns = [
             'username',
             'realname',
             'lastlogin',
@@ -20,17 +18,10 @@ if (! function_exists('authme_get_columns')) {
             'isLogged',
             'hasSession'
         ];
-    }
-}
-
-if (! function_exists('authme_init_table')) {
-
-    function authme_init_table()
-    {
         $exists = [];
         $initialized = true;
 
-        foreach (authme_get_columns() as $column) {
+        foreach ($columns as $column) {
             $exists[$column] = Schema::hasColumn('users', $column);
 
             if (! $exists[$column]) {
@@ -66,7 +57,7 @@ if (! function_exists('authme_init_table')) {
         });
 
         try {
-            \App\Models\User::all()->each(function ($user) {
+            App\Models\User::all()->each(function ($user) {
                 $playerName = $user->player_name;
                 $user->realname = $playerName;
                 $user->username = strtolower($playerName);
@@ -76,5 +67,8 @@ if (! function_exists('authme_init_table')) {
         } catch (Exception $e) {
             app(Illuminate\Contracts\Debug\ExceptionHandler::class)->report($e);
         }
-    }
-}
+    },
+    App\Events\PluginWasDisabled::class => function () {
+        option(['single_player' => false]);
+    },
+];

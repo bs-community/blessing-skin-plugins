@@ -3,16 +3,7 @@
 use Integration\Authme\Listener;
 use Illuminate\Contracts\Events\Dispatcher;
 
-require __DIR__.'/src/helpers.php';
-
 return function (Dispatcher $events) {
-    if (! option('single_player')) {
-        option(['single_player' => true]);
-    }
-
-    // 在皮肤站 users 表上添加 Authme 需要的字段
-    authme_init_table();
-
     // 保证 Authme 新增的 username 等字段与皮肤站原有的 player_name 同步
     $events->subscribe(Listener\SyncWithAuthme::class);
 
