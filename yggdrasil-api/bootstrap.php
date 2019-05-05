@@ -11,16 +11,10 @@ return function (Dispatcher $events) {
         'path' => ygg_log_path()
     ]]);
 
-    // 创建数据表
-    ygg_init_db_tables();
-
     // 从旧版升级上来的默认继续使用旧的 UUID 生成算法
     if (DB::table('uuid')->count() > 0 && !Option::has('ygg_uuid_algorithm')) {
         Option::set('ygg_uuid_algorithm', 'v4');
     }
-
-    // 初始化配置项
-    ygg_init_options();
 
     // 初次使用自动生成私钥
     if (option('ygg_private_key') == '') {
