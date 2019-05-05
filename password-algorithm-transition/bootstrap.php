@@ -1,23 +1,23 @@
 <?php
 
-return function (App\Services\PluginManager $plugins) {
-    $newAlgorithm = env('PWD_METHOD');
-    $oldAlgorithm = env('OLD_PWD_METHOD');
+use Illuminate\Support\Str;
 
+return function (App\Services\PluginManager $plugins) {
     $isAuthMe = $plugins->isEnabled('authme-integration');
     $authMeAlgs = ['SALTED2MD5', 'SALTED2SHA512', 'SHA256'];
 
-    if ($isAuthMe && in_array($oldAlgorithm, $authMeAlgs)) {
-        app()->singleton('cipher.old', 'Integration\Authme\Cipher\\'.$oldAlgorithm);
-    } else {
-        app()->singleton('cipher.old', 'App\Services\Cipher\\'.$oldAlgorithm);
-    }
+    $methods = preg_split('/,\s*/', env('PASSWORD_METHODS'));
+    $ciphers = array_map(function ($method) use ($isAuthMe, $authMeAlgs) {
+        if ($isAuthMe && in_array($method, $authMeAlgs)) {
+            return 'Integration\Authme\Cipher\\'.$method;
+        } else {
+            return 'App\Services\Cipher\\'.$method;
+        }
+    }, $methods);
+    app()->tag($ciphers, 'ciphers');
 
-    if ($isAuthMe && in_array($newAlgorithm, $authMeAlgs)) {
-        app()->singleton('cipher.new', 'Integration\Authme\Cipher\\'.$newAlgorithm);
-    } else {
-        app()->singleton('cipher.new', 'App\Services\Cipher\\'.$newAlgorithm);
-    }
-
-    app()->singleton('cipher', \GPlane\PasswordTransition\Cipher::class);
+    app()->instance(
+        'cipher',
+        new \GPlane\PasswordTransition\Cipher(preg_split('/,\s*/', env('SALT')))
+    );
 };

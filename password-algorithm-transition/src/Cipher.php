@@ -8,26 +8,50 @@ use App\Services\Cipher\BaseCipher;
 
 class Cipher extends BaseCipher
 {
+    protected $salts;
+
+    public function __construct($salts = [])
+    {
+        $this->salts = $salts;
+    }
+
     public function hash($value, $salt = '')
     {
-        return app('cipher.new')->hash($value, env('SALT'));
+        foreach (app()->tagged('ciphers') as $cipher) {
+            return $cipher->hash($value, $this->salts[0]);
+        }
     }
 
     public function verify($password, $hash, $salt = '')
     {
-        $attempt = app('cipher.new')->verify($password, $hash, env('SALT'));
-        if ($attempt) {
-            return true;
+        $index = 0;
+        $firstCipher = null;
+        $result = false;
+        foreach (app()->tagged('ciphers') as $cipher) {
+            if ($index == 0) {
+                $firstCipher = $cipher;
+            }
+
+            $isValid = $cipher->verify($password, $hash, $this->salts[$index]);
+            if ($isValid) {
+                if ($index == 0) {
+                    return true;
+                } else {
+                    $result = $isValid;
+                    break;
+                }
+            }
+
+            $index++;
         }
 
-        $fallback = app('cipher.old')->verify($password, $hash, env('OLD_SALT'));
-        if ($fallback) {
+        if ($result) {
             Event::listen(Events\UserLoggedIn::class, function ($event) use ($password) {
                 $event->user->changePassword($password);
                 return false;
             });
         }
 
-        return $fallback;
+        return $result;
     }
 }
