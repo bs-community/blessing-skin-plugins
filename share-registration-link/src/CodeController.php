@@ -25,7 +25,7 @@ class CodeController extends Controller
     {
         $record = new Record;
         $record->sharer = auth()->id();
-        $record->code = Str::random(120);
+        $record->code = Str::random(20);
         $record->save();
 
         return json('注册链接已生成。', 0, [
