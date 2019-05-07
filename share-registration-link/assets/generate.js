@@ -5,7 +5,7 @@
       <h3 class="box-title">分享注册链接</h3>
     </div>
     <div class="box-body">
-      <p>分享注册链接，当他人使用此链接时，您将获得积分。</p>
+      <p>分享注册链接，当新用户使用此链接时，您与新用户都将获得积分。</p>
       <p>可用的链接：</p>
       <ul id="reg-links" style="word-wrap: break-word;"></ul>
     </div>
@@ -15,7 +15,7 @@
   </div>
   `
 
-  const el = document.querySelector('.col-md-5')
+  const el = document.querySelector('.col-md-7')
   el.innerHTML += html
 
   const list = document.querySelector('#reg-links')
@@ -28,6 +28,7 @@
 
       list.addEventListener('click', e => {
         const code = e.target.getAttribute('data-code')
+        if(code){
         blessing.fetch.post('/user/reg-links/remove', { code })
           .then(response => {
             if (response.code === 0) {
@@ -36,6 +37,7 @@
               alert(response.message)
             }
           })
+        }
       })
     })
 
