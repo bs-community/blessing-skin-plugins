@@ -15,7 +15,7 @@
   </div>
   `
 
-  const el = document.querySelector('.col-md-5')
+  const el = document.querySelector('.col-md-7')
   el.innerHTML += html
 
   const list = document.querySelector('#reg-links')
@@ -28,7 +28,8 @@
 
       list.addEventListener('click', e => {
         const code = e.target.getAttribute('data-code')
-        blessing.fetch.post('/user/reg-links/remove', { code })
+        if (code) {
+          blessing.fetch.post('/user/reg-links/remove', { code })
           .then(response => {
             if (response.code === 0) {
               e.target.parentElement.remove()
@@ -36,6 +37,7 @@
               alert(response.message)
             }
           })
+        }
       })
     })
 
