@@ -5,7 +5,7 @@
       <h3 class="box-title">分享注册链接</h3>
     </div>
     <div class="box-body">
-      <p>分享注册链接，当他人使用此链接时，您将获得积分。</p>
+      <p>分享注册链接，当新用户使用此链接时，您将获得积分。</p>
       <p>可用的链接：</p>
       <ul id="reg-links" style="word-wrap: break-word;"></ul>
     </div>
@@ -21,10 +21,17 @@
   const list = document.querySelector('#reg-links')
   blessing.fetch.get('/user/reg-links')
     .then(data => {
-      const html = data
+      const records = data.records
+      const html = records
         .map(item => `<li>${item.url}&nbsp;<a data-code="${item.code}" href="#">删除</a></li>`)
         .join('')
       list.innerHTML += html
+
+      list
+        .previousElementSibling
+        .previousElementSibling
+        .textContent = `分享注册链接，当新用户使用此链接时，您将获得 ${data.sharer} 积分` +
+          (data.sharee > 0 ? `，同时新用户可获得 ${data.sharee} 积分。` : '。')
 
       list.addEventListener('click', e => {
         const code = e.target.getAttribute('data-code')

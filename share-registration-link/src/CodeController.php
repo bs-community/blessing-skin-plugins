@@ -10,7 +10,7 @@ class CodeController extends Controller
 {
     public function list()
     {
-        return Record::where('sharer', auth()->id())
+        $records = Record::where('sharer', auth()->id())
             ->select('code')
             ->get()
             ->map(function ($record) {
@@ -19,6 +19,12 @@ class CodeController extends Controller
                     'url' => url('/auth/register?share='.$record->code),
                 ];
             });
+
+        return json([
+            'records' => $records,
+            'sharer' => option('reg_link_sharer_score', 50),
+            'sharee' => option('reg_link_sharee_score', 0),
+        ]);
     }
 
     public function generate()
