@@ -1,4 +1,3 @@
-// @ts-check
 const fs = require('fs')
 const childProcess = require('child_process')
 const crypto = require('crypto')

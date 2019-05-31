@@ -8,7 +8,14 @@
     "node": ">=10.15.0"
   },
   "private": true,
+  "scripts": {
+    "dev": "node watch.js"
+  },
   "devDependencies": {
-    "js-yaml": "^3.13.0"
+    "@types/minimist": "^1.2.0",
+    "chokidar": "^3.0.0",
+    "js-yaml": "^3.13.0",
+    "minimist": "^1.2.0",
+    "mkdirp": "^0.5.1"
   }
 }
