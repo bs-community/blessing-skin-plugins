@@ -15,7 +15,7 @@ install:
 
 script:
 - git clone https://blessing-skin:$AZURE_TOKEN@dev.azure.com/blessing-skin/Plugins/_git/Plugins .dist
-- node build.js
+- NODE_ENV=production node build.js
 - cd .dist
 - git add .
 - if [ "$(git status -s)" ]; then git commit -m "Publish"; fi
