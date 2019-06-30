@@ -19,9 +19,7 @@ fetch("https://v1.hitokoto.cn?encode=json").then(function(response) {
     $('.hitokoto').text(data.hitokoto);
 }).
 catch(function(err) {
-
 });
-
 </script>
 EOT;
 
