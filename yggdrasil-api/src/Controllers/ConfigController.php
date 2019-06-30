@@ -20,10 +20,10 @@ class ConfigController extends Controller
         // - Specified by option 'site_url'
         // - Extract host from current URL
         $extra = option('ygg_skin_domain') === '' ? [] : explode(',', option('ygg_skin_domain'));
-        $skinDomains = array_map('trim', array_unique(array_merge($extra, [
+        $skinDomains = array_map('trim', array_values(array_unique(array_merge($extra, [
             parse_url(option('site_url'), PHP_URL_HOST),
             $request->getHost()
-        ])));
+        ]))));
 
         $privateKey = openssl_pkey_get_private(option('ygg_private_key'));
 
