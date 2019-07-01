@@ -1,7 +1,7 @@
-if ($('.breadcrumb').length > 0) {
-    $('.breadcrumb').append("<p class='hitokoto'></p>");
+if (document.querySelectorAll('.breadcrumb').length > 0) {
+   document.querySelector('.breadcrumb').innerHTML += "<p class='hitokoto'></p>";
 } else {
-    $('.content-header').append("<div class='breadcrumb'><p class='hitokoto'></p></div>");
+    document.querySelector('.content-header').innerHTML += "<div class='breadcrumb'><p class='hitokoto'></p></div>";
 }
 
 fetch("https://v1.hitokoto.cn?encode=text").then(function(response) {
