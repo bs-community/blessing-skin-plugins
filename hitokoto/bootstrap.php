@@ -4,7 +4,7 @@ use App\Services\Hook;
 use Illuminate\Contracts\Events\Dispatcher;
 
 return function (Dispatcher $events) {
-    Hook::addScriptFileToPage(plugin_assets('hitokoto', 'hitokoto.js'));
+    Hook::addScriptFileToPage(plugin_assets('hitokoto', 'hitokoto.js'), ['user', 'user/*', 'admin', 'admin/*']);
 
     $events->listen(App\Events\RenderingHeader::class, function($event) {
         // We need some CSS to position the paragraph
