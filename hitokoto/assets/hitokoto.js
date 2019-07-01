@@ -7,7 +7,7 @@ if ($('.breadcrumb').length > 0) {
 fetch("https://v1.hitokoto.cn?encode=text").then(function(response) {
     return response.text();
 }).then(function(data) {
-    document.getElementsByClassName("hitokoto")[0].innerHTML = data;
+    document.querySelector('.hitokoto').textContent = data
 }).
 catch(function(err) {
 
