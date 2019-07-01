@@ -14,5 +14,4 @@ return function (Dispatcher $events) {
         $event->addContent('<style> .hitokoto { display: inline; margin-left: 15px; } </style>');
     });
 
-
 };
