@@ -4,11 +4,11 @@ if (document.querySelectorAll('.breadcrumb').length > 0) {
     document.querySelector('.content-header').innerHTML += "<div class='breadcrumb'><p class='hitokoto'></p></div>";
 }
 
-fetch("https://v1.hitokoto.cn?encode=text").then(function(response) {
+fetch("https://v1.hitokoto.cn?encode=text").then((response) => {
     return response.text();
-}).then(function(data) {
+}).then((data) => {
     document.querySelector('.hitokoto').textContent = data
 }).
-catch(function(err) {
+catch((err) => {
 
 });
