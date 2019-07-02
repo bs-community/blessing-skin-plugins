@@ -1,0 +1,5 @@
+{
+    "require": {
+        "fideloper/proxy": "~4.0"
+    }
+}
