@@ -1,12 +1,12 @@
 {
   "name": "mojang-verification",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "title": "正版验证",
   "description": "为拥有正版账号的用户提供验证、绑定。",
   "author": "GPlane",
   "namespace": "GPlane\\Mojang",
   "config": "config.blade.php",
   "require": {
-    "blessing-skin-server": "^4.2.0"
+    "blessing-skin-server": "^4.3.0"
   }
 }

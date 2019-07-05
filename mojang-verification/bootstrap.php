@@ -57,10 +57,7 @@ return function (Dispatcher $events) {
     $events->listen(Events\UserAuthenticated::class, function ($payload) {
         $uid = $payload->user->uid;
         if (Mojang\MojangVerification::where('user_id', $uid)->count() == 1) {
-            Hook::addScriptFileToPage(
-                plugin_assets('mojang-verification', 'badge.js'),
-                ['user', 'user/*', 'admin', 'admin/*']
-            );
+            Hook::addUserBadge('正版', 'purple');
         } else {
             Hook::addScriptFileToPage(
                 plugin_assets('mojang-verification', 'bind.js'),
