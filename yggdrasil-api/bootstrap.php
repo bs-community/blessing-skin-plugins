@@ -6,10 +6,17 @@ use Illuminate\Contracts\Events\Dispatcher;
 require __DIR__.'/src/Utils/helpers.php';
 
 return function (Dispatcher $events) {
-    config(['logging.channels.ygg' => [
-        'driver' => 'single',
-        'path' => ygg_log_path()
-    ]]);
+    if (env('YGG_VERBOSE_LOG')) {
+        config(['logging.channels.ygg' => [
+            'driver' => 'single',
+            'path' => ygg_log_path(),
+        ]]);
+    } else {
+        config(['logging.channels.ygg' => [
+            'driver' => 'monolog',
+            'handler' => Monolog\Handler\NoopHandler::class,
+        ]]);
+    }
 
     // 从旧版升级上来的默认继续使用旧的 UUID 生成算法
     if (DB::table('uuid')->count() > 0 && !Option::has('ygg_uuid_algorithm')) {
