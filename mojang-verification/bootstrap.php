@@ -54,7 +54,7 @@ return function (Dispatcher $events) {
         bind_mojang_account($user, $result['profiles'], $result['selected']);
     });
 
-    $events->listen(Events\UserAuthenticated::class, function ($payload) {
+    $events->listen(Illuminate\Auth\Events\Authenticated::class, function ($payload) {
         $uid = $payload->user->uid;
         if (Mojang\MojangVerification::where('user_id', $uid)->count() == 1) {
             Hook::addUserBadge('正版', 'purple');
