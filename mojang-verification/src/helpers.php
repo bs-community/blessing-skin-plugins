@@ -89,15 +89,14 @@ if (! function_exists('bind_mojang_account')) {
 
     function bind_mojang_account(User $user, $profiles, $selected)
     {
-        $user->score += option('mojang_verification_score_award', 0);
-        $user->save();
+        bind_with_mojang_players($user, $profiles);
 
-        $record = new Mojang\MojangVerification;
         $record->user_id = $user->uid;
         $record->uuid = Arr::get($selected, 'id', '');
         $record->verified = true;
         $record->save();
 
-        bind_with_mojang_players($user, $profiles);
+        $user->score += option('mojang_verification_score_award', 0);
+        $user->save();
     }
 }
