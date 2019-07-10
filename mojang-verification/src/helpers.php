@@ -4,6 +4,7 @@ use App\Events;
 use GPlane\Mojang;
 use App\Models\User;
 use App\Models\Player;
+use App\Services\Hook;
 use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
 
@@ -55,6 +56,12 @@ if (! function_exists('bind_with_mojang_players')) {
 
                     if (config('mail.driver') != '') {
                         @Mail::to($owner->email)->send(new Mojang\Mail($owner->nickname, $profile['name']));
+                        Hook::sendNotification(
+                            [$owner],
+                            '角色属主更改通知',
+                            '尊敬的 '.$owner->nickname."：\n\n我们很抱歉地告诉您，您的角色 $playerName 已被转让给一个正版用户。\n".
+                            "为此，我们向您补偿了 ".option('score_per_player')." 积分。\n\n由此带来的不便请谅解。"
+                        );
                     }
                 }
             } else {
