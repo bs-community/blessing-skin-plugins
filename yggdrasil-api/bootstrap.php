@@ -14,7 +14,7 @@ return function (Dispatcher $events) {
     } else {
         config(['logging.channels.ygg' => [
             'driver' => 'monolog',
-            'handler' => Monolog\Handler\NoopHandler::class,
+            'handler' => Monolog\Handler\NullHandler::class,
         ]]);
     }
 
