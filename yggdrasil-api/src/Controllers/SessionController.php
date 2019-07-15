@@ -5,6 +5,7 @@ namespace Yggdrasil\Controllers;
 use DB;
 use Log;
 use Cache;
+use Schema;
 use App\Models\User;
 use App\Models\Player;
 use Yggdrasil\Utils\UUID;
@@ -64,6 +65,14 @@ class SessionController extends Controller
 
             // 加入服务器
             Cache::forever("SERVER_$serverId", $selectedProfile);
+        } elseif ($this->mojangVerified($player) && $this->validateMojang($accessToken)) {
+            if ($player->user->permission == User::BANNED) {
+                throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
+            }
+
+            Log::channel('ygg')->info("Player [$player->name] is joining server with Mojang verified account.");
+            // 加入服务器
+            Cache::forever("SERVER_$serverId", $selectedProfile);
         } else {
             // 指定角色所属的用户没有签发任何令牌
             throw new ForbiddenOperationException('未查找到有效的登录信息，请重新登录');
@@ -116,5 +125,27 @@ class SessionController extends Controller
 
         Log::channel('ygg')->info("Player [$name] was not in the server [$serverId]");
         return response('')->setStatusCode(204);
+    }
+
+    protected function mojangVerified($player)
+    {
+        if (! Schema::hasTable('mojang_verifications')) {
+            return false;
+        }
+
+        return DB::table('mojang_verifications')->where('user_id', $player->uid)->exists();
+    }
+
+    protected function validateMojang($accessToken)
+    {
+        try {
+            $client = new \GuzzleHttp\Client();
+            $response = $client->request('POST', 'https://authserver.mojang.com/validate', [
+                'json' => ['accessToken' => $accessToken]
+            ]);
+            return $response->getStatusCode() === 204;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }
