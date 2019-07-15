@@ -4,9 +4,12 @@ namespace Yggdrasil\Models;
 
 use DB;
 use Log;
+use Cache;
+use Schema;
 use App\Models\Player;
 use App\Models\Texture;
 use Yggdrasil\Utils\UUID;
+use Illuminate\Support\Arr;
 use Yggdrasil\Exceptions\IllegalArgumentException;
 
 class Profile
@@ -62,12 +65,30 @@ class Profile
             if ($this->model == "slim") {
                 $textures['textures']['SKIN']['metadata'] = ['model' => 'slim'];
             }
+        } elseif (
+            Schema::hasTable('mojang_verifications') &&
+            DB::table('mojang_verifications')->where('uuid', $this->uuid)->exists()
+        ) {
+            // 如果该角色没有在皮肤站设置皮肤，就从 Mojang 获取。
+            $skin = $this->fetchProfileFromMojang('SKIN');
+            if ($skin) {
+                $textures['textures']['SKIN'] = $skin;
+            }
         }
 
         if ($this->cape != "") {
             $textures['textures']['CAPE'] = [
                 'url' => url("textures/{$this->cape}")
             ];
+        } elseif (
+            Schema::hasTable('mojang_verifications') &&
+            DB::table('mojang_verifications')->where('uuid', $this->uuid)->exists()
+        ) {
+            // 如果该角色没有在皮肤站设置披风，就从 Mojang 获取。
+            $cape = $this->fetchProfileFromMojang('CAPE');
+            if ($cape) {
+                $textures['textures']['CAPE'] = $cape;
+            }
         }
 
         $result = [
@@ -145,5 +166,32 @@ class Profile
         $profile->cape = $player->getTexture('cape');
 
         return $profile;
+    }
+
+    protected function fetchProfileFromMojang($type)
+    {
+        $type = strtoupper($type);
+        $profile = Cache::get('mojang_profile_'.$this->uuid, function () {
+            try {
+                $client = new \GuzzleHttp\Client();
+                $response = $client->request('GET', 'https://sessionserver.mojang.com/session/minecraft/profile/'.$this->uuid);
+                $body = json_decode($response->getBody(), true);
+                Cache::put('mojang_profile_'.$this->uuid, $body, 300);
+                return $body;
+            } catch (\Exception $e) {
+                return null;
+            }
+        });
+
+        if (! $profile) {
+            return null;
+        }
+        $property = Arr::first($profile['properties'], function ($item) {
+            return $item['name'] === 'textures';
+        });
+        if (! $property) {
+            return null;
+        }
+        return Arr::get(json_decode(base64_decode($property['value']), true)['textures'], $type);
     }
 }
