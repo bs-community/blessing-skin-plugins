@@ -1,6 +1,6 @@
 blessing.event.on('mounted', () => {
   document.querySelector('.col-md-5').innerHTML += `
-    <form class="box box-primary" method="post" action="/verify-mojang">
+    <form class="box box-primary" method="post" action="/mojang/verify">
       <input
         type="hidden"
         name="_token"
@@ -23,7 +23,7 @@ blessing.event.on('mounted', () => {
     </form>
   `
 
-  blessing.fetch.get('/verify-mojang').then(response => {
+  blessing.fetch.get('/mojang/verify').then(response => {
     if (response.code === 0) {
       document.querySelector('#m-score').textContent = response.data.score
     }

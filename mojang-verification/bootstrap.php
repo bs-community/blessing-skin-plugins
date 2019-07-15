@@ -58,6 +58,9 @@ return function (Dispatcher $events) {
         $uid = $payload->user->uid;
         if (Mojang\MojangVerification::where('user_id', $uid)->count() == 1) {
             Hook::addUserBadge('正版', 'purple');
+            if (Schema::hasTable('uuid')) {
+                Hook::addScriptFileToPage(plugin_assets('mojang-verification', 'update-uuid.js'), ['user/profile']);
+            }
         } else {
             Hook::addScriptFileToPage(
                 plugin_assets('mojang-verification', 'bind.js'),
@@ -72,17 +75,30 @@ return function (Dispatcher $events) {
     );
 
     Hook::addRoute(function ($router) {
-        $router->get('/verify-mojang', function () {
+        $router->get('/mojang/verify', function () {
             return json('', 0, ['score' => option('mojang_verification_score_award', 0)]);
         })->middleware(['web']);
 
-        $router->post('/verify-mojang', function () {
+        $router->post('/mojang/verify', function () {
             $user = auth()->user();
             $result = validate_mojang_account($user->email, request('password'));
             if ($result['valid']) {
                 bind_mojang_account($user, $result['profiles'], $result['selected']);
             }
             return redirect('/user');
+        })->middleware(['web', 'auth']);
+
+        $router->post('/mojang/update-uuid', function () {
+            $uuid = Mojang\MojangVerification::where('user_id', auth()->id())->first()->uuid;
+            $client = new GuzzleHttp\Client();
+            try {
+                $response = $client->request('GET', "https://api.mojang.com/user/profiles/$uuid/names");
+                $name = json_decode($response->getBody(), true)[0];
+                DB::table('uuid')->where('name', $name)->update(['uuid' => $uuid]);
+                return json('更新成功', 0);
+            } catch (Exception $e) {
+                return json('更新失败', 1);
+            }
         })->middleware(['web', 'auth']);
     });
 };
