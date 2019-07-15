@@ -91,6 +91,7 @@ if (! function_exists('bind_mojang_account')) {
     {
         bind_with_mojang_players($user, $profiles);
 
+        $record = new Mojang\MojangVerification;
         $record->user_id = $user->uid;
         $record->uuid = Arr::get($selected, 'id', '');
         $record->verified = true;
