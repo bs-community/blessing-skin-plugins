@@ -1,6 +1,6 @@
 {
   "name": "forum-integration",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "title": "论坛数据对接",
   "description": "与 Discuz、Phpwind、Flarum 论坛程序进行数据对接，让玩家可以使用论坛的账号密码登录皮肤站，反之亦可。启用之前请仔细阅读使用说明 👉 http://t.cn/RDEq0aH",
   "author": "printempw",

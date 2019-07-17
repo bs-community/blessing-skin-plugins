@@ -20,18 +20,18 @@ return function () {
         DB::table('options')->where('option_name', 'forum_db_config')->delete();
     }
 
+    $config = [
+        'host' => option('forum_db_host', '127.0.0.1'),
+        'port' => option('forum_db_port', 3306),
+        'database' => option('forum_db_database', 'forum'),
+        'username' => option('forum_db_username', 'default'),
+        'password' => option('forum_db_password', 'secret'),
+        'table' => option('forum_db_table', 'users'),
+    ];
+
     // 绑定 Query Builder 至容器，方便之后直接调用
     App::instance('db.local', DB::connection()->table('users'));
-    App::singleton('db.remote', function () {
-        $config = [
-            'host' => option('forum_db_host', '127.0.0.1'),
-            'port' => option('forum_db_port', 3306),
-            'database' => option('forum_db_database', 'forum'),
-            'username' => option('forum_db_username', 'default'),
-            'password' => option('forum_db_password', 'secret'),
-            'table' => option('forum_db_table', 'users'),
-        ];
-
+    App::singleton('db.remote', function () use ($config) {
         config(['database.connections.remote' => array_merge(
             forum_get_default_db_config(), $config
         )]);
