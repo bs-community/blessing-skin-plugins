@@ -59,13 +59,17 @@ class SynchronizeUser
         ) {
             if (option('forum_duplicated_prefer') == 'remote') {
                 $user->password = $remoteUser->password;
-                $user->salt = $remoteUser->salt;
+                if (stristr(get_class(app('cipher')), 'SALTED')) {
+                    $user->salt = $remoteUser->salt;
+                }
                 $user->save();
             } else {
-                app('db.remote')->where('email', $user->email)->update([
-                    'password' => $user->password,
-                    'salt' => $user->salt
-                ]);
+                app('db.remote')->where('email', $user->email)->update(array_merge(
+                    ['password' => $user->password],
+                    stristr(get_class(app('cipher')), 'SALTED')
+                        ? ['salt' => $user->salt]
+                        : []
+                    ));
             }
         }
 
