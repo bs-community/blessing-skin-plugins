@@ -1,6 +1,5 @@
 <?php
 
-use Log;
 use App\Events;
 use GPlane\Mojang;
 use App\Models\User;
