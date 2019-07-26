@@ -84,8 +84,10 @@ return function (Dispatcher $events) {
             $result = validate_mojang_account($user->email, request('password'));
             if ($result['valid']) {
                 bind_mojang_account($user, $result['profiles'], $result['selected']);
+                return redirect('/user');
+            } else {
+                return redirect('/user?mojang=failed');
             }
-            return redirect('/user');
         })->middleware(['web', 'auth']);
 
         $router->post('/mojang/update-uuid', function () {

@@ -1,5 +1,6 @@
 <?php
 
+use Log;
 use App\Events;
 use GPlane\Mojang;
 use App\Models\User;
@@ -28,9 +29,11 @@ if (! function_exists('validate_mojang_account')) {
                     'selected' => Arr::get($body, 'selectedProfile', []),
                 ];
             } else {
+                Log::warning('Received unexpected HTTP status code from Mojang server: '.$response->getStatusCode());
                 return ['valid' => false];
             }
         } catch (\Exception $e) {
+            report($e);
             return ['valid' => false];
         }
     }
