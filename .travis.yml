@@ -6,7 +6,7 @@ cache: yarn
 before_install:
 - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then travis_terminate 0; fi
 - export TZ='Asia/Shanghai'
-- phpenv global 7.1.11
+- phpenv global 7.3.7
 - git config --global user.name "Pig Fang"
 - git config --global user.email "g-plane@hotmail.com"
 
