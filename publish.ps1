@@ -1,5 +1,5 @@
-git config --global user.name "Pig Fang"
-git config --global user.email "g-plane@hotmail.com"
+git config --global user.name 'Pig Fang'
+git config --global user.email 'g-plane@hotmail.com'
 
 $env:NODE_ENV = 'production'
 $token = $env:AZURE_TOKEN
