@@ -11,4 +11,6 @@ class MojangVerification extends Model
         'user_id' => 'integer',
         'verified' => 'boolean',
     ];
+
+    protected $fillable = ['user_id', 'verified'];
 }

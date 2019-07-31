@@ -93,7 +93,7 @@ if (! function_exists('bind_mojang_account')) {
     {
         bind_with_mojang_players($user, $profiles);
 
-        Mojang\MojangVerification::updateOrInsert(
+        Mojang\MojangVerification::updateOrCreate(
             ['user_id' => $user->uid],
             ['uuid' => Arr::get($selected, 'id', ''), 'verified' => true]
         );
