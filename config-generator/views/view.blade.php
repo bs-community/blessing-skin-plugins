@@ -3,7 +3,7 @@
 @section('title', trans('Blessing\ConfigGenerator::config.generate-config'))
 
 @section('style')
-<link rel="stylesheet" href="{{ plugin_assets('config-generator', 'highlight/styles/arduino-light.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js/styles/arduino-light.css">
 <style> pre { border: 0; } td[class='key'], td[class='value'] { border-top: 0 !important; } </style>
 @endsection
 
@@ -115,7 +115,7 @@
 @endsection
 
 @section('script')
-<script type="text/javascript" src="{{ plugin_assets('config-generator', 'highlight/highlight.min.js') }}"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/highlight.js@9.15.8/lib/highlight.js"></script>
 <script>
     $(document).ready(function() {
         $('pre').each(function(i, block) {
