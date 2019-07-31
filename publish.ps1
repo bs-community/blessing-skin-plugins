@@ -4,6 +4,8 @@ git config --global user.email 'g-plane@hotmail.com'
 $env:NODE_ENV = 'production'
 $token = $env:AZURE_TOKEN
 
+Write-Output $token
+
 git clone "https://anything:$token@dev.azure.com/blessing-skin/Plugins/_git/Plugins" .dist
 node build.js
 Set-Location .dist
