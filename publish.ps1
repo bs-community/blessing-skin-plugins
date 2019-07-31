@@ -1,7 +1,7 @@
 git config --global user.name "Pig Fang"
 git config --global user.email "g-plane@hotmail.com"
 
-$env:NODE_ENV = production
+$env:NODE_ENV = 'production'
 $token = $env:AZURE_TOKEN
 
 git clone "https://blessing-skin:$token@dev.azure.com/blessing-skin/Plugins/_git/Plugins" .dist
