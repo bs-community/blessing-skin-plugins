@@ -12,5 +12,5 @@ git add .
 $shouldUpdate = git status -s
 if ($shouldUpdate) {
     git commit -m "Publish"
-    git push -c http.extraheader="AUTHORIZATION: basic $token" origin master
+    git -c http.extraheader="AUTHORIZATION: basic $token" push origin master
 }
