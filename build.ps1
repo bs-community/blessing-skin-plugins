@@ -64,7 +64,7 @@ foreach ($plugin in $plugins) {
     Remove-Item 'assets/src' -Recurse -Force
   }
   if (Test-Path '.gitignore') {
-    Remove-Item '.gitignore'
+    Remove-Item '.gitignore' -Force
   }
 
   if (Test-Path 'composer.json') {
