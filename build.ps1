@@ -42,7 +42,7 @@ Write-Host 'Marketplace Builder'
 git clone "https://dev.azure.com/blessing-skin/Plugins/_git/Plugins" .dist
 $registry = Get-Content '.dist/registry.json' | ConvertFrom-Json
 $packages = $registry.packages
-$plugins = Get-ChildItem -Path . -Directory -Exclude @('node_modules', '.*')
+$plugins = Get-ChildItem -Path . -Directory -Exclude @('node_modules', '.*') | ForEach-Object {$_.Name}
 
 foreach ($plugin in $plugins) {
   Set-Location $plugin
