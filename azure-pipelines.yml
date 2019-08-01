@@ -13,5 +13,8 @@ steps:
 - script: yarn
   displayName: 'Yarn'
 
+- pwsh: ./build.ps1
+  displayName: 'Build plugins'
+
 - pwsh: ./publish.ps1
   displayName: 'Publish plugins'
