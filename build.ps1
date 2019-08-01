@@ -46,10 +46,11 @@ $plugins = Get-ChildItem -Path . -Directory -Exclude @('node_modules', '.*')
 
 foreach ($plugin in $plugins) {
   Set-Location $plugin
-  $manifest = Get-Content "./$plugin/package.json" | ConvertFrom-Json
+  $manifest = Get-Content "package.json" | ConvertFrom-Json
   $version = $manifest.version
 
   if ($packages | Where-Object {$_.name -eq $plugin -and $_.version -eq $version}) {
+    Set-Location '..'
     continue
   }
 
