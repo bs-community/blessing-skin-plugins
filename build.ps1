@@ -38,6 +38,7 @@ function Get-Trans {
 }
 
 Write-Host 'Marketplace Builder'
+$env:NODE_ENV = 'production'
 
 git clone "https://dev.azure.com/blessing-skin/Plugins/_git/Plugins" .dist
 $registry = Get-Content '.dist/registry.json' | ConvertFrom-Json
@@ -53,6 +54,8 @@ foreach ($plugin in $plugins) {
     Set-Location '..'
     continue
   }
+
+  Write-Host "[$plugin] Bump to $version"
 
   if ($manifest.scripts -and $manifest.scripts.build) {
       yarn build
@@ -103,4 +106,4 @@ $packages = $plugins | ForEach-Object {
   }
 }
 $registry.packages = $packages
-ConvertTo-Json $registry -Depth 10 | Write-Host
+ConvertTo-Json $registry -Depth 10 | Out-File -FilePath '.dist/registry.json'
