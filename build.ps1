@@ -103,4 +103,4 @@ $packages = $plugins | ForEach-Object {
   }
 }
 $registry.packages = $packages
-ConvertTo-Json $registry | Write-Host
+ConvertTo-Json $registry -Depth 10 | Write-Host
