@@ -94,8 +94,8 @@ if (! function_exists('bind_mojang_account')) {
         bind_with_mojang_players($user, $profiles);
 
         Mojang\MojangVerification::updateOrCreate(
-            ['user_id' => $user->uid],
-            ['uuid' => $selected['id'], 'verified' => true]
+            ['uuid' => $selected['id']],
+            ['user_id' => $user->uid, 'verified' => true]
         );
 
         $user->score += option('mojang_verification_score_award', 0);
