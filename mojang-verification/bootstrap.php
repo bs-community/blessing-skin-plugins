@@ -10,12 +10,12 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 require __DIR__.'/src/helpers.php';
 
-return function (Dispatcher $events) {
+return function (Dispatcher $events, User $users) {
     $events->listen(Events\UserTryToLogin::class, function ($payload) {
         if ($payload->authType != 'email') {
             return;
         }
-        $user = User::where('email', $payload->identification)->first();
+        $user = $users->where('email', $payload->identification)->first();
         if ($user) {
             return;
         }
@@ -28,7 +28,7 @@ return function (Dispatcher $events) {
         $uuid = Arr::get($result['selected'], 'id');
         $record = Mojang\MojangVerification::where('uuid', $uuid)->first();
         if ($record) {
-            $user = User::find($record->user_id);
+            $user = $users->find($record->user_id);
             if ($user) {
                 $user->update(['email' => $payload->identification]);
                 event(new Events\UserProfileUpdated('email', $user));
@@ -41,8 +41,13 @@ return function (Dispatcher $events) {
         $user->nickname = Arr::get($result['selected'], 'name', '');
         $user->score = option('user_initial_score');
         $user->avatar = 0;
-        $user->password = User::getEncryptedPwdFromEvent(request('password'), $user)
-            ?: app('cipher')->hash(request('password'), config('secure.salt'));
+        if (method_exists($user, 'getEncryptedPwdFromEvent')) {  // For compatibility with BS v4
+            $user->password = $user->getEncryptedPwdFromEvent(request('password'))
+                ?: app('cipher')->hash(request('password'), config('secure.salt'));
+        } else {
+            $user->password = User::getEncryptedPwdFromEvent(request('password'), $user)
+                ?: app('cipher')->hash(request('password'), config('secure.salt'));
+        }
         $user->ip = get_client_ip();
         $user->permission = User::NORMAL;
         $user->register_at = get_datetime_string();

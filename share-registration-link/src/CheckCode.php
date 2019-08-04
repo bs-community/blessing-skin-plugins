@@ -7,6 +7,13 @@ use App\Models\User;
 
 class CheckCode
 {
+    protected $users;
+
+    public function __construct(User $users)
+    {
+        $this->users = $users;
+    }
+
     public function handle($request, \Closure $next)
     {
         $shareCode = $request->input('share_code');
@@ -16,7 +23,7 @@ class CheckCode
 
         $record = Record::where('code', $shareCode)->first();
         if ($record) {
-            $sharer = User::find($record->sharer);
+            $sharer = $this->users->find($record->sharer);
             if ($sharer) {
                 $sharer->score += option('reg_link_sharer_score', 50);
                 $sharer->save();
