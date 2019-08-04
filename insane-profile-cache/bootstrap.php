@@ -18,6 +18,9 @@ foreach (['csl', 'usm'] as $apiType) {
 }
 
 return function (Dispatcher $events) {
+    if (option('enable_json_cache')) {
+        option(['enable_json_cache' => false]);
+    }
 
     $events->subscribe(UpdateFileCache::class);
     $events->subscribe(DeleteFileCache::class);
