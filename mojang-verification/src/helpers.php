@@ -23,9 +23,9 @@ if (! function_exists('validate_mojang_account')) {
             if ($response->getStatusCode() == 200) {
                 $body = json_decode((string) $response->getBody(), true);
                 return [
-                    'valid' => Arr::has($body, 'accessToken'),
-                    'profiles' => Arr::get($body, 'availableProfiles', []),
-                    'selected' => Arr::get($body, 'selectedProfile', []),
+                    'valid' => Arr::has($body, 'selectedProfile'),
+                    'profiles' => $body['availableProfiles'],
+                    'selected' => Arr::get($body, 'selectedProfile'),
                 ];
             } else {
                 Log::warning('Received unexpected HTTP status code from Mojang server: '.$response->getStatusCode());
@@ -95,7 +95,7 @@ if (! function_exists('bind_mojang_account')) {
 
         Mojang\MojangVerification::updateOrCreate(
             ['user_id' => $user->uid],
-            ['uuid' => Arr::get($selected, 'id', ''), 'verified' => true]
+            ['uuid' => $selected['id'], 'verified' => true]
         );
 
         $user->score += option('mojang_verification_score_award', 0);
