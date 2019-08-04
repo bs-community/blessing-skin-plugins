@@ -11,7 +11,7 @@ use Illuminate\Contracts\Events\Dispatcher;
 require __DIR__.'/src/helpers.php';
 
 return function (Dispatcher $events, User $users) {
-    $events->listen(Events\UserTryToLogin::class, function ($payload) {
+    $events->listen(Events\UserTryToLogin::class, function ($payload) use ($users) {
         if ($payload->authType != 'email') {
             return;
         }
