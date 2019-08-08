@@ -41,11 +41,12 @@ return function (Dispatcher $events, User $users) {
         $user->nickname = Arr::get($result['selected'], 'name', '');
         $user->score = option('user_initial_score');
         $user->avatar = 0;
-        if (method_exists($user, 'getEncryptedPwdFromEvent')) {  // For compatibility with BS v4
-            $user->password = $user->getEncryptedPwdFromEvent(request('password'))
+        $reflection = new ReflectionClass($user);
+        if ($reflection->getMethod('getEncryptedPwdFromEvent')->isStatic()) {  // For compatibility with BS v4
+            $user->password = User::getEncryptedPwdFromEvent(request('password'), $user)
                 ?: app('cipher')->hash(request('password'), config('secure.salt'));
         } else {
-            $user->password = User::getEncryptedPwdFromEvent(request('password'), $user)
+            $user->password = $user->getEncryptedPwdFromEvent(request('password'))
                 ?: app('cipher')->hash(request('password'), config('secure.salt'));
         }
         $user->ip = get_client_ip();
