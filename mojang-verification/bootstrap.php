@@ -100,7 +100,11 @@ return function (Dispatcher $events, User $users) {
             $uuid = Mojang\MojangVerification::where('user_id', auth()->id())->first()->uuid;
             $client = new GuzzleHttp\Client();
             try {
-                $response = $client->request('GET', "https://api.mojang.com/user/profiles/$uuid/names");
+                $response = $client->request('GET', "https://api.mojang.com/user/profiles/$uuid/names", [
+                    'verify' => class_exists('Composer\CaBundle\CaBundle')
+                        ? \Composer\CaBundle\CaBundle::getSystemCaRootBundlePath()
+                        : resource_path('misc/ca-bundle.crt'),
+                ]);
                 $name = json_decode($response->getBody(), true)[0];
                 DB::table('uuid')->where('name', $name)->update(['uuid' => $uuid]);
                 return json('更新成功', 0);

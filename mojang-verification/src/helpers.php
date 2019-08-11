@@ -18,9 +18,9 @@ if (! function_exists('validate_mojang_account')) {
                 'json' => array_merge(compact('username', 'password'), [
                     'agent' => ['name' => 'Minecraft', 'version' => 1],
                 ]),
-		'verify' => class_exists('Composer\CaBundle\CaBundle')
-		    ? \Composer\CaBundle\CaBundle::getSystemCaRootBundlePath()
-		    : resource_path('misc/ca-bundle.crt'),
+                'verify' => class_exists('Composer\CaBundle\CaBundle')
+                    ? \Composer\CaBundle\CaBundle::getSystemCaRootBundlePath()
+                    : resource_path('misc/ca-bundle.crt'),
             ]);
 
             if ($response->getStatusCode() == 200) {
