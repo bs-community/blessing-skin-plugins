@@ -1,6 +1,6 @@
 {
   "name": "password-algorithm-transition",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "title": "密码算法切换",
   "description": "将站点的密码算法进行渐进式的切换。使用方法可阅读：https://github.com/bs-community/blessing-skin-plugins/blob/master/password-algorithm-transition/README.md",
   "author": "GPlane",
