@@ -3,7 +3,8 @@
 use Illuminate\Support\Str;
 
 return function (App\Services\PluginManager $plugins) {
-    $isAuthMe = plugin('authme-integration')->isEnabled();
+    $authme = $plugins->get('authme-integration');
+    $isAuthMe = $authme && $authme->isEnabled();
     $authMeAlgs = ['SALTED2MD5', 'SALTED2SHA512', 'SHA256'];
 
     $methods = preg_split('/,\s*/', env('PASSWORD_METHODS'));
