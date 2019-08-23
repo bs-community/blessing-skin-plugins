@@ -160,6 +160,7 @@ class AuthController extends Controller
         Log::channel('ygg')->info("The old access token [$accessToken] is now revoked");
 
         $token->accessToken = UUID::generate()->clearDashes();
+        $token->createdAt = time();
         Log::channel('ygg')->info("New token [$token->accessToken] generated for user [$user->email]");
         $this->storeToken($token, $token->owner);
 
