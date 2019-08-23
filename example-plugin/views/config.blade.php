@@ -59,7 +59,7 @@
           addButton：添加按钮到表单底部
           addMessage：添加信息提示到表单顶部
           always：设置一个表单渲染之前总会被执行的回调
-          renderWithOutTable：不要用 table 元素包裹 OptionItem
+          renderWithoutTable：不要用 table 元素包裹 OptionItem
           renderInputTagsOnly：只渲染 input 等元素，不渲染左边的标题
           renderWithoutSubmitButton：不渲染「提交」按钮
 
