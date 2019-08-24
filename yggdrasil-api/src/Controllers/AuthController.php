@@ -99,7 +99,7 @@ class AuthController extends Controller
             throw new ForbiddenOperationException('提供的 ClientToken 与 AccessToken 不匹配，请重新登录');
         }
 
-        $user = $users->where('email', $token->owner)->first();
+        $user = User::where('email', $token->owner)->first();
 
         if (! $user) {
             throw new ForbiddenOperationException('令牌绑定的用户不存在，请重新登录');
@@ -192,7 +192,7 @@ class AuthController extends Controller
 
             Log::info('Given access token is valid and matches the client token');
 
-            $user = $users->where('email', $token->owner)->first();
+            $user = User::where('email', $token->owner)->first();
 
             if ($user->permission == User::BANNED) {
                 throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
@@ -251,7 +251,7 @@ class AuthController extends Controller
 
             ygg_log([
                 'action' => 'invalidate',
-                'user_id' => $users->where('email', $token->owner)->first()->uid,
+                'user_id' => User::where('email', $token->owner)->first()->uid,
                 'parameters' => json_encode($request->json()->all())
             ]);
 
