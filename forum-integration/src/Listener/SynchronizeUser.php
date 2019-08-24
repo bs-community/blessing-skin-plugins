@@ -74,7 +74,11 @@ class SynchronizeUser
         }
 
         // 同理，保证两边的用户名、绑定角色名一致。
-        if ($user->player_name != $remoteUser->username) {
+        if (
+            $user->player_name != $remoteUser->username &&
+            ! empty($user->player_name) &&
+            ! empty($remoteUser->username)
+        ) {
             if (option('forum_duplicated_prefer') == 'remote') {
                 $user->player_name = $remoteUser->username;
                 $user->save();
@@ -145,7 +149,9 @@ class SynchronizeUser
         $user->permission   = User::NORMAL;
         $user->nickname     = $result->username;
         $user->player_name  = $result->username;
-        $user->salt         = $result->salt ?? '';
+        if (stristr(get_class(app('cipher')), 'SALTED')) {
+            $user->salt = $result->salt ?? '';
+        }
         $user->save();
         event(new Events\UserRegistered($user));
 
