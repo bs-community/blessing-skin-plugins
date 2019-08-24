@@ -6,8 +6,8 @@
 
 @php
 $users = App\Models\User::select(['password'])->get();
-$count = $users->count();
-$info = $users->groupBy(function ($user) {
+$count = User::count();
+$info = User::groupBy(function ($user) {
     $password = $user->password;
     if (Illuminate\Support\Str::startsWith($password, '$2y')) {
         return 'Bcrypt';

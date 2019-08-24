@@ -15,7 +15,7 @@ return function (Dispatcher $events, User $users) {
         if ($payload->authType != 'email') {
             return;
         }
-        $user = $users->where('email', $payload->identification)->first();
+        $user = User::where('email', $payload->identification)->first();
         if ($user) {
             return;
         }
@@ -28,7 +28,7 @@ return function (Dispatcher $events, User $users) {
         $uuid = Arr::get($result['selected'], 'id');
         $record = Mojang\MojangVerification::where('uuid', $uuid)->first();
         if ($record) {
-            $user = $users->find($record->user_id);
+            $user = User::find($record->user_id);
             if ($user) {
                 $user->update(['email' => $payload->identification]);
                 event(new Events\UserProfileUpdated('email', $user));
