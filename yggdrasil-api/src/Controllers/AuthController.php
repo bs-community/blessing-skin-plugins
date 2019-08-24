@@ -274,7 +274,8 @@ class AuthController extends Controller
             throw new IllegalArgumentException('邮箱或者密码没填哦');
         }
 
-        $user = resolve(User::class)->where('email', $identification)->first();
+        event(new \App\Events\UserTryToLogin($identification, 'email'));
+        $user = User::where('email', $identification)->first();
 
         if (! $user) {
             throw new ForbiddenOperationException("用户 [$identification] 不存在");
