@@ -149,6 +149,7 @@ class SynchronizeUser
         $user->permission   = User::NORMAL;
         $user->nickname     = $result->username;
         $user->player_name  = $result->username;
+        $user->verified     = boolval($result->is_email_confirmed ?? false);
         if (stristr(get_class(app('cipher')), 'SALTED')) {
             $user->salt = $result->salt ?? '';
         }
