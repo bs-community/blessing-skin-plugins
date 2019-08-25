@@ -1,6 +1,6 @@
 {
   "name": "hitokoto",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "title": "一言",
   "description": "在用户中心和管理面板的右上角显示一言。",
   "author": "Little_Qiu",
@@ -8,5 +8,10 @@
   "namespace": "Hitokoto",
   "require": {
     "blessing-skin-server": "*"
+  },
+  "enchants": {
+    "conflicts": {
+      "hello-dolly": "*"
+    }
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "hello-dolly",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "title": "HelloDolly::general.hello-dolly",
   "description": "HelloDolly::general.description",
   "author": "Matt Mullenweg",
@@ -8,5 +8,10 @@
   "namespace": "HelloDolly",
   "require": {
     "blessing-skin-server": "*"
+  },
+  "enchants": {
+    "conflicts": {
+      "hitokoto": "*"
+    }
   }
 }
