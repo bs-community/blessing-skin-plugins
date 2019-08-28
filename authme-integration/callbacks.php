@@ -2,8 +2,6 @@
 
 return [
     App\Events\PluginWasEnabled::class => function () {
-        option(['single_player' => true]);
-
         // 创建 AuthMe 所需的字段
         $columns = [
             'username',
@@ -67,8 +65,5 @@ return [
         } catch (Exception $e) {
             app(Illuminate\Contracts\Debug\ExceptionHandler::class)->report($e);
         }
-    },
-    App\Events\PluginWasDisabled::class => function () {
-        option(['single_player' => false]);
     },
 ];
