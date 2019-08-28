@@ -4,6 +4,7 @@ namespace Integration\Authme\Listener;
 
 use Schema;
 use App\Models\User;
+use App\Models\Player;
 use App\Events\UserTryToLogin;
 use App\Events\UserAuthenticated;
 use App\Events\EncryptUserPassword;
