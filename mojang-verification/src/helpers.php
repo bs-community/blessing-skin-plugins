@@ -66,9 +66,9 @@ if (! function_exists('bind_with_mojang_players')) {
                             '角色属主更改通知',
                             '尊敬的 '.$owner->nickname."：\n\n我们很抱歉地告诉您，您的角色 $playerName 已被转让给一个正版用户。\n".
                             "为此，我们向您补偿了 ".option('score_per_player')." 积分。\n\n由此带来的不便，敬请谅解。\n\n\n".
-                            'Dear'.$owner->nickname."\n\nWe are sorry to tell you that your player $playerName has been transfered to another user who has paid for Minecraft.\n".
+                            'Dear'.$owner->nickname."\n\nWe are sorry to tell you that your player $playerName has been transferred to another user who has paid for Minecraft.\n".
                             "Because of that, we have added ".option('score_per_player')." score to your account.\n\n".
-                            'Sorry for the inconvince.'
+                            'Sorry for the inconvenience.'
                         );
                     }
                 }

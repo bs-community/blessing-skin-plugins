@@ -3,14 +3,14 @@ blessing.event.on('mounted', ({ el }) => {
   const div = document.createElement('div')
   div.innerHTML = `
     <div class="box box-primary">
-      <div class="box-header"><h3 class="box-title">${trans('mojang_verification.update_uuid.title')}</h3></div>
+      <div class="box-header"><h3 class="box-title">${trans('mojangVerification.updateUuid.title')}</h3></div>
       <div class="box-body">
-        <p>${trans('mojang_verification.update_uuid.text.line_1')}</p>
-        <div class="callout callout-info"><p>${trans('mojang_verification.update_uuid.text.line_2')}</p></div>
-        <div class="callout callout-success"><p>${trans('mojang_verification.update_uuid.text.line_3')}</p></div>
+        <p>${trans('mojangVerification.updateUuid.text.line1')}</p>
+        <div class="callout callout-info"><p>${trans('mojangVerification.updateUuid.text.line2')}</p></div>
+        <div class="callout callout-success"><p>${trans('mojangVerification.updateUuid.text.line3')}</p></div>
       </div>
       <div class="box-footer">
-        <button id="update-uuid" class="el-button el-button--primary">${trans('mojang_verification.update_uuid.button')}</button>
+        <button id="update-uuid" class="el-button el-button--primary">${trans('mojangVerification.updateUuid.button')}</button>
       </div>
     </div>
   `

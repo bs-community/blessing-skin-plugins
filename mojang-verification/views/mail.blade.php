@@ -11,9 +11,9 @@
 
 Dear {{ $nickname }}:
 
-We are sorry to tell you that your player {{ $playername }} has been transfered to another user who has paid for Minecraft.
+We are sorry to tell you that your player {{ $playername }} has been transferred to another user who has paid for Minecraft.
 Because of that, we have added {{ option('score_per_player') }} score to your account.
 
-Sorry for the inconvince.
+Sorry for the inconvenience.
 
 {{ option_localized('site_name') }}
