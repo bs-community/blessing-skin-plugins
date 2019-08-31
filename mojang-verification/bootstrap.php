@@ -11,6 +11,8 @@ use Illuminate\Contracts\Events\Dispatcher;
 require __DIR__.'/src/helpers.php';
 
 return function (Dispatcher $events, User $users) {
+    Hook::registerPluginTransScripts('mojang-verification');
+    
     $events->listen(Events\UserTryToLogin::class, function ($payload) use ($users) {
         if ($payload->authType != 'email') {
             return;
@@ -63,7 +65,7 @@ return function (Dispatcher $events, User $users) {
     $events->listen(Illuminate\Auth\Events\Authenticated::class, function ($payload) {
         $uid = $payload->user->uid;
         if (Mojang\MojangVerification::where('user_id', $uid)->count() == 1) {
-            Hook::addUserBadge('正版', 'purple');
+            Hook::addUserBadge(trans('GPlane\Mojang::mojang-verification.pro'), 'purple');
             if (Schema::hasTable('uuid')) {
                 Hook::addScriptFileToPage(plugin_assets('mojang-verification', 'update-uuid.js'), ['user/profile']);
             }
@@ -75,8 +77,8 @@ return function (Dispatcher $events, User $users) {
         }
     });
 
-    Hook::addStyleFileToPage(
-        plugin_assets('mojang-verification', 'registrar-notice.css'),
+    Hook::addScriptFileToPage(
+        plugin_assets('mojang-verification', 'register-notice.js'),
         ['auth/register']
     );
 
@@ -107,9 +109,9 @@ return function (Dispatcher $events, User $users) {
                 ]);
                 $name = json_decode($response->getBody(), true)[0];
                 DB::table('uuid')->where('name', $name)->update(['uuid' => $uuid]);
-                return json('更新成功', 0);
+                return json(trans('GPlane\Mojang::mojang-verification.update-success'), 0);
             } catch (Exception $e) {
-                return json('更新失败', 1);
+                return json(trans('GPlane\Mojang::mojang-verification.update-failed'), 1);
             }
         })->middleware(['web', 'auth']);
     });

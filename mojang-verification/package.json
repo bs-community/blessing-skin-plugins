@@ -1,6 +1,6 @@
 {
   "name": "mojang-verification",
-  "version": "0.6.7",
+  "version": "0.7.0",
   "title": "正版验证",
   "description": "为拥有正版账号的用户提供验证、绑定。",
   "author": "GPlane",

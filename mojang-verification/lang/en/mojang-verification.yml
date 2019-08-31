@@ -1,0 +1,4 @@
+pro: Pro
+
+update-success: Successfully updated UUID
+update-failed: Failed to update UUID
