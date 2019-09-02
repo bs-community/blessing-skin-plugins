@@ -1,22 +1,22 @@
 @extends('admin.master')
 
-@section('title', '正版验证配置')
+@section('title', trans('GPlane\Mojang::mojang-verification.config.title'))
 
 @section('content')
 
 @php
-$form = Option::form('mojang_verification', '积分配置', function ($form) {
+$form = Option::form('mojang_verification', trans('GPlane\Mojang::mojang-verification.config.score_config'), function ($form) {
 
-    $form->text('mojang_verification_score_award', '积分奖励')
-        ->placeholder('默认为 0')
-        ->description('通过正版验证后可获得的积分');
+    $form->text('mojang_verification_score_award', trans('GPlane\Mojang::mojang-verification.config.score_award'))
+        ->placeholder(trans('GPlane\Mojang::mojang-verification.config.default'))
+        ->description(trans('GPlane\Mojang::mojang-verification.config.description'));
 
 })->handle();
 @endphp
 
 <div class="content-wrapper">
   <section class="content-header">
-    <h1>正版验证配置</h1>
+    <h1>{!! trans('GPlane\Mojang::mojang-verification.config.title') !!}</h1>
   </section>
   <section class="content">
     <div class="row">
