@@ -10,10 +10,10 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 require __DIR__.'/src/helpers.php';
 
-return function (Dispatcher $events, User $users) {
+return function (Dispatcher $events) {
     Hook::registerPluginTransScripts('mojang-verification');
-    
-    $events->listen(Events\UserTryToLogin::class, function ($payload) use ($users) {
+
+    $events->listen(Events\UserTryToLogin::class, function ($payload) {
         if ($payload->authType != 'email') {
             return;
         }
