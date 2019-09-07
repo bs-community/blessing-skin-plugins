@@ -82,7 +82,7 @@ class AuthController extends Controller
         return json($result);
     }
 
-    public function refresh(Request $request, User $users)
+    public function refresh(Request $request)
     {
         $clientToken = $request->get('clientToken');
         $accessToken = $request->get('accessToken');
@@ -176,7 +176,7 @@ class AuthController extends Controller
         return json($result);
     }
 
-    public function validate(Request $request, User $users)
+    public function validate(Request $request)
     {
         $clientToken = $request->get('clientToken');
         $accessToken = $request->get('accessToken');
@@ -234,7 +234,7 @@ class AuthController extends Controller
         return response('')->setStatusCode(204);
     }
 
-    public function invalidate(Request $request, User $users)
+    public function invalidate(Request $request)
     {
         $clientToken = $request->get('clientToken');
         $accessToken = $request->get('accessToken');
