@@ -19,7 +19,7 @@ return function (Dispatcher $events) {
     }
 
     // 从旧版升级上来的默认继续使用旧的 UUID 生成算法
-    if (DB::table('uuid')->count() > 0 && !Option::has('ygg_uuid_algorithm')) {
+    if (DB::table('uuid')->count() > 0 && !Option::get('ygg_uuid_algorithm')) {
         Option::set('ygg_uuid_algorithm', 'v4');
     }
 
