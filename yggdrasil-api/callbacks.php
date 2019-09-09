@@ -38,7 +38,7 @@ return [
         ];
 
         foreach ($items as $key => $value) {
-            if (! Option::has($key)) {
+            if (! Option::get($key)) {
                 Option::set($key, $value);
             }
         }
