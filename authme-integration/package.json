@@ -1,6 +1,6 @@
 {
   "name": "authme-integration",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "title": "Authme 数据对接",
   "description": "与 Authme 进行数据对接，让玩家可以使用皮肤站的账号密码登录游戏。启用之前请仔细阅读使用说明 👉 http://t.cn/RDEUFQS",
   "author": "printempw",
@@ -8,7 +8,7 @@
   "namespace": "Integration\\Authme",
   "config": "config.blade.php",
   "require": {
-    "blessing-skin-server": "^4.0.0",
+    "blessing-skin-server": "^4.0.0 || ^5",
     "single-player-limit": "^2.0.0"
   }
 }

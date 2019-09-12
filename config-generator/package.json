@@ -1,12 +1,12 @@
 {
   "name": "config-generator",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "title": "配置生成",
   "description": "在用户中心添加自动生成皮肤 Mod 配置的页面。",
   "author": "printempw",
   "url": "https://blessing.studio/",
   "namespace": "Blessing\\ConfigGenerator",
   "require": {
-    "blessing-skin-server": "^4.0.0"
+    "blessing-skin-server": "^4.0.0 || ^5"
   }
 }

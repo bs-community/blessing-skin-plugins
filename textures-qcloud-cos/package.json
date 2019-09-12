@@ -1,6 +1,6 @@
 {
   "name": "textures-qcloud-cos",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "title": "腾讯云对象存储 COS",
   "description": "将用户上传的材质存储文件至腾讯云 COS 中。仅支持 COS v5。",
   "author": "printempw",
@@ -8,6 +8,6 @@
   "namespace": "TextureQcloudCOS",
   "config": "config.blade.php",
   "require": {
-    "blessing-skin-server": "^4.0.0"
+    "blessing-skin-server": "^4.0.0 || ^5"
   }
 }
