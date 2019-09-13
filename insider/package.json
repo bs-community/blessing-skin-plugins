@@ -3,9 +3,9 @@
   "title": "使用预览版",
   "description": "自动将 Blessing Skin 更新源切换到包含预览版的地址。",
   "author": "GPlane",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "namespace": "Insider",
   "require": {
-    "blessing-skin-server": ">=4.0.0"
+    "blessing-skin-server": ">=4.4.0"
   }
 }
