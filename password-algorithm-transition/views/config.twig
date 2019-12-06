@@ -1,0 +1,22 @@
+{% extends 'admin.base' %}
+
+{% block title %}密码算法转换{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card card-info">
+        <div class="card-header">
+          <h3 class="card-title">全站转换进度</h3>
+        </div>
+        <div class="card-body">
+          <ul>
+            {% for item in info %}
+              <li>{{ item }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
