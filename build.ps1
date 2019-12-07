@@ -45,6 +45,8 @@ $registry = Get-Content '.dist/registry.json' | ConvertFrom-Json
 $packages = $registry.packages
 $plugins = Get-ChildItem -Path . -Directory -Exclude @('node_modules', '.*') | ForEach-Object {$_.Name}
 
+[PSObject[]]$updated = @()
+
 foreach ($plugin in $plugins) {
   Set-Location $plugin
   $manifest = Get-Content "package.json" | ConvertFrom-Json
@@ -54,6 +56,8 @@ foreach ($plugin in $plugins) {
     Set-Location '..'
     continue
   }
+
+  $updated += @{ name = $manifest.title; version = $manifest.version }
 
   Write-Host "[$plugin] Bump to $version"
 
@@ -107,3 +111,4 @@ $packages = $plugins | ForEach-Object {
 }
 $registry.packages = $packages
 ConvertTo-Json $registry -Depth 10 | Out-File -FilePath '.dist/registry.json'
+ConvertTo-Json $updated | Out-File -FilePath 'updated.json'
