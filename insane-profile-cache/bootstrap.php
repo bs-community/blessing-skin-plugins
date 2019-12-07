@@ -34,25 +34,10 @@ return function (Dispatcher $events) {
 
     Hook::addRoute(function ($router) {
 
-        $router->get('/admin/generate-profile-cache', function () {
-
-            if (isset($_GET['continue'])) {
-                // Delete all cache file first
-                cleanProfileFileCache();
-
-                $indicator = 0;
-
-                foreach (Player::all() as $player) {
-                    generateProfileFileCache($player);
-
-                    $indicator++;
-                }
-
-                return "在目录 ".PROFILE_CACHE_PATH." 下成功生成了 $indicator 个缓存文件。";
-            }
-
-            return view('InsaneProfileCache::generate');
-        })->middleware(['web', 'auth', 'admin']);
+        $router->get(
+            '/admin/generate-profile-cache',
+            'InsaneProfileCache\Configuration@render'
+        )->middleware(['web', 'auth', 'admin']);
 
     });
 };
