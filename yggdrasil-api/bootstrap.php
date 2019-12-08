@@ -77,7 +77,7 @@ return function (Dispatcher $events) {
             'middleware' => ['web', 'auth', 'admin'],
             'namespace'  => 'Yggdrasil\Controllers'
         ], function ($router) {
-            $router->view('admin/yggdrasil-log', 'Yggdrasil::log');
+            $router->get('admin/yggdrasil-log', 'ConfigController@logPage');
             $router->get('admin/yggdrasil-log/data', 'ConfigController@logData');
         });
 

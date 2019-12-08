@@ -1,16 +1,17 @@
 'use strict'
 
-$('[name=generate-key]').click(() => {
-  blessing.fetch.post(
-    '/admin/plugins/config/yggdrasil-api/generate'
-  ).then(({ code, message, key }) => {
-    if (code === 0) {
-      alert('成功生成了一个新的 4096 bit OpenSSL RSA 私钥')
+document.querySelector('[name=generate-key]')
+  .addEventListener('click', async () => {
+    const { code, message, key } = await blessing.fetch.post(
+      '/admin/plugins/config/yggdrasil-api/generate'
+    )
 
-      $('td.value textarea').val(key)
-      $('input[value=keypair]').parent().submit()
+    if (code === 0) {
+      blessing.notify.toast.success('成功生成了一个新的 4096 bit OpenSSL RSA 私钥')
+
+      document.querySelector('td.value textarea').value = key
+      document.querySelector('input[value=keypair]').parentElement.submit()
     } else {
-      alert(message)
+      blessing.notify.toast.error(message)
     }
   })
-})

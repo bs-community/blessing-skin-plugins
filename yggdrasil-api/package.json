@@ -1,14 +1,16 @@
 {
   "name": "yggdrasil-api",
-  "version": "3.5.3",
+  "version": "4.0.0",
   "title": "Yggdrasil API",
   "description": "为皮肤站添加自定义 Yggdrasil API 支持，可配合 authlib-injector 等软件使用实现外置登录功能。启用之前请仔细阅读使用说明 👉 http://t.cn/RrUySTY",
   "author": "printempw",
   "url": "https://github.com/bs-community/yggdrasil-api/",
   "namespace": "Yggdrasil",
-  "config": "config.blade.php",
   "require": {
-    "blessing-skin-server": "^4.1.0 || ^5"
+    "blessing-skin-server": "^5.0.0"
+  },
+  "enchants": {
+    "config": "Controllers\\ConfigController"
   },
   "scripts": {
     "build": "webpack"

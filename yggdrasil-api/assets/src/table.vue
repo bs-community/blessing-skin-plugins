@@ -1,5 +1,5 @@
 <template>
-  <section class="content">
+  <div class="container-fluid">
     <vue-good-table
       mode="remote"
       :rows="items"
@@ -39,7 +39,7 @@
         </span>
       </template>
     </vue-good-table>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -130,6 +130,9 @@ export default {
       this.serverParams.search = params.searchTerm
       this.fetchData()
     },
+  },
+  mounted() {
+    this.fetchData()
   },
 }
 </script>
