@@ -24,7 +24,7 @@
 ```
 {
   "name": "example-plugin",
-  "version": "1.0",
+  "version": "1.0.0",
   "title": "示例插件",
   "description": "可以直接创建此插件的副本并在其基础上开发新的插件，其代码也兼具插件开发文档功能（其实就是我懒得写文档）",
   "author": "printempw",

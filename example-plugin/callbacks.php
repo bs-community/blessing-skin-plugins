@@ -1,10 +1,4 @@
 <?php
-/**
- * @Author: printempw
- * @Date:   2017-01-14 21:03:03
- * @Last Modified by:   printempw
- * @Last Modified time: 2017-01-20 21:34:04
- */
 
 return [
     App\Events\PluginWasEnabled::class => function (App\Services\PluginManager $manager, $plugins) {
