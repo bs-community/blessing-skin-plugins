@@ -2,27 +2,27 @@ blessing.event.on('mounted', () => {
   const failed = location.search.includes('mojang=failed')
     ? '<div class="callout callout-danger">' + trans('mojangVerification.verifyFailed') + '</div>'
     : ''
-  document.querySelector('.col-md-5').innerHTML += `
-    <form class="box box-primary" method="post" action="/mojang/verify">
+  document.querySelector('.col-md-7').innerHTML += `
+    <form class="card card-primary card-outline" method="post" action="/mojang/verify">
       <input
         type="hidden"
         name="_token"
         value="${document.querySelector('meta[name="csrf-token"]').getAttribute('content')}"
       >
-      <div class="box-header with-border">
-        <h3 class="box-title">${trans('mojangVerification.bind.title')}</h3>
+      <div class="card-header">
+        <h3 class="card-title">${trans('mojangVerification.bind.title')}</h3>
       </div>
-      <div class="box-body">
+      <div class="card-body">
         ${failed}
         <p>${trans('mojangVerification.bind.text.line1')}</p>
         <p>${trans('mojangVerification.bind.text.line2')}</p>
         <p>${trans('mojangVerification.bind.text.line3')}</p>
-        <div class="el-input el-input--suffix">
-          <input class="el-input__inner" type="password" name="password">
-        </div>
+        <label class="form-group">
+          <input class="form-control" type="password" name="password">
+        </label>
       </div>
-      <div class="box-footer">
-        <button type="submit" class="el-button el-button--primary">${trans('general.submit')}</button>
+      <div class="card-footer">
+        <button type="submit" class="btn bg-primary">${trans('general.submit')}</button>
       </div>
     </form>
   `
