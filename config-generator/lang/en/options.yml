@@ -1,0 +1,9 @@
+title: Settings
+
+custom_intro:
+  title: Custom Mod Introduction
+  description: Markdown is supported.
+
+csl_first:
+  title: Top Site of CSL List
+  self: This Site

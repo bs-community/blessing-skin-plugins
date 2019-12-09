@@ -1,0 +1,75 @@
+{% extends 'user.base' %}
+
+{% block title %}{{ trans('Blessing\\ConfigGenerator::config.generate-config') }}{% endblock %}
+
+{% block content %}
+  <link rel="stylesheet"
+      href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/atom-one-light.min.css">
+
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card card-primary">
+        <div class="card-header">
+          <h3 class="card-title">Mod</h3>
+        </div>
+        <div class="card-body">
+          {% if custom_intro %}
+            {{ custom_intro|raw }}
+          {% else %}
+            {{ trans('Blessing\\ConfigGenerator::config.mod-intro')|raw }}
+          {% endif %}
+        </div>
+        <div class="card-footer">
+          <a
+            href="https://github.com/xfl03/MCCustomSkinLoader/releases"
+            target="_blank"
+            class="btn bg-primary"
+          >
+            CustomSkinLoader
+          </a>
+          <a
+            href="https://github.com/RecursiveG/UniSkinMod/releases"
+            target="_blank"
+            class="btn bg-secondary"
+          >
+            UniSkinMod
+          </a>
+        </div>
+      </div>
+      <div class="card card-secondary">
+        <div class="card-header">
+          <h3 class="card-title">CustomSkinLoader ExtraList</h3>
+        </div>
+        <div class="card-body">
+          {{ trans('Blessing\\ConfigGenerator::config.extra-list-intro', {site:site})|raw|nl2br }}
+        </div>
+        <div class="card-footer">
+          <button class="btn bg-primary" id="download-extra-list">
+            {{ trans('Blessing\\ConfigGenerator::config.extra-list-download') }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card card-teal">
+        <div class="card-header">
+          <h3 class="card-title">CustomSkinLoader</h3>
+        </div>
+        <div class="card-body">
+          <pre>{{ csl }}</pre>
+        </div>
+      </div>
+      <div class="card card-maroon">
+        <div class="card-header">
+          <h3 class="card-title">Universal Skin Mod</h3>
+        </div>
+        <div class="card-body">
+          <pre>{{ usm }}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/highlight.min.js"></script>
+{% endblock %}

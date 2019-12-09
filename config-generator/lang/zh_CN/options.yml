@@ -1,0 +1,9 @@
+title: 设置
+
+custom_intro:
+  title: 自定义 Mod 介绍
+  description: 可使用 Markdown
+
+csl_first:
+  title: CSL 列表首位站点
+  self: 本站
