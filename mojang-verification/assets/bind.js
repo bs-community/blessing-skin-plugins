@@ -2,7 +2,9 @@ blessing.event.on('mounted', () => {
   const failed = location.search.includes('mojang=failed')
     ? '<div class="callout callout-danger">' + trans('mojangVerification.verifyFailed') + '</div>'
     : ''
-  document.querySelector('.col-md-7').innerHTML += `
+
+  const card = document.createElement('div')
+  card.innerHTML += `
     <form class="card card-primary card-outline" method="post" action="/mojang/verify">
       <input
         type="hidden"
@@ -26,6 +28,7 @@ blessing.event.on('mounted', () => {
       </div>
     </form>
   `
+  document.querySelector('.col-md-7').appendChild(card)
 
   blessing.fetch.get('/mojang/verify').then(response => {
     if (response.code === 0) {
