@@ -1,0 +1,26 @@
+<form class="card card-primary card-outline" method="post" action="/mojang/verify">
+  {{ csrf_field() }}
+  <div class="card-header">
+    <h3 class="card-title">
+      {{ trans('GPlane\\Mojang::bind.title') }}
+    </h3>
+  </div>
+  <div class="card-body">
+    {% if session_pull('mojang-failed') %}
+      <div class="alert alert-danger">
+        {{ trans('GPlane\\Mojang::bind.failed') }}
+      </div>
+    {% endif %}
+    <div>
+      {{ trans('GPlane\\Mojang::bind.description', {score: score})|nl2br }}
+    </div>
+    <label class="form-group mt-4">
+      <input class="form-control" type="password" name="password">
+    </label>
+  </div>
+  <div class="card-footer">
+    <button type="submit" class="btn bg-primary">
+      {{ trans('general.submit') }}
+    </button>
+  </div>
+</form>

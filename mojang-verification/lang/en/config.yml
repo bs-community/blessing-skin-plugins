@@ -1,0 +1,5 @@
+title: Mojang Verification Config
+score_config: Score
+score_award: Score Award
+default: "0"
+description: How many scores could users gain after passed the verification.

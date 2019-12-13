@@ -5,13 +5,16 @@ use GPlane\Mojang;
 use App\Models\User;
 use App\Services\Hook;
 use App\Models\Player;
+use App\Services\Filter;
 use Illuminate\Support\Arr;
 use Illuminate\Contracts\Events\Dispatcher;
 
 require __DIR__.'/src/helpers.php';
 
-return function (Dispatcher $events) {
-    Hook::registerPluginTransScripts('mojang-verification');
+return function (Dispatcher $events, Filter $filter) {
+    View::composer('GPlane\Mojang::bind', function ($view) {
+        $view->with('score', option('mojang_verification_score_award', 0));
+    });
 
     $events->listen(Events\UserTryToLogin::class, function ($payload) {
         if ($payload->authType != 'email') {
@@ -62,18 +65,24 @@ return function (Dispatcher $events) {
         bind_mojang_account($user, $result['profiles'], $result['selected']);
     });
 
-    $events->listen(Illuminate\Auth\Events\Authenticated::class, function ($payload) {
+    $events->listen(Illuminate\Auth\Events\Authenticated::class, function ($payload) use ($filter) {
         $uid = $payload->user->uid;
         if (Mojang\MojangVerification::where('user_id', $uid)->count() == 1) {
-            Hook::addUserBadge(trans('GPlane\Mojang::mojang-verification.pro'), 'purple');
+            Hook::addUserBadge(trans('GPlane\Mojang::general.pro'), 'purple');
             if (Schema::hasTable('uuid')) {
+                $filter->add('grid:user.profile', function ($grid) {
+                    array_unshift($grid['widgets'][0][1], 'GPlane\Mojang::uuid');
+
+                    return $grid;
+                });
                 Hook::addScriptFileToPage(plugin_assets('mojang-verification', 'update-uuid.js'), ['user/profile']);
             }
         } else {
-            Hook::addScriptFileToPage(
-                plugin_assets('mojang-verification', 'bind.js'),
-                ['user']
-            );
+            $filter->add('grid:user.index', function ($grid) {
+                $grid['widgets'][0][1][] = 'GPlane\Mojang::bind';
+
+                return $grid;
+            });
         }
     });
 
@@ -83,18 +92,14 @@ return function (Dispatcher $events) {
     );
 
     Hook::addRoute(function ($router) {
-        $router->get('/mojang/verify', function () {
-            return json('', 0, ['score' => option('mojang_verification_score_award', 0)]);
-        })->middleware(['web']);
-
         $router->post('/mojang/verify', function () {
             $user = auth()->user();
             $result = validate_mojang_account($user->email, request('password'));
             if ($result['valid']) {
                 bind_mojang_account($user, $result['profiles'], $result['selected']);
-                return redirect('/user');
+                return back();
             } else {
-                return redirect('/user?mojang=failed');
+                return back()->with('mojang-failed', true);
             }
         })->middleware(['web', 'auth']);
 
@@ -109,9 +114,9 @@ return function (Dispatcher $events) {
                 ]);
                 $name = json_decode($response->getBody(), true)[0];
                 DB::table('uuid')->where('name', $name)->update(['uuid' => $uuid]);
-                return json(trans('GPlane\Mojang::mojang-verification.update-success'), 0);
+                return json(trans('GPlane\Mojang::uuid.success'), 0);
             } catch (Exception $e) {
-                return json(trans('GPlane\Mojang::mojang-verification.update-failed'), 1);
+                return json(trans('GPlane\Mojang::uuid.failed'), 1);
             }
         })->middleware(['web', 'auth']);
     });

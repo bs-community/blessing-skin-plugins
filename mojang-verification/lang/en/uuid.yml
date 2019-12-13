@@ -1,0 +1,7 @@
+title: Update UUID
+description: If you want to join the server which deployed Yggdrasil API using your premium Minecraft player name with your premium Minecraft UUID, you could click the "Update UUID" button below to update it.
+tip: If your premium Minecraft player has already set up skin on our website, it will use the skin set up on the website in the game; if not, the skin you set up on Mojang will be automatically used.
+notice: Only need to update once, no need to repeat this operation.
+button: Update UUID
+success: UUID updated successfully.
+failed: Failed to update UUID.

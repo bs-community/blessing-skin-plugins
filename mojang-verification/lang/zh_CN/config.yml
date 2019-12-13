@@ -1,0 +1,5 @@
+title: 正版验证配置
+score_config: 积分配置
+score_award: 积分奖励
+default: 默认为 0
+description: 通过正版验证后可获得的积分
