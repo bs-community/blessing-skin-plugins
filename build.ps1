@@ -110,5 +110,5 @@ $packages = $plugins | ForEach-Object {
   }
 }
 $registry.packages = $packages
-ConvertTo-Json $registry -Depth 10 | Out-File -FilePath '.dist/registry.json'
+ConvertTo-Json $registry -Depth 10 | Out-File -FilePath '.dist/registry-preview.json'
 ConvertTo-Json $updated | Out-File -FilePath 'updated.json'
