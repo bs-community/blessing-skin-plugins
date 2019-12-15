@@ -41,7 +41,7 @@ Write-Host 'Marketplace Builder'
 $env:NODE_ENV = 'production'
 
 git clone "https://dev.azure.com/blessing-skin/Plugins/_git/Plugins" .dist
-$registry = Get-Content '.dist/registry.json' | ConvertFrom-Json
+$registry = Get-Content '.dist/registry-preview.json' | ConvertFrom-Json
 $packages = $registry.packages
 $plugins = Get-ChildItem -Path . -Directory -Exclude @('node_modules', '.*') | ForEach-Object {$_.Name}
 
