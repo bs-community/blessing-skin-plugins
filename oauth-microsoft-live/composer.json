@@ -1,0 +1,15 @@
+{
+  "name": "gplane/oauth-microsoft-live",
+  "description": "",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Pig Fang",
+      "email": "g-plane@hotmail.com"
+    }
+  ],
+  "require": {
+    "socialiteproviders/microsoft-live": "^3.0"
+  }
+}
