@@ -1,0 +1,17 @@
+{
+  "name": "gplane/oauth-github",
+  "description": "",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Pig Fang",
+      "email": "g-plane@hotmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "socialiteproviders/github": "dev-master"
+  }
+}
