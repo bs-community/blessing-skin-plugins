@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 if (! function_exists('ygg_log_path')) {
 
     function ygg_log_path()
@@ -66,7 +68,7 @@ if (! function_exists('ygg_log')) {
             'player_id' => 0,
             'parameters' => '[]',
             'ip' => get_client_ip(),
-            'time' => get_datetime_string()
+            'time' => Carbon::now(),
         ], $params);
 
         return DB::table('ygg_log')->insert($data);
