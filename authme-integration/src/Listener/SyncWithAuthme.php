@@ -26,8 +26,8 @@ class SyncWithAuthme
             ->each(function ($user) {
                 $user->nickname = $user->realname;
                 $user->score = option('user_initial_score');
-                $user->register_at = get_datetime_string();
-                $user->last_sign_at = get_datetime_string(time() - 86400);
+                $user->register_at = Carbon::now();
+                $user->last_sign_at = Carbon::now()->subDay();
                 $user->save();
 
                 $player = new Player;

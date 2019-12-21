@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use App\Services\Hook;
 use App\Events\UserRegistered;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -36,7 +37,7 @@ return function (Dispatcher $events) {
         // 用户注册后标记该邀请码为已使用
         DB::table('invitation_codes')->where('code', session('using_invitation_code'))->update([
             'used_by' => $event->user->uid,
-            'used_at' => get_datetime_string()
+            'used_at' => Carbon::now(),
         ]);
     });
 };

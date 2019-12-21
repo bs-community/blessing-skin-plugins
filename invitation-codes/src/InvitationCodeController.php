@@ -3,6 +3,7 @@
 namespace InvitationCodes;
 
 use DB;
+use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 
 class InvitationCodeController extends Controller
@@ -26,7 +27,7 @@ class InvitationCodeController extends Controller
         for ($i = 0; $i < $amount; $i++) {
             $codes[] = [
                 'code' => md5(time().rand()),
-                'generated_at' => get_datetime_string()
+                'generated_at' => Carbon::now(),
             ];
         }
 

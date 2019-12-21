@@ -1,6 +1,7 @@
 <?php
 
 use App\Events;
+use Carbon\Carbon;
 use GPlane\Mojang;
 use App\Models\User;
 use App\Services\Hook;
@@ -56,8 +57,8 @@ return function (Dispatcher $events, Filter $filter) {
         }
         $user->ip = get_client_ip();
         $user->permission = User::NORMAL;
-        $user->register_at = get_datetime_string();
-        $user->last_sign_at = get_datetime_string(time() - 86400);
+        $user->register_at = Carbon::now();
+        $user->last_sign_at = Carbon::now()->subDay();
         $user->save();
 
         event(new Events\UserRegistered($user));

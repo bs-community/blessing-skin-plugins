@@ -3,6 +3,7 @@
 namespace Integration\Forum\Listener;
 
 use App\Events;
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Player;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -144,8 +145,8 @@ class SynchronizeUser
         $user->password     = $result->password;
         $user->ip           = $result->regip ?? '255.255.255.255';
         $user->score        = option('user_initial_score');
-        $user->register_at  = get_datetime_string();
-        $user->last_sign_at = get_datetime_string(time() - 86400);
+        $user->register_at  = Carbon::now();
+        $user->last_sign_at = Carbon::now()->subDay();
         $user->permission   = User::NORMAL;
         $user->nickname     = $result->username;
         $user->player_name  = $result->username;
@@ -167,7 +168,7 @@ class SynchronizeUser
             $player->name = $result->username;
             $player->tid_skin = 0;
             $player->tid_cape = 0;
-            $player->last_modified = get_datetime_string();
+            $player->last_modified = Carbon::now();
             $player->save();
             event(new Events\PlayerWasAdded($player));
         }
