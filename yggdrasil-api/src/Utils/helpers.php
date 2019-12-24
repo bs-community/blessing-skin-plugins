@@ -1,6 +1,7 @@
 <?php
 
 use Carbon\Carbon;
+use Vectorface\Whip\Whip;
 
 if (! function_exists('ygg_log_path')) {
 
@@ -67,7 +68,7 @@ if (! function_exists('ygg_log')) {
             'user_id' => 0,
             'player_id' => 0,
             'parameters' => '[]',
-            'ip' => get_client_ip(),
+            'ip' => (new Whip())->getValidIpAddress(),
             'time' => Carbon::now(),
         ], $params);
 
