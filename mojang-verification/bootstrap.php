@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Services\Hook;
 use App\Models\Player;
 use App\Services\Filter;
+use Vectorface\Whip\Whip;
 use Illuminate\Support\Arr;
 use Illuminate\Contracts\Events\Dispatcher;
 
@@ -42,7 +43,10 @@ return function (Dispatcher $events, Filter $filter) {
             }
         }
 
-        $user = new User;
+        $whip = new Whip();
+        $ip = $whip->getValidIpAddress();
+
+        $user = new User();
         $user->email = $payload->identification;
         $user->nickname = Arr::get($result['selected'], 'name', '');
         $user->score = option('user_initial_score');
@@ -55,7 +59,7 @@ return function (Dispatcher $events, Filter $filter) {
             $user->password = $user->getEncryptedPwdFromEvent(request('password'))
                 ?: app('cipher')->hash(request('password'), config('secure.salt'));
         }
-        $user->ip = get_client_ip();
+        $user->ip = $ip;
         $user->permission = User::NORMAL;
         $user->register_at = Carbon::now();
         $user->last_sign_at = Carbon::now()->subDay();
