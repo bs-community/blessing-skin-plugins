@@ -3,6 +3,7 @@
 namespace Blessing\ExamplePlugin;
 
 use Option;
+use Parsedown;
 
 class Configuration
 {
@@ -57,7 +58,7 @@ class Configuration
         if (!$markdown) {
             $readme = "<p>无法加载 README.md</p>";
         } else {
-            $readme = app('parsedown')->text($markdown);
+            $readme = (new Parsedown())->text($markdown);
         }
 
         return view('Blessing\ExamplePlugin::config', compact('form', 'readme'));

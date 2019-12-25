@@ -3,6 +3,7 @@
 namespace Blessing\ConfigGenerator;
 
 use App\Services\Hook;
+use Parsedown;
 
 class Controller
 {
@@ -35,7 +36,7 @@ class Controller
             | JSON_UNESCAPED_SLASHES;
 
         $intro = option_localized('config_generator_intro', '');
-        $intro = resolve('parsedown')->text($intro);
+        $intro = (new Parsedown())->text($intro);
 
         return view('Blessing\ConfigGenerator::generator', [
             'csl' => json_encode($csl, $jsonConstants),

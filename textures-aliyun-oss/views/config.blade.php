@@ -50,9 +50,8 @@ EOT;
               } catch (Exception $e) {
                 echo '<div class="callout callout-danger">无法连接至阿里云 OSS，请检查你的配置。<br>错误信息：'.$e->getMessage().'</div>';
               }
-
-              echo app('parsedown')->text($instruction);
             @endphp
+            {!! (new Parsedown())->text($instruction) !!}
           </div>
         </div>
       </div>

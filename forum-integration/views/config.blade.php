@@ -67,16 +67,7 @@
             <h3 class="box-title">说明</h3>
           </div><!-- /.box-header -->
           <div class="box-body table-responsive">
-            <?php
-              $path = plugin('forum-integration')->getPath().'/README.md';
-              $markdown = @file_get_contents($path);
-
-              if (! $markdown) {
-                echo "<p>无法加载插件根目录下的 README.md</p>";
-              } else {
-                echo app('parsedown')->text(mb_substr($markdown, 10));
-              }
-            ?>
+            {!! (new Parsedown())->text($instruction) !!}
           </div>
         </div>
       </div>
