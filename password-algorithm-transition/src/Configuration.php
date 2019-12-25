@@ -16,6 +16,8 @@ class Configuration
             $password = $user->password;
             if (Str::startsWith($password, '$2y')) {
                 return 'Bcrypt';
+            } elseif (Str::startsWith($password, '$argon2i')) {
+                return 'Argon2i';
             } else {
                 $length = strlen($password);
                 if ($length === 128) {
