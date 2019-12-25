@@ -1,0 +1,15 @@
+{% if code %}
+  <div class="container-fluid p-0">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">{{ trans('skinlib.show.comment') }}</h3>
+      </div>
+      <div class="card-body">
+        {% set tid = texture.tid %}
+        {% set name = texture.name %}
+        {% set rules = {'{tid}': tid, '{name}': name, '{url}': url} %}
+        {{ code|replace(rules)|raw }}
+      </div>
+    </div>
+  </div>
+{% endif %}

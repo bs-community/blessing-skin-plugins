@@ -1,0 +1,2 @@
+title: Script de comentarios
+description: El marcador de posición está disponible, <code>{tid}</code> será reemplazado por el id de la textura, <code>{name}</code> será reemplazado por el nombre de la textura, <code>{url}</code> será reemplazado por la URL actual.

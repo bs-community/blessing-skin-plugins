@@ -1,0 +1,15 @@
+{
+  "name": "embedded-comment",
+  "title": "嵌入第三方评论",
+  "version": "1.0.0",
+  "description": "向材质详情页中嵌入第三方评论系统",
+  "author": "GPlane",
+  "url": "https://gplane.win",
+  "namespace": "Blessing\\EmbeddedComment",
+  "require": {
+    "blessing-skin-server": "^5.0.0"
+  },
+  "enchants": {
+    "config": "Configuration"
+  }
+}
