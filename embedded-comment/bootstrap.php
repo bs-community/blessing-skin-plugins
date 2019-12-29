@@ -1,6 +1,6 @@
 <?php
 
-use App\Services\Filter;
+use Blessing\Filter;
 
 return function (Filter $filter) {
     View::composer('Blessing\EmbeddedComment::comment', function ($view) {

@@ -6,7 +6,7 @@ use GPlane\Mojang;
 use App\Models\User;
 use App\Services\Hook;
 use App\Models\Player;
-use App\Services\Filter;
+use Blessing\Filter;
 use Vectorface\Whip\Whip;
 use Illuminate\Support\Arr;
 use Illuminate\Contracts\Events\Dispatcher;
