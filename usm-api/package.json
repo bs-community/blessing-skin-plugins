@@ -1,0 +1,13 @@
+{
+  "name": "usm-api",
+  "title": "UniSkinMod API",
+  "version": "1.0.0",
+  "description": "提供 Universal Skin Mod 的 API",
+  "author": "GPlane",
+  "url": "https://gplane.win",
+  "namespace": "Blessing\\Usm",
+  "require": {
+    "blessing-skin-server": "^5.0.0"
+  },
+  "enchants": {}
+}
