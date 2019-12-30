@@ -162,8 +162,8 @@ class Profile
         $profile->name = $player->name;
         $profile->model = $model;
         $profile->player = $player;
-        $profile->skin = $player->getTexture('skin');
-        $profile->cape = $player->getTexture('cape');
+        $profile->skin = optional($player->skin)->hash;
+        $profile->cape = optional($player->cape)->hash;
 
         return $profile;
     }
