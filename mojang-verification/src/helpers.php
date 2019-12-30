@@ -7,20 +7,19 @@ use App\Models\Player;
 use App\Services\Hook;
 use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
+use Composer\CaBundle\CaBundle;
 
 if (! function_exists('validate_mojang_account')) {
 
     function validate_mojang_account($username, $password)
     {
-        $client = new Client;
+        $client = new Client();
         try {
             $response = $client->request('POST', 'https://authserver.mojang.com/authenticate', [
                 'json' => array_merge(compact('username', 'password'), [
                     'agent' => ['name' => 'Minecraft', 'version' => 1],
                 ]),
-                'verify' => class_exists('Composer\CaBundle\CaBundle')
-                    ? \Composer\CaBundle\CaBundle::getSystemCaRootBundlePath()
-                    : resource_path('misc/ca-bundle.crt'),
+                'verify' => CaBundle::getSystemCaRootBundlePath(),
             ]);
 
             if ($response->getStatusCode() == 200) {
