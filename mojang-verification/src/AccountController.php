@@ -15,6 +15,11 @@ class AccountController extends Controller
     public function verify(Request $request)
     {
         $user = auth()->user();
+
+        if (MojangVerification::where('user_id', $user->uid)->count() === 1) {
+            return back();
+        }
+
         $result = validate_mojang_account($user->email, $request->input('password'));
         if ($result['valid']) {
             bind_mojang_account($user, $result['profiles'], $result['selected']);
