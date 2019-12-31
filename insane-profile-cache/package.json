@@ -1,15 +1,13 @@
 {
   "name": "insane-profile-cache",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "title": "Profile 文件缓存",
-  "description": "直接生成玩家 Profile 的文件缓存，交给 Nginx 处理，慎用。每次玩家更新皮肤时、添加新角色时都会自动更新文件缓存。",
+  "description": "直接生成玩家 Profile 的文件缓存，交给 Nginx 处理，慎用。",
   "author": "printempw",
   "url": "https://blessing.studio/",
   "namespace": "InsaneProfileCache",
   "require": {
     "blessing-skin-server": "^5.0.0"
   },
-  "enchants": {
-    "config": "Configuration"
-  }
+  "enchants": {}
 }

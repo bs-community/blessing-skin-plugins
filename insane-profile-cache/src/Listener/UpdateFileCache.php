@@ -2,17 +2,21 @@
 
 namespace InsaneProfileCache\Listener;
 
-use Illuminate\Contracts\Events\Dispatcher;
+use File;
 
 class UpdateFileCache
 {
-    public function subscribe(Dispatcher $events)
+    public function handle($event)
     {
-        $events->listen([
-            \App\Events\PlayerProfileUpdated::class,
-            \App\Events\PlayerWasAdded::class
-        ], function ($event) {
-            generateProfileFileCache($event->player);
-        });
+        $dir = storage_path('insane-profile-cache');
+        if (File::missing($dir)) {
+            File::makeDirectory($dir);
+        }
+
+        $player = $event->player;
+        File::put(
+            storage_path('insane-profile-cache/'.$player->name.'.json'),
+            $player->toJson()
+        );
     }
 }
