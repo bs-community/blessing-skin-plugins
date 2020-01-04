@@ -19,7 +19,7 @@ POST /api/yggdrasil/sessionserver/session/minecraft/join
 GET  /api/yggdrasil/sessionserver/session/minecraft/hasJoined
 
 # Profiles
-GET  /api/yggdrasil/sessionserver/session/profile/{uuid}
+GET  /api/yggdrasil/sessionserver/session/minecraft/profile/{uuid}
 POST /api/yggdrasil/api/profiles/minecraft
 ```
 
