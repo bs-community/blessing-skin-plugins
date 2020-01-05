@@ -1,0 +1,15 @@
+{
+    "name": "asnxthaony/oauth-littleskin",
+    "description": "",
+    "type": "project",
+    "license": "MIT",
+    "authors": [{
+        "name": "Asnxthaony",
+        "email": "asnxthaony@outlook.com"
+    }],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "blessingsocialiteproviders/littleskin": "dev-master"
+    }
+}
