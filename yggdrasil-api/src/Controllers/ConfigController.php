@@ -102,7 +102,7 @@ class ConfigController extends Controller
                 ]
             ],
             'skinDomains' => $skinDomains,
-            'signaturePublickey' => $keyData['key']
+            'signaturePublickey' => $keyData['key'],
         ];
 
         if (option('user_can_register')) {
@@ -149,7 +149,7 @@ class ConfigController extends Controller
         try {
             return json([
                 'code' => 0,
-                'key' => ygg_generate_rsa_keys()['private']
+                'key' => ygg_generate_rsa_keys()['private'],
             ]);
         } catch (Exception $e) {
             return json('自动生成私钥时出错，请尝试手动设置私钥。错误信息：'.$e->getMessage(), 1);

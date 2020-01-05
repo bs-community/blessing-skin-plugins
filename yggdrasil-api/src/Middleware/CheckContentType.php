@@ -9,7 +9,7 @@ class CheckContentType
         if (! $request->isJson()) {
             return json([
                 'error' => 'Unsupported Media Type',
-                'errorMessage' => '请求的 Content-Type 必须为 application/json'
+                'errorMessage' => '请求的 Content-Type 必须为 application/json',
             ]);
         }
 

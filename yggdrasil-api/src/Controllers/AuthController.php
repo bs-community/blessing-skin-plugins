@@ -24,12 +24,12 @@ class AuthController extends Controller
          * 注意，新版账户验证中 username 字段填的是邮箱，
          * 只有旧版的用户填的才是用户名（legacy = true）
          */
-        $identification = strtolower($request->get('username'));
+        $identification = strtolower($request->input('username'));
         Log::channel('ygg')->info("User [$identification] is try to authenticate with", [$request->except(['username', 'password'])]);
         $user = $this->checkUserCredentials($request);
 
         // clientToken 原样返回，如果没提供就给客户端生成一个
-        $clientToken = $request->get('clientToken') ?: UUID::generate()->clearDashes();
+        $clientToken = $request->input('clientToken', UUID::generate()->clearDashes());
         // clientToken 原样返回，生成新 accessToken 并格式化为不带符号的 UUID
         $accessToken = UUID::generate()->clearDashes();
 
@@ -54,16 +54,16 @@ class AuthController extends Controller
             'availableProfiles' => $availableProfiles
         ];
 
-        if (app('request')->get('requestUser')) {
+        if ($request->input('requestUser')) {
             // 用户 ID 根据其邮箱生成
             $result['user'] = [
                 'id' => UUID::generate(5, $user->email, UUID::NS_DNS)->clearDashes(),
-                'properties' => []
+                'properties' => [],
             ];
         }
 
         // 当用户只有一个角色时自动帮他选择
-        if (!empty($availableProfiles) && count($availableProfiles) == 1) {
+        if (!empty($availableProfiles) && count($availableProfiles) === 1) {
             $result['selectedProfile'] = $availableProfiles[0];
             $token->profileId = $availableProfiles[0]['id'];
         }
@@ -84,8 +84,8 @@ class AuthController extends Controller
 
     public function refresh(Request $request)
     {
-        $clientToken = $request->get('clientToken');
-        $accessToken = $request->get('accessToken');
+        $clientToken = $request->input('clientToken');
+        $accessToken = $request->input('accessToken');
 
         Log::channel('ygg')->info("Try to refresh access token [$accessToken] with client token [$clientToken]");
 
@@ -119,10 +119,10 @@ class AuthController extends Controller
             'availableProfiles' => $availableProfiles
         ];
 
-        if ($request->get('requestUser')) {
+        if ($request->input('requestUser')) {
             $result['user'] = [
                 'id' => UUID::generate(5, $user->email, UUID::NS_DNS)->clearDashes(),
-                'properties' => []
+                'properties' => [],
             ];
         }
 
@@ -169,7 +169,7 @@ class AuthController extends Controller
         ygg_log([
             'action' => 'refresh',
             'user_id' => $user->uid,
-            'parameters' => json_encode($request->except('accessToken'))
+            'parameters' => json_encode($request->except('accessToken')),
         ]);
 
         $result['accessToken'] = $token->accessToken;
@@ -178,8 +178,8 @@ class AuthController extends Controller
 
     public function validate(Request $request)
     {
-        $clientToken = $request->get('clientToken');
-        $accessToken = $request->get('accessToken');
+        $clientToken = $request->input('clientToken');
+        $accessToken = $request->input('accessToken');
 
         Log::channel('ygg')->info("Check if an access token is valid", compact('clientToken', 'accessToken'));
 
@@ -201,7 +201,7 @@ class AuthController extends Controller
             ygg_log([
                 'action' => 'validate',
                 'user_id' => $user->uid,
-                'parameters' => json_encode($request->except('accessToken'))
+                'parameters' => json_encode($request->except('accessToken')),
             ]);
 
             return response('')->setStatusCode(204);
@@ -212,7 +212,7 @@ class AuthController extends Controller
 
     public function signout(Request $request)
     {
-        $identification = strtolower($request->get('username'));
+        $identification = strtolower($request->input('username'));
         Log::channel('ygg')->info("User [$identification] is try to signout");
         $user = $this->checkUserCredentials($request, false);
 
@@ -228,7 +228,7 @@ class AuthController extends Controller
 
         ygg_log([
             'action' => 'signout',
-            'user_id' => $user->uid
+            'user_id' => $user->uid,
         ]);
 
         return response('')->setStatusCode(204);
@@ -236,8 +236,8 @@ class AuthController extends Controller
 
     public function invalidate(Request $request)
     {
-        $clientToken = $request->get('clientToken');
-        $accessToken = $request->get('accessToken');
+        $clientToken = $request->input('clientToken');
+        $accessToken = $request->input('accessToken');
 
         Log::channel('ygg')->info("Try to invalidate an access token", compact('clientToken', 'accessToken'));
 
@@ -252,7 +252,7 @@ class AuthController extends Controller
             ygg_log([
                 'action' => 'invalidate',
                 'user_id' => User::where('email', $token->owner)->first()->uid,
-                'parameters' => json_encode($request->json()->all())
+                'parameters' => json_encode($request->json()->all()),
             ]);
 
             Log::channel('ygg')->info("Access token [$accessToken] was successfully revoked");
@@ -267,14 +267,13 @@ class AuthController extends Controller
     protected function checkUserCredentials(Request $request, $checkBanned = true)
     {
         // 验证一大堆乱七八糟的东西
-        $identification = $request->get('username');
-        $password = $request->get('password');
+        $identification = $request->input('username');
+        $password = $request->input('password');
 
         if (is_null($identification) || is_null($password)) {
             throw new IllegalArgumentException('邮箱或者密码没填哦');
         }
 
-        event(new \App\Events\UserTryToLogin($identification, 'email'));
         $user = User::where('email', $identification)->first();
 
         if (! $user) {
@@ -306,7 +305,7 @@ class AuthController extends Controller
 
             $profiles[] = [
                 'id' => $uuid,
-                'name' => $player->name
+                'name' => $player->name,
             ];
         }
 
@@ -324,7 +323,7 @@ class AuthController extends Controller
 
         Log::channel('ygg')->info("Serialized token stored to cache with expiry time $timeToFullyExpired minutes", [
             'keys' => ["TOKEN_{$token->accessToken}", "ID_$identification"],
-            'token' => $token
+            'token' => $token,
         ]);
     }
 }

@@ -20,9 +20,9 @@ class SessionController extends Controller
 {
     public function joinServer(Request $request)
     {
-        $accessToken = $request->get('accessToken');
-        $selectedProfile = $request->get('selectedProfile');
-        $serverId = $request->get('serverId');
+        $accessToken = $request->input('accessToken');
+        $selectedProfile = $request->input('selectedProfile');
+        $serverId = $request->input('serverId');
 
         Log::channel('ygg')->info("Player [$selectedProfile] is trying to join server [$serverId] with access token [$accessToken]");
 
@@ -84,7 +84,7 @@ class SessionController extends Controller
             'action' => 'join',
             'user_id' => $player->uid,
             'player_id' => $player->pid,
-            'parameters' => json_encode($request->except('accessToken'))
+            'parameters' => json_encode($request->except('accessToken')),
         ]);
 
         return response('')->setStatusCode(204);
@@ -92,9 +92,9 @@ class SessionController extends Controller
 
     public function hasJoinedServer(Request $request)
     {
-        $name = $request->get('username');
-        $serverId = $request->get('serverId');
-        $ip = $request->get('ip');
+        $name = $request->input('username');
+        $serverId = $request->input('serverId');
+        $ip = $request->input('ip');
 
         Log::channel('ygg')->info("Checking if player [$name] has joined the server [$serverId] with IP [$ip]");
 
@@ -116,7 +116,7 @@ class SessionController extends Controller
                     'action' => 'has_joined',
                     'user_id' => $profile->player->uid,
                     'player_id' => $profile->player->pid,
-                    'parameters' => json_encode($request->except('username'))
+                    'parameters' => json_encode($request->except('username')),
                 ], ($ip ? compact('ip') : [])));
 
                 return response()->json()->setContent($response);
@@ -141,7 +141,7 @@ class SessionController extends Controller
         try {
             $client = new \GuzzleHttp\Client();
             $response = $client->request('POST', 'https://authserver.mojang.com/validate', [
-                'json' => ['accessToken' => $accessToken]
+                'json' => ['accessToken' => $accessToken],
             ]);
             return $response->getStatusCode() === 204;
         } catch (\Exception $e) {

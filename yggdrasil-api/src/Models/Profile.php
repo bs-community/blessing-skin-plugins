@@ -40,7 +40,7 @@ class Profile
             'profileId' => UUID::format($this->uuid),
             'profileName' => $this->name,
             'isPublic' => true,
-            'textures' => []
+            'textures' => [],
         ];
 
         // 检查 RSA 私钥
@@ -59,7 +59,7 @@ class Profile
 
         if ($this->skin != "") {
             $textures['textures']['SKIN'] = [
-                'url' => url("textures/{$this->skin}")
+                'url' => url("textures/{$this->skin}"),
             ];
 
             if ($this->model == "slim") {
@@ -99,9 +99,9 @@ class Profile
                     'name' => 'textures',
                     'value' => base64_encode(
                         json_encode($textures, JSON_UNESCAPED_SLASHES | JSON_FORCE_OBJECT)
-                    )
-                ]
-            ]
+                    ),
+                ],
+            ],
         ];
 
         if ($unsigned === false) {
