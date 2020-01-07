@@ -1,6 +1,6 @@
 {
   "name": "textures-aliyun-oss",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "title": "阿里云对象存储 OSS",
   "description": "将用户上传的材质存储文件至阿里云 OSS 中。",
   "author": "printempw",
