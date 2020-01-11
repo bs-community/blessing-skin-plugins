@@ -5,6 +5,7 @@ namespace Blessing\Usm;
 use App\Http\Controllers\Controller;
 use App\Models\Player;
 use App\Models\Texture;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -12,11 +13,12 @@ class ProfileController extends Controller
     {
         $player = Player::where('name', $player)->first();
         if (empty($player)) {
-
             return response()
                 ->json(['errno' => 1, 'msg' => 'Player not found.'])
                 ->setStatusCode(404);
         }
+
+        abort_if($player->user->permission === User::BANNED, 403);
 
         $skin = Texture::find($player->tid_skin);
         $model = empty($skin)

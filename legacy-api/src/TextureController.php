@@ -4,6 +4,7 @@ namespace Blessing\Legacy;
 
 use App\Models\Player;
 use App\Models\Texture;
+use App\Models\User;
 use Storage;
 
 class TextureController
@@ -20,10 +21,8 @@ class TextureController
 
     protected function texture($player, $type)
     {
-        $player = Player::where('name', $player)->first();
-        if (empty($player)) {
-            return abort(404, 'Player not found.');
-        }
+        $player = Player::where('name', $player)->firstOrFail();
+        abort_if($player->user->permission === User::BANNED, 403);
 
         $tid = $player->getAttribute("tid_$type");
         $texture = Texture::find($tid);
