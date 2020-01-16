@@ -1,7 +1,7 @@
 {
   "name": "legacy-api",
   "title": "传统皮肤加载方式",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "提供传统的皮肤加载方式，即直接访问角色名。",
   "author": "GPlane",
   "url": "https://gplane.win/",
@@ -9,5 +9,10 @@
   "require": {
     "blessing-skin-server": "^5.0.0"
   },
-  "enchants": {}
+  "enchants": {
+    "icon": {
+      "fa": "republican",
+      "bg": "purple"
+    }
+  }
 }

@@ -1,6 +1,6 @@
 {
   "name": "batch-import",
-  "version": "3.1.2",
+  "version": "3.1.3",
   "title": "批量导入",
   "description": "从本地文件批量导入材质至皮肤库，启用后请刷新页面从侧边栏进入。",
   "author": "printempw",
@@ -8,6 +8,12 @@
   "namespace": "BatchImport",
   "require": {
     "blessing-skin-server": "^4.1.0 || ^5"
+  },
+  "enchants": {
+    "icon": {
+      "fa": "database",
+      "bg": "danger"
+    }
   },
   "scripts": {
     "build": "babel assets/src --out-dir assets/dist"

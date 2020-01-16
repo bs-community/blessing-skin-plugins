@@ -1,7 +1,7 @@
 {
   "name": "oauth-github",
   "title": "使用 GitHub 登录",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "用 GitHub 账号来登录皮肤站",
   "author": "GPlane",
   "url": "https://gplane.win/",
@@ -9,5 +9,11 @@
   "require": {
     "blessing-skin-server": "^5.0.0"
   },
-  "enchants": {}
+  "enchants": {
+    "icon": {
+      "fa": "github",
+      "faType": "fab",
+      "bg": "success"
+    }
+  }
 }

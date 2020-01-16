@@ -1,6 +1,6 @@
 {
   "name": "single-player-limit",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "title": "单角色限制",
   "description": "限制一个用户至多只能拥有一个角色。",
   "author": "GPlane",
@@ -8,5 +8,11 @@
   "namespace": "SinglePlayerLimit",
   "require": {
     "blessing-skin-server": ">=4.0.0"
+  },
+  "enchants": {
+    "icon": {
+      "fa": "user-lock",
+      "bg": "yellow"
+    }
   }
 }

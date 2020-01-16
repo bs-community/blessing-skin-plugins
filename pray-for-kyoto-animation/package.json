@@ -1,11 +1,17 @@
 {
   "name": "pray-for-kyoto-animation",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "title": "祈福京阿尼",
   "description": "为京都动画第一工作室祈福。",
   "author": "GPlane",
   "namespace": "Pfka",
   "require": {
     "blessing-skin-server": "*"
+  },
+  "enchants": {
+    "icon": {
+      "fa": "pray",
+      "bg": "black"
+    }
   }
 }

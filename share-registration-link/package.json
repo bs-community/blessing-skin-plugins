@@ -1,6 +1,6 @@
 {
   "name": "share-registration-link",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "title": "分享注册链接",
   "description": "允许用户分享注册链接并获得积分",
   "author": "GPlane",
@@ -8,5 +8,11 @@
   "config": "config.blade.php",
   "require": {
     "blessing-skin-server": "^4.1.0 || ^5"
+  },
+  "enchants": {
+    "icon": {
+      "fa": "share-alt",
+      "bg": "info"
+    }
   }
 }

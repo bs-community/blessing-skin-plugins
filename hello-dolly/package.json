@@ -1,6 +1,6 @@
 {
   "name": "hello-dolly",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "title": "HelloDolly::general.hello-dolly",
   "description": "HelloDolly::general.description",
   "author": "Matt Mullenweg",
@@ -12,6 +12,10 @@
   "enchants": {
     "conflicts": {
       "hitokoto": "*"
+    },
+    "icon": {
+      "fa": "quote-left",
+      "bg": "teal"
     }
   }
 }

@@ -1,7 +1,7 @@
 {
   "name": "oauth-microsoft-live",
   "title": "使用 Microsoft Live 登录",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "通过 Microsoft Live 来登录皮肤站",
   "author": "GPlane",
   "url": "",
@@ -9,5 +9,11 @@
   "require": {
     "blessing-skin-server": "^5.0.0"
   },
-  "enchants": {}
+  "enchants": {
+    "icon": {
+      "fa": "microsoft",
+      "faType": "fab",
+      "bg": "primary"
+    }
+  }
 }

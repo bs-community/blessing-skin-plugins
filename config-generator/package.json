@@ -1,6 +1,6 @@
 {
   "name": "config-generator",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "title": "配置生成",
   "description": "在用户中心添加自动生成皮肤 Mod 配置的页面。",
   "author": "printempw",
@@ -10,6 +10,10 @@
     "blessing-skin-server": "^5.0.0"
   },
   "enchants": {
-    "config": "Configuration"
+    "config": "Configuration",
+    "icon": {
+      "fa": "code",
+      "bg": "success"
+    }
   }
 }

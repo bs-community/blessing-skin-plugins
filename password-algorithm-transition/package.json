@@ -9,6 +9,10 @@
     "blessing-skin-server": "^5.0.0"
   },
   "enchants": {
-    "config": "Configuration"
+    "config": "Configuration",
+    "icon": {
+      "fa": "star-of-life",
+      "bg": "lime"
+    }
   }
 }

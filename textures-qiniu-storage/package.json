@@ -1,6 +1,6 @@
 {
   "name": "textures-qiniu-storage",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "title": "七牛云存储",
   "description": "将用户上传的材质存储文件至七牛云存储中。",
   "author": "printempw",
@@ -9,5 +9,11 @@
   "config": "config.blade.php",
   "require": {
     "blessing-skin-server": "^4.0.0 || ^5"
+  },
+  "enchants": {
+    "icon": {
+      "fa": "radiation",
+      "bg": "purple"
+    }
   }
 }
