@@ -12,7 +12,7 @@ return function () {
     Hook::addRoute(function ($router) {
         $router->group([
             'prefix' => 'admin/batch-import',
-            'middleware' => ['web', 'auth', 'admin'],
+            'middleware' => ['web', 'auth', 'role:admin'],
             'namespace'  => 'BatchImport',
         ], function ($router) {
             $router->get('', 'BatchImportController@index');

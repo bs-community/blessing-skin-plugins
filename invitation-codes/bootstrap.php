@@ -20,7 +20,7 @@ return function (Dispatcher $events) {
 
     Hook::addRoute(function ($router) {
         $router->group([
-            'middleware' => ['web', 'auth', 'admin'],
+            'middleware' => ['web', 'auth', 'role:admin'],
             'namespace'  => 'InvitationCodes',
         ], function ($router) {
             $router->any('admin/invitation-codes', 'InvitationCodeController@generate');
