@@ -74,7 +74,7 @@ return function (Dispatcher $events) {
         });
 
         $router->group([
-            'middleware' => ['web', 'auth', 'admin'],
+            'middleware' => ['web', 'auth', 'role:admin'],
             'namespace'  => 'Yggdrasil\Controllers'
         ], function ($router) {
             $router->get('admin/yggdrasil-log', 'ConfigController@logPage');
@@ -82,7 +82,7 @@ return function (Dispatcher $events) {
         });
 
         $router->group([
-            'middleware' => ['web', 'auth', 'admin'],
+            'middleware' => ['web', 'auth', 'role:admin'],
             'namespace'  => 'Yggdrasil\Controllers',
             'prefix' => 'admin/plugins/config/yggdrasil-api'
         ], function ($router) {
