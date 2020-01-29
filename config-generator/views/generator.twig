@@ -16,7 +16,20 @@
           {% if custom_intro %}
             {{ custom_intro|raw }}
           {% else %}
-            {{ trans('Blessing\\ConfigGenerator::config.mod-intro')|raw }}
+            <p>{{ trans('Blessing\\ConfigGenerator::config.mod-intro') }}</p>
+            <ul>
+              <li>
+                <a href="http://www.mcbbs.net/thread-269807-1-1.html" target="_blank" rel="noopener noreferrer">CustomSkinLoader</a>
+              </li>
+              {% if has_usm %}
+                <li>
+                  <a href="http://www.mcbbs.net/forum.php?mod=viewthread&tid=358932" target="_blank" rel="noopener noreferrer">Universal Skin Mod</a>
+                </li>
+              {% endif %}
+              {% if has_legacy %}
+                <li>{{ trans('Blessing\\ConfigGenerator::config.legacy') }}</li>
+              {% endif %}
+            </ul>
           {% endif %}
         </div>
         <div class="card-footer">
@@ -27,13 +40,15 @@
           >
             CustomSkinLoader
           </a>
-          <a
-            href="https://github.com/RecursiveG/UniSkinMod/releases"
-            target="_blank"
-            class="btn bg-secondary"
-          >
-            UniSkinMod
-          </a>
+          {% if has_usm %}
+            <a
+              href="https://github.com/RecursiveG/UniSkinMod/releases"
+              target="_blank"
+              class="btn bg-secondary"
+            >
+              UniSkinMod
+            </a>
+          {% endif %}
         </div>
       </div>
       <div class="card card-secondary">
@@ -60,14 +75,16 @@
           <pre>{{ csl }}</pre>
         </div>
       </div>
-      <div class="card card-maroon">
-        <div class="card-header">
-          <h3 class="card-title">Universal Skin Mod</h3>
+      {% if has_usm %}
+        <div class="card card-maroon">
+          <div class="card-header">
+            <h3 class="card-title">Universal Skin Mod</h3>
+          </div>
+          <div class="card-body">
+            <pre>{{ usm }}</pre>
+          </div>
         </div>
-        <div class="card-body">
-          <pre>{{ usm }}</pre>
-        </div>
-      </div>
+      {% endif %}
     </div>
   </div>
 

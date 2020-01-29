@@ -3,11 +3,12 @@
 namespace Blessing\ConfigGenerator;
 
 use App\Services\Hook;
+use App\Services\PluginManager;
 use Parsedown;
 
 class Controller
 {
-    public function generate()
+    public function generate(PluginManager $plugins)
     {
         $siteName = option_localized('site_name');
 
@@ -40,7 +41,9 @@ class Controller
 
         return view('Blessing\ConfigGenerator::generator', [
             'csl' => json_encode($csl, $jsonConstants),
+            'has_usm' => optional($plugins->get('usm-api'))->isEnabled(),
             'usm' => json_encode($usm, $jsonConstants),
+            'has_legacy' => optional($plugins->get('legacy-api'))->isEnabled(),
             'site' => $siteName,
             'custom_intro' => $intro,
         ]);

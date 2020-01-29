@@ -1,9 +1,8 @@
 generate-config: Generate Config
 
 mod-requirement: Mod Requirement
-mod-intro: |
-  <p>We support all versions of <a href="http://www.mcbbs.net/forum.php?mod=viewthread&tid=358932" target="_blank">UniSkinMod</a> and <a href="http://www.mcbbs.net/thread-269807-1-1.html" target="_blank">CustomSkinLoader</a>, and any other skin mod supporting leagcy links.</p>
-  <p>Detailed documentation is available at: <a href="https://github.com/bs-community/blessing-skin-server/wiki/%E5%A6%82%E4%BD%95%E9%85%8D%E7%BD%AE%E7%9A%AE%E8%82%A4-Mod" target="_blank">@GitHub</a></p>
+mod-intro: 'We support the APIs below:'
+legacy: Legacy
 version: Version
 config-file: Config File
 
