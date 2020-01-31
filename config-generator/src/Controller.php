@@ -25,7 +25,7 @@ class Controller
         }
 
         $usm = [
-            'rootURIs' => [url('/csm/')],
+            'rootURIs' => [url('/usm/')],
             'legacySkinURIs' => [],
             'legacyCapeURIs' => [],
         ];
