@@ -15,7 +15,7 @@ class Controller
         $mojang = ['name' => 'Mojang', 'type' => 'MojangAPI'];
         $self = [
             'name' => $siteName,
-            'root' => url('/csl/'),
+            'root' => url('/csl/') . '/',
             'type' => 'CustomSkinAPI',
         ];
         if (option('csl_first', 'self') === 'self') {
@@ -25,7 +25,7 @@ class Controller
         }
 
         $usm = [
-            'rootURIs' => [url('/usm/')],
+            'rootURIs' => [url('/usm/') . '/'],
             'legacySkinURIs' => [],
             'legacyCapeURIs' => [],
         ];
