@@ -1,26 +1,48 @@
 <?php
 
+use App\Services\Plugin;
 use Illuminate\Contracts\Events\Dispatcher;
 
 return function (Dispatcher $events) {
     $events->listen(App\Events\PlayerProfileUpdated::class, function ($event) {
-        $name = $event->player->name;
-        $url[0] = env('QCLOUD_CDN_BASE_URL') . "/$name.json";
-        $url[1] = env('QCLOUD_CDN_BASE_URL') . "/csl/$name.json";
-        $url[2] = env('QCLOUD_CDN_BASE_URL') . "/usm/$name.json";
-
+        $baseUrl = env('QCLOUD_CDN_BASE_URL');
         $secretKey = env('QCLOUD_CDN_SECRET_KEY');
         $secretId = env('QCLOUD_CDN_SECRET_ID');
+        $usm = plugin('usm');
+        $yggdrasil = plugin('yggdrasil-api');
+
+        $name = $event->player->name;
+        $urls = [
+            $baseUrl . '/' . $name . '.json',
+            $baseUrl . '/csl/' . $name . '.json',
+            $baseUrl . '/skin/' . $name . '.png',
+            $baseUrl . '/cape/' . $name . '.png'
+        ];
+
+        if(isset($usm) && $usm->enabled) {
+            $urls[] = $baseUrl . '/usm/' . $name . '.json';
+        }
+
+        if(isset($yggdrasil) && $yggdrasil->enabled) {
+            $uuid = DB::table('uuid')->where('name', $name)->value('uuid');
+            array_push(
+                $urls,
+                $baseUrl . '/api/yggdrasil/sessionserver/session/minecraft/profile/' . $uuid,
+                $baseUrl . '/api/yggdrasil/sessionserver/session/minecraft/profile/' . $uuid . 'unsigned?=false',
+                $baseUrl . '/api/yggdrasil/sessionserver/session/minecraft/profile/' . $uuid . 'unsigned=true');
+        }
 
         $apiBody = [
             'Nonce' => rand(),
-            'Timestamp' => time(NULL),
+            'Timestamp' => time(),
             'Action' => 'RefreshCdnUrl',
-            'SecretId' => $secretId,
-            'urls.0' => $url[0],
-            'urls.1' => $url[1],
-            'urls.2' => $url[2],
+            'SecretId' => $secretId
         ];
+
+        for ($i = 0; $i < count($urls); $i++) {
+            $apiBody['urls.' . $i] = $urls[$i];
+        }
+
         ksort($apiBody);
 
         $sigTxt = 'POSTcdn.api.qcloud.com/v2/index.php?';
@@ -53,5 +75,7 @@ return function (Dispatcher $events) {
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_exec($ch);  // 忽略响应
+
     });
+
 };
