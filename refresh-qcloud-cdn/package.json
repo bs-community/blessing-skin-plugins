@@ -6,7 +6,7 @@
   "author": "GPlane",
   "namespace": "GPlane\\RefreshQcloudCdn",
   "require": {
-    "blessing-skin-server": "^4.0.0 || ^5"
+    "blessing-skin-server": "^5"
   },
   "enchants": {
     "icon": {
