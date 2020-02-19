@@ -1,11 +1,11 @@
 <?php
 
 use App\Services\Hook;
-use Illuminate\Contracts\Events\Dispatcher;
+use Blessing\Filter;
 
 require __DIR__.'/src/Utils/helpers.php';
 
-return function (Dispatcher $events) {
+return function (Filter $filter) {
     if (env('YGG_VERBOSE_LOG')) {
         config(['logging.channels.ygg' => [
             'driver' => 'single',
@@ -54,6 +54,11 @@ return function (Dispatcher $events) {
 
     // 向用户中心首页添加「快速配置启动器」板块
     if (option('ygg_show_config_section')) {
+        $filter->add('grid:user.index', function ($grid) {
+            $grid['widgets'][0][0][] = 'Yggdrasil::dnd';
+
+            return $grid;
+        });
         Hook::addScriptFileToPage(plugin('yggdrasil-api')->assets('dist/dnd.js'), ['user']);
     }
 
