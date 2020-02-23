@@ -1,0 +1,61 @@
+{% extends "admin.base" %}
+
+{% block title %}批量导入{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-6">
+    <div class="card card-primary">
+      <div class="card-header">
+        <h3 class="card-title">选择目录</h3>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <label for="dir">请输入要导入的材质文件所在的目录：</label>
+          <input type="text" class="form-control" id="dir" value="{{ app.cache.store.get('import-source-dir') }}" placeholder="填写服务器上的绝对路径">
+        </div>
+        <div class="callout callout-info">
+          <p>如果你使用的是 Windows 服务器，那么文件名中的中文字符在导入后可能会变成乱码。</p>
+          <p>请在下一步的预览中查看导入后的文件名，如果有乱码，请返回本页勾选下方的选项后重试。</p>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="gbk">
+          <label class="form-check-label" for="gbk">尝试消除乱码</label>
+        </div>
+      </div>
+      <div class="card-footer">
+        <button id="next" class="btn btn-primary">下一步</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block before_foot %}
+<script>
+const next = document.querySelector('#next');
+
+next.addEventListener('click', checkImportDirAvailable);
+
+async function checkImportDirAvailable() {
+  next.innerHTML = '<i class="fa fa-spinner fa-spin"></i> 检查目录权限中';
+  next.setAttribute('disabled', true);
+
+  const {
+    code,
+    message
+  } = await blessing.fetch.post('/admin/batch-import/check-dir', {
+    dir: document.querySelector('#dir').value,
+    gbk: document.querySelector('#gbk').checked
+  });
+
+  if (code === 0) {
+    window.location.href = '?step=2';
+  } else {
+    next.textContent = '下一步';
+    next.removeAttribute('disabled');
+    blessing.notify.toast.error(message)
+  }
+}
+</script>
+{% endblock %}
