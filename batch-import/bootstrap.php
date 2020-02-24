@@ -20,4 +20,12 @@ return function () {
             $router->post('chunk-import', 'BatchImportController@chunkImport');
         });
     });
+
+    Hook::addScriptFileToPage(plugin('batch-import')->assets('js/import.js'), ['admin/batch-import']);
+
+    $twig = app()->get('twig');
+    $filter = new \Twig\TwigFilter('basename', function ($path) {
+        return basename($path);
+    });
+    $twig->addFilter($filter);
 };
