@@ -23,7 +23,7 @@ return function () {
 
     Hook::addScriptFileToPage(plugin('batch-import')->assets('js/import.js'), ['admin/batch-import']);
 
-    $twig = app()->get('twig');
+    $twig = app('twig');
     $filter = new \Twig\TwigFilter('basename', function ($path) {
         return basename($path);
     });
