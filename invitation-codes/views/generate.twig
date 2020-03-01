@@ -1,0 +1,95 @@
+{% extends 'admin.base' %}
+{% block title %}生成邀请码{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+ <section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card card-primary">
+          <div class="card-header with-border">
+            <h3 class="card-title">目前可用的邀请码</h3>
+          </div>
+          <div class="card-body table-responsive">
+            <div class="callout callout-info">
+              <p>如需删除或修改邀请码，请前往 <code>invitation_codes</code> 数据表手动操作。</p>
+            </div>
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>邀请码</th>
+                    <th>生成时间</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                {% for entry in available %}
+                  <tr id="code-{{ entry.id }}">
+                    <td>{{ entry.code }}</td>
+                    <td>{{ entry.generated_at }}</td>
+                  </tr>
+                  
+                 {% endfor %}
+                    {% if available is empty %}
+                    <tr><td>没有可用的邀请码</td></tr>
+                    {% endif %}
+                </tbody>
+              </table>
+          </div>
+          <div class="card-footer">
+            <form method="post">
+              {{ csrf_field() }}
+              
+              <div class="input-group">
+
+                <input type="text" class="form-control" name="amount" style="width: 50%;" placeholder="要生成的邀请码数量">
+                <div class="input-group-append"><button type="submit" class="btn btn-primary pl-3 pr-3">
+                    生成
+                  </button></div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+          <div class="card">
+            <div class="card-header with-border">
+              <h3 class="card-title">已被使用的邀请码</h3>
+            </div><!-- /.card-header -->
+            <div class="card-body table-responsive">
+              <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>邀请码</th>
+                      <th>生成时间</th>
+                      <th>使用者 UID</th>
+                      <th>使用时间</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                  {% for entry in used %}
+                    
+                    <tr id="code-{{ entryid }}">
+                      <td>{{ entry.code }}</td>
+                      <td>{{ entry.generated_at }}</td>
+                      <td>{{ entry.used_by }}</td>
+                      <td>{{ entry.used_at }}</td>
+                    </tr>
+                   {% endfor %}
+                    {% if used is empty %}
+                    <tr><td>没有已被使用的邀请码</td></tr>
+                    {% endif %}
+                  </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+    </div>
+    </div>
+  </section><!-- /.content -->
+</div><!-- /.content-wrapper -->
+
+{% endblock %}

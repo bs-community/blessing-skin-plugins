@@ -1,12 +1,8 @@
 'use strict'
 
 blessing.event.on('mounted', ({ el }) => {
-  $(el).find('.row').first().before(
-    `<div class="form-group has-feedback">
-            <input id="invitation-code" type="text" class="form-control" placeholder="邀请码">
-            <span class="glyphicon glyphicon-inbox form-control-feedback"></span>
-        </div>`
-  )
+   $(el).find('.input-group').first().before('<div class="input-group mb-3"><input class="form-control" id="invitation-code" required="required" type="text" placeholder="邀请码"> <div class="input-group-append"><div class="input-group-text"><span class="fas fa-id-card"></span></div></div></div>');
+   	
 })
 
 // 插入邀请码的值

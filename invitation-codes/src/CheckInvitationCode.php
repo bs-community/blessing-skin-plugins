@@ -21,7 +21,10 @@ class CheckInvitationCode
 
             return $next($request);
         }
+#{"message":"The given data was invalid.","errors":{"email":["email \u5df2\u7ecf\u5b58\u5728\u3002"]}}
 
-        return json('邀请码无效', 1);
+
+        return json(['message'=>'邀请码错误','errors'=>array('email":"邀请码错误'),
+        ]);
     }
 }

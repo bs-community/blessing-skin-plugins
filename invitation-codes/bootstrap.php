@@ -14,9 +14,7 @@ return function (Dispatcher $events) {
         ]);
     });
 
-    Hook::addScriptFileToPage(plugin('invitation-codes')->assets('register.js'), [
-        'auth/register'
-    ]);
+    
 
     Hook::addRoute(function ($router) {
         $router->group([
@@ -40,4 +38,7 @@ return function (Dispatcher $events) {
             'used_at' => Carbon::now(),
         ]);
     });
+    Hook::addScriptFileToPage(plugin('invitation-codes')->assets('register.js'), [
+        'auth/register'
+    ]);
 };
