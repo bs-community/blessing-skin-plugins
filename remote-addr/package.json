@@ -1,0 +1,18 @@
+{
+  "name": "remote-addr",
+  "title": "Remote Addr",
+  "version": "0.1.0",
+  "description": "通过 `REMOTE_ADDR` 来获取 IP。使用负载均衡或反向代理的网站请不要使用。",
+  "author": "GPlane",
+  "url": "https://gplane.win/",
+  "namespace": "Blessing\\RemoteAddr",
+  "require": {
+    "blessing-skin-server": "^5.0.0"
+  },
+  "enchants": {
+    "icon": {
+      "fa": "ethernet",
+      "bg": "indigo"
+    }
+  }
+}
