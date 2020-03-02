@@ -94,7 +94,7 @@ class ConfigController extends Controller
 
         $result = [
             'meta' => [
-                'serverName' => option('site_name'),
+                'serverName' => option_localized('site_name'),
                 'implementationName' => 'Yggdrasil API for Blessing Skin',
                 'implementationVersion' => plugin('yggdrasil-api')->version,
                 'links' => [
