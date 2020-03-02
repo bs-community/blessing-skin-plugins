@@ -3,6 +3,7 @@
 namespace GPlane\Mojang\Listeners;
 
 use App\Models\User;
+use Blessing\Filter;
 use Carbon\Carbon;
 use Event;
 use Illuminate\Support\Arr;
@@ -42,6 +43,7 @@ class CreateNewUser
 
         $whip = new Whip();
         $ip = $whip->getValidIpAddress();
+        $ip = resolve(Filter::class)->apply('client_ip', $ip);
 
         $user = new User();
         $user->email = $email;
