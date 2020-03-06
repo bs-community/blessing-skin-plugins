@@ -40,7 +40,7 @@ class SynchronizeUser
                 $user = User::where('email', $event->identification)->first();//查询对应用户
                 if($user)
                 {
-                    $tempPlayer = Player::where('uid', $event->user->uid)->first();
+                    $tempPlayer = Player::where('uid', $user->uid)->first();
                     if($tempPlayer)
                     {
                         $this->CHemail($tempPlayer->name);//根据查询处的用户获得角色并获取角色名,并尝试同步邮箱
