@@ -3,7 +3,6 @@
 namespace Integration\Forum\Listener;
 
 use App\Events;
-use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Player;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -17,36 +16,63 @@ class SynchronizeUser
             Events\UserAuthenticated::class,
             Events\UserTryToLogin::class,
             Events\UserRegistered::class,
+//            Events\PlayerProfileUpdated::class//bysmyhw
         ], [$this, 'synchronize']);
     }
 
     public function synchronize(Events\Event $event)
     {
-        if ($event instanceof Events\UserTryToLogin) {
-            if ($event->authType == 'email') {
-                $user = User::where('email', $event->identification)->first();
-            } else {
-                $player = Player::where('name', $event->identification)->first();
-                $user = optional($player, function ($p) {
-                    return $p->user;
-                });
+        //如果用户更改了邮箱,同步到论坛
+        //S
+        if($event instanceof Events\UserProfileUpdated && $event->type == 'email' )
+        {
+            $tempPlayer = Player::where('uid', $event->user->uid)->first();
+            if($tempPlayer!=null)
+            {
+                $this->CHemail($tempPlayer->name);
+            }
+        }
+        //如果用户尝试登入,从这里开始触发
+        if ($event instanceof Events\UserTryToLogin) 
+        {
+            if ($event->authType == 'email') //如果是邮箱登入
+            {
+                $user = User::where('email', $event->identification)->first();//查询对应用户
+                if($user)
+                {
+                    $tempPlayer = Player::where('uid', $event->user->uid)->first();
+                    if($tempPlayer)
+                    {
+                        $this->CHemail($tempPlayer->name);//根据查询处的用户获得角色并获取角色名,并尝试同步邮箱
+                    }
+                }
+            } 
+            else //如果是角色名登入
+            {
+                $this->CHemail($event->identification);//直接根据输入的角色名尝试同步邮箱
+                $player = Player::where('name', $event->identification)->first();//查询对应角色
+                $user = optional($player, function ($p) {return $p->user;});//根据角色查询对应用户
             }
 
             // 如果正在登录的用户在皮肤站数据库中不存在，就尝试从论坛数据库同步过来
-            if (! $user) {
+            if (! $user) 
+            {
                 $user = $this->syncFromRemote($event->authType, $event->identification);
             }
-        } else {
+        } 
+        else
+        {
             $user = $event->user;
         }
 
         // 如果到这里了皮肤站里还是没有这个用户，就说明该用户确实是不存在的
         if (! $user) return;
 
-        $remoteUser = app('db.remote')->where('email', $user->email)->first();
-
+        if(Player::where('uid', $user->uid)->first()==null) return;//如果查不到,返回,防止下一句出错
+        $remoteUser = app('db.remote')->where('username', Player::where('uid', $user->uid)->first()->name)->first();
         // 如果这个角色存在于皮肤站，却不存在与论坛数据库中的话，就尝试同步过去
-        if (! $remoteUser) {
+        if (! $remoteUser) 
+        {
             $remoteUser = $this->syncFromLocal($user);
         }
 
@@ -54,24 +80,21 @@ class SynchronizeUser
         if (! $remoteUser) return;
 
         // 如果两边用户的密码或 salt 不同，就按照「重复处理」选项的定义来处理。
-        if (
-            $user->password != $remoteUser->password ||
-            (! empty($remoteUser->salt) && $user->salt != $remoteUser->salt)
-        ) {
-            if (option('forum_duplicated_prefer') == 'remote') {
-                $user->password = $remoteUser->password;
-                if (stristr(get_class(app('cipher')), 'SALTED')) {
-                    $user->salt = $remoteUser->salt;
+        if ($user->password != $remoteUser->password || (! empty($remoteUser->salt) && $user->salt != $remoteUser->salt) ) 
+        {
+                if (option('forum_duplicated_prefer') == 'remote') 
+                {
+                    $user->password = $remoteUser->password;
+                    if (stristr(get_class(app('cipher')), 'SALTED')) 
+                    {
+                        $user->salt = $remoteUser->salt;
+                    }
+                    $user->save();
+                } 
+                else 
+                {
+                    app('db.remote')->where('email', $user->email)->update(array_merge(['password' => $user->password],stristr(get_class(app('cipher')), 'SALTED')? ['salt' => $user->salt]: []));
                 }
-                $user->save();
-            } else {
-                app('db.remote')->where('email', $user->email)->update(array_merge(
-                    ['password' => $user->password],
-                    stristr(get_class(app('cipher')), 'SALTED')
-                        ? ['salt' => $user->salt]
-                        : []
-                    ));
-            }
         }
 
         // 同理，保证两边的用户名、绑定角色名一致。
@@ -79,16 +102,29 @@ class SynchronizeUser
             $user->player_name != $remoteUser->username &&
             ! empty($user->player_name) &&
             ! empty($remoteUser->username)
-        ) {
-            if (option('forum_duplicated_prefer') == 'remote') {
+            ) 
+        {
+            if (option('forum_duplicated_prefer') == 'remote') 
+            {
                 $user->player_name = $remoteUser->username;
                 $user->save();
-            } else {
-                app('db.remote')->where('email', $user->email)->update([
-                    'username' => $user->player_name
-                ]);
+            }
+            else 
+            {
+                app('db.remote')->where('email', $user->email)->update(['username' => $user->player_name]);
             }
         }
+    }
+
+    //将用户的email同步至论坛
+    protected function CHemail($username)
+    {
+        $bbs = app('db.remote')->where('username', $username)->first();//获取论坛里该用户名的邮箱
+        $mcskin = User::where('username', $username)->first();//或许皮肤站里该用户名的邮箱
+        if($bbs==null || $mcskin==null){return;}//如果有任意一端的数据不存在(即用户不存在),跳过
+//        if($bbs->password == $mcskin->password && $bbs->salt == $mcskin->salt)
+        if($bbs->email == $mcskin->email){return;}//如果email本就相同,跳过
+        {app('db.remote')->where('username', $username)->update(['email' => $mcskin->email]);}
     }
 
     /**
@@ -99,10 +135,13 @@ class SynchronizeUser
      */
     protected function syncFromLocal(User $user)
     {
+        $tempPlayer = Player::where('uid', $user->uid)->first();
+        if(!$tempPlayer){return;}//如果查不到这个玩家,就直接返回
+        $realName=$tempPlayer->name;
         if (config('secure.cipher') == 'BCRYPT' || config('secure.cipher') == 'PHP_PASSWORD_HASH') {
             // 用这个加密算法说明正在使用 Flarum
             app('db.remote')->insertGetId([
-                'username' => $user->player_name ?? $user->nickname,
+                'username' => $user->player_name ?? $realName,
                 'email'    => $user->email,
                 'password' => $user->password,
                 'is_email_confirmed' => (int) $user->verified,
@@ -111,7 +150,7 @@ class SynchronizeUser
         } elseif (config('secure.cipher') == 'SALTED2MD5') {
             // 用这个加密算法说明正在使用 Discuz! 或 PhpWind
             app('db.remote')->insertGetId([
-                'username' => $user->player_name,
+                'username' => $realName,
                 'email'    => $user->email,
                 'password' => $user->password,
                 'regip'    => $user->ip,
@@ -140,17 +179,17 @@ class SynchronizeUser
         }
 
         // 在皮肤站数据库新建用户及角色
-        $user               = new User;
-        $user->email        = $result->email;
-        $user->password     = $result->password;
-        $user->ip           = $result->regip ?? '255.255.255.255';
-        $user->score        = option('user_initial_score');
-        $user->register_at  = Carbon::now();
-        $user->last_sign_at = Carbon::now()->subDay();
-        $user->permission   = User::NORMAL;
-        $user->nickname     = $result->username;
-        $user->player_name  = $result->username;
-        $user->verified     = boolval($result->is_email_confirmed ?? false);
+        $user = new User;
+        $user->email = $result->email;
+        $user->password = $result->password;
+        $user->ip = $result->regip ?? '255.255.255.255';
+        $user->score = option('user_initial_score');
+        $user->register_at = get_datetime_string();
+        $user->last_sign_at = get_datetime_string(time() - 86400);
+        $user->permission = User::NORMAL;
+        $user->nickname = $result->username;
+        $user->player_name = $result->username;
+        $user->verified = boolval($result->is_email_confirmed ?? false);
         if (stristr(get_class(app('cipher')), 'SALTED')) {
             $user->salt = $result->salt ?? '';
         }
@@ -168,7 +207,7 @@ class SynchronizeUser
             $player->name = $result->username;
             $player->tid_skin = 0;
             $player->tid_cape = 0;
-            $player->last_modified = Carbon::now();
+            $player->last_modified = get_datetime_string();
             $player->save();
             event(new Events\PlayerWasAdded($player));
         }
