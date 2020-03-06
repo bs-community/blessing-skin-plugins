@@ -29,7 +29,7 @@ class SynchronizeUser
             $tempPlayer = Player::where('uid', $event->user->uid)->first();
             if($tempPlayer!=null)
             {
-                $this->CHemail($tempPlayer->name);
+                $this->syncEmailFromLocal($tempPlayer->name);
             }
         }
         //如果用户尝试登入,从这里开始触发
@@ -43,13 +43,13 @@ class SynchronizeUser
                     $tempPlayer = Player::where('uid', $user->uid)->first();
                     if($tempPlayer)
                     {
-                        $this->CHemail($tempPlayer->name);//根据查询处的用户获得角色并获取角色名,并尝试同步邮箱
+                        $this->syncEmailFromLocal($tempPlayer->name);//根据查询处的用户获得角色并获取角色名,并尝试同步邮箱
                     }
                 }
             } 
             else //如果是角色名登入
             {
-                $this->CHemail($event->identification);//直接根据输入的角色名尝试同步邮箱
+                $this->syncEmailFromLocal($event->identification);//直接根据输入的角色名尝试同步邮箱
                 $player = Player::where('name', $event->identification)->first();//查询对应角色
                 $user = optional($player, function ($p) {return $p->user;});//根据角色查询对应用户
             }
@@ -117,7 +117,7 @@ class SynchronizeUser
     }
 
     //将用户的email同步至论坛
-    protected function CHemail($username)
+    protected function syncEmailFromLocal($username)
     {
         $bbs = app('db.remote')->where('username', $username)->first();//获取论坛里该用户名的邮箱
         $mcskin = User::where('username', $username)->first();//或许皮肤站里该用户名的邮箱
@@ -184,8 +184,8 @@ class SynchronizeUser
         $user->password = $result->password;
         $user->ip = $result->regip ?? '255.255.255.255';
         $user->score = option('user_initial_score');
-        $user->register_at = get_datetime_string();
-        $user->last_sign_at = get_datetime_string(time() - 86400);
+        $user->register_at = Carbon::now();
+        $user->last_sign_at = Carbon::now()->subDay();
         $user->permission = User::NORMAL;
         $user->nickname = $result->username;
         $user->player_name = $result->username;
@@ -207,7 +207,7 @@ class SynchronizeUser
             $player->name = $result->username;
             $player->tid_skin = 0;
             $player->tid_cape = 0;
-            $player->last_modified = get_datetime_string();
+            $player->last_modified = Carbon::now();
             $player->save();
             event(new Events\PlayerWasAdded($player));
         }
