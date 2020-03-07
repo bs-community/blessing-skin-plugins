@@ -11,7 +11,7 @@ return function (Dispatcher $events) {
         $yggdrasil = plugin('yggdrasil-api');
 
         // 列出需要刷新的 URL
-        $name = $event->player->name;
+        $name = urlencode($event->player->name);
         $urls = [
             '/' . $name . '.json',
             '/csl/' . $name . '.json'
@@ -65,7 +65,6 @@ return function (Dispatcher $events) {
         }
 
         // 请求清除缓存
-        logger($token);
         curl_setopt_array($ch, [
             CURLOPT_POST => true,
             CURLOPT_HTTPHEADER => [
