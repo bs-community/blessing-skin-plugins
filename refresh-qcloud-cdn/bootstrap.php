@@ -8,22 +8,30 @@ return function (Dispatcher $events) {
         $baseUrl = env('QCLOUD_CDN_BASE_URL');
         $secretKey = env('QCLOUD_CDN_SECRET_KEY');
         $secretId = env('QCLOUD_CDN_SECRET_ID');
-        $usm = plugin('usm');
+
+        $usm = plugin('usm-api');
+        $legacy = plugin('legacy-api');
         $yggdrasil = plugin('yggdrasil-api');
 
         $name = $event->player->name;
         $urls = [
             $baseUrl . '/' . $name . '.json',
             $baseUrl . '/csl/' . $name . '.json',
-            $baseUrl . '/skin/' . $name . '.png',
-            $baseUrl . '/cape/' . $name . '.png'
         ];
 
-        if(isset($usm) && $usm->enabled) {
+        if (isset($usm) && $usm->enabled) {
             $urls[] = $baseUrl . '/usm/' . $name . '.json';
         }
 
-        if(isset($yggdrasil) && $yggdrasil->enabled) {
+        if (isset($legacy) && $legacy->enabled) {
+            array_push(
+                $urls,
+                $baseUrl . '/skin/' . $name . '.png',
+                $baseUrl . '/cape/' . $name . '.png'
+            );
+        }
+
+        if (isset($yggdrasil) && $yggdrasil->enabled) {
             $uuid = DB::table('uuid')->where('name', $name)->value('uuid');
             array_push(
                 $urls,
@@ -54,7 +62,7 @@ return function (Dispatcher $events) {
             $isFirst = false;
 
             // 拼接签名原文时，如果参数名称中携带"_"，需要替换成"."
-            if(strpos($key, '_')) {
+            if (strpos($key, '_')) {
                 $key = str_replace('_', '.', $key);
             }
             $sigTxt = $sigTxt . $key . '=' . $value;
