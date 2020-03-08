@@ -14,6 +14,10 @@
 - `AZURE_CDN_PROFILE` - CDN 域名组配置文件名称；
 - `AZURE_CDN_ENDPOINT` - CDN 终结点名称。
 
+## 注意
+
+在使用本插件前，请确保配置好队列驱动。
+
 ## License
 
 MIT License (c) 2020-present Honoka Tech LTD(GB)
