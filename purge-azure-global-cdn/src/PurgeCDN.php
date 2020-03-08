@@ -36,7 +36,7 @@ class PurgeCDN implements ShouldQueue
         $yggdrasil = $plugins->get('yggdrasil-api');
 
         // 列出需要刷新的 URL
-        $name = $this->player->name;
+        $name = urlencode($this->player->name);
         $urls = ['/'. $name.'.json', '/csl/'.$name.'.json'];
         if (isset($usm) && $usm->enabled) {
             $urls[] = '/usm/' . $name . '.json';
