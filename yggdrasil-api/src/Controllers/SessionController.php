@@ -8,12 +8,11 @@ use Cache;
 use Schema;
 use App\Models\User;
 use App\Models\Player;
-use Yggdrasil\Utils\UUID;
 use Yggdrasil\Models\Token;
 use Illuminate\Http\Request;
 use Yggdrasil\Models\Profile;
 use Illuminate\Routing\Controller;
-use Yggdrasil\Exceptions\IllegalArgumentException;
+use Illuminate\Support\Facades\Http;
 use Yggdrasil\Exceptions\ForbiddenOperationException;
 
 class SessionController extends Controller
@@ -139,11 +138,10 @@ class SessionController extends Controller
     protected function validateMojang($accessToken)
     {
         try {
-            $client = new \GuzzleHttp\Client();
-            $response = $client->request('POST', 'https://authserver.mojang.com/validate', [
+            $response = Http::post('https://authserver.mojang.com/validate', [
                 'json' => ['accessToken' => $accessToken],
             ]);
-            return $response->getStatusCode() === 204;
+            return $response->status() === 204;
         } catch (\Exception $e) {
             return false;
         }

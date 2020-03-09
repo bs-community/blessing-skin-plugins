@@ -10,6 +10,7 @@ use App\Models\Player;
 use App\Models\Texture;
 use Yggdrasil\Utils\UUID;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Http;
 use Yggdrasil\Exceptions\IllegalArgumentException;
 
 class Profile
@@ -173,11 +174,15 @@ class Profile
         $type = strtoupper($type);
         $profile = Cache::get('mojang_profile_'.$this->uuid, function () {
             try {
-                $client = new \GuzzleHttp\Client();
-                $response = $client->request('GET', 'https://sessionserver.mojang.com/session/minecraft/profile/'.$this->uuid);
-                $body = json_decode($response->getBody(), true);
-                Cache::put('mojang_profile_'.$this->uuid, $body, 300);
-                return $body;
+                $response = Http::get('https://sessionserver.mojang.com/session/minecraft/profile/'.$this->uuid);
+                if ($response->ok()) {
+                    $body = $response->json();
+                    Cache::put('mojang_profile_'.$this->uuid, $body, 300);
+
+                    return $body;
+                } else {
+                    return null;
+                }
             } catch (\Exception $e) {
                 return null;
             }
