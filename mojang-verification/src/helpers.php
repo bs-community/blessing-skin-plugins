@@ -58,8 +58,9 @@ if (! function_exists('bind_with_mojang_players')) {
                     $owner->score += option('score_per_player');
                     $owner->save();
 
-                    if (config('mail.driver') != '') {
+                    if (config('mail.default') != '') {
                         @Mail::to($owner->email)->send(new Mojang\Mail($owner->nickname, $profile['name']));
+                        $playerName = $player->name;
                         Hook::sendNotification(
                             [$owner],
                             '角色属主更改通知',

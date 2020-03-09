@@ -21,7 +21,7 @@ class Mail extends Mailable
 
     public function build()
     {
-        return $this->from(config('mail.username'), option_localized('site_name'))
+        return $this->from(config('mail.from'))
             ->subject('角色属主更改通知')
             ->view('GPlane\\Mojang::mail');
     }
