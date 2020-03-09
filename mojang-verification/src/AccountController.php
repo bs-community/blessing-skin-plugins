@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Composer\CaBundle\CaBundle;
 use DB;
 use Illuminate\Http\Request;
-use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 
 require_once __DIR__.'/helpers.php';
 
@@ -32,19 +32,15 @@ class AccountController extends Controller
     public function uuid()
     {
         $uuid = MojangVerification::where('user_id', auth()->id())->first()->uuid;
-        $client = new Client();
         try {
-            $response = $client->request(
-                'GET',
-                "https://api.mojang.com/user/profiles/$uuid/names",
-                ['verify' => CaBundle::getSystemCaRootBundlePath()]
-            );
-            $name = json_decode($response->getBody(), true)[0];
+            $response = Http::withOptions(['verify' => CaBundle::getSystemCaRootBundlePath()])
+                ->get("https://api.mojang.com/user/profiles/$uuid/names");
+            $name = $response->json()[0];
 
             DB::table('uuid')->where('name', $name)->update(['uuid' => $uuid]);
 
             return json(trans('GPlane\Mojang::uuid.success'), 0);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return json(trans('GPlane\Mojang::uuid.failed'), 1);
         }
     }

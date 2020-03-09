@@ -1,6 +1,6 @@
 {
   "name": "purge-azure-global-cdn",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "title": "刷新 Azure 国际版 CDN",
   "description": "当资源被更新时，自动刷新 Azure 国际版 CDN 的缓存。不适用于 Azure 中国版。",
   "author": "Honoka Tech LTD(GB)",

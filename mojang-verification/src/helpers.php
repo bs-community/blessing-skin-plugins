@@ -5,32 +5,32 @@ use GPlane\Mojang;
 use App\Models\User;
 use App\Models\Player;
 use App\Services\Hook;
-use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Http;
 use Composer\CaBundle\CaBundle;
 
 if (! function_exists('validate_mojang_account')) {
 
     function validate_mojang_account($username, $password)
     {
-        $client = new Client();
         try {
-            $response = $client->request('POST', 'https://authserver.mojang.com/authenticate', [
-                'json' => array_merge(compact('username', 'password'), [
-                    'agent' => ['name' => 'Minecraft', 'version' => 1],
-                ]),
-                'verify' => CaBundle::getSystemCaRootBundlePath(),
-            ]);
+            $response = Http::withOptions(['verify' => CaBundle::getSystemCaRootBundlePath()])
+                ->post(
+                    'https://authserver.mojang.com/authenticate',
+                    array_merge(compact('username', 'password'), [
+                        'agent' => ['name' => 'Minecraft', 'version' => 1],
+                    ])
+                );
 
-            if ($response->getStatusCode() == 200) {
-                $body = json_decode((string) $response->getBody(), true);
+            if ($response->ok()) {
+                $body = $response->json();
                 return [
                     'valid' => Arr::has($body, 'selectedProfile'),
                     'profiles' => $body['availableProfiles'],
                     'selected' => Arr::get($body, 'selectedProfile'),
                 ];
             } else {
-                Log::warning('Received unexpected HTTP status code from Mojang server: '.$response->getStatusCode());
+                Log::warning('Received unexpected HTTP status code from Mojang server: '.$response->status());
                 return ['valid' => false];
             }
         } catch (\Exception $e) {

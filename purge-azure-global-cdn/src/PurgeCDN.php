@@ -5,7 +5,6 @@ namespace Honoka\PurgeAzureGlobalCdn;
 use App\Models\Player;
 use App\Services\PluginManager;
 use Composer\CaBundle\CaBundle;
-use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -13,6 +12,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class PurgeCDN implements ShouldQueue
 {
@@ -60,8 +60,7 @@ class PurgeCDN implements ShouldQueue
 
         // 获取 Access Token
         $token = Cache::get('AZURE_ACCESS_TOKEN', function () {
-            $client = new Client();
-            $response = $client->post('https://login.microsoftonline.com/'.env('AZURE_AD_TENANT_ID').'/oauth2/token', [
+            $response = Http::withOptions([
                 'query' => [
                     'grant_type' => 'client_credentials',
                     'client_id' => env('AZURE_AD_CLIENT_ID'),
@@ -69,26 +68,21 @@ class PurgeCDN implements ShouldQueue
                     'resource' => 'https://management.azure.com/',
                 ],
                 'verify' => CaBundle::getSystemCaRootBundlePath(),
-            ]);
+            ])->post('https://login.microsoftonline.com/'.env('AZURE_AD_TENANT_ID').'/oauth2/token');
 
-            $result = json_decode((string) $response->getBody(), true);
+            $result = $response->json();
             Cache::put('AZURE_ACCESS_TOKEN', $result['access_token'], (int) $result['expires_in']);
 
             return $result['access_token'];
         });
 
         // 请求清除缓存
-        $client = new Client();
-        $client->post(
-            'https://management.azure.com/subscriptions/'.env('AZURE_SUBSCRIPTION_ID').'/resourceGroups/'.env('AZURE_RESOURCE_GROUP').'/providers/Microsoft.Cdn/profiles/'.env('AZURE_CDN_PROFILE').'/endpoints/'.env('AZURE_CDN_ENDPOINT').'/purge?api-version=2019-04-15',
-            [
-                'body' => json_encode(['contentPaths' => $urls], JSON_UNESCAPED_SLASHES),
-                'headers' => [
-                    'Authorization' => "Bearer $token",
-                    'Content-Type' => 'application/json',
-                ],
-                'verify' => CaBundle::getSystemCaRootBundlePath(),
-            ]
-        );
+        Http::withHeaders([
+            'Authorization' => "Bearer $token",
+            'Content-Type' => 'application/json',
+        ])->withOptions([
+            'body' => json_encode(['contentPaths' => $urls], JSON_UNESCAPED_SLASHES),
+            'verify' => CaBundle::getSystemCaRootBundlePath(),
+        ])->post('https://management.azure.com/subscriptions/'.env('AZURE_SUBSCRIPTION_ID').'/resourceGroups/'.env('AZURE_RESOURCE_GROUP').'/providers/Microsoft.Cdn/profiles/'.env('AZURE_CDN_PROFILE').'/endpoints/'.env('AZURE_CDN_ENDPOINT').'/purge?api-version=2019-04-15');
     }
 }
