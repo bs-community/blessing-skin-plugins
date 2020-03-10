@@ -1,0 +1,18 @@
+{
+  "name": "predis",
+  "title": "Predis",
+  "version": "1.0.0",
+  "description": "设置 Redis 客户端为 Predis。",
+  "author": "GPlane",
+  "url": "https://gplane.win/",
+  "namespace": "Blessing\\Predis",
+  "require": {
+    "blessing-skin-server": "^5.0.0"
+  },
+  "enchants": {
+    "icon": {
+      "fa": "memory",
+      "bg": "danger"
+    }
+  }
+}
