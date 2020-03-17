@@ -1,7 +1,7 @@
 {
   "name": "oauth-microsoft-live",
   "title": "使用 Microsoft Live 登录",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "通过 Microsoft Live 来登录皮肤站",
   "author": "GPlane",
   "url": "",
