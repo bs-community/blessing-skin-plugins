@@ -1,0 +1,11 @@
+{
+  "name": "fix-v4-update",
+  "title": "修复 v4 更新",
+  "version": "0.1.0",
+  "description": "修复 v4 的后台更新",
+  "author": "GPlane",
+  "namespace": "Blessing\\FixV4Update",
+  "require": {
+    "blessing-skin-server": "^4.0.0"
+  }
+}
