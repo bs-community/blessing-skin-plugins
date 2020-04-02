@@ -36,8 +36,8 @@ return function (Dispatcher $events) {
             array_push(
                 $urls,
                 $baseUrl . '/api/yggdrasil/sessionserver/session/minecraft/profile/' . $uuid,
-                $baseUrl . '/api/yggdrasil/sessionserver/session/minecraft/profile/' . $uuid . 'unsigned?=false',
-                $baseUrl . '/api/yggdrasil/sessionserver/session/minecraft/profile/' . $uuid . 'unsigned=true');
+                $baseUrl . '/api/yggdrasil/sessionserver/session/minecraft/profile/' . $uuid . '?unsigned=false',
+                $baseUrl . '/api/yggdrasil/sessionserver/session/minecraft/profile/' . $uuid . '?unsigned=true');
         }
 
         $apiBody = [

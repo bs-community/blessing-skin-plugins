@@ -53,8 +53,8 @@ class PurgeCDN implements ShouldQueue
             array_push(
                 $urls,
                 '/api/yggdrasil/sessionserver/session/minecraft/profile/' . $uuid,
-                '/api/yggdrasil/sessionserver/session/minecraft/profile/' . $uuid . 'unsigned?=false',
-                '/api/yggdrasil/sessionserver/session/minecraft/profile/' . $uuid . 'unsigned=true'
+                '/api/yggdrasil/sessionserver/session/minecraft/profile/' . $uuid . '?unsigned=false',
+                '/api/yggdrasil/sessionserver/session/minecraft/profile/' . $uuid . '?unsigned=true'
             );
         }
 
