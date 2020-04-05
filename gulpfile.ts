@@ -1,9 +1,10 @@
 import { src, dest, watch } from 'gulp'
 
 export function copy() {
-  return src('*/assets/**/*.*').pipe(dest('/tmp/plugins'))
+  const destPath = process.env.DEST || '../blessing-skin-server/public/plugins'
+  return src('*/assets/**/*.*').pipe(dest(destPath))
 }
 
 export function dev() {
-  watch('*/assets/**/*.*', copy)
+  watch('*/assets/**/*.*', { ignoreInitial: false }, copy)
 }
