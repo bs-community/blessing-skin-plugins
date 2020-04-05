@@ -16,5 +16,12 @@
     "gulp": "^4.0.2",
     "ts-node": "^8.8.2",
     "typescript": "^3.8.3"
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "tabWidth": 2
   }
 }
