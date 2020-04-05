@@ -1,0 +1,8 @@
+{
+  "extends": "@gplane/tsconfig",
+  "compilerOptions": {
+    "declaration": false,
+    "sourceMap": false,
+    "target": "es2017"
+  }
+}
