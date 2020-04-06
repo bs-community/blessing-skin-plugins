@@ -3,6 +3,11 @@
   "compilerOptions": {
     "declaration": false,
     "sourceMap": false,
-    "target": "es2017"
-  }
+    "target": "es2017",
+    "module": "umd"
+  },
+  "include": [
+    "*/assets",
+    "shims.d.ts"
+  ]
 }

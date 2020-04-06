@@ -594,10 +594,10 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@gplane/tsconfig@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@gplane/tsconfig/-/tsconfig-1.0.0.tgz#c7e6d56ece3d045abe46d00aece990d8412440f0"
-  integrity sha512-x0Lxt+oBXGVK8qYYLQvohFYQZlt9KgeVfkGAEXWOq38Gxu5KdcsGzPvyWPMhz5Og/U2pWXbjw4+rN4Qa7CPiWQ==
+"@gplane/tsconfig@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@gplane/tsconfig/-/tsconfig-1.1.0.tgz#81b98eea24463ce3e4acaf4f7d1b473873f45013"
+  integrity sha512-GOwmz1L5R5/CwoN1vtu+R9UjNawAXcKEhyw6Osk5jvy57Mvkudh5+9KDOIYd16Sqg69L4tqymrQ1eZEaeOnHvw==
 
 "@types/events@*":
   version "3.0.0"

@@ -45,6 +45,8 @@ $registry = Get-Content '.dist/registry-preview.json' | ConvertFrom-Json
 $packages = $registry.packages
 $plugins = Get-ChildItem -Path . -Directory -Exclude @('node_modules', '.*') | ForEach-Object {$_.Name}
 
+yarn build
+
 [PSObject[]]$updated = @()
 
 foreach ($plugin in $plugins) {

@@ -6,5 +6,5 @@ export function copy() {
 }
 
 export function dev() {
-  watch('*/assets/**/*.*', { ignoreInitial: false }, copy)
+  watch('*/assets/**/*.*', { ignoreInitial: false, ignored: ['**/*.ts'] }, copy)
 }
