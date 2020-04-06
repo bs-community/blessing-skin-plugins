@@ -2,19 +2,23 @@
 
 namespace GPlane\ShareRegistrationLink;
 
-use Event;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class CheckCode
 {
-    public function handle($request, \Closure $next)
-    {
-        $shareCode = $request->input('share_code');
-        if (! $shareCode) {
-            return $next($request);
-        }
+    /** @var Request */
+    protected $request;
 
-        $record = Record::where('code', $shareCode)->first();
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
+
+    public function handle(User $user)
+    {
+        $code = $this->request->input('share');
+        $record = Record::where('code', $code)->first();
         if ($record) {
             $sharer = User::find($record->sharer);
             if ($sharer) {
@@ -22,13 +26,8 @@ class CheckCode
                 $sharer->save();
             }
 
-            Event::listen(\App\Events\UserRegistered::class, function ($event) {
-                $user = $event->user;
-                $user->score += option('reg_link_sharee_score', 0);
-                $user->save();
-            });
+            $user->score += option('reg_link_sharee_score', 0);
+            $user->save();
         }
-
-        return $next($request);
     }
 }

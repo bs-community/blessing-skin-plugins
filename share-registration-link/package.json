@@ -1,15 +1,15 @@
 {
   "name": "share-registration-link",
-  "version": "1.2.2",
+  "version": "2.0.0",
   "title": "分享注册链接",
   "description": "允许用户分享注册链接并获得积分",
   "author": "GPlane",
   "namespace": "GPlane\\ShareRegistrationLink",
-  "config": "config.blade.php",
   "require": {
-    "blessing-skin-server": "^4.1.0 || ^5"
+    "blessing-skin-server": "^5.0.0"
   },
   "enchants": {
+    "config": "GPlane\\ShareRegistrationLink\\Configuration",
     "icon": {
       "fa": "share-alt",
       "bg": "info"

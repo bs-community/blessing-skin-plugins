@@ -20,10 +20,10 @@ declare global {
     i18n: object
 
     fetch: {
-      get(url: string, params?: object): Promise<object>
-      post(url: string, data?: object): Promise<object>
-      put(url: string, data?: object): Promise<object>
-      del(url: string, data?: object): Promise<object>
+      get<T = any>(url: string, params?: object): Promise<T>
+      post<T = any>(url: string, data?: object): Promise<T>
+      put<T = any>(url: string, data?: object): Promise<T>
+      del<T = any>(url: string, data?: object): Promise<T>
     }
 
     event: {
