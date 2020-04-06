@@ -21,8 +21,10 @@ blessing.event.on('mounted', () => {
 })
 
 // 插入邀请码的值
-blessing.event.on('beforeFetch', (request: { data: any }) => {
-  request.data.invitationCode = document.querySelector<HTMLInputElement>(
-    '#invitation-code',
-  )?.value
-})
+blessing.event.on(
+  'beforeFetch',
+  (request: { data: Record<string, string> }) => {
+    request.data.invitationCode =
+      document.querySelector<HTMLInputElement>('#invitation-code')?.value || ''
+  },
+)
