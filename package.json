@@ -1,8 +1,7 @@
 {
   "version": "0.0.0",
   "workspaces": [
-    "batch-import",
-    "yggdrasil-api"
+    "batch-import"
   ],
   "engines": {
     "node": ">=10.15.0"
