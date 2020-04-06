@@ -1,4 +1,1 @@
-node_modules/*
-assets/dist/*
-.cache/*
-vendor/*
+*.js

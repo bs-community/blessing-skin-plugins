@@ -60,7 +60,7 @@ class ConfigController extends Controller
             $keypairForm->addMessage('私钥有效。', 'success');
         }
 
-        Hook::addScriptFileToPage(plugin_assets('yggdrasil-api', 'dist/config.js'));
+        Hook::addScriptFileToPage(plugin_assets('yggdrasil-api', 'config.js'));
 
         return view('Yggdrasil::config', [
             'forms' => ['common' => $commonForm, 'keypair' => $keypairForm],

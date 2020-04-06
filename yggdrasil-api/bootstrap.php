@@ -59,7 +59,7 @@ return function (Filter $filter) {
 
             return $grid;
         });
-        Hook::addScriptFileToPage(plugin('yggdrasil-api')->assets('dist/dnd.js'), ['user']);
+        Hook::addScriptFileToPage(plugin('yggdrasil-api')->assets('dnd.js'), ['user']);
     }
 
     // 向管理后台菜单添加「Yggdrasil 日志」项目
