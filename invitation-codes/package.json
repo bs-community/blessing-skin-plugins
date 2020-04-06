@@ -7,7 +7,7 @@
   "url": "https://blessing.studio/",
   "namespace": "InvitationCodes",
   "require": {
-    "blessing-skin-server": "^4.0.0 || ^5"
+    "blessing-skin-server": "^5.0.0"
   },
   "enchants": {
     "icon": {

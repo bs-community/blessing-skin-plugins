@@ -2,26 +2,35 @@
 
 namespace InvitationCodes;
 
-use DB;
-use Closure;
+use Blessing\Rejection;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CheckInvitationCode
 {
-    public function handle($request, Closure $next)
+    /** @var Request */
+    protected $request;
+
+    public function __construct(Request $request)
     {
-        if (! $request->input('invitationCode')) {
-            return json('邀请码不能为空', 1);
+        $this->request = $request;
+    }
+
+    public function filter($can)
+    {
+        $code = $this->request->input('invitationCode');
+        if (empty($code)) {
+            return new Rejection('邀请码不能为空');
         }
 
-        $code = request('invitationCode');
         $result = DB::table('invitation_codes')->where('code', $code)->first();
 
         if ($result && $result->used_by == 0) {
             session(['using_invitation_code' => $code]);
 
-            return $next($request);
+            return $can;
         }
 
-        return json('邀请码无效', 1);
+        return new Rejection('邀请码无效');
     }
 }

@@ -2,35 +2,41 @@
 
 namespace InvitationCodes;
 
-use DB;
-use Carbon\Carbon;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use DB;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class InvitationCodeController extends Controller
 {
-    public function generate()
+    public function list()
     {
-        if (request()->isMethod('post') && request('amount')) {
-            $this->generateInvitationCodes(request('amount'));
-        }
+        $free = DB::table('invitation_codes')->where('used_by', 0)->get();
+        $used = DB::table('invitation_codes')->where('used_by', '<>', 0)->get();
 
-        return view('InvitationCodes::generate', [
-            'available' => DB::table('invitation_codes')->where('used_by', 0)->get(),
-            'used' => DB::table('invitation_codes')->where('used_by', '<>', 0)->get()
-        ]);
+        return view('InvitationCodes::codes', compact('free', 'used'));
     }
 
-    protected function generateInvitationCodes($amount)
+    public function generate(Request $request)
     {
-        $codes = [];
+        ['amount' => $amount] = $request->validate([
+            'amount' => 'required|integer|min:1',
+        ], ['amount' => 'aa']);
 
-        for ($i = 0; $i < $amount; $i++) {
-            $codes[] = [
-                'code' => md5(time().rand()),
-                'generated_at' => Carbon::now(),
-            ];
-        }
+        $records = Collection::times($amount)
+            ->map(function () {
+                return [
+                    'code' => md5(Str::random()),
+                    'generated_at' => Carbon::now(),
+                ];
+            })
+            ->values()
+            ->toArray();
 
-        DB::table('invitation_codes')->insert($codes);
+        DB::table('invitation_codes')->insert($records);
+
+        return back();
     }
 }
