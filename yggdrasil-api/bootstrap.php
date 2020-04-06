@@ -83,7 +83,6 @@ return function (Filter $filter) {
             'namespace'  => 'Yggdrasil\Controllers'
         ], function ($router) {
             $router->get('admin/yggdrasil-log', 'ConfigController@logPage');
-            $router->get('admin/yggdrasil-log/data', 'ConfigController@logData');
         });
 
         $router->group([

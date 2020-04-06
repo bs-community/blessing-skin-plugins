@@ -62,8 +62,6 @@ class ConfigController extends Controller
 
         Hook::addScriptFileToPage(plugin_assets('yggdrasil-api', 'dist/config.js'));
 
-        $uuidCount = DB::table('uuid')->count();
-
         return view('Yggdrasil::config', [
             'forms' => ['common' => $commonForm, 'keypair' => $keypairForm],
         ]);
@@ -114,34 +112,19 @@ class ConfigController extends Controller
 
     public function logPage()
     {
-        Hook::addScriptFileToPage(plugin_assets('yggdrasil-api', 'dist/log.js'));
-
-        return view('Yggdrasil::log');
-    }
-
-    public function logData(Request $request)
-    {
-        $search = $request->input('search', '');
-        $sortField = $request->input('sortField', 'id');
-        $sortType = $request->input('sortType', 'asc');
-        $page = $request->input('page', 1);
-        $perPage = $request->input('perPage', 10);
-
-        $query = DB::table('ygg_log')
-            ->join('users', 'ygg_log.user_id', '=', 'users.uid')
-            ->leftJoin('players', 'ygg_log.player_id', '=', 'players.pid')
-            ->select('id', 'action', 'user_id', 'email', 'player_id', 'players.name', 'parameters', 'ygg_log.ip', 'time')
-            ->where('email', 'like', '%'.$search.'%')
-            ->orWhere('players.name', 'like', '%'.$search.'%')
-            ->orWhere('ygg_log.ip', 'like', '%'.$search.'%')
-            ->orderBy($sortField, $sortType)
-            ->offset(($page - 1) * $perPage)
-            ->limit($perPage);
-
-        return [
-            'data' => $query->get(),
-            'totalRecords' => DB::table('ygg_log')->count()
+        $logs = DB::table('ygg_log')->paginate(10);
+        $actions = [
+            'authenticate' => '登录',
+            'refresh' => '刷新令牌',
+            'validate' => '验证令牌',
+            'signout' => '登出',
+            'invalidate' => '吊销令牌',
+            'join' => '请求加入服务器',
+            'has_joined' => '进入服务器',
+            'undefined' => '未知',
         ];
+
+        return view('Yggdrasil::log', ['logs' => $logs, 'actions' => $actions]);
     }
 
     public function generate()
