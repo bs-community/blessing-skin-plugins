@@ -9,7 +9,8 @@ git add .
 $shouldUpdate = git status -s
 if ($shouldUpdate) {
   git commit -m "Publish"
-  git push "https://tadaf:$token@github.com/bs-community/plugins-dist.git" master
+  git remote set-url origin "https://tadaf:$token@github.com/bs-community/plugins-dist.git"
+  git push origin master
 }
 
 Set-Location '..'
