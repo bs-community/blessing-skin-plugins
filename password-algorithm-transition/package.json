@@ -1,6 +1,6 @@
 {
   "name": "password-algorithm-transition",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "title": "GPlane\\PasswordTransition::general.title",
   "description": "GPlane\\PasswordTransition::general.description",
   "author": "GPlane",

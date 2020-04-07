@@ -25,13 +25,8 @@ class Cipher extends BaseCipher
     public function verify($password, $hash, $salt = '')
     {
         $index = 0;
-        $firstCipher = null;
         $result = false;
         foreach (app()->tagged('ciphers') as $cipher) {
-            if ($index == 0) {
-                $firstCipher = $cipher;
-            }
-
             $isValid = $cipher->verify($password, $hash, $this->salts[$index]);
             if ($isValid) {
                 if ($index == 0) {
@@ -46,9 +41,8 @@ class Cipher extends BaseCipher
         }
 
         if ($result) {
-            Event::listen(Events\UserLoggedIn::class, function ($event) use ($password) {
-                $event->user->changePassword($password);
-                return false;
+            Event::listen('auth.login.succeeded', function ($user) use ($password) {
+                $user->changePassword($password);
             });
         }
 
