@@ -1,0 +1,5 @@
+title: 密码算法转换
+
+progress:
+  title: 全站转换进度
+  count: ":total 位用户 (:percentage%)"
