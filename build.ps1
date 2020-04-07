@@ -40,7 +40,7 @@ function Get-Trans {
 Write-Host 'Marketplace Builder'
 $env:NODE_ENV = 'production'
 
-git clone "https://dev.azure.com/blessing-skin/Plugins/_git/Plugins" .dist
+git clone "https://github.com/bs-community/plugins-dist.git" .dist
 $registry = Get-Content '.dist/registry-preview.json' | ConvertFrom-Json
 $packages = $registry.packages
 $plugins = Get-ChildItem -Path . -Directory -Exclude @('node_modules', '.*') | ForEach-Object {$_.Name}
@@ -89,6 +89,7 @@ $packages = $plugins | ForEach-Object {
   $manifest = Get-Content "./${_}/package.json" | ConvertFrom-Json
   $name = $manifest.name
   $version = $manifest.version
+  $url = "https://cdn.jsdelivr.net/gh/bs-community/plugins-dist/${name}_$version.zip"
   @{
     name = $name
     version = $version
@@ -106,8 +107,8 @@ $packages = $plugins | ForEach-Object {
     require = $manifest.require
     dist = @{
       type = 'zip'
-      url = "https://dev.azure.com/blessing-skin/0dc12c60-882a-46a2-90c6-9450490193a2/_apis/git/repositories/d5283b63-dfb0-497e-ad17-2860a547596f/Items?path=%2F${name}_$version.zip"
-      shasum = (Get-FileHash -Path ".dist/${name}_$version.zip" -Algorithm SHA1).Hash.ToLower()
+      url = $url
+      shasum = (Get-FileHash -Path ".dist/${name}_$version.zip" -Algorithm SHA256).Hash.ToLower()
     }
   }
 }
