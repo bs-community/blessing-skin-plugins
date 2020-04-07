@@ -1,8 +1,5 @@
 {
   "version": "0.0.0",
-  "workspaces": [
-    "batch-import"
-  ],
   "engines": {
     "node": ">=10.15.0"
   },
