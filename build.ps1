@@ -122,6 +122,6 @@ foreach ($lang in 'en', 'zh_CN') {
         }
     }
     $registry.packages = $packages
-    ConvertTo-Json $registry -Depth 10 | Out-File -FilePath '.dist/registry-preview_$lang.json'
+    ConvertTo-Json $registry -Depth 10 | Out-File -FilePath ".dist/registry-preview_$lang.json"
 }
 Copy-Item -Path '.dist/registry-preview_zh_CN.json' -Destination '.dist/registry-preview.json'
