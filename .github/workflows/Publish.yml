@@ -1,0 +1,21 @@
+name: Publish
+
+on: push
+
+jobs:
+  publish:
+    name: 'Build and Publish'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        submodules: true
+    - name: Install dependencies
+      run: yarn
+    - name: Build
+      run: ./build.ps1
+      shell: pwsh
+    - name: Publish
+      run: ./publish.ps1
+      shell: pwsh
