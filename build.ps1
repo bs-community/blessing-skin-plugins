@@ -64,7 +64,15 @@ foreach ($plugin in $plugins) {
         continue
     }
 
-    $updated += @{ name = $manifest.title; version = $manifest.version }
+    $updated += @{
+        name    = if ($manifest.title.Contains('::')) {
+            Get-Trans -Plugin $plugin -Key $manifest.title -Lang zh_CN
+        }
+        else {
+            $manifest.title
+        }
+        version = $manifest.version
+    }
 
     Write-Host "[$plugin] Bump to $version"
 
