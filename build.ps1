@@ -72,7 +72,7 @@ foreach ($plugin in $plugins) {
 
     $updated += @{
         name    = if ($manifest.title.Contains('::')) {
-            Get-Trans -Plugin $plugin -Key $manifest.title -Lang zh_CN
+            Get-Trans -Key $manifest.title -Lang zh_CN
         }
         else {
             $manifest.title
