@@ -5,7 +5,7 @@ document.body.addEventListener('dragstart', (event) => {
 
   const target = event.target as HTMLElement
 
-  if (target.id === 'dnd-button') {
+  if (target.id === 'ygg-dnd-button') {
     const uri =
       'authlib-injector:yggdrasil-server:' +
       encodeURIComponent(target.dataset.clipboardText!)
