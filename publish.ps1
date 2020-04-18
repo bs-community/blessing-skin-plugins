@@ -21,3 +21,8 @@ $botBinUrl = ((Invoke-WebRequest $botRelease.assets_url).Content | ConvertFrom-J
 bash -c "curl -fSL $botBinUrl -o bot"
 chmod +x ./bot
 ./bot plugin updated.json
+
+foreach ($lang in 'en', 'zh_CN') {
+    Invoke-WebRequest "https://purge.jsdelivr.net/gh/bs-community/plugins-dist@latest/registry-preview_$lang.json"
+}
+Invoke-WebRequest 'https://purge.jsdelivr.net/gh/bs-community/plugins-dist@latest/registry-preview.json'
