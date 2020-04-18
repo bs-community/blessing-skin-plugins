@@ -3,7 +3,7 @@ Install-Module powershell-yaml -Force
 function Get-Trans {
     param (
         # Plugin name
-        [Parameter]
+        [Parameter(Mandatory = $false)]
         [string]
         $Plugin,
 
