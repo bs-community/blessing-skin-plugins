@@ -3,7 +3,7 @@ Install-Module powershell-yaml -Force
 function Get-Trans {
     param (
         # Plugin name
-        [Parameter(Mandatory)]
+        [Parameter]
         [string]
         $Plugin,
 
@@ -22,7 +22,13 @@ function Get-Trans {
         $realKey = $Key.Split("::")[1]
         $segment = $realKey.Split(".")
         $head = $segment[0]
-        $obj = Get-Content "./$Plugin/lang/$Lang/$head.yml" -Raw | ConvertFrom-Yaml
+        $filePath = if ($Plugin) {
+            "./$Plugin/lang/$Lang/$head.yml"
+        }
+        else {
+            "./lang/$Lang/$head.yml"
+        }
+        $obj = Get-Content $filePath -Raw | ConvertFrom-Yaml
 
         $temp = ""
         for ($i = 0; $i -lt $segment.Count; $i++) {
