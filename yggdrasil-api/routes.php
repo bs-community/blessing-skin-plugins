@@ -1,30 +1,26 @@
 <?php
 
-$router->group([
-    'prefix' => 'authserver',
-    'middleware' => ['Yggdrasil\Middleware\CheckContentType'],
-], function ($router) {
-    // 防止暴力破解密码
-    $router->group([
-        'middleware' => ['Yggdrasil\Middleware\Throttle'],
-    ], function ($router) {
-        $router->post('authenticate', 'AuthController@authenticate');
-        $router->post('signout', 'AuthController@signout');
-    });
+Route::prefix('authserver')
+    ->middleware(['Yggdrasil\Middleware\CheckContentType'])
+    ->group(function () {
+        // 防止暴力破解密码
+        Route::middleware(['Yggdrasil\Middleware\Throttle'])
+            ->group(function () {
+                Route::post('authenticate', 'AuthController@authenticate');
+                Route::post('signout', 'AuthController@signout');
+            });
 
-    $router->post('refresh', 'AuthController@refresh');
+        Route::post('refresh', 'AuthController@refresh');
 
-    $router->post('validate', 'AuthController@validate');
-    $router->post('invalidate', 'AuthController@invalidate');
+        Route::post('validate', 'AuthController@validate');
+        Route::post('invalidate', 'AuthController@invalidate');
 });
 
-$router->group([
-    'prefix' => 'sessionserver/session/minecraft'
-], function ($router) {
-    $router->post('join', 'SessionController@joinServer');
-    $router->get('hasJoined', 'SessionController@hasJoinedServer');
+Route::prefix('sessionserver/session/minecraft')->group(function () {
+    Route::post('join', 'SessionController@joinServer');
+    Route::get('hasJoined', 'SessionController@hasJoinedServer');
 
-    $router->get('profile/{uuid}', 'ProfileController@getProfileFromUuid');
+    Route::get('profile/{uuid}', 'ProfileController@getProfileFromUuid');
 });
 
-$router->post('api/profiles/minecraft', 'ProfileController@searchProfile');
+Route::post('api/profiles/minecraft', 'ProfileController@searchProfile');

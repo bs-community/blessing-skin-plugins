@@ -70,35 +70,26 @@ return function (Filter $filter) {
     ]);
 
     // 添加 API 路由
-    Hook::addRoute(function ($router) {
+    Hook::addRoute(function () {
+        Route::namespace('Yggdrasil\Controllers')
+            ->prefix('api/yggdrasil')
+            ->group(function () {
+                Route::any('', 'ConfigController@hello');
 
-        $router->group([
-            'namespace'  => 'Yggdrasil\Controllers'
-        ], function ($router) {
-            $router->any('api/yggdrasil', 'ConfigController@hello');
-        });
+                require __DIR__.'/routes.php';
+            });
 
-        $router->group([
-            'middleware' => ['web', 'auth', 'role:admin'],
-            'namespace'  => 'Yggdrasil\Controllers'
-        ], function ($router) {
-            $router->get('admin/yggdrasil-log', 'ConfigController@logPage');
-        });
+        Route::middleware(['web', 'auth', 'role:admin'])
+            ->namespace('Yggdrasil\Controllers')
+            ->prefix('admin')
+            ->group(function () {
+                Route::get('yggdrasil-log', 'ConfigController@logPage');
 
-        $router->group([
-            'middleware' => ['web', 'auth', 'role:admin'],
-            'namespace'  => 'Yggdrasil\Controllers',
-            'prefix' => 'admin/plugins/config/yggdrasil-api'
-        ], function ($router) {
-            $router->post('generate', 'ConfigController@generate');
-        });
-
-        $router->group([
-            'namespace'  => 'Yggdrasil\Controllers',
-            'prefix' => 'api/yggdrasil'
-        ], function ($router) {
-            require __DIR__.'/routes.php';
-        });
+                Route::post(
+                    'plugins/config/yggdrasil-api/generate',
+                    'ConfigController@generate'
+                );
+            });
     });
 
     // 全局添加 ALI HTTP 响应头
