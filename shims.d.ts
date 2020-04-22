@@ -36,6 +36,8 @@ declare global {
       toast: Toast
     }
   }
+
+  let trans: (key: string, params?: object) => string
 }
 
 export default undefined
