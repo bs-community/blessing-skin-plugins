@@ -1,0 +1,48 @@
+title: Yggdrasil API Configuration
+
+url:
+  label: 'Yggdrasil API URL:'
+  notice: Please make sure the URL above is accessible before configuring authlib-injector.
+
+common:
+  title: Common
+  ygg_uuid_algorithm:
+    title: UUID Algorithm
+    v3: 'Version 3: Keep it same with "Offline Users" (Recommended)'
+    v4: 'Version 4: Generate randomly (DO NOT use this if you expect it can be compatible with "Offline Users")'
+    hint: Use "Version 3" to gather compatibility with offline servers.
+  ygg_token_expire_1:
+    title: Token Temporarily-expired Time
+  ygg_token_expire_2:
+    title: Token Completely-expired Time
+    description: Specify the expiry time of Token "Temporarily Invalid" and "Completely Invalid" in seconds.
+  ygg_rate_limit:
+    title: Log-in/Log-out Rate Limit
+    hint: Time interval between two operations (ms).
+  ygg_skin_domain:
+    title: Additional Skin Domain Names Whitelist
+    description: Only textures from the list here will be loaded. Split them with comma. URL of this site and current access URL are added by default.
+  ygg_search_profile_max:
+    title: Limit Number of Roles for Batch Query
+    hint: How many roles can be queried in one request?
+  ygg_show_config_section:
+    title: Show "Quick Configuartion"
+    label: Show "Quick Configuration" at user center.
+  ygg_enable_ali:
+    title: API Location Indicator
+    label: Enable API Location Indicator (ALI).
+
+keypair:
+  title: Keypair
+  ygg_private_key:
+    title: OpenSSL Private Key
+    hint: PEM-format private key is required and public key will be generated automatically according to private key.
+    generate: Generate Private Key
+    submit: Submit Private Key
+    message: Click the button below to generate a private key.
+    valid: Valid private key.
+    invalid: Invalid RSA private key. Please check and re-configure it.
+
+rsa:
+  invalid: Invalid RSA private key. Please re-configure it.
+  length: The length of RSA private key must be greater than 4096. Please re-configure it.

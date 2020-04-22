@@ -1,0 +1,2 @@
+content-type: "Content-Type" must be "application/json".
+throttle: 'Too frequent requests. Please try after :s seconds.'

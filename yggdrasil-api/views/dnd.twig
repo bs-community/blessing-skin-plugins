@@ -1,0 +1,26 @@
+<div class="card card-success card-outline">
+  <div class="card-header">
+    <h3 class="card-title">{{ trans('Yggdrasil::dnd.title') }}</h3>
+  </div>
+  <div class="card-body">
+    <p>{{ trans('Yggdrasil::dnd.url') }}<code>{{ url('/api/yggdrasil') }}</code></p>
+    <p>{{ trans('Yggdrasil::dnd.tip') }}</p>
+  </div>
+  <div class="card-footer">
+    <button
+      id="ygg-dnd-button"
+      class="btn btn-primary"
+      draggable="true"
+      data-clipboard-text="{{ url('/api/yggdrasil') }}"
+    >
+      {{ trans('Yggdrasil::dnd.button') }}
+    </button>
+    <a
+      class="btn btn-default ml-2"
+      target="_blank"
+      href="https://github.com/bs-community/yggdrasil-api/wiki/0x03-%E9%85%8D%E5%90%88-authlib-injector-%E4%BD%BF%E7%94%A8#%EF%B8%8F-%E9%85%8D%E7%BD%AE%E5%90%AF%E5%8A%A8%E5%99%A8"
+    >
+      {{ trans('Yggdrasil::dnd.guide') }}
+    </a>
+  </div>
+</div>

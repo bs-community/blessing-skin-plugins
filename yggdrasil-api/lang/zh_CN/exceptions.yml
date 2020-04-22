@@ -1,0 +1,22 @@
+token:
+  invalid: 无效的 AccessToken，请重新登录
+  not-matched: 提供的 ClientToken 与 AccessToken 不匹配，请重新登录
+  missing: 未查找到有效的登录信息，请重新登录
+
+user:
+  not-existed: 令牌绑定的用户不存在，请重新登录
+  banned: 你已经被本站封禁，详情请询问管理人员
+  not-verified: 你还没有验证你的邮箱，请在通过皮肤站的邮箱验证后再尝试登录
+
+player:
+  not-existed: 请求的角色不存在
+  not-matched: 请求的角色与令牌绑定的角色不一致
+  owner: 请求的角色不属于该用户
+  query-max: '一次最多只能查询 :count 个角色'
+
+auth:
+  empty: 邮箱或者密码没填哦
+  not-existed: '用户 :identification 不存在'
+  not-matched: 输入的邮箱与密码不匹配
+
+uuid: '无效的 Profile UUID [:profile]，它不属于任何角色'

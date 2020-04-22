@@ -1,0 +1,19 @@
+{
+  "name": "yggdrasil-api",
+  "version": "4.4.0",
+  "title": "Yggdrasil API",
+  "description": "Yggdrasil API + authlib-injector = ✨",
+  "author": "printempw",
+  "url": "https://github.com/bs-community/yggdrasil-api/",
+  "namespace": "Yggdrasil",
+  "require": {
+    "blessing-skin-server": "^5.0.0"
+  },
+  "enchants": {
+    "config": "Controllers\\ConfigController",
+    "icon": {
+      "fa": "khanda",
+      "bg": "info"
+    }
+  }
+}

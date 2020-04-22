@@ -1,0 +1,52 @@
+{% extends 'admin.base' %}
+
+{% block title %}{{ trans('Yggdrasil::log.title') }}{% endblock %}
+
+{% block content %}
+  <div class="card">
+    <div class="card-body p-0">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>{{ trans('Yggdrasil::log.header.action') }}</th>
+            <th>UID</th>
+            <th>PID</th>
+            <th>{{ trans('Yggdrasil::log.header.params') }}</th>
+            <th>IP</th>
+            <th>{{ trans('Yggdrasil::log.header.time') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for log in logs %}
+            <tr>
+              <td>{{ log.id }}</td>
+              <td>{{ actions[log.action] }}</td>
+              <td>{{ log.user_id }}</td>
+              <td>{{ log.player_id }}</td>
+              <td>
+                <a
+                  href="#"
+                  onclick="alert('{{ log.parameters }}')"
+                >
+                  {{ trans('Yggdrasil::log.show-details') }}
+                </a>
+              </td>
+              <td>{{ log.ip }}</td>
+              <td>{{ log.time }}</td>
+            </tr>
+          {% else %}
+            <tr>
+              <td colspan="7">{{ trans('Yggdrasil::log.no-records') }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer">
+      <div class="float-right">
+        {{ logs.links()|raw }}
+      </div>
+    </div>
+  </div>
+{% endblock %}

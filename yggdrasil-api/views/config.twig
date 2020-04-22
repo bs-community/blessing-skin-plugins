@@ -1,0 +1,30 @@
+{% extends 'admin.base' %}
+
+{% block title %}{{ trans('Yggdrasil::config.title') }}{% endblock %}
+
+{% block content %}
+  <style>
+    textarea {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    }
+  </style>
+
+  <div class="row">
+    <div class="col-md-6">
+      {{ forms.common|raw }}
+    </div>
+    <div class="col-md-6">
+      <div class="card card-success">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fa fa-star"></i> API Root</h3>
+        </div>
+        <div class="card-body">
+          <p>{{ trans('Yggdrasil::config.url.label') }}<code>{{ url('api/yggdrasil') }}</code></p>
+          <p>{{ trans('Yggdrasil::config.url.notice') }}</p>
+        </div>
+      </div>
+
+      {{ forms.keypair|raw }}
+    </div>
+  </div>
+{% endblock %}

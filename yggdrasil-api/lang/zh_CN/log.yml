@@ -1,0 +1,16 @@
+title: Yggdrasil 日志
+header:
+  action: 动作
+  params: 附加参数
+  time: 时间
+show-details: 点击查看
+no-records: 暂无记录
+actions:
+  authenticate: 登录
+  refresh: 刷新令牌
+  validate: 验证令牌
+  signout: 登出
+  invalidate: 吊销令牌
+  join: 请求加入服务器
+  has_joined: 进入服务器
+  undefined: 未知
