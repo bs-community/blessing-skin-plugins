@@ -24,7 +24,7 @@ class ProfileController extends Controller
         } else {
             // UUID 不存在就返回 204
             Log::channel('ygg')->info("Profile not found for uuid [$uuid]");
-            return response('')->setStatusCode(204);
+            return response(null)->setStatusCode(204);
         }
     }
 
@@ -34,7 +34,7 @@ class ProfileController extends Controller
 
         if (! $player) {
             // 角色不存在
-            return response('')->setStatusCode(204);
+            return response(null)->setStatusCode(204);
         }
 
         $profile = Profile::createFromPlayer($player);
@@ -49,7 +49,9 @@ class ProfileController extends Controller
         Log::channel('ygg')->info('Search profiles by player names as listed', array_values($names));
 
         if (count($names) > option('ygg_search_profile_max')) {
-            throw new ForbiddenOperationException(sprintf('一次最多只能查询 %s 个角色哦', option('ygg_search_profile_max')));
+            throw new ForbiddenOperationException(
+                trans('Yggdrasil::exceptions.player.query-max', ['count' => option('ygg_search_profile_max')])
+            );
         }
 
         $profiles = [];

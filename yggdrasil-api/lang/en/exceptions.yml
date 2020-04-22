@@ -1,0 +1,22 @@
+token:
+  invalid: Invalid AccessToken. Please re-login.
+  not-matched: ClientToken isn't matched with AccessToken. Please re-login.
+  missing: No valid credential information.
+
+user:
+  not-existed: The user that the token binds is not found.
+  banned: You're banned.
+  not-verified: Your email isn't verified. Please verify it before logging in.
+
+player:
+  not-existed: Player is not found.
+  not-matched: The player requested doesn't match with that token.
+  owner: The player requested doesn't belong to that user.
+  query-max: 'You can query up to :count players in one request.'
+
+auth:
+  empty: Email address and password are required.
+  not-existed: 'User :identification is not found.'
+  not-matched: Invalid credential information.
+
+uuid: 'Invalid Profile UUID [:profile]. It doesn't belong to any players.'

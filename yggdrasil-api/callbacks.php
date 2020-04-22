@@ -56,7 +56,6 @@ return [
         }
 
         if (! env('YGG_VERBOSE_LOG')) {
-            // 删就完事儿了
             @unlink(ygg_log_path());
             @unlink(storage_path('logs/yggdrasil.log'));
         }

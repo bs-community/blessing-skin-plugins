@@ -28,8 +28,10 @@ class SessionController extends Controller
         $result = DB::table('uuid')->where('uuid', $selectedProfile)->first();
 
         if (! $result) {
-            // 据说 Mojang 在这种情况下是会返回 403 的，我就照做好了
-            throw new ForbiddenOperationException("无效的 Profile UUID [$selectedProfile]，它不属于任何角色");
+            // 据说 Mojang 在这种情况下是会返回 403 的
+            throw new ForbiddenOperationException(
+                trans('Yggdrasil::exceptions.uuid', ['profile' => $selectedProfile])
+            );
         }
 
         $player = Player::where('name', $result->name)->first();
@@ -38,7 +40,9 @@ class SessionController extends Controller
             // 删除已失效的 UUID 映射（e.g. 其对应的角色已被删除）
             DB::table('uuid')->where('uuid', $selectedProfile)->delete();
 
-            throw new ForbiddenOperationException("无效的 Profile UUID [$selectedProfile]，它不属于任何角色");
+            throw new ForbiddenOperationException(
+                trans('Yggdrasil::exceptions.uuid', ['profile' => $selectedProfile])
+            );
         }
 
         $identification = strtolower($player->user->email);
@@ -51,22 +55,22 @@ class SessionController extends Controller
             Log::channel('ygg')->info("All access tokens issued for user [$identification] are as listed", [$token]);
 
             if ($token->accessToken != $accessToken) {
-                throw new ForbiddenOperationException('无效的 AccessToken，请重新登录');
+                throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.token.invalid'));
             }
 
             if ($token->profileId != $selectedProfile) {
-                throw new ForbiddenOperationException('请求的角色与令牌绑定的角色不一致');
+                throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.player.not-matched'));
             }
 
             if ($player->user->permission == User::BANNED) {
-                throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
+                throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.user.banned'));
             }
 
             // 加入服务器
             Cache::forever("SERVER_$serverId", $selectedProfile);
         } elseif ($this->mojangVerified($player) && $this->validateMojang($accessToken)) {
             if ($player->user->permission == User::BANNED) {
-                throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
+                throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.user.banned'));
             }
 
             Log::channel('ygg')->info("Player [$player->name] is joining server with Mojang verified account.");
@@ -74,7 +78,7 @@ class SessionController extends Controller
             Cache::forever("SERVER_$serverId", $selectedProfile);
         } else {
             // 指定角色所属的用户没有签发任何令牌
-            throw new ForbiddenOperationException('未查找到有效的登录信息，请重新登录');
+            throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.token.missing'));
         }
 
         Log::channel('ygg')->info("Player [$selectedProfile] successfully joined the server [$serverId]");

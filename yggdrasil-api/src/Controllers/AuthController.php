@@ -4,7 +4,6 @@ namespace Yggdrasil\Controllers;
 
 use Log;
 use Cache;
-use Schema;
 use App\Models\User;
 use App\Models\Player;
 use Yggdrasil\Utils\UUID;
@@ -91,24 +90,24 @@ class AuthController extends Controller
 
         $token = Token::lookup($accessToken);
         if (! $token) {
-            throw new ForbiddenOperationException('无效的 AccessToken，请重新登录');
+            throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.token.invalid'));
         }
 
         if ($clientToken && $token->clientToken !== $clientToken) {
             Log::info("Expect client token to be [$token->clientToken]");
-            throw new ForbiddenOperationException('提供的 ClientToken 与 AccessToken 不匹配，请重新登录');
+            throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.token.not-matched'));
         }
 
         $user = User::where('email', $token->owner)->first();
 
-        if (! $user) {
-            throw new ForbiddenOperationException('令牌绑定的用户不存在，请重新登录');
+        if (!$user) {
+            throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.user.not-existed'));
         }
 
         Log::channel('ygg')->info("The given access token is owned by user [$token->owner]");
 
         if ($user->permission == User::BANNED) {
-            throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
+            throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.user.banned'));
         }
 
         $availableProfiles = $this->getAvailableProfiles($user);
@@ -129,11 +128,11 @@ class AuthController extends Controller
         // 当指定了 selectedProfile 时
         if ($selected = $request->get('selectedProfile')) {
             if (! Player::where('name', $selected['name'])->first()) {
-                throw new IllegalArgumentException('请求的角色不存在');
+                throw new IllegalArgumentException(trans('Yggdrasil::exceptions.player.not-existed'));
             }
 
             if ($token->profileId != '' && $selected != $token->profileId) {
-                throw new IllegalArgumentException('token 对应的角色与当前请求的角色不对');
+                throw new IllegalArgumentException(trans('Yggdrasil::exceptions.player.not-matched'));
             }
 
             foreach ($availableProfiles as $profile) {
@@ -143,7 +142,7 @@ class AuthController extends Controller
             }
 
             if (! isset($result['selectedProfile'])) {
-                throw new ForbiddenOperationException('拉倒吧，请求的角色不是你的');
+                throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.player.owner'));
             }
 
             $token->profileId = $result['selectedProfile']['id'];
@@ -187,7 +186,7 @@ class AuthController extends Controller
         if ($token && $token->isValid()) {
 
             if ($clientToken && $clientToken !== $token->clientToken) {
-                throw new ForbiddenOperationException('提供的 ClientToken 与 AccessToken 不匹配，请重新登录');
+                throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.token.not-matched'));
             }
 
             Log::info('Given access token is valid and matches the client token');
@@ -195,7 +194,7 @@ class AuthController extends Controller
             $user = User::where('email', $token->owner)->first();
 
             if ($user->permission == User::BANNED) {
-                throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
+                throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.user.banned'));
             }
 
             ygg_log([
@@ -206,7 +205,7 @@ class AuthController extends Controller
 
             return response('')->setStatusCode(204);
         } else {
-            throw new ForbiddenOperationException('提供的 AccessToken 无效');
+            throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.token.invalid'));
         }
     }
 
@@ -266,31 +265,31 @@ class AuthController extends Controller
 
     protected function checkUserCredentials(Request $request, $checkBanned = true)
     {
-        // 验证一大堆乱七八糟的东西
         $identification = $request->input('username');
         $password = $request->input('password');
 
         if (is_null($identification) || is_null($password)) {
-            throw new IllegalArgumentException('邮箱或者密码没填哦');
+            throw new IllegalArgumentException(trans('Yggdrasil::exceptions.auth.empty'));
         }
 
         $user = User::where('email', $identification)->first();
 
-        if (! $user) {
-            throw new ForbiddenOperationException("用户 [$identification] 不存在");
+        if (!$user) {
+            throw new ForbiddenOperationException(
+                trans('Yggdrasil::exceptions.auth.not-existed', compact('identification'))
+            );
         }
 
-        if (! $user->verifyPassword($password)) {
-            throw new ForbiddenOperationException('输入的邮箱与密码不匹配');
+        if (!$user->verifyPassword($password)) {
+            throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.auth.not-matched'));
         }
 
         if ($checkBanned && $user->permission == User::BANNED) {
-            throw new ForbiddenOperationException('你已经被本站封禁，详情请询问管理人员');
+            throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.user.banned'));
         }
 
-        // 兼容 BS 最新版的邮箱验证
         if (option('require_verification') && $user->verified === false) {
-            throw new ForbiddenOperationException('你还没有验证你的邮箱，请在通过皮肤站的邮箱验证后再尝试登录');
+            throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.user.not-verified'));
         }
 
         return $user;

@@ -10,7 +10,7 @@ document
 
     if (response.code === 0) {
       blessing.notify.toast.success(
-        '成功生成了一个新的 4096 bit OpenSSL RSA 私钥',
+        trans('yggdrasil-api.key-generated'),
       )
 
       document.querySelector<HTMLTextAreaElement>('td.value textarea')!.value =

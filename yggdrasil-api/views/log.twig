@@ -1,6 +1,6 @@
 {% extends 'admin.base' %}
 
-{% block title %}Yggdrasil 日志{% endblock %}
+{% block title %}{{ trans('Yggdrasil::log.title') }}{% endblock %}
 
 {% block content %}
   <div class="card">
@@ -9,12 +9,12 @@
         <thead>
           <tr>
             <th>#</th>
-            <th>动作</th>
+            <th>{{ trans('Yggdrasil::log.header.action') }}</th>
             <th>UID</th>
             <th>PID</th>
-            <th>附加参数</th>
+            <th>{{ trans('Yggdrasil::log.header.params') }}</th>
             <th>IP</th>
-            <th>时间</th>
+            <th>{{ trans('Yggdrasil::log.header.time') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -29,7 +29,7 @@
                   href="#"
                   onclick="alert('{{ log.parameters }}')"
                 >
-                  点击查看
+                  {{ trans('Yggdrasil::log.show-details') }}
                 </a>
               </td>
               <td>{{ log.ip }}</td>
@@ -37,7 +37,7 @@
             </tr>
           {% else %}
             <tr>
-              <td colspan="7">暂无记录</td>
+              <td colspan="7">{{ trans('Yggdrasil::log.no-records') }}</td>
             </tr>
           {% endfor %}
         </tbody>

@@ -18,11 +18,6 @@ if (! function_exists('ygg_generate_rsa_keys')) {
 
     function ygg_generate_rsa_keys($config = [])
     {
-        /**
-         * 很多 PHP 主机都没有设置 openssl.cnf 这个配置文件，
-         * 导致 OpenSSL 扩展的数字签名和密钥生成功能直接残废，
-         * 所以我只好随插件自带一个了。
-         */
         $config = array_merge($config, [
             'private_key_bits' => 4096,
             'private_key_type' => OPENSSL_KEYTYPE_RSA,

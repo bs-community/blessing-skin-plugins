@@ -64,7 +64,7 @@ return function (Filter $filter) {
 
     // 向管理后台菜单添加「Yggdrasil 日志」项目
     Hook::addMenuItem('admin', 4, [
-        'title' => 'Yggdrasil 日志',
+        'title' => 'Yggdrasil::log.title',
         'link'  => 'admin/yggdrasil-log',
         'icon'  => 'fa-history'
     ]);

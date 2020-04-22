@@ -49,7 +49,9 @@ class Profile
             $key = openssl_pkey_get_private(option('ygg_private_key'));
 
             if (! $key) {
-                throw new IllegalArgumentException('无效的 RSA 私钥，请访问插件配置页设置');
+                throw new IllegalArgumentException(
+                    trans('Yggdrasil::config.rsa.invalid')
+                );
             }
 
             $textures['signatureRequired'] = true;

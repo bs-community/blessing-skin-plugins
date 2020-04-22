@@ -33,7 +33,9 @@ document
     input.remove()
     const originalContent = target.textContent
     target.disabled = true
-    target.innerHTML = '<i class="fas fa-check mr-1"></i>已复制'
+    target.innerHTML = `<i class="fas fa-check mr-1"></i>${trans(
+      'yggdrasil-api.copied',
+    )}`
 
     setTimeout(() => {
       target.textContent = originalContent

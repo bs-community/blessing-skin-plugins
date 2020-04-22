@@ -1,6 +1,6 @@
 {% extends 'admin.base' %}
 
-{% block title %}Yggdrasil API 配置{% endblock %}
+{% block title %}{{ trans('Yggdrasil::config.title') }}{% endblock %}
 
 {% block content %}
   <style>
@@ -19,13 +19,8 @@
           <h3 class="card-title"><i class="fa fa-star"></i> API Root</h3>
         </div>
         <div class="card-body">
-          <p>本站的 Yggdrasil API 地址：<code>{{ url('api/yggdrasil') }}</code></p>
-          <p>
-            请确认以上 URL 能够正常访问后再&nbsp;
-            <a href="https://github.com/bs-community/yggdrasil-api/wiki/0x03-%E9%85%8D%E5%90%88-authlib-injector-%E4%BD%BF%E7%94%A8">
-              进行 authlib-injector 的配置
-            </a>。
-          </p>
+          <p>{{ trans('Yggdrasil::config.url.label') }}<code>{{ url('api/yggdrasil') }}</code></p>
+          <p>{{ trans('Yggdrasil::config.url.notice') }}</p>
         </div>
       </div>
 

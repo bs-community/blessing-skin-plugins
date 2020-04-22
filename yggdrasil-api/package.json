@@ -2,7 +2,7 @@
   "name": "yggdrasil-api",
   "version": "4.3.1",
   "title": "Yggdrasil API",
-  "description": "为皮肤站添加自定义 Yggdrasil API 支持，可配合 authlib-injector 等软件使用实现外置登录功能。",
+  "description": "Yggdrasil API + authlib-injector = ✨",
   "author": "printempw",
   "url": "https://github.com/bs-community/yggdrasil-api/",
   "namespace": "Yggdrasil",
