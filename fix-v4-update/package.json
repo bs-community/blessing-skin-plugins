@@ -1,8 +1,8 @@
 {
   "name": "fix-v4-update",
-  "title": "修复 v4 更新",
-  "version": "0.1.0",
-  "description": "修复 v4 的后台更新",
+  "title": "Blessing\\FixV4Update::general.title",
+  "version": "0.2.0",
+  "description": "Blessing\\FixV4Update::general.description",
   "author": "GPlane",
   "namespace": "Blessing\\FixV4Update",
   "require": {
