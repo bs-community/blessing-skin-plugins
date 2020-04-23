@@ -1,14 +1,14 @@
 {
   "name": "batch-import",
-  "version": "4.0.0",
-  "title": "批量导入",
-  "description": "从本地文件批量导入材质至皮肤库，使用前请先阅读说明。",
+  "version": "4.1.0",
+  "title": "BatchImport::general.title",
+  "description": "BatchImport::general.description",
   "author": "printempw",
   "url": "https://blessing.studio/",
   "namespace": "BatchImport",
   "require": {
     "blessing-skin-server": "^5.0.0",
-    "texture-type-cast": "^0.2.0"
+    "texture-type-cast": ">=0.2.0"
   },
   "enchants": {
     "icon": {
