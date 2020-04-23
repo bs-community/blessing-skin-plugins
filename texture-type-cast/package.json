@@ -1,8 +1,8 @@
 {
   "name": "texture-type-cast",
-  "title": "材质类型强制转换",
-  "version": "0.2.0",
-  "description": "强制对全站的材质进行材质类型修改",
+  "title": "Blessing\\TextureTypeCast::general.title",
+  "version": "0.3.0",
+  "description": "Blessing\\TextureTypeCast::general.description",
   "author": "GPlane",
   "url": "https://gplane.win/",
   "namespace": "Blessing\\TextureTypeCast",
