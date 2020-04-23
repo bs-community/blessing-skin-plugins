@@ -1,8 +1,8 @@
 {
   "name": "config-generator",
   "version": "3.1.2",
-  "title": "配置生成",
-  "description": "在用户中心添加自动生成皮肤 Mod 配置的页面。",
+  "title": "Blessing\\ConfigGenerator::general.title",
+  "description": "Blessing\\ConfigGenerator::general.description",
   "author": "printempw",
   "url": "https://blessing.studio/",
   "namespace": "Blessing\\ConfigGenerator",
