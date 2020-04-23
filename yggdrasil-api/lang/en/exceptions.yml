@@ -19,4 +19,4 @@ auth:
   not-existed: 'User :identification is not found.'
   not-matched: Invalid credential information.
 
-uuid: 'Invalid Profile UUID [:profile]. It doesn't belong to any players.'
+uuid: "Invalid Profile UUID [:profile]. It doesn't belong to any players."
