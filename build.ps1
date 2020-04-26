@@ -128,7 +128,7 @@ foreach ($lang in 'en', 'zh_CN') {
             }
             author      = $manifest.author
             require     = $manifest.require
-            dist        = @{
+            dist        = [PSCustomObject]@{
                 type   = 'zip'
                 url    = $url
                 shasum = (Get-FileHash -Path ".dist/${name}_$version.zip" -Algorithm SHA256).Hash.ToLower()
