@@ -19,11 +19,11 @@ return function (Dispatcher $events) {
             $baseUrl . '/csl/' . $name . '.json',
         ];
 
-        if (isset($usm) && $usm->enabled) {
+        if (isset($usm) && $usm->isEnabled()) {
             $urls[] = $baseUrl . '/usm/' . $name . '.json';
         }
 
-        if (isset($legacy) && $legacy->enabled) {
+        if (isset($legacy) && $legacy->isEnabled()) {
             array_push(
                 $urls,
                 $baseUrl . '/skin/' . $name . '.png',
@@ -31,7 +31,7 @@ return function (Dispatcher $events) {
             );
         }
 
-        if (isset($yggdrasil) && $yggdrasil->enabled) {
+        if (isset($yggdrasil) && $yggdrasil->isEnabled()) {
             $uuid = DB::table('uuid')->where('name', $name)->value('uuid');
             array_push(
                 $urls,

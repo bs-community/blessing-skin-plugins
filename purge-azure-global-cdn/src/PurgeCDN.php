@@ -38,17 +38,17 @@ class PurgeCDN implements ShouldQueue
         // 列出需要刷新的 URL
         $name = urlencode($this->player->name);
         $urls = ['/'. $name.'.json', '/csl/'.$name.'.json'];
-        if (isset($usm) && $usm->enabled) {
+        if (isset($usm) && $usm->isEnabled()) {
             $urls[] = '/usm/' . $name . '.json';
         }
-        if (isset($legacy) && $legacy->enabled) {
+        if (isset($legacy) && $legacy->isEnabled()) {
             array_push(
                 $urls,
                 '/skin/' . $name . '.png',
                 '/cape/' . $name . '.png'
             );
         }
-        if (isset($yggdrasil) && $yggdrasil->enabled) {
+        if (isset($yggdrasil) && $yggdrasil->isEnabled()) {
             $uuid = DB::table('uuid')->where('name', $name)->value('uuid');
             array_push(
                 $urls,
