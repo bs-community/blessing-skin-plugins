@@ -1,14 +1,11 @@
 <?php
 
 use App\Services\Hook;
-use Illuminate\Contracts\Events\Dispatcher;
+use App\Services\Plugin;
 
-return function (Dispatcher $events) {
-    Hook::addScriptFileToPage(plugin_assets('hitokoto', 'hitokoto.js'), ['user', 'user/*', 'admin', 'admin/*']);
-
-    $events->listen(App\Events\RenderingHeader::class, function($event) {
-        // We need some CSS to position the paragraph
-        $event->addContent('<style> .hitokoto { display: inline; margin-left: 15px; } </style>');
-    });
-
+return function (Plugin $plugin) {
+    Hook::addScriptFileToPage(
+        $plugin->assets('hitokoto.js'),
+        ['user', 'user/*', 'admin', 'admin/*']
+    );
 };

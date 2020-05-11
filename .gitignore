@@ -3,3 +3,4 @@ node_modules
 littleskin/
 */vendor
 plugin-test/
+*/assets/**/*.js
