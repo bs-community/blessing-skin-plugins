@@ -23,4 +23,5 @@ Route::prefix('sessionserver/session/minecraft')->group(function () {
     Route::get('profile/{uuid}', 'ProfileController@getProfileFromUuid');
 });
 
-Route::post('api/profiles/minecraft', 'ProfileController@searchProfile');
+Route::post('api/profiles/minecraft', 'ProfileController@searchMultipleProfiles');
+Route::get('api/users/profiles/minecraft/{username}', 'ProfileController@searchSingleProfile');

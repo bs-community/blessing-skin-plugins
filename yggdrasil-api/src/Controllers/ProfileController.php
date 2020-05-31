@@ -4,7 +4,6 @@ namespace Yggdrasil\Controllers;
 
 use Log;
 use App\Models\Player;
-use Yggdrasil\Utils\UUID;
 use Illuminate\Http\Request;
 use Yggdrasil\Models\Profile;
 use Illuminate\Routing\Controller;
@@ -24,7 +23,7 @@ class ProfileController extends Controller
         } else {
             // UUID 不存在就返回 204
             Log::channel('ygg')->info("Profile not found for uuid [$uuid]");
-            return response(null)->setStatusCode(204);
+            return response()->noContent();
         }
     }
 
@@ -32,9 +31,8 @@ class ProfileController extends Controller
     {
         $player = Player::where('name', $name)->first();
 
-        if (! $player) {
-            // 角色不存在
-            return response(null)->setStatusCode(204);
+        if (empty($player)) {
+            return response()->noContent();
         }
 
         $profile = Profile::createFromPlayer($player);
@@ -42,7 +40,7 @@ class ProfileController extends Controller
         return response()->json()->setContent($profile);
     }
 
-    public function searchProfile(Request $request)
+    public function searchMultipleProfiles(Request $request)
     {
         $names = array_unique($request->json()->all());
 
@@ -64,11 +62,26 @@ class ProfileController extends Controller
 
                 $profiles[] = [
                     'id' => $profile->uuid,
-                    'name' => $name
+                    'name' => $name,
                 ];
             }
         }
 
         return json($profiles);
+    }
+
+    public function searchSingleProfile($username)
+    {
+        $player = Player::where('name', $username);
+        if (empty($player)) {
+            return response()->noContent();
+        }
+
+        $profile = Profile::createFromPlayer($player);
+
+        return [
+            'id' => $profile->uuid,
+            'name' => $username,
+        ];
     }
 }
