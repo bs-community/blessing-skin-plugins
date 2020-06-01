@@ -21,7 +21,6 @@ class OnAuthenticated
     {
         $uid = $event->user->uid;
         if (MojangVerification::where('user_id', $uid)->count() == 1) {
-            Hook::addUserBadge(trans('GPlane\Mojang::general.pro'), 'purple');
             if (Schema::hasTable('uuid')) {
                 $this->filter->add('grid:user.profile', function ($grid) {
                     array_unshift($grid['widgets'][0][1], 'GPlane\Mojang::uuid');
