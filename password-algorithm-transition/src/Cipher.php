@@ -3,7 +3,6 @@
 namespace GPlane\PasswordTransition;
 
 use Event;
-use App\Events;
 use App\Services\Cipher\BaseCipher;
 
 class Cipher extends BaseCipher
@@ -15,14 +14,14 @@ class Cipher extends BaseCipher
         $this->salts = $salts;
     }
 
-    public function hash($value, $salt = '')
+    public function hash($value, $salt = ''): string
     {
         foreach (app()->tagged('ciphers') as $cipher) {
             return $cipher->hash($value, $this->salts[0]);
         }
     }
 
-    public function verify($password, $hash, $salt = '')
+    public function verify($password, $hash, $salt = ''): bool
     {
         $index = 0;
         $result = false;

@@ -11,14 +11,14 @@ use App\Services\Cipher\BaseCipher;
  */
 class SHA256 extends BaseCipher
 {
-    public function hash($value, $salt = '')
+    public function hash($value, $salt = ''): string
     {
         $salt = (strlen($salt) == 16) ? $salt : $this->generateSalt();
 
         return '$SHA$'.$salt.'$'.hash('sha256', hash('sha256', $value).$salt);
     }
 
-    public function verify($password, $hash, $salt = '')
+    public function verify($password, $hash, $salt = ''): bool
     {
         // Parse AuthMe's fucking in-line salt from hash
         $salt = $this->parseHash($hash)['salt'];
@@ -37,7 +37,8 @@ class SHA256 extends BaseCipher
         ];
     }
 
-    protected function generateSalt() {
+    protected function generateSalt()
+    {
         // Format /^[0-9a-f]{16}$/
         return bin2hex(random_bytes(8));
     }
