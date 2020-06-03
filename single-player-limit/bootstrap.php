@@ -1,11 +1,19 @@
 <?php
 
 use App\Models\User;
+use App\Services\Hook;
+use App\Services\Plugin;
 use Blessing\Filter;
 use Blessing\Rejection;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Routing\Route as RouteItem;
+use Illuminate\Support\Str;
 
-return function (Filter $filter, Dispatcher $events) {
+return function (
+    Filter $filter,
+    Dispatcher $events,
+    Plugin $plugin
+) {
     $filter->add('can_add_player', function () {
         return new Rejection(trans('SinglePlayerLimit::player.add'));
     });
@@ -27,5 +35,23 @@ return function (Filter $filter, Dispatcher $events) {
         $user = auth()->user();
         $user->nickname = $player->name;
         $user->save();
+    });
+
+    Hook::addScriptFileToPage($plugin->assets('BindPlayer.js'), ['user/player/bind']);
+    Hook::addRoute(function () {
+        $routes = Route::getRoutes()->getRoutes();
+        $routes = array_filter($routes, function (RouteItem $route) {
+            return Str::startsWith($route->uri(), 'user');
+        });
+        array_walk($routes, function (RouteItem $route) {
+            $route->middleware(SinglePlayerLimit\RequireBindPlayer::class);
+        });
+
+        Route::namespace('SinglePlayerLimit')
+            ->middleware(['web', 'authorize'])
+            ->group(function () {
+                Route::view('user/player/bind', 'SinglePlayerLimit::bind');
+                Route::post('user/player/bind', 'BindController@bind');
+            });
     });
 };
