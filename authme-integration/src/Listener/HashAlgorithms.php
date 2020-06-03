@@ -6,8 +6,7 @@ use Schema;
 use App\Models\User;
 use App\Models\Player;
 use App\Events\UserTryToLogin;
-use App\Events\UserAuthenticated;
-use App\Events\EncryptUserPassword;
+use Blessing\Filter;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class HashAlgorithms
@@ -90,16 +89,15 @@ class HashAlgorithms
             }
         });
 
-        $events->listen(EncryptUserPassword::class, function ($event) {
-            $user = $event->user;
-
-            // 生成并保存随机 salt
-            if (! $user->salt) {
+        resolve(Filter::class)->add('verify_password', function ($passed, $raw, $user) {
+            if (!$user->salt) {
                 $user->salt = app('cipher')->generateSalt();
                 $user->save();
             }
 
-            return app('cipher')->hash($event->raw, $user->salt);
+            $hashed = app('cipher')->hash($raw, $user->salt);
+
+            return hash_equals($user->password, $hashed);
         });
     }
 }
