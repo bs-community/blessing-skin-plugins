@@ -74,18 +74,20 @@ class SynchronizeUser
             }
         }
 
+		$player_name = Player::where('uid', $user->uid)->first();
+		if(!$player_name) return;//如果用户没有角色，则不进行同步
         // 同理，保证两边的用户名、绑定角色名一致。
         if (
-            $user->player_name != $remoteUser->username &&
-            ! empty($user->player_name) &&
+            $player_name != $remoteUser->username &&
+            ! empty($player_name) &&
             ! empty($remoteUser->username)
         ) {
             if (option('forum_duplicated_prefer') == 'remote') {
-                $user->player_name = $remoteUser->username;
+                $player_name = $remoteUser->username;
                 $user->save();
             } else {
                 app('db.remote')->where('email', $user->email)->update([
-                    'username' => $user->player_name
+                    'username' => $player_name
                 ]);
             }
         }
@@ -104,7 +106,7 @@ class SynchronizeUser
         if (config('secure.cipher') == 'BCRYPT' || config('secure.cipher') == 'PHP_PASSWORD_HASH') {
             // 用这个加密算法说明正在使用 Flarum
             app('db.remote')->insertGetId([
-                'username' => $user->player_name ?? $user->nickname,
+                'username' => $player_name ?? $user->nickname,
                 'email'    => $user->email,
                 'password' => $user->password,
                 'is_email_confirmed' => (int) $user->verified,
@@ -151,7 +153,6 @@ class SynchronizeUser
         $user->last_sign_at = Carbon::now()->subDay();
         $user->permission   = User::NORMAL;
         $user->nickname     = $result->username;
-        $user->player_name  = $result->username;
         $user->verified     = boolval($result->is_email_confirmed ?? false);
         if (stristr(get_class(app('cipher')), 'SALTED')) {
             $user->salt = $result->salt ?? '';
