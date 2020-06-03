@@ -74,7 +74,7 @@ class SynchronizeUser
             }
         }
 
-		$player_name = Player::where('uid', $user->uid)->first();
+		$player_name = Player::where('uid', $user->uid)->first()->name;
 		if(!$player_name) return;//如果用户没有角色，则不进行同步
         // 同理，保证两边的用户名、绑定角色名一致。
         if (
@@ -101,7 +101,7 @@ class SynchronizeUser
      */
     protected function syncFromLocal(User $user)
     {
-		$player_name = Player::where('uid', $user->uid)->first();
+		$player_name = Player::where('uid', $user->uid)->first()->name;
 		if(!$player_name) return;//如果用户没有角色，则不进行同步
         if (config('secure.cipher') == 'BCRYPT' || config('secure.cipher') == 'PHP_PASSWORD_HASH') {
             // 用这个加密算法说明正在使用 Flarum
