@@ -1,10 +1,10 @@
 <?php
 
-use App\Events;
 use GPlane\Mojang;
 use App\Models\User;
 use App\Models\Player;
 use App\Services\Hook;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use Composer\CaBundle\CaBundle;
@@ -73,7 +73,9 @@ if (! function_exists('bind_with_mojang_players')) {
                     }
                 }
             } else {
-                event(new Events\PlayerWillBeAdded($profile['name']));
+                /** @var Dispatcher */
+                $dispatcher = resolve(Dispatcher::class);
+                $dispatcher->dispatch('player.adding', [$profile['name'], $user]);
 
                 $player = new Player;
                 $player->uid = $user->uid;
@@ -82,7 +84,7 @@ if (! function_exists('bind_with_mojang_players')) {
                 $player->tid_cape = 0;
                 $player->save();
 
-                event(new Events\PlayerWasAdded($player));
+                $dispatcher->dispatch('player.added', [$player, $user]);
             }
 
             // For "yggdrasil-api" plugin.

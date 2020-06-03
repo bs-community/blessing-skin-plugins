@@ -14,6 +14,14 @@ require_once __DIR__.'/../helpers.php';
 
 class CreateNewUser
 {
+    /** @var Filter */
+    protected $filter;
+
+    public function __construct(Filter $filter)
+    {
+        $this->filter = $filter;
+    }
+
     public function handle($email, $password, $authType)
     {
         if ($authType != 'email') {
@@ -35,23 +43,25 @@ class CreateNewUser
         if ($record) {
             $user = User::find($record->user_id);
             if ($user) {
+                Event::dispatch('user.profile.updating', [$user, 'email', ['new_email' => $email]]);
                 $user->update(['email' => $email]);
-                event(new \App\Events\UserProfileUpdated('email', $user));
+                Event::dispatch('user.profile.updated', [$user, 'email', ['new_email' => $email]]);
                 return;
             }
         }
 
         $whip = new Whip();
         $ip = $whip->getValidIpAddress();
-        $ip = resolve(Filter::class)->apply('client_ip', $ip);
+        $ip = $this->filter->apply('client_ip', $ip);
 
         $user = new User();
         $user->email = $email;
         $user->nickname = Arr::get($result['selected'], 'name', '');
         $user->score = option('user_initial_score');
         $user->avatar = 0;
-        $user->password = $user->getEncryptedPwdFromEvent(request('password'))
-                ?: app('cipher')->hash(request('password'), config('secure.salt'));
+        $password = app('cipher')->hash(request('password'), config('secure.salt'));
+        $password = $this->filter->apply('user_password', $password);
+        $user->password = $password;
         $user->ip = $ip;
         $user->permission = User::NORMAL;
         $user->register_at = Carbon::now();
