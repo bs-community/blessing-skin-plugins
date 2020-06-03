@@ -99,6 +99,8 @@ class SynchronizeUser
      */
     protected function syncFromLocal(User $user)
     {
+		$player_name = Player::where('uid', $user->uid)->first();
+		if(!$player_name) return;//如果用户没有角色，则不进行同步
         if (config('secure.cipher') == 'BCRYPT' || config('secure.cipher') == 'PHP_PASSWORD_HASH') {
             // 用这个加密算法说明正在使用 Flarum
             app('db.remote')->insertGetId([
@@ -111,7 +113,7 @@ class SynchronizeUser
         } elseif (config('secure.cipher') == 'SALTED2MD5') {
             // 用这个加密算法说明正在使用 Discuz! 或 PhpWind
             app('db.remote')->insertGetId([
-                'username' => $user->player_name,
+                'username' => $player_name,
                 'email'    => $user->email,
                 'password' => $user->password,
                 'regip'    => $user->ip,
