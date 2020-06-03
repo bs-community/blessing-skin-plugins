@@ -72,7 +72,7 @@ class ProfileController extends Controller
 
     public function searchSingleProfile($username)
     {
-        $player = Player::where('name', $username);
+        $player = Player::where('name', $username)->first();
         if (empty($player)) {
             return response()->noContent();
         }
