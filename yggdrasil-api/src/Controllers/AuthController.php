@@ -189,7 +189,7 @@ class AuthController extends Controller
                 throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.token.not-matched'));
             }
 
-            Log::info('Given access token is valid and matches the client token');
+            Log::channel('ygg')->info('Given access token is valid and matches the client token');
 
             $user = User::where('email', $token->owner)->first();
 
