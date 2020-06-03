@@ -43,7 +43,7 @@ class SynchronizeUser
         // 如果到这里了皮肤站里还是没有这个用户，就说明该用户确实是不存在的
         if (! $user) return;
 
-        $remoteUser = app('db.remote')->where('email', $user->email)->first();
+        $remoteUser = app('db.remote')->where('uid', $user->forum_uid)->first();
 
         // 如果这个角色存在于皮肤站，却不存在与论坛数据库中的话，就尝试同步过去
         if (! $remoteUser) {
@@ -142,6 +142,10 @@ class SynchronizeUser
         if (! $result) {
             return;
         }
+		
+		//如果皮肤站数据库中已经存在对应uid的账户，则直接返回该账户
+		$user = User::where('forum_uid', $result->uid)->first();
+		if($user) return $user;
 
         // 在皮肤站数据库新建用户及角色
         $user               = new User;
@@ -154,6 +158,7 @@ class SynchronizeUser
         $user->permission   = User::NORMAL;
         $user->nickname     = $result->username;
         $user->verified     = boolval($result->is_email_confirmed ?? false);
+		$user->forum_uid	= $result->uid;
         if (stristr(get_class(app('cipher')), 'SALTED')) {
             $user->salt = $result->salt ?? '';
         }
