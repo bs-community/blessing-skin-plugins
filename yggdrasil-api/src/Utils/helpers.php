@@ -3,8 +3,7 @@
 use Carbon\Carbon;
 use Vectorface\Whip\Whip;
 
-if (! function_exists('ygg_log_path')) {
-
+if (!function_exists('ygg_log_path')) {
     function ygg_log_path()
     {
         $dbConfig = config('database.connections.'.config('database.default'));
@@ -14,19 +13,18 @@ if (! function_exists('ygg_log_path')) {
     }
 }
 
-if (! function_exists('ygg_generate_rsa_keys')) {
-
+if (!function_exists('ygg_generate_rsa_keys')) {
     function ygg_generate_rsa_keys($config = [])
     {
         $config = array_merge($config, [
             'private_key_bits' => 4096,
             'private_key_type' => OPENSSL_KEYTYPE_RSA,
-            'config' => plugin('yggdrasil-api')->getPath().'/assets/openssl.cnf'
+            'config' => plugin('yggdrasil-api')->getPath().'/assets/openssl.cnf',
         ]);
 
         $res = openssl_pkey_new($config);
 
-        if (! $res) {
+        if (!$res) {
             throw new Exception(openssl_error_string(), 1);
         }
 
@@ -34,13 +32,12 @@ if (! function_exists('ygg_generate_rsa_keys')) {
 
         return [
             'private' => $privateKey,
-            'public'  => openssl_pkey_get_details($res)['key']
+            'public' => openssl_pkey_get_details($res)['key'],
         ];
     }
 }
 
-if (! function_exists('ygg_log_http_request_and_response')) {
-
+if (!function_exists('ygg_log_http_request_and_response')) {
     function ygg_log_http_request_and_response()
     {
         Log::channel('ygg')->info('============================================================');
@@ -54,8 +51,7 @@ if (! function_exists('ygg_log_http_request_and_response')) {
     }
 }
 
-if (! function_exists('ygg_log')) {
-
+if (!function_exists('ygg_log')) {
     function ygg_log($params)
     {
         if (env('YGG_VERBOSE_LOG')) {

@@ -4,3 +4,4 @@ littleskin/
 */vendor
 plugin-test/
 */assets/**/*.js
+.php_cs.cache

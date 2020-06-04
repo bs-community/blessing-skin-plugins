@@ -1,16 +1,15 @@
 <?php
 
-use GPlane\Mojang;
-use App\Models\User;
 use App\Models\Player;
+use App\Models\User;
 use App\Services\Hook;
+use Composer\CaBundle\CaBundle;
+use GPlane\Mojang;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
-use Composer\CaBundle\CaBundle;
 
-if (! function_exists('validate_mojang_account')) {
-
+if (!function_exists('validate_mojang_account')) {
     function validate_mojang_account($username, $password)
     {
         try {
@@ -24,6 +23,7 @@ if (! function_exists('validate_mojang_account')) {
 
             if ($response->ok()) {
                 $body = $response->json();
+
                 return [
                     'valid' => Arr::has($body, 'selectedProfile'),
                     'profiles' => $body['availableProfiles'],
@@ -31,17 +31,18 @@ if (! function_exists('validate_mojang_account')) {
                 ];
             } else {
                 Log::warning('Received unexpected HTTP status code from Mojang server: '.$response->status());
+
                 return ['valid' => false];
             }
         } catch (\Exception $e) {
             report($e);
+
             return ['valid' => false];
         }
     }
 }
 
-if (! function_exists('bind_with_mojang_players')) {
-
+if (!function_exists('bind_with_mojang_players')) {
     function bind_with_mojang_players(User $user, $profiles)
     {
         array_walk($profiles, function ($profile) use ($user) {
@@ -65,9 +66,9 @@ if (! function_exists('bind_with_mojang_players')) {
                             [$owner],
                             '角色属主更改通知',
                             '尊敬的 '.$owner->nickname."：\n\n我们很抱歉地告诉您，您的角色 $playerName 已被转让给一个正版用户。\n".
-                            "为此，我们向您补偿了 ".option('score_per_player')." 积分。\n\n由此带来的不便，敬请谅解。\n\n\n".
+                            '为此，我们向您补偿了 '.option('score_per_player')." 积分。\n\n由此带来的不便，敬请谅解。\n\n\n".
                             'Dear '.$owner->nickname."\n\nWe are sorry to tell you that your player $playerName has been transferred to another user who has paid for Minecraft.\n".
-                            "Because of that, we have added ".option('score_per_player')." score to your account.\n\n".
+                            'Because of that, we have added '.option('score_per_player')." score to your account.\n\n".
                             'Sorry for the inconvenience.'
                         );
                     }
@@ -77,7 +78,7 @@ if (! function_exists('bind_with_mojang_players')) {
                 $dispatcher = resolve(Dispatcher::class);
                 $dispatcher->dispatch('player.adding', [$profile['name'], $user]);
 
-                $player = new Player;
+                $player = new Player();
                 $player->uid = $user->uid;
                 $player->name = $profile['name'];
                 $player->tid_skin = 0;
@@ -95,8 +96,7 @@ if (! function_exists('bind_with_mojang_players')) {
     }
 }
 
-if (! function_exists('bind_mojang_account')) {
-
+if (!function_exists('bind_mojang_account')) {
     function bind_mojang_account(User $user, $profiles, $selected)
     {
         bind_with_mojang_players($user, $profiles);

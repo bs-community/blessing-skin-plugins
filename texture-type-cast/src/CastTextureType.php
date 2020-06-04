@@ -27,6 +27,7 @@ class CastTextureType extends Command
         $skins->each(function ($skin) use ($disk, $bar, &$modified) {
             if (!$disk->exists($skin->hash)) {
                 $bar->advance();
+
                 return;
             }
 

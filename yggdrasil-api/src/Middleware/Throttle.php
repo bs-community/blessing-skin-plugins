@@ -15,9 +15,7 @@ class Throttle
         $retryAfter = option('ygg_rate_limit') - ($currentTimeInMillisecond - Cache::get($id));
 
         if ($retryAfter > 0) {
-            throw new ForbiddenOperationException(
-                trans('Yggdrasil::middleware.throttle', ['s' =>  ceil($retryAfter / 1000)])
-            );
+            throw new ForbiddenOperationException(trans('Yggdrasil::middleware.throttle', ['s' => ceil($retryAfter / 1000)]));
         }
 
         Cache::put($id, $currentTimeInMillisecond, 3600);

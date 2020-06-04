@@ -2,18 +2,18 @@
 
 namespace Yggdrasil\Controllers;
 
-use DB;
-use Log;
-use Cache;
-use Schema;
-use App\Models\User;
 use App\Models\Player;
-use Yggdrasil\Models\Token;
+use App\Models\User;
+use Cache;
+use DB;
 use Illuminate\Http\Request;
-use Yggdrasil\Models\Profile;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Http;
+use Log;
+use Schema;
 use Yggdrasil\Exceptions\ForbiddenOperationException;
+use Yggdrasil\Models\Profile;
+use Yggdrasil\Models\Token;
 
 class SessionController extends Controller
 {
@@ -27,22 +27,18 @@ class SessionController extends Controller
 
         $result = DB::table('uuid')->where('uuid', $selectedProfile)->first();
 
-        if (! $result) {
+        if (!$result) {
             // 据说 Mojang 在这种情况下是会返回 403 的
-            throw new ForbiddenOperationException(
-                trans('Yggdrasil::exceptions.uuid', ['profile' => $selectedProfile])
-            );
+            throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.uuid', ['profile' => $selectedProfile]));
         }
 
         $player = Player::where('name', $result->name)->first();
 
-        if (! $player) {
+        if (!$player) {
             // 删除已失效的 UUID 映射（e.g. 其对应的角色已被删除）
             DB::table('uuid')->where('uuid', $selectedProfile)->delete();
 
-            throw new ForbiddenOperationException(
-                trans('Yggdrasil::exceptions.uuid', ['profile' => $selectedProfile])
-            );
+            throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.uuid', ['profile' => $selectedProfile]));
         }
 
         $identification = strtolower($player->user->email);
@@ -51,7 +47,6 @@ class SessionController extends Controller
 
         $token = Token::lookup($accessToken);
         if ($token && $token->isValid()) {
-
             Log::channel('ygg')->info("All access tokens issued for user [$identification] are as listed", [$token]);
 
             if ($token->accessToken != $accessToken) {
@@ -127,12 +122,13 @@ class SessionController extends Controller
         }
 
         Log::channel('ygg')->info("Player [$name] was not in the server [$serverId]");
+
         return response('')->setStatusCode(204);
     }
 
     protected function mojangVerified($player)
     {
-        if (! Schema::hasTable('mojang_verifications')) {
+        if (!Schema::hasTable('mojang_verifications')) {
             return false;
         }
 
@@ -145,6 +141,7 @@ class SessionController extends Controller
             $response = Http::post('https://authserver.mojang.com/validate', [
                 'json' => ['accessToken' => $accessToken],
             ]);
+
             return $response->status() === 204;
         } catch (\Exception $e) {
             return false;

@@ -2,18 +2,17 @@
 
 namespace Yggdrasil\Controllers;
 
-use Log;
-use Cache;
-use App\Models\User;
 use App\Models\Player;
-use Yggdrasil\Utils\UUID;
-use Yggdrasil\Models\Token;
+use App\Models\User;
+use Cache;
 use Illuminate\Http\Request;
-use Yggdrasil\Models\Profile;
 use Illuminate\Routing\Controller;
-use Yggdrasil\Exceptions\NotFoundException;
-use Yggdrasil\Exceptions\IllegalArgumentException;
+use Log;
 use Yggdrasil\Exceptions\ForbiddenOperationException;
+use Yggdrasil\Exceptions\IllegalArgumentException;
+use Yggdrasil\Models\Profile;
+use Yggdrasil\Models\Token;
+use Yggdrasil\Utils\UUID;
 
 class AuthController extends Controller
 {
@@ -21,7 +20,7 @@ class AuthController extends Controller
     {
         /**
          * 注意，新版账户验证中 username 字段填的是邮箱，
-         * 只有旧版的用户填的才是用户名（legacy = true）
+         * 只有旧版的用户填的才是用户名（legacy = true）.
          */
         $identification = strtolower($request->input('username'));
         Log::channel('ygg')->info("User [$identification] is try to authenticate with", [$request->except(['username', 'password'])]);
@@ -50,7 +49,7 @@ class AuthController extends Controller
         $result = [
             'accessToken' => $token->accessToken,
             'clientToken' => $token->clientToken,
-            'availableProfiles' => $availableProfiles
+            'availableProfiles' => $availableProfiles,
         ];
 
         if ($request->input('requestUser')) {
@@ -75,7 +74,7 @@ class AuthController extends Controller
         ygg_log([
             'action' => 'authenticate',
             'user_id' => $user->uid,
-            'parameters' => json_encode($request->except('username', 'password'))
+            'parameters' => json_encode($request->except('username', 'password')),
         ]);
 
         return json($result);
@@ -89,7 +88,7 @@ class AuthController extends Controller
         Log::channel('ygg')->info("Try to refresh access token [$accessToken] with client token [$clientToken]");
 
         $token = Token::lookup($accessToken);
-        if (! $token) {
+        if (!$token) {
             throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.token.invalid'));
         }
 
@@ -115,7 +114,7 @@ class AuthController extends Controller
         $result = [
             'accessToken' => $token->accessToken,
             'clientToken' => $token->clientToken, // 原样返回
-            'availableProfiles' => $availableProfiles
+            'availableProfiles' => $availableProfiles,
         ];
 
         if ($request->input('requestUser')) {
@@ -127,7 +126,7 @@ class AuthController extends Controller
 
         // 当指定了 selectedProfile 时
         if ($selected = $request->get('selectedProfile')) {
-            if (! Player::where('name', $selected['name'])->first()) {
+            if (!Player::where('name', $selected['name'])->first()) {
                 throw new IllegalArgumentException(trans('Yggdrasil::exceptions.player.not-existed'));
             }
 
@@ -141,7 +140,7 @@ class AuthController extends Controller
                 }
             }
 
-            if (! isset($result['selectedProfile'])) {
+            if (!isset($result['selectedProfile'])) {
                 throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.player.owner'));
             }
 
@@ -172,6 +171,7 @@ class AuthController extends Controller
         ]);
 
         $result['accessToken'] = $token->accessToken;
+
         return json($result);
     }
 
@@ -180,11 +180,10 @@ class AuthController extends Controller
         $clientToken = $request->input('clientToken');
         $accessToken = $request->input('accessToken');
 
-        Log::channel('ygg')->info("Check if an access token is valid", compact('clientToken', 'accessToken'));
+        Log::channel('ygg')->info('Check if an access token is valid', compact('clientToken', 'accessToken'));
 
         $token = Token::lookup($accessToken);
         if ($token && $token->isValid()) {
-
             if ($clientToken && $clientToken !== $token->clientToken) {
                 throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.token.not-matched'));
             }
@@ -238,7 +237,7 @@ class AuthController extends Controller
         $clientToken = $request->input('clientToken');
         $accessToken = $request->input('accessToken');
 
-        Log::channel('ygg')->info("Try to invalidate an access token", compact('clientToken', 'accessToken'));
+        Log::channel('ygg')->info('Try to invalidate an access token', compact('clientToken', 'accessToken'));
 
         // 据说不用检查 clientToken 与 accessToken 是否匹配
         if ($cache = Cache::get("TOKEN_$accessToken")) {
@@ -275,9 +274,7 @@ class AuthController extends Controller
         $user = User::where('email', $identification)->first();
 
         if (!$user) {
-            throw new ForbiddenOperationException(
-                trans('Yggdrasil::exceptions.auth.not-existed', compact('identification'))
-            );
+            throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.auth.not-existed', compact('identification')));
         }
 
         if (!$user->verifyPassword($password)) {

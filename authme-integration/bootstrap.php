@@ -1,7 +1,7 @@
 <?php
 
-use Integration\Authme\Listener;
 use Illuminate\Contracts\Events\Dispatcher;
+use Integration\Authme\Listener;
 
 return function (Dispatcher $events) {
     // 保证 Authme 新增的 username 等字段与皮肤站原有的 player_name 同步

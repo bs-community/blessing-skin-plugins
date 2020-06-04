@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Str;
-
 return function (App\Services\PluginManager $plugins) {
     $authme = $plugins->get('authme-integration');
     $isAuthMe = $authme && $authme->isEnabled();

@@ -23,8 +23,8 @@ return function (Dispatcher $events, Filter $filter) {
 
     Hook::addMenuItem('admin', 4, [
         'title' => '邀请码',
-        'link'  => 'admin/invitation-codes',
-        'icon'  => 'fa-inbox'
+        'link' => 'admin/invitation-codes',
+        'icon' => 'fa-inbox',
     ]);
 
     $filter->add('can_register', InvitationCodes\CheckInvitationCode::class);

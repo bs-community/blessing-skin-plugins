@@ -2,19 +2,14 @@
 
 namespace Integration\Authme\Listener;
 
-use DB;
-use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Player;
-use App\Events\UserTryToLogin;
 use App\Events\UserAuthenticated;
+use App\Models\Player;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class SyncWithAuthme
 {
-    /**
-     * @param Dispatcher $events
-     */
     public function subscribe(Dispatcher $events)
     {
         // 初始化在 Authme 那边注册的用户
@@ -30,7 +25,7 @@ class SyncWithAuthme
                 $user->last_sign_at = Carbon::now()->subDay();
                 $user->save();
 
-                $player = new Player;
+                $player = new Player();
                 $player->name = $user->realname;
                 $player->uid = $user->uid;
                 $player->tid_skin = 0;

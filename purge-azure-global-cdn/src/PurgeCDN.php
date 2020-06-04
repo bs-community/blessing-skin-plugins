@@ -16,7 +16,10 @@ use Illuminate\Support\Facades\Http;
 
 class PurgeCDN implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     public $tries = 3;
 
@@ -37,24 +40,24 @@ class PurgeCDN implements ShouldQueue
 
         // 列出需要刷新的 URL
         $name = urlencode($this->player->name);
-        $urls = ['/'. $name.'.json', '/csl/'.$name.'.json'];
+        $urls = ['/'.$name.'.json', '/csl/'.$name.'.json'];
         if (isset($usm) && $usm->isEnabled()) {
-            $urls[] = '/usm/' . $name . '.json';
+            $urls[] = '/usm/'.$name.'.json';
         }
         if (isset($legacy) && $legacy->isEnabled()) {
             array_push(
                 $urls,
-                '/skin/' . $name . '.png',
-                '/cape/' . $name . '.png'
+                '/skin/'.$name.'.png',
+                '/cape/'.$name.'.png'
             );
         }
         if (isset($yggdrasil) && $yggdrasil->isEnabled()) {
             $uuid = DB::table('uuid')->where('name', $name)->value('uuid');
             array_push(
                 $urls,
-                '/api/yggdrasil/sessionserver/session/minecraft/profile/' . $uuid,
-                '/api/yggdrasil/sessionserver/session/minecraft/profile/' . $uuid . '?unsigned=false',
-                '/api/yggdrasil/sessionserver/session/minecraft/profile/' . $uuid . '?unsigned=true'
+                '/api/yggdrasil/sessionserver/session/minecraft/profile/'.$uuid,
+                '/api/yggdrasil/sessionserver/session/minecraft/profile/'.$uuid.'?unsigned=false',
+                '/api/yggdrasil/sessionserver/session/minecraft/profile/'.$uuid.'?unsigned=true'
             );
         }
 

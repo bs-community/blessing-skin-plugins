@@ -14,7 +14,7 @@ return [
             'yaw',
             'pitch',
             'isLogged',
-            'hasSession'
+            'hasSession',
         ];
         $exists = [];
         $initialized = true;
@@ -22,7 +22,7 @@ return [
         foreach ($columns as $column) {
             $exists[$column] = Schema::hasColumn('users', $column);
 
-            if (! $exists[$column]) {
+            if (!$exists[$column]) {
                 $initialized = false;
             }
         }
@@ -39,18 +39,18 @@ return [
             $table->dateTime('last_sign_at')->nullable()->change();
             $table->dateTime('register_at')->nullable()->change();
 
-            $exists['username']   || $table->string('username')->nullable();
-            $exists['realname']   || $table->string('realname')->nullable();
-            $exists['lastlogin']  || $table->bigInteger('lastlogin')->nullable();
-            $exists['x']          || $table->double('x')->default(0);
-            $exists['y']          || $table->double('y')->default(0);
-            $exists['z']          || $table->double('z')->default(0);
-            $exists['world']      || $table->string('world')->default('world');
-            $exists['regdate']    || $table->bigInteger('regdate')->default(0);
-            $exists['regip']      || $table->string('regip', 40)->nullable();
-            $exists['yaw']        || $table->float('yaw')->nullable();
-            $exists['pitch']      || $table->float('pitch')->nullable();
-            $exists['isLogged']   || $table->smallInteger('isLogged')->default(0);
+            $exists['username'] || $table->string('username')->nullable();
+            $exists['realname'] || $table->string('realname')->nullable();
+            $exists['lastlogin'] || $table->bigInteger('lastlogin')->nullable();
+            $exists['x'] || $table->double('x')->default(0);
+            $exists['y'] || $table->double('y')->default(0);
+            $exists['z'] || $table->double('z')->default(0);
+            $exists['world'] || $table->string('world')->default('world');
+            $exists['regdate'] || $table->bigInteger('regdate')->default(0);
+            $exists['regip'] || $table->string('regip', 40)->nullable();
+            $exists['yaw'] || $table->float('yaw')->nullable();
+            $exists['pitch'] || $table->float('pitch')->nullable();
+            $exists['isLogged'] || $table->smallInteger('isLogged')->default(0);
             $exists['hasSession'] || $table->smallInteger('hasSession')->default(0);
         });
 

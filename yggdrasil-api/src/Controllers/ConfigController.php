@@ -2,13 +2,13 @@
 
 namespace Yggdrasil\Controllers;
 
-use DB;
-use Option;
-use Exception;
 use App\Services\Hook;
 use App\Services\OptionForm;
+use DB;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Option;
 use Yggdrasil\Exceptions\IllegalArgumentException;
 
 class ConfigController extends Controller
@@ -39,7 +39,7 @@ class ConfigController extends Controller
             $form->textarea('ygg_private_key', trans('Yggdrasil::config.keypair.ygg_private_key.title'))
                 ->rows(10)
                 ->hint(trans('Yggdrasil::config.keypair.ygg_private_key.hint'));
-            })->renderWithOutSubmitButton()->addButton([
+        })->renderWithOutSubmitButton()->addButton([
                 'style' => 'success',
                 'name' => 'generate-key',
                 'text' => trans('Yggdrasil::config.keypair.ygg_private_key.generate'),
@@ -71,12 +71,12 @@ class ConfigController extends Controller
         $extra = option('ygg_skin_domain') === '' ? [] : explode(',', option('ygg_skin_domain'));
         $skinDomains = array_map('trim', array_values(array_unique(array_merge($extra, [
             parse_url(option('site_url'), PHP_URL_HOST),
-            $request->getHost()
+            $request->getHost(),
         ]))));
 
         $privateKey = openssl_pkey_get_private(option('ygg_private_key'));
 
-        if (! $privateKey) {
+        if (!$privateKey) {
             throw new IllegalArgumentException(trans('Yggdrasil::config.rsa.invalid'));
         }
 
@@ -92,8 +92,8 @@ class ConfigController extends Controller
                 'implementationName' => 'Yggdrasil API for Blessing Skin',
                 'implementationVersion' => plugin('yggdrasil-api')->version,
                 'links' => [
-                    'homepage' => url('/')
-                ]
+                    'homepage' => url('/'),
+                ],
             ],
             'skinDomains' => $skinDomains,
             'signaturePublickey' => $keyData['key'],

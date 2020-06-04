@@ -2,7 +2,7 @@
 
 return [
     App\Events\PluginWasEnabled::class => function () {
-        if (! Schema::hasTable('mojang_verifications')) {
+        if (!Schema::hasTable('mojang_verifications')) {
             Schema::create('mojang_verifications', function ($table) {
                 $table->increments('id');
                 $table->integer('user_id')->unique();

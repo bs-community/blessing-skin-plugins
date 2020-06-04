@@ -9,12 +9,12 @@ class NotFoundException extends YggdrasilException
      *
      * @var string
      */
-    protected $error = "NotFoundException";
+    protected $error = 'NotFoundException';
 
     /**
      * Status code of HTTP response.
      *
-     * @var integer
+     * @var int
      */
     protected $statusCode = 404;
 }

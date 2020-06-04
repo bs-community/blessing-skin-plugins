@@ -6,8 +6,8 @@ use App\Models\User;
 use Blessing\Filter;
 use Carbon\Carbon;
 use Event;
-use Illuminate\Support\Arr;
 use GPlane\Mojang\MojangVerification;
+use Illuminate\Support\Arr;
 use Vectorface\Whip\Whip;
 
 require_once __DIR__.'/../helpers.php';
@@ -46,6 +46,7 @@ class CreateNewUser
                 Event::dispatch('user.profile.updating', [$user, 'email', ['new_email' => $email]]);
                 $user->update(['email' => $email]);
                 Event::dispatch('user.profile.updated', [$user, 'email', ['new_email' => $email]]);
+
                 return;
             }
         }

@@ -1,0 +1,21 @@
+<?php
+
+$finder = PhpCsFixer\Finder::create()
+    ->exclude('node_modules')
+    ->exclude('.git')
+    ->in(__DIR__)
+;
+
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@Symfony' => true,
+        'align_multiline_comment' => true,
+        'array_syntax' => ['syntax' => 'short'],
+        'increment_style' => ['style' => 'post'],
+        'list_syntax' => ['syntax' => 'short'],
+        'standardize_increment' => false,
+        'yoda_style' => false,
+
+    ])
+    ->setFinder($finder)
+;

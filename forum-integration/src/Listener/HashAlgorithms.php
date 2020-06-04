@@ -2,9 +2,9 @@
 
 namespace Integration\Forum\Listener;
 
-use App\Models\User;
-use App\Models\Player;
 use App\Events\UserTryToLogin;
+use App\Models\Player;
+use App\Models\User;
 use Blessing\Filter;
 use Illuminate\Contracts\Events\Dispatcher;
 
@@ -29,7 +29,9 @@ class HashAlgorithms
                     return $p->user;
                 });
             }
-            if (! $user) return;
+            if (!$user) {
+                return;
+            }
 
             $password = request('password');
 
