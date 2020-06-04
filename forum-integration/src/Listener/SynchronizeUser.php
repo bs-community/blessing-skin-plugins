@@ -81,7 +81,7 @@ class SynchronizeUser
 
         $player = Player::where('uid', $user->uid)->first();
         //如果用户没有角色，则不进行同步
-        if(!$player) {
+        if (!$player) {
             return;
         }
         $player_name = $player->name;
@@ -110,18 +110,21 @@ class SynchronizeUser
     protected function syncFromLocal(User $user)
     {
         $player = Player::where('uid', $user->uid)->first();
-        if(!$player) return;//如果用户没有角色，则不进行同步
+        if (!$player) {
+            return;
+        } //如果用户没有角色，则不进行同步
         $player_name = $player->name;
         //如果论坛数据库里有账号密码都相同的账户，则将其绑定至本皮肤站账户
         $RemoteDB = clone app('db.remote');
         $remoteUser = $RemoteDB->where([
-            ['username',$player_name],
-            ['email',$user->email],
-            ['password',$user->password]
+            ['username', $player_name],
+            ['email', $user->email],
+            ['password', $user->password],
         ])->first();
-        if($RemUser){
-            $user -> forum_uid = $RemUser -> uid;
+        if ($RemUser) {
+            $user->forum_uid = $RemUser->uid;
             $user->save();
+            
             return $RemUser;
         }
         if (config('secure.cipher') == 'BCRYPT' || config('secure.cipher') == 'PHP_PASSWORD_HASH') {
@@ -167,7 +170,9 @@ class SynchronizeUser
         
         //如果皮肤站数据库中已经存在对应uid的账户，则直接返回该账户
         $user = User::where('forum_uid', $result->uid)->first();
-        if($user) return $user;
+        if ($user) {
+            return $user;
+        }
 
         // 在皮肤站数据库新建用户及角色
         $user = new User();
@@ -180,7 +185,7 @@ class SynchronizeUser
         $user->permission = User::NORMAL;
         $user->nickname = $result->username;
         $user->verified = boolval($result->is_email_confirmed ?? false);
-        $user->forum_uid    = $result->uid;
+        $user->forum_uid = $result->uid;
         if (stristr(get_class(app('cipher')), 'SALTED')) {
             $user->salt = $result->salt ?? '';
         }
