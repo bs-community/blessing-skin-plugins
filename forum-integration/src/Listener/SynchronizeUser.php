@@ -45,8 +45,8 @@ class SynchronizeUser
             return;
         }
 
-        $remoteDB = app('db.remote');
-        $remoteUser = $RemoteDB->where('uid', $user->forum_uid)->first();
+        $remoteDB = clone app('db.remote');
+        $remoteUser = $remoteDB->where('uid', $user->forum_uid)->first();
 
         // 如果这个角色存在于皮肤站，却不存在与论坛数据库中的话，就尝试同步过去
         if (!$remoteUser) {
@@ -115,17 +115,17 @@ class SynchronizeUser
         } //如果用户没有角色，则不进行同步
         $player_name = $player->name;
         //如果论坛数据库里有账号密码都相同的账户，则将其绑定至本皮肤站账户
-        $RemoteDB = clone app('db.remote');
-        $remoteUser = $RemoteDB->where([
+        $remoteDB = clone app('db.remote');
+        $remoteUser = $remoteDB->where([
             ['username', $player_name],
             ['email', $user->email],
             ['password', $user->password],
         ])->first();
-        if ($RemUser) {
-            $user->forum_uid = $RemUser->uid;
+        if ($remoteUser) {
+            $user->forum_uid = $remoteUser->uid;
             $user->save();
 
-            return $RemUser;
+            return $remoteUser;
         }
         if (config('secure.cipher') == 'BCRYPT' || config('secure.cipher') == 'PHP_PASSWORD_HASH') {
             // 用这个加密算法说明正在使用 Flarum
