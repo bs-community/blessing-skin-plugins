@@ -17,7 +17,7 @@ class Configuration
                     trans('GPlane\Mojang::config.score_award')
                 )->placeholder(trans('GPlane\Mojang::config.default'))
                     ->description(trans('GPlane\Mojang::config.description'));
-        })->handle();
+            })->handle();
 
         return view('GPlane\Mojang::config', compact('form'));
     }

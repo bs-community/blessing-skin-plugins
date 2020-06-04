@@ -1,7 +1,6 @@
 <?php
 
-if (! function_exists('forum_get_default_db_config')) {
-
+if (!function_exists('forum_get_default_db_config')) {
     function forum_get_default_db_config()
     {
         return [
@@ -21,8 +20,7 @@ if (! function_exists('forum_get_default_db_config')) {
     }
 }
 
-if (! function_exists('forum_generate_random_salt')) {
-
+if (!function_exists('forum_generate_random_salt')) {
     function forum_generate_random_salt()
     {
         // Format /^[0-9a-f]{6}$/

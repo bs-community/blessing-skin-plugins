@@ -15,23 +15,23 @@ class Controller
         $mojang = ['name' => 'Mojang', 'type' => 'MojangAPI'];
         $self = [
             'name' => $siteName,
-            'root' => url('/csl') . '/',
+            'root' => url('/csl').'/',
             'type' => 'CustomSkinAPI',
         ];
         if (option('csl_first', 'self') === 'self') {
             $csl = [
                 'enable' => true,
-                'loadlist' => [$self, $mojang]
+                'loadlist' => [$self, $mojang],
             ];
         } else {
             $csl = [
                 'enable' => true,
-                'loadlist' => [$mojang, $self]
+                'loadlist' => [$mojang, $self],
             ];
         }
 
         $usm = [
-            'rootURIs' => [url('/usm') . '/'],
+            'rootURIs' => [url('/usm').'/'],
             'legacySkinURIs' => [],
             'legacyCapeURIs' => [],
         ];

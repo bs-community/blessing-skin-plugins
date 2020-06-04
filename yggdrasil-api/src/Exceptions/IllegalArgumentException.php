@@ -9,12 +9,12 @@ class IllegalArgumentException extends YggdrasilException
      *
      * @var string
      */
-    protected $error = "IllegalArgumentException";
+    protected $error = 'IllegalArgumentException';
 
     /**
      * Status code of HTTP response.
      *
-     * @var integer
+     * @var int
      */
     protected $statusCode = 400;
 }

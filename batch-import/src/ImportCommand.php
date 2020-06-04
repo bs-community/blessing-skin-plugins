@@ -3,11 +3,11 @@
 namespace BatchImport;
 
 use App\Models\Texture;
+use Blessing\TextureTypeCast\CastTextureType;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Blessing\TextureTypeCast\CastTextureType;
 use Image;
 use Symfony\Component\Finder\SplFileInfo;
 

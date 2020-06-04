@@ -15,19 +15,19 @@ return function (Dispatcher $events) {
 
         $name = $event->player->name;
         $urls = [
-            $baseUrl . '/' . $name . '.json',
-            $baseUrl . '/csl/' . $name . '.json',
+            $baseUrl.'/'.$name.'.json',
+            $baseUrl.'/csl/'.$name.'.json',
         ];
 
         if (isset($usm) && $usm->isEnabled()) {
-            $urls[] = $baseUrl . '/usm/' . $name . '.json';
+            $urls[] = $baseUrl.'/usm/'.$name.'.json';
         }
 
         if (isset($legacy) && $legacy->isEnabled()) {
             array_push(
                 $urls,
-                $baseUrl . '/skin/' . $name . '.png',
-                $baseUrl . '/cape/' . $name . '.png'
+                $baseUrl.'/skin/'.$name.'.png',
+                $baseUrl.'/cape/'.$name.'.png'
             );
         }
 
@@ -35,20 +35,20 @@ return function (Dispatcher $events) {
             $uuid = DB::table('uuid')->where('name', $name)->value('uuid');
             array_push(
                 $urls,
-                $baseUrl . '/api/yggdrasil/sessionserver/session/minecraft/profile/' . $uuid,
-                $baseUrl . '/api/yggdrasil/sessionserver/session/minecraft/profile/' . $uuid . '?unsigned=false',
-                $baseUrl . '/api/yggdrasil/sessionserver/session/minecraft/profile/' . $uuid . '?unsigned=true');
+                $baseUrl.'/api/yggdrasil/sessionserver/session/minecraft/profile/'.$uuid,
+                $baseUrl.'/api/yggdrasil/sessionserver/session/minecraft/profile/'.$uuid.'?unsigned=false',
+                $baseUrl.'/api/yggdrasil/sessionserver/session/minecraft/profile/'.$uuid.'?unsigned=true');
         }
 
         $apiBody = [
             'Nonce' => rand(),
             'Timestamp' => time(),
             'Action' => 'RefreshCdnUrl',
-            'SecretId' => $secretId
+            'SecretId' => $secretId,
         ];
 
         for ($i = 0; $i < count($urls); $i++) {
-            $apiBody['urls.' . $i] = $urls[$i];
+            $apiBody['urls.'.$i] = $urls[$i];
         }
 
         ksort($apiBody);
@@ -56,7 +56,7 @@ return function (Dispatcher $events) {
         $sigTxt = 'POSTcdn.api.qcloud.com/v2/index.php?';
         $isFirst = true;
         foreach ($apiBody as $key => $value) {
-            if (! $isFirst) {
+            if (!$isFirst) {
                 $sigTxt = $sigTxt.'&';
             }
             $isFirst = false;
@@ -65,13 +65,13 @@ return function (Dispatcher $events) {
             if (strpos($key, '_')) {
                 $key = str_replace('_', '.', $key);
             }
-            $sigTxt = $sigTxt . $key . '=' . $value;
+            $sigTxt = $sigTxt.$key.'='.$value;
         }
 
         $signature = base64_encode(hash_hmac('sha1', $sigTxt, $secretKey, true));
-        $requestUrl = 'Signature=' . urlencode($signature);
+        $requestUrl = 'Signature='.urlencode($signature);
         foreach ($apiBody as $key => $value) {
-            $requestUrl = $requestUrl . '&' . $key . '=' . urlencode($value);
+            $requestUrl = $requestUrl.'&'.$key.'='.urlencode($value);
         }
 
         // 开始发出请求
@@ -83,7 +83,5 @@ return function (Dispatcher $events) {
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_exec($ch);  // 忽略响应
-
     });
-
 };

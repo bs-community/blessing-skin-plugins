@@ -11,29 +11,30 @@ class YggdrasilException extends \Exception
      *
      * @var string
      */
-    protected $error = "";
+    protected $error = '';
 
     /**
      * Longer description which can be shown to the user.
+     *
      * @var string
      */
-    protected $errorMessage = "";
+    protected $errorMessage = '';
 
     /**
      * Cause of the error. Optional.
      *
      * @var string
      */
-    protected $cause = "";
+    protected $cause = '';
 
     /**
      * Status code of HTTP response.
      *
-     * @var integer
+     * @var int
      */
     protected $statusCode = 200;
 
-    public function __construct($message = "Error occured.", $cause = "")
+    public function __construct($message = 'Error occured.', $cause = '')
     {
         parent::__construct($message, $this->statusCode);
 
@@ -50,10 +51,10 @@ class YggdrasilException extends \Exception
     {
         $result = [
             'error' => $this->error,
-            'errorMessage' => $this->errorMessage
+            'errorMessage' => $this->errorMessage,
         ];
 
-        if ($this->cause !== "") {
+        if ($this->cause !== '') {
             $result['cause'] = $this->cause;
         }
 

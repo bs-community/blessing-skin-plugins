@@ -2,18 +2,15 @@
 
 namespace Integration\Authme\Listener;
 
-use Schema;
-use App\Models\User;
-use App\Models\Player;
 use App\Events\UserTryToLogin;
+use App\Models\Player;
+use App\Models\User;
 use Blessing\Filter;
 use Illuminate\Contracts\Events\Dispatcher;
+use Schema;
 
 class HashAlgorithms
 {
-    /**
-     * @param Dispatcher $events
-     */
     public function subscribe(Dispatcher $events)
     {
         if (config('secure.cipher') == 'SHA256') {
@@ -41,7 +38,9 @@ class HashAlgorithms
                     return $p->user;
                 });
             }
-            if (! $user) return;
+            if (!$user) {
+                return;
+            }
 
             $password = request('password');
 
@@ -59,7 +58,7 @@ class HashAlgorithms
     protected function adaptToDynamicSalt(Dispatcher $events)
     {
         // 在 users 表上添加 salt 字段
-        if (! Schema::hasColumn('users', 'salt')) {
+        if (!Schema::hasColumn('users', 'salt')) {
             Schema::table('users', function ($table) {
                 $table->string('salt', 6)->default('');
             });
@@ -76,7 +75,9 @@ class HashAlgorithms
                     return $p->user;
                 });
             }
-            if (! $user) return;
+            if (!$user) {
+                return;
+            }
 
             $password = request('password');
 

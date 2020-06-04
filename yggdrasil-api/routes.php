@@ -14,7 +14,7 @@ Route::prefix('authserver')
 
         Route::post('validate', 'AuthController@validate');
         Route::post('invalidate', 'AuthController@invalidate');
-});
+    });
 
 Route::prefix('sessionserver/session/minecraft')->group(function () {
     Route::post('join', 'SessionController@joinServer');

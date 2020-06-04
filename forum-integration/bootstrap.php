@@ -41,7 +41,7 @@ return function () {
 
     try {
         app('db.remote')->getConnection()->getPdo();
-        if (! Schema::connection('remote')->hasTable($config['table'])) {
+        if (!Schema::connection('remote')->hasTable($config['table'])) {
             return;
         }
     } catch (Exception $e) {

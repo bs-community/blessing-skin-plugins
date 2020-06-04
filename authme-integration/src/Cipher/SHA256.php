@@ -33,7 +33,7 @@ class SHA256 extends BaseCipher
         // Hash formatted as $SHA$salt$hash
         return [
             'hash' => $parts[3],
-            'salt' => $parts[2]
+            'salt' => $parts[2],
         ];
     }
 

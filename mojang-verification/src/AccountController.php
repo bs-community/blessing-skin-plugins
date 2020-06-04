@@ -23,6 +23,7 @@ class AccountController extends Controller
         $result = validate_mojang_account($user->email, $request->input('password'));
         if ($result['valid']) {
             bind_mojang_account($user, $result['profiles'], $result['selected']);
+
             return back();
         } else {
             return back()->with('mojang-failed', true);

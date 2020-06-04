@@ -36,7 +36,7 @@ class Token
             'clientToken' => $this->clientToken,
             'accessToken' => $this->accessToken,
             'owner' => $this->owner,
-            'createdAt' => $this->createdAt
+            'createdAt' => $this->createdAt,
         ];
     }
 
@@ -55,6 +55,7 @@ class Token
                 Cache::forget("TOKEN_$accessToken");
             }
         }
+
         return null;
     }
 }

@@ -38,7 +38,9 @@ return function (Filter $filter) {
         $new = $model->getAttribute('name');
         $original = $model->getOriginal('name');
 
-        if (!$original || $original === $new) return;
+        if (!$original || $original === $new) {
+            return;
+        }
 
         // 要是能执行到这里就说明新的角色名已经没人在用了
         // 所以残留着的 UUID 映射删掉也没问题
@@ -65,8 +67,8 @@ return function (Filter $filter) {
     // 向管理后台菜单添加「Yggdrasil 日志」项目
     Hook::addMenuItem('admin', 4, [
         'title' => 'Yggdrasil::log.title',
-        'link'  => 'admin/yggdrasil-log',
-        'icon'  => 'fa-history'
+        'link' => 'admin/yggdrasil-log',
+        'icon' => 'fa-history',
     ]);
 
     // 添加 API 路由

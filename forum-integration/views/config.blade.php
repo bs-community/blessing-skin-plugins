@@ -6,21 +6,19 @@
 
 <?php
   $targetDbConfigForm = Option::form('connection', '数据库连接配置', function ($form) {
+      $form->text('forum_db_host', '目标数据库地址')->hint('跨数据库主机进行对接可能会有延迟，敬请知悉。');
+      $form->text('forum_db_port', '端口');
+      $form->text('forum_db_database', '数据库名');
+      $form->text('forum_db_username', '用户名');
+      $form->text('forum_db_password', '密码');
+      $form->text('forum_db_table', '用户数据表名');
 
-    $form->text('forum_db_host',     '目标数据库地址')->hint('跨数据库主机进行对接可能会有延迟，敬请知悉。');
-    $form->text('forum_db_port',     '端口');
-    $form->text('forum_db_database', '数据库名');
-    $form->text('forum_db_username', '用户名');
-    $form->text('forum_db_password', '密码');
-    $form->text('forum_db_table',    '用户数据表名');
-
-    $form->select('forum_duplicated_prefer', '重复处理')
+      $form->select('forum_duplicated_prefer', '重复处理')
       ->option('remote', '用论坛程序上的用户数据覆盖皮肤站')
-      ->option('local',  '用皮肤站上的用户数据覆盖论坛程序')
+      ->option('local', '用皮肤站上的用户数据覆盖论坛程序')
       ->description('此项选择后，在用户数据（如用户名相同、用户名密码不同）冲突的情况下将以你选择的那一方为准，另一方的用户数据将被覆盖');
-
   })->handle()->always(function ($form) {
-    $config = [
+      $config = [
         'host' => option('forum_db_host', '127.0.0.1'),
         'port' => option('forum_db_port', 3306),
         'database' => option('forum_db_database', 'forum'),
@@ -29,21 +27,21 @@
         'table' => option('forum_db_table', 'users'),
     ];
 
-    config(['database.connections.remote' => array_merge(
+      config(['database.connections.remote' => array_merge(
       forum_get_default_db_config(), $config
     )]);
 
-    try {
-      DB::connection('remote')->getPdo();
+      try {
+          DB::connection('remote')->getPdo();
 
-      if (Schema::connection('remote')->hasTable($config['table'])) {
-        $form->addMessage('目标数据库连接正常。', 'success');
-      } else {
-        $form->addMessage("成功连接至目标数据库，但是指定的数据表 [{$config['table']}] 不存在。", 'warning');
+          if (Schema::connection('remote')->hasTable($config['table'])) {
+              $form->addMessage('目标数据库连接正常。', 'success');
+          } else {
+              $form->addMessage("成功连接至目标数据库，但是指定的数据表 [{$config['table']}] 不存在。", 'warning');
+          }
+      } catch (Exception $e) {
+          $form->addMessage('无法连接至 MySQL 服务器，请检查你的配置。<br>错误信息：'.$e->getMessage(), 'danger');
       }
-    } catch (Exception $e) {
-      $form->addMessage('无法连接至 MySQL 服务器，请检查你的配置。<br>错误信息：'.$e->getMessage(), 'danger');
-    }
   });
 ?>
 

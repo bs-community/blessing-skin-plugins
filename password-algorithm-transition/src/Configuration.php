@@ -31,6 +31,7 @@ class Configuration
         })->map(function ($users, $algName) use ($count) {
             $total = count($users);
             $percentage = $total / $count * 100;
+
             return $algName.': '.$total.' 位用户 ('.$percentage.'%)';
         });
 

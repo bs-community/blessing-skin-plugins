@@ -2,8 +2,8 @@
 
 namespace GPlane\PasswordTransition;
 
-use Event;
 use App\Services\Cipher\BaseCipher;
+use Event;
 
 class Cipher extends BaseCipher
 {

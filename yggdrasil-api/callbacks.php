@@ -4,7 +4,7 @@ require __DIR__.'/src/Utils/helpers.php';
 
 return [
     App\Events\PluginWasEnabled::class => function () {
-        if (! Schema::hasTable('uuid')) {
+        if (!Schema::hasTable('uuid')) {
             Schema::create('uuid', function ($table) {
                 $table->increments('id');
                 $table->string('name');
@@ -12,7 +12,7 @@ return [
             });
         }
 
-        if (! Schema::hasTable('ygg_log')) {
+        if (!Schema::hasTable('ygg_log')) {
             Schema::create('ygg_log', function ($table) {
                 $table->increments('id');
                 $table->string('action');
@@ -34,18 +34,18 @@ return [
             'ygg_private_key' => '',
             'ygg_show_config_section' => 'true',
             'ygg_show_activities_section' => 'true',
-            'ygg_enable_ali' => 'true'
+            'ygg_enable_ali' => 'true',
         ];
 
         foreach ($items as $key => $value) {
-            if (! Option::get($key)) {
+            if (!Option::get($key)) {
                 Option::set($key, $value);
             }
         }
 
         $originalDefaultValue = [
             'ygg_token_expire_1' => '600',
-            'ygg_token_expire_2' => '1200'
+            'ygg_token_expire_2' => '1200',
         ];
 
         // 原来的令牌过期时间默认值太低了，调高点
@@ -55,7 +55,7 @@ return [
             }
         }
 
-        if (! env('YGG_VERBOSE_LOG')) {
+        if (!env('YGG_VERBOSE_LOG')) {
             @unlink(ygg_log_path());
             @unlink(storage_path('logs/yggdrasil.log'));
         }

@@ -2,12 +2,12 @@
 
 namespace Yggdrasil\Controllers;
 
-use Log;
 use App\Models\Player;
 use Illuminate\Http\Request;
-use Yggdrasil\Models\Profile;
 use Illuminate\Routing\Controller;
+use Log;
 use Yggdrasil\Exceptions\ForbiddenOperationException;
+use Yggdrasil\Models\Profile;
 
 class ProfileController extends Controller
 {
@@ -19,10 +19,12 @@ class ProfileController extends Controller
 
         if ($profile) {
             Log::channel('ygg')->info("Returning profile for uuid [$uuid]", [$profile->serialize()]);
+
             return response()->json()->setContent($profile);
         } else {
             // UUID 不存在就返回 204
             Log::channel('ygg')->info("Profile not found for uuid [$uuid]");
+
             return response()->noContent();
         }
     }
@@ -47,9 +49,7 @@ class ProfileController extends Controller
         Log::channel('ygg')->info('Search profiles by player names as listed', array_values($names));
 
         if (count($names) > option('ygg_search_profile_max')) {
-            throw new ForbiddenOperationException(
-                trans('Yggdrasil::exceptions.player.query-max', ['count' => option('ygg_search_profile_max')])
-            );
+            throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.player.query-max', ['count' => option('ygg_search_profile_max')]));
         }
 
         $profiles = [];

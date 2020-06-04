@@ -9,12 +9,12 @@ class ForbiddenOperationException extends YggdrasilException
      *
      * @var string
      */
-    protected $error = "ForbiddenOperationException";
+    protected $error = 'ForbiddenOperationException';
 
     /**
      * Status code of HTTP response.
      *
-     * @var integer
+     * @var int
      */
     protected $statusCode = 403;
 }

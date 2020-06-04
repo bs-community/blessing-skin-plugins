@@ -13,7 +13,7 @@ return function (Dispatcher $events) {
     $events->listen('Illuminate\Console\Events\ArtisanStarting', function ($event) {
         $event->artisan->resolveCommands([
             'InsaneProfileCache\Commands\Clean',
-            'InsaneProfileCache\Commands\Generate'
+            'InsaneProfileCache\Commands\Generate',
         ]);
     });
 };

@@ -2,23 +2,23 @@
 
 namespace Yggdrasil\Models;
 
-use DB;
-use Log;
-use Cache;
-use Schema;
 use App\Models\Player;
 use App\Models\Texture;
-use Yggdrasil\Utils\UUID;
+use Cache;
+use DB;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
+use Log;
+use Schema;
 use Yggdrasil\Exceptions\IllegalArgumentException;
+use Yggdrasil\Utils\UUID;
 
 class Profile
 {
     public $uuid;
     public $name;
     public $player;
-    public $model = "default";
+    public $model = 'default';
     public $skin;
     public $cape;
 
@@ -48,10 +48,8 @@ class Profile
         if ($unsigned === false) {
             $key = openssl_pkey_get_private(option('ygg_private_key'));
 
-            if (! $key) {
-                throw new IllegalArgumentException(
-                    trans('Yggdrasil::config.rsa.invalid')
-                );
+            if (!$key) {
+                throw new IllegalArgumentException(trans('Yggdrasil::config.rsa.invalid'));
             }
 
             $textures['signatureRequired'] = true;
@@ -60,12 +58,12 @@ class Profile
         // 避免 BungeeCord 服务器上可能出现无法加载材质的 Bug
         app('url')->forceRootUrl(option('site_url'));
 
-        if ($this->skin != "") {
+        if ($this->skin != '') {
             $textures['textures']['SKIN'] = [
                 'url' => url("textures/{$this->skin}"),
             ];
 
-            if ($this->model == "slim") {
+            if ($this->model == 'slim') {
                 $textures['textures']['SKIN']['metadata'] = ['model' => 'slim'];
             }
         } elseif (
@@ -79,9 +77,9 @@ class Profile
             }
         }
 
-        if ($this->cape != "") {
+        if ($this->cape != '') {
             $textures['textures']['CAPE'] = [
-                'url' => url("textures/{$this->cape}")
+                'url' => url("textures/{$this->cape}"),
             ];
         } elseif (
             Schema::hasTable('mojang_verifications') &&
@@ -131,7 +129,7 @@ class Profile
     {
         $result = DB::table('uuid')->where('name', $name)->first();
 
-        if (! $result) {
+        if (!$result) {
             // 分配新的 UUID
             $result = UUID::generateMinecraftUuid($name)->clearDashes();
             DB::table('uuid')->insert(['name' => $name, 'uuid' => $result]);
@@ -190,15 +188,16 @@ class Profile
             }
         });
 
-        if (! $profile) {
+        if (!$profile) {
             return null;
         }
         $property = Arr::first($profile['properties'], function ($item) {
             return $item['name'] === 'textures';
         });
-        if (! $property) {
+        if (!$property) {
             return null;
         }
+
         return Arr::get(json_decode(base64_decode($property['value']), true)['textures'], $type);
     }
 }
