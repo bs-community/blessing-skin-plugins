@@ -75,8 +75,9 @@ class SynchronizeUser
             }
         }
 
-		$player_name = Player::where('uid', $user->uid)->first()->name;
-		if(!$player_name) return;//如果用户没有角色，则不进行同步
+		$player = Player::where('uid', $user->uid)->first();
+		if(!$player) return;//如果用户没有角色，则不进行同步
+		$player_name = $player->name;
         // 同理，保证两边的用户名、绑定角色名一致。
         if (
             $player_name != $remoteUser->username &&
