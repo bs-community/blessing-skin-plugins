@@ -7,12 +7,12 @@ return [
                 $table->string('salt', 6)->default('');
             });
         }
-		
-		if (! Schema::hasColumn('users', 'forum_uid')) {
+
+        if (! Schema::hasColumn('users', 'forum_uid')) {
             Schema::table('users', function ($table) {
-                $table->integer('forum_uid', false,false)->nullable();
+                $table->integer('forum_uid', false, false)->nullable();
             });
         }
-		
     },
 ];
+
