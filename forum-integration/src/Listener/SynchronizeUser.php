@@ -124,7 +124,7 @@ class SynchronizeUser
         if ($RemUser) {
             $user->forum_uid = $RemUser->uid;
             $user->save();
-            
+
             return $RemUser;
         }
         if (config('secure.cipher') == 'BCRYPT' || config('secure.cipher') == 'PHP_PASSWORD_HASH') {
@@ -167,7 +167,7 @@ class SynchronizeUser
         if (!$result) {
             return;
         }
-        
+
         //如果皮肤站数据库中已经存在对应uid的账户，则直接返回该账户
         $user = User::where('forum_uid', $result->uid)->first();
         if ($user) {
