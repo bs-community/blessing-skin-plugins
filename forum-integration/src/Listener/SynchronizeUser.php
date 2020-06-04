@@ -76,7 +76,10 @@ class SynchronizeUser
         }
 
 		$player = Player::where('uid', $user->uid)->first();
-		if(!$player) return;//如果用户没有角色，则不进行同步
+        //如果用户没有角色，则不进行同步
+		if(!$player) {
+            return;
+        }
 		$player_name = $player->name;
         // 同理，保证两边的用户名、绑定角色名一致。
         if (
@@ -109,9 +112,9 @@ class SynchronizeUser
 		//如果论坛数据库里有账号密码都相同的账户，则将其绑定至本皮肤站账户
 		$RemoteDB = clone app('db.remote');
 		$RemUser = $RemoteDB->where([
-		['username',$player_name],
-		['email',$user->email],
-		['password',$user->password]
+		    ['username',$player_name],
+		    ['email',$user->email],
+		    ['password',$user->password]
 		])->first();
 		if($RemUser){
 			$user -> forum_uid = $RemUser -> uid;
