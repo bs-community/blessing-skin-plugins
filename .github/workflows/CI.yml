@@ -1,0 +1,20 @@
+name: CI
+
+on: [push, pull_rqeuest]
+
+jobs:
+  php-lint:
+    name: PHP Linting
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 7.4
+        coverage: none
+    - name: Install dependencies
+      run: composer global require friendsofphp/php-cs-fixer
+    - name: Check coding style
+      run: php-cs-fixer fix --dry-run --stop-on-violation --diff-format=udiff
