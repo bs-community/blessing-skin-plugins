@@ -45,7 +45,7 @@ class SynchronizeUser
             return;
         }
 
-		$RemoteDB = clone app('db.remote');
+		 $remoteDB = app('db.remote');
         $remoteUser = $RemoteDB->where('uid', $user->forum_uid)->first();
 
         // 如果这个角色存在于皮肤站，却不存在与论坛数据库中的话，就尝试同步过去
@@ -114,7 +114,7 @@ class SynchronizeUser
 		$player_name = $player->name;
 		//如果论坛数据库里有账号密码都相同的账户，则将其绑定至本皮肤站账户
 		$RemoteDB = clone app('db.remote');
-		$RemUser = $RemoteDB->where([
+		$remoteUser = $RemoteDB->where([
 		    ['username',$player_name],
 		    ['email',$user->email],
 		    ['password',$user->password]
