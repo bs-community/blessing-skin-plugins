@@ -48,7 +48,7 @@ class SynchronizeUser
         $remoteDB = clone app('db.remote');
         //使用该算法，则确定是discuz,否则为Flarum
         $remoteUser = null;
-        if ($this->distinguishForumType()=='discuz') {
+        if ($this->distinguishForumType() == 'discuz') {
             $remoteUser = $remoteDB->where('uid', $user->forum_uid)->first();
         } else {
             $remoteUser = $remoteDB->where('id', $user->forum_uid)->first();
@@ -107,10 +107,11 @@ class SynchronizeUser
             }
         }
     }
+
     /**
-    * 判断论坛类型
-    * @return discuz|flarum
-    */
+     * 判断论坛类型
+     * @return discuz|flarum
+     */
     protected function distinguishForumType()
     {
         if (config('secure.cipher') == 'SALTED2MD5') {
@@ -121,6 +122,7 @@ class SynchronizeUser
             return 'flarum';
         }
     }
+
     /**
      * 同步所给的皮肤站用户至论坛数据库。
      *
@@ -141,7 +143,7 @@ class SynchronizeUser
             ['email', $user->email],
         ])->first();
         if ($remoteUser) {
-            if ($this->distinguishForumType()=='discuz') {
+            if ($this->distinguishForumType() == 'discuz') {
                 $user->forum_uid = $remoteUser->uid;
             } else {
                 $user->forum_uid = $remoteUser->id;
@@ -193,7 +195,7 @@ class SynchronizeUser
 
         //如果皮肤站数据库中已经存在对应uid的账户，则直接返回该账户
         $forumId = null;
-        if ($this->distinguishForumType()=='discuz') {
+        if ($this->distinguishForumType() == 'discuz') {
             $forumId = $result->uid;
         } else {
             $forumId = $result->id;
@@ -214,7 +216,7 @@ class SynchronizeUser
         $user->permission = User::NORMAL;
         $user->nickname = $result->username;
         $user->verified = boolval($result->is_email_confirmed ?? false);
-        if ($this->distinguishForumType()=='discuz') {
+        if ($this->distinguishForumType() == 'discuz') {
             $user->forum_uid = $result->uid;
         } else {
             $user->forum_uid = $result->id;
