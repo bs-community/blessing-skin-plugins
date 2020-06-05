@@ -111,7 +111,7 @@ class SynchronizeUser
     /**
      * 判断论坛类型.
      *
-     * @return discuz|flarum
+     * @return string|null
      */
     protected function distinguishForumType()
     {
