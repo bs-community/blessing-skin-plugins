@@ -65,7 +65,7 @@
             <h3 class="box-title">说明</h3>
           </div><!-- /.box-header -->
           <div class="box-body table-responsive">
-            {!! (new Parsedown())->text($instruction) !!}
+            {!! (new Parsedown())->text($instruction ?? '') !!}
           </div>
         </div>
       </div>
