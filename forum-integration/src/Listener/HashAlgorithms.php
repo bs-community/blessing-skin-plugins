@@ -34,7 +34,7 @@ class HashAlgorithms
             }
 
             $password = request('password');
-            
+
             // 如果该账户没有绑定论坛账户，就不需要执行.
             if (!$user->forum_uid) {
                 return;
