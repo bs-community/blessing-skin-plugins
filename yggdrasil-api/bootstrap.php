@@ -9,7 +9,7 @@ return function (Filter $filter) {
     if (env('YGG_VERBOSE_LOG')) {
         config(['logging.channels.ygg' => [
             'driver' => 'single',
-            'path' => ygg_log_path(),
+            'path' => storage_path('logs/yggdrasil.log'),
         ]]);
     } else {
         config(['logging.channels.ygg' => [

@@ -3,16 +3,6 @@
 use Carbon\Carbon;
 use Vectorface\Whip\Whip;
 
-if (!function_exists('ygg_log_path')) {
-    function ygg_log_path()
-    {
-        $dbConfig = config('database.connections.'.config('database.default'));
-        $mask = substr(md5(implode(',', array_values($dbConfig))), 0, 8);
-
-        return storage_path("logs/yggdrasil-$mask.log");
-    }
-}
-
 if (!function_exists('ygg_generate_rsa_keys')) {
     function ygg_generate_rsa_keys($config = [])
     {
