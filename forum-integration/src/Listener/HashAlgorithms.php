@@ -6,7 +6,6 @@ use App\Events\UserTryToLogin;
 use App\Models\Player;
 use App\Models\User;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Support\Facades\Log;
 
 class HashAlgorithms
 {
