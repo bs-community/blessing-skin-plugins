@@ -45,7 +45,7 @@ class SynchronizeUser
             return;
         }
 
-        $remoteDB = clone app('db.remote');
+        $remoteDB = app('db.remote');
         //使用该算法，则确定是discuz,否则为Flarum
         $remoteUser = null;
         if ($this->distinguishForumType() == 'discuz') {
@@ -160,7 +160,7 @@ class SynchronizeUser
         }
         $player_name = $player->name;
         //如果论坛数据库里有邮箱和用户名都相同的账户，则将其绑定至本皮肤站账户
-        $remoteDB = clone app('db.remote');
+        $remoteDB = app('db.remote');
         $remoteUser = $remoteDB->where([
             ['username', $player_name],
             ['email', $user->email],
