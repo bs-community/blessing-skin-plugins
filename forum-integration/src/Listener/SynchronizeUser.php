@@ -63,6 +63,28 @@ class SynchronizeUser
         if (!$remoteUser) {
             return;
         }
+        
+        // 首先同步邮箱
+        if (
+            $user->email != $remoteUser->email &&
+            !empty($user->email) &&
+            !empty($remoteUser->email)
+        ) {
+            if (option('forum_duplicated_prefer') == 'remote') {
+                $user->email = $remoteUser->email;
+                $user->save();
+            } else {
+                if ($this->distinguishForumType() == 'discuz') {
+                    app('db.remote')->where('uid', $user->forum_uid)->update([
+                        'email' => $user->email,
+                    ]);
+                } else {
+                    app('db.remote')->where('id', $user->forum_uid)->update([
+                        'email' => $user->email,
+                    ]);
+                }
+            }
+        }
 
         // 如果两边用户的密码或 salt 不同，就按照「重复处理」选项的定义来处理。
         if (
