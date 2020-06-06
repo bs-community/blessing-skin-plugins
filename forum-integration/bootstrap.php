@@ -30,7 +30,7 @@ return function () {
     ];
 
     // 绑定 Query Builder 至容器，方便之后直接调用
-    app()->instance('db.local', DB::connection()->table('users'));
+    app()->bind('db.local', DB::connection()->table('users'));
     app()->bind('db.remote', function () use ($config) {
         config(['database.connections.remote' => array_merge(
             forum_get_default_db_config(), $config
