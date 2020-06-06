@@ -28,7 +28,7 @@ class SessionController extends Controller
         $result = DB::table('uuid')->where('uuid', $selectedProfile)->first();
 
         if (!$result) {
-            // 据说 Mojang 在这种情况下是会返回 403 的
+            //  Mojang 在这种情况下是会返回 403 的
             throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.uuid', ['profile' => $selectedProfile]));
         }
 
@@ -85,7 +85,7 @@ class SessionController extends Controller
             'parameters' => json_encode($request->except('accessToken')),
         ]);
 
-        return response('')->setStatusCode(204);
+        return response()->noContent();
     }
 
     public function hasJoinedServer(Request $request)
@@ -123,7 +123,7 @@ class SessionController extends Controller
 
         Log::channel('ygg')->info("Player [$name] was not in the server [$serverId]");
 
-        return response('')->setStatusCode(204);
+        return response()->noContent();
     }
 
     protected function mojangVerified($player)

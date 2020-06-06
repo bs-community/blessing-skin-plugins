@@ -202,7 +202,7 @@ class AuthController extends Controller
                 'parameters' => json_encode($request->except('accessToken')),
             ]);
 
-            return response('')->setStatusCode(204);
+            return response()->noContent();
         } else {
             throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.token.invalid'));
         }
@@ -229,7 +229,7 @@ class AuthController extends Controller
             'user_id' => $user->uid,
         ]);
 
-        return response('')->setStatusCode(204);
+        return response()->noContent();
     }
 
     public function invalidate(Request $request)
@@ -239,7 +239,7 @@ class AuthController extends Controller
 
         Log::channel('ygg')->info('Try to invalidate an access token', compact('clientToken', 'accessToken'));
 
-        // 据说不用检查 clientToken 与 accessToken 是否匹配
+        // 不用检查 clientToken 与 accessToken 是否匹配
         if ($cache = Cache::get("TOKEN_$accessToken")) {
             $token = unserialize($cache);
             $identification = strtolower($token->owner);
@@ -258,8 +258,8 @@ class AuthController extends Controller
             Log::channel('ygg')->error("Invalid access token [$accessToken], nothing to do");
         }
 
-        // 据说无论操作是否成功都应该返回 204
-        return response('')->setStatusCode(204);
+        // 无论操作是否成功都应该返回 204
+        return response()->noContent();
     }
 
     protected function checkUserCredentials(Request $request, $checkBanned = true)

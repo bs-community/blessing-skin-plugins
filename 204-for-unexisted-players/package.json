@@ -1,7 +1,7 @@
 {
   "name": "204-for-unexisted-players",
   "title": "返回 204",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "对请求不存在的角色的 JSON Profile 返回 204",
   "author": "GPlane",
   "url": "",

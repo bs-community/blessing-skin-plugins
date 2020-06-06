@@ -14,8 +14,7 @@ class Middleware
         $response = $next($request);
 
         if ($response->status() === 404) {
-            $response->setContent(null);
-            $response->setStatusCode(204);
+            return response()->noContent();
         }
 
         return $response;
