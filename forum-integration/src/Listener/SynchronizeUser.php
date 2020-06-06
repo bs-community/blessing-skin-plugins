@@ -63,7 +63,7 @@ class SynchronizeUser
         if (!$remoteUser) {
             return;
         }
-        
+
         // 首先同步邮箱
         if (
             $user->email != $remoteUser->email &&
