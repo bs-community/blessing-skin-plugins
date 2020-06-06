@@ -86,27 +86,6 @@ class SynchronizeUser
             }
         }
 
-        // 如果两边用户的密码或 salt 不同，就按照「重复处理」选项的定义来处理。
-        if (
-            $user->password != $remoteUser->password ||
-            (!empty($remoteUser->salt) && $user->salt != $remoteUser->salt)
-        ) {
-            if (option('forum_duplicated_prefer') == 'remote') {
-                $user->password = $remoteUser->password;
-                if (stristr(get_class(app('cipher')), 'SALTED')) {
-                    $user->salt = $remoteUser->salt;
-                }
-                $user->save();
-            } else {
-                app('db.remote')->where('email', $user->email)->update(array_merge(
-                    ['password' => $user->password],
-                    stristr(get_class(app('cipher')), 'SALTED')
-                        ? ['salt' => $user->salt]
-                        : []
-                ));
-            }
-        }
-
         $player = Player::where('uid', $user->uid)->first();
         //如果用户没有角色，则不进行同步
         if (!$player) {
@@ -126,6 +105,31 @@ class SynchronizeUser
                 app('db.remote')->where('email', $user->email)->update([
                     'username' => $player_name,
                 ]);
+            }
+        }
+
+        // 如果使用加盐算法,就不同步密码了
+        if (config('secure.cipher') == 'SALTED2MD5') {
+            return;
+        }
+        // 如果两边用户的密码或 salt 不同，就按照「重复处理」选项的定义来处理。
+        if (
+            $user->password != $remoteUser->password ||
+            (!empty($remoteUser->salt) && $user->salt != $remoteUser->salt)
+        ) {
+            if (option('forum_duplicated_prefer') == 'remote') {
+                $user->password = $remoteUser->password;
+                if (stristr(get_class(app('cipher')), 'SALTED')) {
+                    $user->salt = $remoteUser->salt;
+                }
+                $user->save();
+            } else {
+                app('db.remote')->where('email', $user->email)->update(array_merge(
+                    ['password' => $user->password],
+                    stristr(get_class(app('cipher')), 'SALTED')
+                        ? ['salt' => $user->salt]
+                        : []
+                ));
             }
         }
     }
@@ -189,10 +193,10 @@ class SynchronizeUser
             app('db.remote')->insertGetId([
                 'username' => $player_name,
                 'email' => $user->email,
-                'password' => $user->password,
+                'password' => 'defaultPassword',
                 'regip' => $user->ip,
                 'regdate' => time(),
-                'salt' => $user->salt,
+                'salt' => forum_generate_random_salt(),
             ]);
         }
 
@@ -243,9 +247,6 @@ class SynchronizeUser
             $user->forum_uid = $result->uid;
         } else {
             $user->forum_uid = $result->id;
-        }
-        if (stristr(get_class(app('cipher')), 'SALTED')) {
-            $user->salt = $result->salt ?? '';
         }
         $user->save();
         event(new Events\UserRegistered($user));
