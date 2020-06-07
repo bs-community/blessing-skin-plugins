@@ -62,7 +62,9 @@ class SessionController extends Controller
             }
 
             // 加入服务器
-            Cache::forever("SERVER_$serverId", $selectedProfile);
+            static::executeWithLock("SERVER_$serverId", function () use ($serverId, $selectedProfile) {
+                Cache::forever("SERVER_$serverId", $selectedProfile);
+            });
         } elseif ($this->mojangVerified($player) && $this->validateMojang($accessToken)) {
             if ($player->user->permission == User::BANNED) {
                 throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.user.banned'));
@@ -70,7 +72,9 @@ class SessionController extends Controller
 
             Log::channel('ygg')->info("Player [$player->name] is joining server with Mojang verified account.");
             // 加入服务器
-            Cache::forever("SERVER_$serverId", $selectedProfile);
+            static::executeWithLock("SERVER_$serverId", function () use ($serverId, $selectedProfile) {
+                Cache::forever("SERVER_$serverId", $selectedProfile);
+            });
         } else {
             // 指定角色所属的用户没有签发任何令牌
             throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.token.missing'));
@@ -96,29 +100,34 @@ class SessionController extends Controller
 
         Log::channel('ygg')->info("Checking if player [$name] has joined the server [$serverId] with IP [$ip]");
 
-        // 检查是否进行过 join 请求
-        if ($selectedProfile = Cache::get("SERVER_$serverId")) {
-            $profile = Profile::createFromUuid($selectedProfile);
+        $ret = static::executeWithLock("SERVER_$serverId", function () use ($serverId, $name, $ip, $request) {
+            // 检查是否进行过 join 请求
+            if ($selectedProfile = Cache::get("SERVER_$serverId")) {
+                $profile = Profile::createFromUuid($selectedProfile);
 
-            // TODO: 检查 IP 地址
-            if ($name === $profile->name) {
-                // 检查完成后马上删除缓存键值对
-                Cache::forget("SERVER_$serverId");
-                Log::channel('ygg')->info("Player [$name] was in the server [$serverId]");
+                // TODO: 检查 IP 地址
+                if ($name === $profile->name) {
+                    // 检查完成后马上删除缓存键值对
+                    Cache::forget("SERVER_$serverId");
+                    Log::channel('ygg')->info("Player [$name] was in the server [$serverId]");
 
-                // 这里返回的 Profile 必须带材质的数据签名
-                $response = $profile->serialize(false);
-                Log::channel('ygg')->info("Returning player [$name]'s profile", [$response]);
+                    // 这里返回的 Profile 必须带材质的数据签名
+                    $response = $profile->serialize(false);
+                    Log::channel('ygg')->info("Returning player [$name]'s profile", [$response]);
 
-                ygg_log(array_merge([
-                    'action' => 'has_joined',
-                    'user_id' => $profile->player->uid,
-                    'player_id' => $profile->player->pid,
-                    'parameters' => json_encode($request->except('username')),
-                ], ($ip ? compact('ip') : [])));
+                    ygg_log(array_merge([
+                        'action' => 'has_joined',
+                        'user_id' => $profile->player->uid,
+                        'player_id' => $profile->player->pid,
+                        'parameters' => json_encode($request->except('username')),
+                    ], ($ip ? compact('ip') : [])));
 
-                return response()->json()->setContent($response);
+                    return response()->json()->setContent($response);
+                }
             }
+        }, 4);
+        if ($ret) {
+            return $ret;
         }
 
         Log::channel('ygg')->info("Player [$name] was not in the server [$serverId]");
@@ -146,5 +155,36 @@ class SessionController extends Controller
         } catch (\Exception $e) {
             return false;
         }
+    }
+
+    protected static function isLockSupported(): bool
+    {
+        switch (config('cache.default')) {
+            case 'redis':
+            case 'database':
+            case 'array':
+            case 'memcached':
+            case 'dynamodb':
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    protected static function executeWithLock(
+        string $prefix,
+        $callback,
+        int $seconds = 0
+    ) {
+        if (static::isLockSupported()) {
+            $name = "$prefix-lock";
+            $lock = Cache::lock($name);
+
+            return $seconds === 0
+                ? $lock->get($callback)
+                : $lock->block($seconds, $callback);
+        }
+
+        return $callback();
     }
 }
