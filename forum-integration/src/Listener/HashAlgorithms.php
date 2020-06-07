@@ -5,7 +5,6 @@ namespace Integration\Forum\Listener;
 use App\Events\UserTryToLogin;
 use App\Models\Player;
 use App\Models\User;
-use Blessing\Filter;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class HashAlgorithms
@@ -35,24 +34,37 @@ class HashAlgorithms
 
             $password = request('password');
 
-            // 如果用户的密码还是用 .env 里的那个固定 salt 计算的 hash
-            // 就生成个随机 salt 放到 users 表里去
-            if ($user->password == app('cipher')->hash($password, config('secure.salt'))) {
-                $user->salt = forum_generate_random_salt();
-                $user->password = app('cipher')->hash($password, $user->salt);
-                $user->save();
+            // 如果该账户没有绑定论坛账户，就不需要执行.
+            if (!$user->forum_uid) {
+                return;
             }
-        });
-
-        resolve(Filter::class)->add('verify_password', function ($passed, $raw, $user) {
-            if (!$user->salt) {
-                $user->salt = forum_generate_random_salt();
-                $user->save();
+            // 如果不是SALTED2MD5算法,就没必要执行下面的代码了.
+            if (config('secure.cipher') != 'SALTED2MD5') {
+                return;
             }
-
-            $hashed = app('cipher')->hash($raw, $user->salt);
-
-            return hash_equals($user->password, $hashed);
+            $remoteUser = app('db.remote')->where('uid', $user->forum_uid)->first();
+            //如果绑定的论坛用户不存在，则不执行
+            if (!$remoteUser) {
+                return;
+            }
+            if (option('forum_duplicated_prefer') == 'remote') {
+                // 如果密码符合论坛数据，则同步
+                if (
+                    $remoteUser->password == app('cipher')->hash($password, $remoteUser->salt)
+                ) {
+                    $user->password = app('cipher')->hash($password, config('secure.salt'));
+                    $user->save();
+                }
+            } else {
+                // 如果密码符合皮肤站数据，则同步
+                if (
+                    $user->password == app('cipher')->hash($password, config('secure.salt'))
+                ) {
+                    app('db.remote')->where('uid', $remoteUser->uid)->update([
+                        'password' => app('cipher')->hash($password, $remoteUser->salt),
+                    ]);
+                }
+            }
         });
     }
 }
