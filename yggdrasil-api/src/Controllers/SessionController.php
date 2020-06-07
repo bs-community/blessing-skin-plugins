@@ -4,6 +4,7 @@ namespace Yggdrasil\Controllers;
 
 use App\Models\Player;
 use App\Models\User;
+use Blessing\Filter;
 use Cache;
 use DB;
 use Illuminate\Http\Request;
@@ -11,17 +12,24 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Http;
 use Log;
 use Schema;
+use Vectorface\Whip\Whip;
 use Yggdrasil\Exceptions\ForbiddenOperationException;
 use Yggdrasil\Models\Profile;
 use Yggdrasil\Models\Token;
 
 class SessionController extends Controller
 {
-    public function joinServer(Request $request)
+    public function joinServer(Request $request, Filter $filter)
     {
         $accessToken = $request->input('accessToken');
         $selectedProfile = $request->input('selectedProfile');
         $serverId = $request->input('serverId');
+
+        $whip = new Whip();
+        $ip = $whip->getValidIpAddress();
+        $ip = $filter->apply('client_ip', $ip);
+
+        $session = ['profile' => $selectedProfile, 'ip' => $ip];
 
         Log::channel('ygg')->info("Player [$selectedProfile] is trying to join server [$serverId] with access token [$accessToken]");
 
@@ -62,7 +70,7 @@ class SessionController extends Controller
             }
 
             // 加入服务器
-            Cache::put("SERVER_$serverId", $selectedProfile, 120);
+            Cache::put("SERVER_$serverId", $session, 120);
         } elseif ($this->mojangVerified($player) && $this->validateMojang($accessToken)) {
             if ($player->user->permission == User::BANNED) {
                 throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.user.banned'));
@@ -70,7 +78,7 @@ class SessionController extends Controller
 
             Log::channel('ygg')->info("Player [$player->name] is joining server with Mojang verified account.");
             // 加入服务器
-            Cache::put("SERVER_$serverId", $selectedProfile, 120);
+            Cache::put("SERVER_$serverId", $session, 120);
         } else {
             // 指定角色所属的用户没有签发任何令牌
             throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.token.missing'));
@@ -97,10 +105,14 @@ class SessionController extends Controller
         Log::channel('ygg')->info("Checking if player [$name] has joined the server [$serverId] with IP [$ip]");
 
         // 检查是否进行过 join 请求
-        if ($selectedProfile = Cache::get("SERVER_$serverId")) {
-            $profile = Profile::createFromUuid($selectedProfile);
+        $session = Cache::get("SERVER_$serverId");
+        if ($session) {
+            $profile = Profile::createFromUuid($session['profile']);
 
-            // TODO: 检查 IP 地址
+            if ($ip && $ip !== $session['ip']) {
+                return response()->noContent();
+            }
+
             if ($name === $profile->name) {
                 Log::channel('ygg')->info("Player [$name] was in the server [$serverId]");
 
