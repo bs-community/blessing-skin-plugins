@@ -1,8 +1,10 @@
 <?php
 
+use Blessing\Filter;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Collection;
 
-return function (Dispatcher $events) {
+return function (Dispatcher $events, Filter $filter) {
     $events->listen(
         'SocialiteProviders\Manager\SocialiteWasCalled',
         'SocialiteProviders\GitHub\GitHubExtendSocialite@handle'
@@ -14,6 +16,12 @@ return function (Dispatcher $events) {
         'redirect' => env('GITHUB_REDIRECT_URI'),
     ]]);
 
-    resolve('oauth.providers')
-        ->put('github', ['icon' => 'github', 'displayName' => 'GitHub']);
+    $filter->add('oauth_providers', function (Collection $providers) {
+        $providers->put('github', [
+            'icon' => 'github',
+            'displayName' => 'GitHub',
+        ]);
+
+        return $providers;
+    });
 };

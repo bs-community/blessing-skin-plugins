@@ -1,13 +1,14 @@
 {
   "name": "oauth-littleskin",
-  "title": "使用 LittleSkin 登录",
-  "version": "0.1.5",
-  "description": "用 LittleSkin 账号来登录皮肤站",
+  "title": "Blessing\\OAuth\\LittleSkin::general.title",
+  "version": "0.2.0",
+  "description": "Blessing\\OAuth\\LittleSkin::general.description",
   "author": "Asnxthaony",
   "url": "https://github.com/Asnxthaony",
   "namespace": "Blessing\\OAuth\\LittleSkin",
   "require": {
-    "blessing-skin-server": "^5.0.0"
+    "blessing-skin-server": "^5.0.0",
+    "oauth": "^1.0.0"
   },
   "enchants": {
     "icon": {

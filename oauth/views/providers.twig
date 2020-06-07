@@ -1,0 +1,11 @@
+{% if providers|length > 0 %}
+  <div class="my-3 text-center">
+    <div class="mb-1">{{ trans('Blessing\\OAuthCore::providers.title') }}</div>
+    {% for name, provider in providers %}
+      <a href="{{ url("/auth/login/#{name}") }}" class="btn btn-block bg-light border-secondary">
+        <i class="fab fa-{{ provider.icon }}"></i>&nbsp;
+        {{ provider.displayName }}
+      </a>
+    {% endfor %}
+  </div>
+{% endif %}

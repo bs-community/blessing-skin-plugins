@@ -1,8 +1,10 @@
 <?php
 
+use Blessing\Filter;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Collection;
 
-return function (Dispatcher $events) {
+return function (Dispatcher $events, Filter $filter) {
     $events->listen(
         'SocialiteProviders\Manager\SocialiteWasCalled',
         'SocialiteProviders\Live\LiveExtendSocialite@handle'
@@ -14,6 +16,12 @@ return function (Dispatcher $events) {
         'redirect' => env('LIVE_REDIRECT_URI'),
     ]]);
 
-    resolve('oauth.providers')
-        ->put('live', ['icon' => 'microsoft', 'displayName' => 'Microsoft Live']);
+    $filter->add('oauth_providers', function (Collection $providers) {
+        $providers->put('littleskin', [
+            'icon' => 'microsoft',
+            'displayName' => 'Microsoft Live',
+        ]);
+
+        return $providers;
+    });
 };
