@@ -32,8 +32,9 @@ class AuthController extends Controller
         $accessToken = UUID::generate()->clearDashes();
 
         // 吊销该用户的其他令牌
-        if ($cache = Cache::get("ID_$identification")) {
-            $expiredAccessToken = unserialize($cache)->accessToken;
+        $token = Cache::get("ID_$identification");
+        if ($token) {
+            $expiredAccessToken = $token->accessToken;
 
             Cache::forget("ID_$identification");
             Cache::forget("TOKEN_$expiredAccessToken");
@@ -215,8 +216,9 @@ class AuthController extends Controller
         $user = $this->checkUserCredentials($request, false);
 
         // 吊销所有令牌
-        if ($cache = Cache::get("ID_$identification")) {
-            $accessToken = unserialize($cache)->accessToken;
+        $token = Cache::get("ID_$identification");
+        if ($token) {
+            $accessToken = $token->accessToken;
 
             Cache::forget("ID_$identification");
             Cache::forget("TOKEN_$accessToken");
@@ -240,8 +242,8 @@ class AuthController extends Controller
         Log::channel('ygg')->info('Try to invalidate an access token', compact('clientToken', 'accessToken'));
 
         // 不用检查 clientToken 与 accessToken 是否匹配
-        if ($cache = Cache::get("TOKEN_$accessToken")) {
-            $token = unserialize($cache);
+        $token = Cache::get("TOKEN_$accessToken");
+        if ($token) {
             $identification = strtolower($token->owner);
 
             Cache::forget("ID_$identification");
@@ -313,9 +315,9 @@ class AuthController extends Controller
     {
         $timeToFullyExpired = option('ygg_token_expire_2');
         // 使用 accessToken 作为缓存主键
-        Cache::put("TOKEN_{$token->accessToken}", serialize($token), $timeToFullyExpired);
+        Cache::put("TOKEN_{$token->accessToken}", $token, $timeToFullyExpired);
         // TODO: 实现一个用户可以签发多个 Token
-        Cache::put("ID_$identification", serialize($token), $timeToFullyExpired);
+        Cache::put("ID_$identification", $token, $timeToFullyExpired);
 
         Log::channel('ygg')->info("Serialized token stored to cache with expiry time $timeToFullyExpired minutes", [
             'keys' => ["TOKEN_{$token->accessToken}", "ID_$identification"],
