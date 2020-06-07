@@ -1,6 +1,6 @@
 {
   "name": "forum-integration",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "title": "论坛数据对接",
   "description": "与 Discuz、Phpwind、Flarum 论坛程序进行数据对接，让玩家可以使用论坛的账号密码登录皮肤站，反之亦可。",
   "author": "printempw",
@@ -9,7 +9,7 @@
   "config": "config.blade.php",
   "require": {
     "blessing-skin-server": ">=4.0.0",
-    "single-player-limit": "^2.0.0"
+    "single-player-limit": ">=2.0.0"
   },
   "enchants": {
     "icon": {
