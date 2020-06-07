@@ -1,11 +1,13 @@
 <?php
 
+use App\Models\User;
 use App\Services\Hook;
 use Blessing\Filter;
+use Illuminate\Contracts\Events\Dispatcher;
 
 require __DIR__.'/src/Utils/helpers.php';
 
-return function (Filter $filter) {
+return function (Filter $filter, Dispatcher $events) {
     if (env('YGG_VERBOSE_LOG')) {
         config(['logging.channels.ygg' => [
             'driver' => 'single',
@@ -63,6 +65,21 @@ return function (Filter $filter) {
         });
         Hook::addScriptFileToPage(plugin('yggdrasil-api')->assets('dnd.js'), ['user']);
     }
+
+    $events->listen('user.profile.updated', function (User $user, string $action) {
+        if ($action !== 'password') {
+            return;
+        }
+
+        $identification = strtolower($user->email);
+        $token = Cache::get("ID_$identification");
+        if ($token) {
+            $accessToken = $token->accessToken;
+
+            Cache::forget("ID_$identification");
+            Cache::forget("TOKEN_$accessToken");
+        }
+    });
 
     // 向管理后台菜单添加「Yggdrasil 日志」项目
     Hook::addMenuItem('admin', 4, [
