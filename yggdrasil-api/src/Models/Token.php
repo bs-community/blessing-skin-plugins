@@ -46,9 +46,8 @@ class Token
      */
     public static function lookup(string $accessToken)
     {
-        $cache = Cache::get("TOKEN_$accessToken");
-        if ($cache) {
-            $token = unserialize($cache);
+        $token = Cache::get("TOKEN_$accessToken");
+        if ($token) {
             if ($token->isRefreshable()) {
                 return $token;
             } else {
