@@ -17,7 +17,7 @@ return function (Dispatcher $events, Filter $filter) {
     ]]);
 
     $filter->add('oauth_providers', function (Collection $providers) {
-        $providers->put('littleskin', [
+        $providers->put('live', [
             'icon' => 'microsoft',
             'displayName' => 'Microsoft Live',
         ]);
