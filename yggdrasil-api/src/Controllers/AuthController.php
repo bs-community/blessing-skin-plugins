@@ -32,12 +32,12 @@ class AuthController extends Controller
         $accessToken = UUID::generate()->clearDashes();
 
         // 吊销该用户的其他令牌
-        $token = Cache::get("ID_$identification");
+        $token = Cache::get("yggdrasil-id-$identification");
         if ($token) {
             $expiredAccessToken = $token->accessToken;
 
-            Cache::forget("ID_$identification");
-            Cache::forget("TOKEN_$expiredAccessToken");
+            Cache::forget("yggdrasil-id-$identification");
+            Cache::forget("yggdrasil-token-$expiredAccessToken");
         }
 
         // 实例化并存储 Token
@@ -155,7 +155,7 @@ class AuthController extends Controller
         }
 
         // 上面那一大票检测完了，最后再刷新令牌
-        Cache::forget("TOKEN_$accessToken");
+        Cache::forget("yggdrasil-token-$accessToken");
         Log::channel('ygg')->info("The old access token [$accessToken] is now revoked");
 
         $token->accessToken = UUID::generate()->clearDashes();
@@ -216,12 +216,12 @@ class AuthController extends Controller
         $user = $this->checkUserCredentials($request, false);
 
         // 吊销所有令牌
-        $token = Cache::get("ID_$identification");
+        $token = Cache::get("yggdrasil-id-$identification");
         if ($token) {
             $accessToken = $token->accessToken;
 
-            Cache::forget("ID_$identification");
-            Cache::forget("TOKEN_$accessToken");
+            Cache::forget("yggdrasil-id-$identification");
+            Cache::forget("yggdrasil-token-$accessToken");
         }
 
         Log::channel('ygg')->info("User [$identification] signed out, all tokens revoked");
@@ -242,12 +242,12 @@ class AuthController extends Controller
         Log::channel('ygg')->info('Try to invalidate an access token', compact('clientToken', 'accessToken'));
 
         // 不用检查 clientToken 与 accessToken 是否匹配
-        $token = Cache::get("TOKEN_$accessToken");
+        $token = Cache::get("yggdrasil-token-$accessToken");
         if ($token) {
             $identification = strtolower($token->owner);
 
-            Cache::forget("ID_$identification");
-            Cache::forget("TOKEN_$accessToken");
+            Cache::forget("yggdrasil-id-$identification");
+            Cache::forget("yggdrasil-token-$accessToken");
 
             ygg_log([
                 'action' => 'invalidate',
@@ -315,12 +315,12 @@ class AuthController extends Controller
     {
         $timeToFullyExpired = option('ygg_token_expire_2');
         // 使用 accessToken 作为缓存主键
-        Cache::put("TOKEN_{$token->accessToken}", $token, $timeToFullyExpired);
+        Cache::put("yggdrasil-token-{$token->accessToken}", $token, $timeToFullyExpired);
         // TODO: 实现一个用户可以签发多个 Token
-        Cache::put("ID_$identification", $token, $timeToFullyExpired);
+        Cache::put("yggdrasil-id-$identification", $token, $timeToFullyExpired);
 
         Log::channel('ygg')->info("Serialized token stored to cache with expiry time $timeToFullyExpired minutes", [
-            'keys' => ["TOKEN_{$token->accessToken}", "ID_$identification"],
+            'keys' => ["yggdrasil-token-{$token->accessToken}", "yggdrasil-id-$identification"],
             'token' => $token,
         ]);
     }

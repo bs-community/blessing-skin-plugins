@@ -72,12 +72,12 @@ return function (Filter $filter, Dispatcher $events) {
         }
 
         $identification = strtolower($user->email);
-        $token = Cache::get("ID_$identification");
+        $token = Cache::get("yggdrasil-id-$identification");
         if ($token) {
             $accessToken = $token->accessToken;
 
-            Cache::forget("ID_$identification");
-            Cache::forget("TOKEN_$accessToken");
+            Cache::forget("yggdrasil-id-$identification");
+            Cache::forget("yggdrasil-token-$accessToken");
         }
     });
 

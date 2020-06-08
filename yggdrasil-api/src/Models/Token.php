@@ -46,12 +46,12 @@ class Token
      */
     public static function lookup(string $accessToken)
     {
-        $token = Cache::get("TOKEN_$accessToken");
+        $token = Cache::get("yggdrasil-token-$accessToken");
         if ($token) {
             if ($token->isRefreshable()) {
                 return $token;
             } else {
-                Cache::forget("TOKEN_$accessToken");
+                Cache::forget("yggdrasil-token-$accessToken");
             }
         }
 

@@ -70,7 +70,7 @@ class SessionController extends Controller
             }
 
             // 加入服务器
-            Cache::put("SERVER_$serverId", $session, 120);
+            Cache::put("yggdrasil-server-$serverId", $session, 120);
         } elseif ($this->mojangVerified($player) && $this->validateMojang($accessToken)) {
             if ($player->user->permission == User::BANNED) {
                 throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.user.banned'));
@@ -78,7 +78,7 @@ class SessionController extends Controller
 
             Log::channel('ygg')->info("Player [$player->name] is joining server with Mojang verified account.");
             // 加入服务器
-            Cache::put("SERVER_$serverId", $session, 120);
+            Cache::put("yggdrasil-server-$serverId", $session, 120);
         } else {
             // 指定角色所属的用户没有签发任何令牌
             throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.token.missing'));
@@ -105,7 +105,7 @@ class SessionController extends Controller
         Log::channel('ygg')->info("Checking if player [$name] has joined the server [$serverId] with IP [$ip]");
 
         // 检查是否进行过 join 请求
-        $session = Cache::get("SERVER_$serverId");
+        $session = Cache::get("yggdrasil-server-$serverId");
         if ($session) {
             $profile = Profile::createFromUuid($session['profile']);
 
