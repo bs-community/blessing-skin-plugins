@@ -1,8 +1,8 @@
 {
   "name": "204-for-unexisted-players",
-  "title": "返回 204",
-  "version": "0.1.2",
-  "description": "对请求不存在的角色的 JSON Profile 返回 204",
+  "title": "Blessing\\NoContent::general.title",
+  "version": "0.1.3",
+  "description": "Blessing\\NoContent::general.description",
   "author": "GPlane",
   "url": "",
   "namespace": "Blessing\\NoContent",

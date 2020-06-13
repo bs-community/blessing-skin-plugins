@@ -1,8 +1,8 @@
 {
   "name": "embedded-comment",
-  "title": "嵌入第三方评论",
-  "version": "1.0.2",
-  "description": "向材质详情页中嵌入第三方评论系统",
+  "title": "Blessing\\EmbeddedComment::general.title",
+  "version": "1.0.3",
+  "description": "Blessing\\EmbeddedComment::general.description",
   "author": "GPlane",
   "url": "https://gplane.win",
   "namespace": "Blessing\\EmbeddedComment",
