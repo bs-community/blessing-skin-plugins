@@ -10,6 +10,6 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "LittleSkinChina/bs-socialite-provider-littleskin": "master"
+        "littleskinchina/bs-socialite-provider-littleskin": "dev-master"
     }
 }

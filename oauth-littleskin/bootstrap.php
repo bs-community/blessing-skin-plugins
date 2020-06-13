@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 return function (Dispatcher $events, Filter $filter) {
     $events->listen(
         'SocialiteProviders\Manager\SocialiteWasCalled',
-        'BlessingSocialiteProviders\LittleSkin\LittleSkinExtendSocialite@handle'
+        'LittleSkinChina\BsSocialiteProviderLittleSkin\LittleSkinExtendSocialite@handle'
     );
 
     config(['services.littleskin' => [
