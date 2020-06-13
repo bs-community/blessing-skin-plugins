@@ -1,8 +1,8 @@
 {
   "name": "legacy-api",
-  "title": "传统皮肤加载方式",
-  "version": "1.1.1",
-  "description": "提供传统的皮肤加载方式，即直接访问角色名。",
+  "title": "Blessing\\Legacy::general.title",
+  "version": "1.1.2",
+  "description": "Blessing\\Legacy::general.description",
   "author": "GPlane",
   "url": "https://gplane.win/",
   "namespace": "Blessing\\Legacy",
