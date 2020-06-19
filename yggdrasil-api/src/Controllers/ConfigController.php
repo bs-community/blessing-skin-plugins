@@ -4,6 +4,7 @@ namespace Yggdrasil\Controllers;
 
 use App\Services\Hook;
 use App\Services\OptionForm;
+use App\Services\PluginManager;
 use DB;
 use Exception;
 use Illuminate\Http\Request;
@@ -63,7 +64,7 @@ class ConfigController extends Controller
         ]);
     }
 
-    public function hello(Request $request)
+    public function hello(Request $request, PluginManager $pluginManager)
     {
         // Default skin domain whitelist:
         // - Specified by option 'site_url'
@@ -98,6 +99,10 @@ class ConfigController extends Controller
             'skinDomains' => $skinDomains,
             'signaturePublickey' => $keyData['key'],
         ];
+
+        if (!optional($pluginManager->get('disable-registration'))->isEnabled()) {
+            $result['meta']['links']['register'] = url('auth/register');
+        }
 
         return json($result);
     }
