@@ -5,7 +5,6 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 return function (Dispatcher $events) {
     $events->listen(App\Events\PlayerProfileUpdated::class, function ($event) {
-
         // 获取配置
         $baseUrl = env('ALICDN_SITE_BASE_URL');
         $AccessKeyId = env('ALICDN_ACCESSKEY_ID');
@@ -18,19 +17,19 @@ return function (Dispatcher $events) {
 
         $name = $event->player->name;
         $urls = [
-            $baseUrl . '/' . $name . '.json',
-            $baseUrl . '/csl/' . $name . '.json',
+            $baseUrl.'/'.$name.'.json',
+            $baseUrl.'/csl/'.$name.'.json',
         ];
 
         if (isset($usm) && $usm->isEnabled()) {
-            $urls[] = $baseUrl . '/usm/' . $name . '.json';
+            $urls[] = $baseUrl.'/usm/'.$name.'.json';
         }
 
         if (isset($legacy) && $legacy->isEnabled()) {
             array_push(
                 $urls,
-                $baseUrl . '/skin/' . $name . '.png',
-                $baseUrl . '/cape/' . $name . '.png'
+                $baseUrl.'/skin/'.$name.'.png',
+                $baseUrl.'/cape/'.$name.'.png'
             );
         }
 
@@ -38,9 +37,9 @@ return function (Dispatcher $events) {
             $uuid = DB::table('uuid')->where('name', $name)->value('uuid');
             array_push(
                 $urls,
-                $baseUrl . '/api/yggdrasil/sessionserver/session/minecraft/profile/' . $uuid,
-                $baseUrl . '/api/yggdrasil/sessionserver/session/minecraft/profile/' . $uuid . '?unsigned=false',
-                $baseUrl . '/api/yggdrasil/sessionserver/session/minecraft/profile/' . $uuid . '?unsigned=true'
+                $baseUrl.'/api/yggdrasil/sessionserver/session/minecraft/profile/'.$uuid,
+                $baseUrl.'/api/yggdrasil/sessionserver/session/minecraft/profile/'.$uuid.'?unsigned=false',
+                $baseUrl.'/api/yggdrasil/sessionserver/session/minecraft/profile/'.$uuid.'?unsigned=true'
             );
         }
 
@@ -49,9 +48,9 @@ return function (Dispatcher $events) {
         // 构建需要刷新URL链接
         foreach ($urls as $k => $v) {
             if ($k === (sizeof($urls) - 1)) {
-                $need_refresh_url = $need_refresh_url . $v;
+                $need_refresh_url = $need_refresh_url.$v;
             } else {
-                $need_refresh_url = $need_refresh_url . $v . '\n';
+                $need_refresh_url = $need_refresh_url.$v.'\n';
             }
         }
 
@@ -66,7 +65,7 @@ return function (Dispatcher $events) {
             'SignatureMethod' => 'HMAC-SHA1',
             'SignatureNonce' => bin2hex(random_bytes(16)),
             'SignatureVersion' => '1.0',
-            'Timestamp' => gmdate('Y-m-d\TH:i:s\Z')
+            'Timestamp' => gmdate('Y-m-d\TH:i:s\Z'),
         ];
 
         // 构造规范化请求字符串
@@ -82,7 +81,7 @@ return function (Dispatcher $events) {
             $v = preg_replace('/\+/', '%20', $v);
             $v = preg_replace('/\*/', '%2A', $v);
             $v = preg_replace('/%7E/', '~', $v);
-            $canonicalizedQueryString .= ('&' . $k . '=' . $v);
+            $canonicalizedQueryString .= ('&'.$k.'='.$v);
         }
 
         // 构造签名字符串
@@ -91,12 +90,12 @@ return function (Dispatcher $events) {
         $SignText = preg_replace('/\+/', '%20', $SignText);
         $SignText = preg_replace('/\*/', '%2A', $SignText);
         $SignText = preg_replace('/%7E/', '~', $SignText);
-        $StringToSign = 'GET&%2F&' . $SignText;
-        $Signature = base64_encode(hash_hmac('sha1', $StringToSign, ($AccessKeySecret . '&'), true));
+        $StringToSign = 'GET&%2F&'.$SignText;
+        $Signature = base64_encode(hash_hmac('sha1', $StringToSign, ($AccessKeySecret.'&'), true));
 
         // URL拼接
         $API_Query['Signature'] = $Signature;
-        $requestUrl = 'https://cdn.aliyuncs.com/?' . http_build_query($API_Query);
+        $requestUrl = 'https://cdn.aliyuncs.com/?'.http_build_query($API_Query);
 
         // 发出请求
         $ch = curl_init();
