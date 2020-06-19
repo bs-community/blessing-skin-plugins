@@ -99,10 +99,6 @@ class ConfigController extends Controller
             'signaturePublickey' => $keyData['key'],
         ];
 
-        if (option('user_can_register')) {
-            $result['meta']['links']['register'] = url('auth/register');
-        }
-
         return json($result);
     }
 
