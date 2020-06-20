@@ -88,8 +88,8 @@ class SessionController extends Controller
 
         ygg_log([
             'action' => 'join',
-            'user_id' => $player->uid,
-            'player_id' => $player->pid,
+            'email' => $player->user->email,
+            'name' => $player->name,
             'parameters' => json_encode($request->except('accessToken')),
         ]);
 
@@ -122,8 +122,8 @@ class SessionController extends Controller
 
                 ygg_log(array_merge([
                     'action' => 'has_joined',
-                    'user_id' => $profile->player->uid,
-                    'player_id' => $profile->player->pid,
+                    'email' => $profile->player->user->email,
+                    'name' => $name,
                     'parameters' => json_encode($request->except('username')),
                 ], ($ip ? compact('ip') : [])));
 
@@ -142,7 +142,7 @@ class SessionController extends Controller
             return false;
         }
 
-        return DB::table('mojang_verifications')->where('user_id', $player->uid)->exists();
+        return DB::table('mojang_verifications')->where('email', $player->email)->exists();
     }
 
     protected function validateMojang($accessToken)

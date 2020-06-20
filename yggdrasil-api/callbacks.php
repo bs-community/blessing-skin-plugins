@@ -16,14 +16,20 @@ return [
             Schema::create('ygg_log', function ($table) {
                 $table->increments('id');
                 $table->string('action');
-                $table->integer('user_id');
-                $table->integer('player_id');
+                $table->string('email');
+                $table->string('name');
                 $table->string('parameters')->default('');
                 $table->string('ip')->default('');
                 $table->dateTime('time');
             });
-        }
-
+        }elseif(Schema::hasColumn('ygg_log','user_id')){
+			Schema::table('ygg_log', function ($table) {
+                $table->dropColumn('user_id');
+				$table->dropColumn('player_id');
+				$table->string('email')->after('action');
+				$table->string('name')->after('email');
+			});			
+		}
         $items = [
             'ygg_uuid_algorithm' => 'v3',
             'ygg_token_expire_1' => '259200', // 3 days

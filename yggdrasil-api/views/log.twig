@@ -10,8 +10,8 @@
           <tr>
             <th>#</th>
             <th>{{ trans('Yggdrasil::log.header.action') }}</th>
-            <th>UID</th>
-            <th>PID</th>
+            <th>{{ trans('Yggdrasil::log.header.email') }}</th>
+            <th>{{ trans('Yggdrasil::log.header.name') }}</th>
             <th>{{ trans('Yggdrasil::log.header.params') }}</th>
             <th>IP</th>
             <th>{{ trans('Yggdrasil::log.header.time') }}</th>
@@ -22,8 +22,8 @@
             <tr>
               <td>{{ log.id }}</td>
               <td>{{ actions[log.action] }}</td>
-              <td>{{ log.user_id }}</td>
-              <td>{{ log.player_id }}</td>
+              <td>{{ log.email }}</td>
+              <td>{{ log.name }}</td>
               <td>
                 <a
                   href="#"

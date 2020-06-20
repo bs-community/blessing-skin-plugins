@@ -74,7 +74,7 @@ class AuthController extends Controller
 
         ygg_log([
             'action' => 'authenticate',
-            'user_id' => $user->uid,
+            'email' => $user->email,
             'parameters' => json_encode($request->except('username', 'password')),
         ]);
 
@@ -167,7 +167,7 @@ class AuthController extends Controller
 
         ygg_log([
             'action' => 'refresh',
-            'user_id' => $user->uid,
+            'email' => $user->email,
             'parameters' => json_encode($request->except('accessToken')),
         ]);
 
@@ -199,7 +199,7 @@ class AuthController extends Controller
 
             ygg_log([
                 'action' => 'validate',
-                'user_id' => $user->uid,
+                'email' => $user->email,
                 'parameters' => json_encode($request->except('accessToken')),
             ]);
 
@@ -228,7 +228,7 @@ class AuthController extends Controller
 
         ygg_log([
             'action' => 'signout',
-            'user_id' => $user->uid,
+            'email' => $user->email,
         ]);
 
         return response()->noContent();
@@ -251,7 +251,7 @@ class AuthController extends Controller
 
             ygg_log([
                 'action' => 'invalidate',
-                'user_id' => User::where('email', $token->owner)->first()->uid,
+                'email' => User::where('email', $token->owner)->first()->email,
                 'parameters' => json_encode($request->json()->all()),
             ]);
 

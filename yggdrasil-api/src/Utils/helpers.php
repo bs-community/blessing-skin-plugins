@@ -47,8 +47,8 @@ if (!function_exists('ygg_log')) {
         if (env('YGG_VERBOSE_LOG')) {
             $data = array_merge([
                 'action' => 'undefined',
-                'user_id' => 0,
-                'player_id' => 0,
+                'email' => 0,
+                'name' => 0,
                 'parameters' => '[]',
                 'ip' => (new Whip())->getValidIpAddress(),
                 'time' => Carbon::now(),
