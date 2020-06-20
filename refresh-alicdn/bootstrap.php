@@ -7,8 +7,8 @@ return function (Dispatcher $events) {
     $events->listen(App\Events\PlayerProfileUpdated::class, function ($event) {
         // 获取配置
         $baseUrl = env('ALICDN_SITE_BASE_URL');
-        $AccessKeyId = env('ALICDN_ACCESSKEY_ID');
-        $AccessKeySecret = env('ALICDN_ACCESSKEY_SECRET');
+        $accessKeyId = env('ALICDN_ACCESSKEY_ID');
+        $accessKeySecret = env('ALICDN_ACCESSKEY_SECRET');
 
         // 检测插件
         $usm = plugin('usm-api');
@@ -43,25 +43,25 @@ return function (Dispatcher $events) {
             );
         }
 
-        $need_refresh_url = '';
+        $needRefreshUrl = '';
 
         // 构建需要刷新URL链接
         foreach ($urls as $k => $v) {
             if ($k === (sizeof($urls) - 1)) {
-                $need_refresh_url = $need_refresh_url.$v;
+                $needRefreshUrl = $needRefreshUrl.$v;
             } else {
-                $need_refresh_url = $need_refresh_url.$v.'\n';
+                $needRefreshUrl = $needRefreshUrl.$v.'\n';
             }
         }
 
         // API请求Query数组
-        $API_Query = [
+        $apiQuery = [
             'Action' => 'RefreshObjectCaches',
-            'ObjectPath' => $need_refresh_url,
+            'ObjectPath' => $needRefreshUrl,
             'ObjectType' => 'File',
             'Format' => 'JSON',
             'Version' => '2018-05-10',
-            'AccessKeyId' => $AccessKeyId,
+            'AccessKeyId' => $accessKeyId,
             'SignatureMethod' => 'HMAC-SHA1',
             'SignatureNonce' => bin2hex(random_bytes(16)),
             'SignatureVersion' => '1.0',
@@ -69,9 +69,9 @@ return function (Dispatcher $events) {
         ];
 
         // 构造规范化请求字符串
-        ksort($API_Query);
+        ksort($apiQuery);
         $canonicalizedQueryString = '';
-        foreach ($API_Query as $key => $value) {
+        foreach ($apiQuery as $key => $value) {
             $k = urlencode($key);
             $v = urlencode($value);
             // 加号（+）替换为 %20、星号（*）替换为 %2A、%7E 替换为波浪号（~）
@@ -85,17 +85,17 @@ return function (Dispatcher $events) {
         }
 
         // 构造签名字符串
-        $SignText = urlencode(substr($canonicalizedQueryString, 1));
+        $signText = urlencode(substr($canonicalizedQueryString, 1));
         // 加号（+）替换为 %20、星号（*）替换为 %2A、%7E 替换为波浪号（~）
-        $SignText = preg_replace('/\+/', '%20', $SignText);
-        $SignText = preg_replace('/\*/', '%2A', $SignText);
-        $SignText = preg_replace('/%7E/', '~', $SignText);
-        $StringToSign = 'GET&%2F&'.$SignText;
-        $Signature = base64_encode(hash_hmac('sha1', $StringToSign, ($AccessKeySecret.'&'), true));
+        $signText = preg_replace('/\+/', '%20', $signText);
+        $signText = preg_replace('/\*/', '%2A', $signText);
+        $signText = preg_replace('/%7E/', '~', $signText);
+        $stringToSign = 'GET&%2F&'.$signText;
+        $signature = base64_encode(hash_hmac('sha1', $stringToSign, ($accessKeySecret.'&'), true));
 
         // URL拼接
-        $API_Query['Signature'] = $Signature;
-        $requestUrl = 'https://cdn.aliyuncs.com/?'.http_build_query($API_Query);
+        $apiQuery['Signature'] = $signature;
+        $requestUrl = 'https://cdn.aliyuncs.com/?'.http_build_query($apiQuery);
 
         // 发出请求
         $ch = curl_init();
