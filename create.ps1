@@ -5,14 +5,6 @@ param (
 
     [Parameter(Mandatory)]
     [string]
-    $Title,
-
-    [Parameter(Mandatory)]
-    [string]
-    $Description,
-
-    [Parameter(Mandatory)]
-    [string]
     $Author,
 
     [Parameter(Mandatory)]
@@ -31,11 +23,7 @@ param (
     [Parameter()]
     [switch]
     [Alias('Assets')]
-    $Asset,
-
-    [Parameter()]
-    [switch]
-    $Lang
+    $Asset
 )
 
 $manifest = [PSCustomObject]@{
@@ -58,8 +46,12 @@ $manifest = [PSCustomObject]@{
 }
 
 New-Item "./$Id/src" -ItemType Directory | Out-Null
+New-Item "./$Id/lang/en" -ItemType Directory | Out-Null
+New-Item "./$Id/lang/zh_CN" -ItemType Directory | Out-Null
 ConvertTo-Json $manifest | Set-Content "./$Id/package.json"
 Set-Content -Value "<?php`n`nreturn function () {};" -Path "./$Id/bootstrap.php"
+Set-Content -Value "title: `ndescription: " -Path "./$Id/lang/en/general.yml"
+Set-Content -Value "title: `ndescription: " -Path "./$Id/lang/zh_CN/general.yml"
 
 if ($View) {
     New-Item "./$Id/views" -ItemType Directory | Out-Null
