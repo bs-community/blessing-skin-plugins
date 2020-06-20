@@ -39,17 +39,22 @@ param (
 )
 
 $manifest = [PSCustomObject]@{
-    name = $Id
-    title = $Title
-    version = '0.1.0'
-    description = $Description
-    author = $Author
-    url = $Url
-    namespace = $Namespace
-    require = @{
+    name        = $Id
+    title       = "$Namespace::general.title"
+    version     = '0.1.0'
+    description = "$Namespace::general.description"
+    author      = $Author
+    url         = $Url
+    namespace   = $Namespace
+    require     = @{
         'blessing-skin-server' = '^5.0.0'
     }
-    enchants = @{}
+    enchants    = @{
+        icon = @{
+            fa = ''
+            bg = ''
+        }
+    }
 }
 
 New-Item "./$Id/src" -ItemType Directory | Out-Null
