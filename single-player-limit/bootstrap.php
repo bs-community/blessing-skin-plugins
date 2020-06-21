@@ -39,6 +39,14 @@ return function (
 
     Hook::addScriptFileToPage($plugin->assets('BindPlayer.js'), ['user/player/bind']);
     Hook::addRoute(function () {
+        Route::namespace('SinglePlayerLimit')
+            ->middleware(['web', 'authorize'])
+            ->prefix('user/player/bind')
+            ->group(function () {
+                Route::view('', 'SinglePlayerLimit::bind');
+                Route::post('', 'BindController@bind');
+            });
+
         $routes = Route::getRoutes()->getRoutes();
         $routes = array_filter($routes, function (RouteItem $route) {
             return Str::startsWith($route->uri(), 'user');
@@ -46,12 +54,5 @@ return function (
         array_walk($routes, function (RouteItem $route) {
             $route->middleware(SinglePlayerLimit\RequireBindPlayer::class);
         });
-
-        Route::namespace('SinglePlayerLimit')
-            ->middleware(['web', 'authorize'])
-            ->group(function () {
-                Route::view('user/player/bind', 'SinglePlayerLimit::bind');
-                Route::post('user/player/bind', 'BindController@bind');
-            });
     });
 };
