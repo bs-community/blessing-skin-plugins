@@ -1,0 +1,17 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run webpack for plugin assets",
+      "type": "process",
+      "command": "yarn",
+      "args": [
+        "dev",
+        "-o",
+        "../blessing-skin-server/public/plugins"
+      ],
+      "isBackground": true,
+      "problemMatcher": []
+    }
+  ]
+}
