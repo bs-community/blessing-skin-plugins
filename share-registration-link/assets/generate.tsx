@@ -1,3 +1,6 @@
+import * as React from 'react'
+import * as ReactDOM from 'react-dom'
+
 type CodeRecord = {
   id: number
   sharer: number

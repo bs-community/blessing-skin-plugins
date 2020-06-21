@@ -1,5 +1,4 @@
-{
-  const lyrics = `Hello, Dolly
+const lyrics = `Hello, Dolly
 Well, hello, Dolly
 It's so nice to have you back where you belong
 You're lookin' swell, Dolly
@@ -28,19 +27,20 @@ Dolly'll never go away
 Dolly'll never go away
 Dolly'll never go away again`.split('\n')
 
-  const length = lyrics.length
+const length = lyrics.length
 
-  const hitokoto = document.createElement('div')
-  hitokoto.style.marginTop = '3px'
-  hitokoto.textContent = lyrics[Math.floor(Math.random() * length)]
+const hitokoto = document.createElement('div')
+hitokoto.style.marginTop = '3px'
+hitokoto.textContent = lyrics[Math.floor(Math.random() * length)]
 
-  const container = document.querySelector('.breadcrumb')
-  if (container) {
-    container.appendChild(hitokoto)
-  } else {
-    const container = document.createElement('div')
-    container.className = 'breadcrumb'
-    container.appendChild(hitokoto)
-    document.querySelector('.content-header')?.appendChild(container)
-  }
+const container = document.querySelector('.breadcrumb')
+if (container) {
+  container.appendChild(hitokoto)
+} else {
+  const container = document.createElement('div')
+  container.className = 'breadcrumb'
+  container.appendChild(hitokoto)
+  document.querySelector('.content-header')?.appendChild(container)
 }
+
+export default undefined

@@ -6,3 +6,4 @@ plugin-test/
 */assets/**/*.js
 .php_cs.cache
 composer.lock
+yarn-error.log

@@ -82,17 +82,16 @@ foreach ($plugin in $plugins) {
 
     Write-Host "[$plugin] Bump to $version"
 
-    if ($manifest.scripts -and $manifest.scripts.build) {
-        yarn build
-    }
     if (Test-Path 'node_modules') {
         Remove-Item 'node_modules' -Recurse -Force
     }
-    if (Test-Path 'assets/src') {
-        Remove-Item 'assets/src' -Recurse -Force
-    }
     if (Test-Path '.gitignore') {
         Remove-Item '.gitignore' -Force
+    }
+    Get-ChildItem ./assets -Recurse | ForEach-Object {
+        if ($_.Name.EndsWith('.ts')) {
+            Remove-Item $_
+        }
     }
 
     if (Test-Path 'composer.json') {

@@ -15,5 +15,11 @@
       "fa": "code",
       "bg": "success"
     }
+  },
+  "dependencies": {
+    "highlight.js": "^10.1.1"
+  },
+  "devDependencies": {
+    "@types/highlight.js": "^9.12.4"
   }
 }
