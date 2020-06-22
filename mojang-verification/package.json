@@ -1,8 +1,8 @@
 {
   "name": "mojang-verification",
-  "version": "1.9.0",
-  "title": "正版验证",
-  "description": "为拥有正版账号的用户提供验证、绑定。",
+  "version": "1.9.1",
+  "title": "GPlane\\Mojang::general.title",
+  "description": "GPlane\\Mojang::general.description",
   "author": "GPlane",
   "namespace": "GPlane\\Mojang",
   "require": {
