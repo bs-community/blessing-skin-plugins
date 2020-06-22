@@ -23,7 +23,7 @@ class InvitationCodeController extends Controller
     {
         ['amount' => $amount] = $request->validate([
             'amount' => 'required|integer|min:1',
-        ], ['amount' => 'aa']);
+        ]);
 
         $records = Collection::times($amount)
             ->map(function () {

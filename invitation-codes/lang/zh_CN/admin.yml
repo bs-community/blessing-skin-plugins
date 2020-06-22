@@ -1,0 +1,15 @@
+title: 生成邀请码
+
+generated_at: 生成时间
+
+available:
+  title: 目前可用的邀请码
+  empty: 没有可用的邀请码
+  amount: 数量
+  placeholder: 要生成的邀请码数量
+
+used:
+  title: 已被使用的邀请码
+  user_id: 使用者 UID
+  used_at: 使用时间
+  empty: 没有已被使用的邀请码

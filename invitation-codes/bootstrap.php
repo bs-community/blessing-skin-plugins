@@ -22,7 +22,7 @@ return function (Dispatcher $events, Filter $filter) {
     });
 
     Hook::addMenuItem('admin', 4, [
-        'title' => '邀请码',
+        'title' => 'InvitationCodes::general.code',
         'link' => 'admin/invitation-codes',
         'icon' => 'fa-inbox',
     ]);
@@ -30,7 +30,6 @@ return function (Dispatcher $events, Filter $filter) {
     $filter->add('can_register', InvitationCodes\CheckInvitationCode::class);
 
     $events->listen('auth.registration.completed', function ($user) {
-        // 用户注册后标记该邀请码为已使用
         DB::table('invitation_codes')
             ->where('code', session()->pull('using_invitation_code'))
             ->update([

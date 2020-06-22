@@ -20,7 +20,7 @@ class CheckInvitationCode
     {
         $code = $this->request->input('invitationCode');
         if (empty($code)) {
-            return new Rejection('邀请码不能为空');
+            return new Rejection(trans('InvitationCodes::messages.empty'));
         }
 
         $result = DB::table('invitation_codes')->where('code', $code)->first();
@@ -31,6 +31,6 @@ class CheckInvitationCode
             return $can;
         }
 
-        return new Rejection('邀请码无效');
+        return new Rejection(trans('InvitationCodes::messages.invalid'));
     }
 }

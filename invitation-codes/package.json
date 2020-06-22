@@ -1,8 +1,8 @@
 {
   "name": "invitation-codes",
-  "version": "3.0.0",
-  "title": "注册邀请码",
-  "description": "在管理后台生成邀请码，只有持有邀请码才可以注册成为本站用户。",
+  "version": "3.1.0",
+  "title": "InvitationCodes::general.title",
+  "description": "InvitationCodes::general.description",
   "author": "printempw",
   "url": "https://blessing.studio/",
   "namespace": "InvitationCodes",

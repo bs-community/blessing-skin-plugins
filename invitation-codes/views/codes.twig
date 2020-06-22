@@ -1,20 +1,20 @@
 {% extends 'admin.base' %}
 
-{% block title %}生成邀请码{% endblock %}
+{% block title %}{{ trans('InvitationCodes::admin.title') }}{% endblock %}
 
 {% block content %}
   <div class="row">
     <div class="col-md-6">
       <div class="card card-success">
         <div class="card-header">
-          <h3 class="card-title">目前可用的邀请码</h3>
+          <h3 class="card-title">{{ trans('InvitationCodes::admin.available.title') }}</h3>
         </div>
         <div class="card-body p-0">
           <table class="table table-hover">
             <thead>
               <tr>
-                <th>邀请码</th>
-                <th>生成时间</th>
+                <th>{{ trans('InvitationCodes::general.code') }}</th>
+                <th>{{ trans('InvitationCodes::admin.generated_at') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -25,7 +25,7 @@
                 </tr>
               {% else %}
                 <tr>
-                  <td colspan="2">没有可用的邀请码</td>
+                  <td colspan="2">{{ trans('InvitationCodes::admin.available.empty') }}</td>
                 </tr>
               {% endfor %}
             </tbody>
@@ -36,20 +36,24 @@
             {{ csrf_field() }}
             <div class="input-group mb-2">
               <div class="input-group-prepend">
-                <span class="input-group-text">数量</span>
+                <span class="input-group-text">
+                  {{ trans('InvitationCodes::admin.available.amount') }}
+                </span>
               </div>
               <input
                 type="number"
                 class="form-control"
                 name="amount"
                 style="width: 50%;"
-                placeholder="要生成的邀请码数量"
+                placeholder="{{ trans('InvitationCodes::admin.available.placeholder') }}"
               >
             </div>
             {% if errors.any() %}
               <div class="alert alert-danger">{{ errors.first() }}</div>
             {% endif %}
-            <button type="submit" class="btn btn-primary">生成邀请码</button>
+            <button type="submit" class="btn btn-primary">
+              {{ trans('InvitationCodes::admin.title') }}
+            </button>
           </form>
         </div>
       </div>
@@ -58,16 +62,16 @@
     <div class="col-md-6">
       <div class="card card-secondary">
         <div class="card-header">
-          <h3 class="card-title">已被使用的邀请码</h3>
+          <h3 class="card-title">{{ trans('InvitationCodes::admin.used.title') }}</h3>
         </div>
         <div class="card-body p-0">
           <table class="table table-hover">
             <thead>
               <tr>
-                <th>邀请码</th>
-                <th>生成时间</th>
-                <th>使用者 UID</th>
-                <th>使用时间</th>
+                <th>{{ trans('InvitationCodes::general.code') }}</th>
+                <th>{{ trans('InvitationCodes::admin.generated_at') }}</th>
+                <th>{{ trans('InvitationCodes::admin.used.user_id') }}</th>
+                <th>{{ trans('InvitationCodes::admin.used.used_at') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -80,7 +84,7 @@
                 </tr>
               {% else %}
                 <tr>
-                  <td colspan="4">没有已被使用的邀请码</td>
+                  <td colspan="4">{{ trans('InvitationCodes::admin.used.empty') }}</td>
                 </tr>
               {% endfor %}
             </tbody>

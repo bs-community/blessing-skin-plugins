@@ -1,0 +1,15 @@
+title: Generate Codes
+
+generated_at: Generated At
+
+available:
+  title: Available Codes
+  empty: No available codes.
+  amount: Amount
+  placeholder: Amount of invitation codes to be generated.
+
+used:
+  title: Used Codes
+  user_id: User ID
+  used_at: Used At
+  empty: No used codes.
