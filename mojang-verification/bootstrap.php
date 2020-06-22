@@ -28,10 +28,11 @@ return function (Dispatcher $events, Filter $filter) {
         return $badges;
     });
 
-    Hook::addScriptFileToPage(
-        plugin_assets('mojang-verification', 'register-notice.js'),
-        ['auth/register']
-    );
+    $filter->add('auth_page_rows:register', function ($rows) {
+        $rows[] = 'GPlane\Mojang::notice';
+
+        return $rows;
+    });
 
     Hook::addRoute(function () {
         Route::prefix('mojang')
