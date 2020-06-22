@@ -43,9 +43,9 @@ class CreateNewUser
         if ($record) {
             $user = User::find($record->user_id);
             if ($user) {
-                Event::dispatch('user.profile.updating', [$user, 'email', ['new_email' => $email]]);
+                Event::dispatch('user.profile.updating', [$user, 'email', ['email' => $email]]);
                 $user->update(['email' => $email]);
-                Event::dispatch('user.profile.updated', [$user, 'email', ['new_email' => $email]]);
+                Event::dispatch('user.profile.updated', [$user, 'email', ['email' => $email]]);
 
                 return;
             }
