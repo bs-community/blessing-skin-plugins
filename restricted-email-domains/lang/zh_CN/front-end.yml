@@ -1,0 +1,7 @@
+ok: 更新成功
+
+allow:
+  title: 允许的邮箱域名
+
+deny:
+  title: 禁止的邮箱域名

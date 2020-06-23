@@ -1,0 +1,7 @@
+ok: Updated successfully.
+
+allow:
+  title: Allowed Email Domain Names
+
+deny:
+  title: Denied Email Domain Names

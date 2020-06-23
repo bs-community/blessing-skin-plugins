@@ -1,0 +1,10 @@
+{% extends 'admin.base' %}
+
+{% block title %}{{ trans('Blessing\\RestrictedEmailDomains::general.title') }}{% endblock %}
+
+{% block content %}
+  <div class="callout callout-info">
+    {{ trans('Blessing\\RestrictedEmailDomains::general.notice') }}
+  </div>
+  <div id="config"></div>
+{% endblock %}

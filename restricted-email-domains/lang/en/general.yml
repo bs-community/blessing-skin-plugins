@@ -1,0 +1,4 @@
+title: Email Domains Restriction
+description: Restrict email domain names for registration.
+notice: You just need to submit one of these lists below. When both lists are filled, "Denied Domain Names" will be ignored.
+rejection: Email address of ":domain" is not supported.

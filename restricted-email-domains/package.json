@@ -1,0 +1,24 @@
+{
+  "name": "restricted-email-domains",
+  "title": "Blessing\\RestrictedEmailDomains::general.title",
+  "version": "0.1.0",
+  "description": "Blessing\\RestrictedEmailDomains::general.description",
+  "author": "GPlane",
+  "url": "https://gplane.win/",
+  "namespace": "Blessing\\RestrictedEmailDomains",
+  "require": {
+    "blessing-skin-server": "^5.0.0"
+  },
+  "enchants": {
+    "config": "ConfigController",
+    "icon": {
+      "bg": "purple",
+      "fa": "at"
+    }
+  },
+  "dependencies": {
+    "immer": "^7.0.4",
+    "nanoid": "^3.1.10",
+    "use-immer": "^0.4.0"
+  }
+}

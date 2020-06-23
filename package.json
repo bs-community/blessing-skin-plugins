@@ -5,7 +5,8 @@
   },
   "private": true,
   "workspaces": [
-    "config-generator"
+    "config-generator",
+    "restricted-email-domains"
   ],
   "scripts": {
     "dev": "webpack -d -w",
