@@ -1,6 +1,5 @@
 <?php
 
-use App\Services\Plugin;
 use Illuminate\Contracts\Events\Dispatcher;
 
 return function (Dispatcher $events) {
@@ -45,7 +44,7 @@ return function (Dispatcher $events) {
 
         $needRefreshUrl = '';
 
-        // 构建需要刷新URL链接
+        // 构建需要刷新 URL 链接
         foreach ($urls as $k => $v) {
             if ($k === (sizeof($urls) - 1)) {
                 $needRefreshUrl = $needRefreshUrl.$v;
@@ -54,7 +53,7 @@ return function (Dispatcher $events) {
             }
         }
 
-        // API请求Query数组
+        // API 请求 Query 数组
         $apiQuery = [
             'Action' => 'RefreshObjectCaches',
             'ObjectPath' => $needRefreshUrl,
@@ -93,7 +92,7 @@ return function (Dispatcher $events) {
         $stringToSign = 'GET&%2F&'.$signText;
         $signature = base64_encode(hash_hmac('sha1', $stringToSign, ($accessKeySecret.'&'), true));
 
-        // URL拼接
+        // URL 拼接
         $apiQuery['Signature'] = $signature;
         $requestUrl = 'https://cdn.aliyuncs.com/?'.http_build_query($apiQuery);
 
