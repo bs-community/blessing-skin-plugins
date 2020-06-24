@@ -1,8 +1,6 @@
 .dist/*
 node_modules
-littleskin/
 plugins/*/vendor
-plugin-test/
 plugins/*/assets/**/*.js
 plugins/*/assets/**/*.map
 .php_cs.cache
