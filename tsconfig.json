@@ -4,10 +4,14 @@
     "declaration": false,
     "sourceMap": false,
     "target": "es2017",
-    "module": "commonjs"
+    "module": "commonjs",
+    "baseUrl": ".",
+    "paths": {
+      "blessing-skin": ["./types"]
+    }
   },
   "include": [
     "plugins/*/assets",
-    "shims.d.ts"
+    "types.ts"
   ]
 }

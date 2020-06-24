@@ -41,6 +41,7 @@ const config: Configuration = {
   externals: {
     react: 'React',
     'react-dom': 'ReactDOM',
+    'blessing-skin': 'blessing',
   },
   devtool: false,
 }

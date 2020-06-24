@@ -1,5 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
+import { fetch, notify, base_url } from 'blessing-skin'
 
 type Player = {
   pid: number
@@ -19,7 +20,7 @@ const BindPlayer: React.FC = () => {
   React.useEffect(() => {
     const getPlayers = async () => {
       setIsLoading(true)
-      const data = await blessing.fetch.get<Player[]>('/user/player/list')
+      const data = await fetch.get<Player[]>('/user/player/list')
       const players = data.map((player) => player.name)
       setPlayers(players)
       setSelected(players[0])
@@ -38,12 +39,12 @@ const BindPlayer: React.FC = () => {
     }: {
       code: number
       message: string
-    } = await blessing.fetch.post('/user/player/bind', { player: selected })
+    } = await fetch.post('/user/player/bind', { player: selected })
     if (code === 0) {
-      await blessing.notify.showModal({ mode: 'alert', text: message })
-      window.location.href = `${blessing.base_url}/user`
+      await notify.showModal({ mode: 'alert', text: message })
+      window.location.href = `${base_url}/user`
     } else {
-      blessing.notify.showModal({ mode: 'alert', text: message })
+      notify.showModal({ mode: 'alert', text: message })
     }
 
     setIsPending(false)

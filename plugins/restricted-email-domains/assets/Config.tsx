@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import * as ReactDOM from 'react-dom'
 import { nanoid } from 'nanoid'
 import { useImmer } from 'use-immer'
+import { fetch, notify } from 'blessing-skin'
 
 type Item = { id: string; value: string }
 
@@ -18,7 +19,7 @@ const Configuration: React.FC = () => {
       const {
         allow,
         deny,
-      }: { allow: string[]; deny: string[] } = await blessing.fetch.get(
+      }: { allow: string[]; deny: string[] } = await fetch.get(
         '/admin/restricted-email-domains',
       )
       setAllows(() => allow.map((value) => ({ id: nanoid(), value })))
@@ -73,23 +74,23 @@ const Configuration: React.FC = () => {
   }
 
   const saveAllowList = async () => {
-    const resp = await blessing.fetch.put(
+    const resp = await fetch.put(
       '/admin/restricted-email-domains/allow',
       allows.map((item) => item.value),
     )
     if (resp === '') {
-      blessing.notify.toast.success(trans('restricted-email-domains.ok'))
+      notify.toast.success(trans('restricted-email-domains.ok'))
       setIsAllowListDirty(false)
     }
   }
 
   const saveDenyList = async () => {
-    const resp = await blessing.fetch.put(
+    const resp = await fetch.put(
       '/admin/restricted-email-domains/deny',
       denies.map((item) => item.value),
     )
     if (resp === '') {
-      blessing.notify.toast.success(trans('restricted-email-domains.ok'))
+      notify.toast.success(trans('restricted-email-domains.ok'))
       setIsDenyListDirty(false)
     }
   }

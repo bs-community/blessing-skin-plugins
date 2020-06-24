@@ -1,5 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
+import { fetch } from 'blessing-skin'
 
 type CodeRecord = {
   id: number
@@ -19,7 +20,7 @@ const RegistrationLinksList = () => {
         records: CodeRecord[]
         sharer: number
         sharee: number
-      } = await blessing.fetch.get('/user/reg-links')
+      } = await fetch.get('/user/reg-links')
       setRecords(response.records)
       setSharer(response.sharer)
       setSharee(response.sharee)
@@ -29,16 +30,14 @@ const RegistrationLinksList = () => {
 
   const handleDeleteClick = async (record: CodeRecord) => {
     const { id } = record
-    await blessing.fetch.del(`/user/reg-links/${id}`)
+    await fetch.del(`/user/reg-links/${id}`)
     setRecords((records) => records.filter((record) => record.id !== id))
   }
 
   const handleGenerateClick = async () => {
     const {
       data: { record },
-    }: { data: { record: CodeRecord } } = await blessing.fetch.post(
-      '/user/reg-links',
-    )
+    }: { data: { record: CodeRecord } } = await fetch.post('/user/reg-links')
     setRecords((records) => [...records, record])
   }
 

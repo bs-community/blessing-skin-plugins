@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import * as ReactDOM from 'react-dom'
+import { event } from 'blessing-skin'
 
 const CodeField: React.FC = () => {
   const [code, setCode] = useState('')
 
   useEffect(() => {
-    const off = blessing.event.on(
+    const off = event.on(
       'beforeFetch',
       (request: { data: Record<string, string> }) => {
         request.data.invitationCode = code
@@ -38,7 +39,7 @@ const CodeField: React.FC = () => {
   )
 }
 
-blessing.event.on('mounted', () => {
+event.on('mounted', () => {
   const div = document.createElement('div')
   div.className = 'input-group mb-3'
   ReactDOM.render(<CodeField />, div)
