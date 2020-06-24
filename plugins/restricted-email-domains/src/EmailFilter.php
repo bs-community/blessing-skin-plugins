@@ -3,6 +3,7 @@
 namespace Blessing\RestrictedEmailDomains;
 
 use Blessing\Rejection;
+use Illuminate\Support\Str;
 
 class EmailFilter
 {
@@ -11,7 +12,17 @@ class EmailFilter
         $allowList = json_decode(option('restricted-email-domains.allow', '[]'), true);
         $denyList = json_decode(option('restricted-email-domains.deny', '[]'), true);
 
-        [$head, $domain] = explode('@', request('email', ''));
+        $request = request();
+        if ($request->missing('email')) {
+            return $can;
+        }
+
+        $email = $request->input('email', '');
+        if (!Str::contains($email, '@')) {
+            return $can;
+        }
+
+        [$head, $domain] = explode('@', $email);
 
         if (count($allowList) > 0 && !in_array($domain, $allowList)) {
             return new Rejection(
