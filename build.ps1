@@ -23,7 +23,7 @@ function Get-Trans {
         $segment = $realKey.Split(".")
         $head = $segment[0]
         $filePath = if ($Plugin) {
-            "./$Plugin/lang/$Lang/$head.yml"
+            "./plugins/$Plugin/lang/$Lang/$head.yml"
         }
         else {
             "./lang/$Lang/$head.yml"
@@ -54,19 +54,19 @@ $env:NODE_ENV = 'production'
 git clone "https://github.com/bs-community/plugins-dist.git" .dist
 $registry = Get-Content '.dist/registry-preview.json' | ConvertFrom-Json
 $packages = $registry.packages
-$plugins = Get-ChildItem -Path . -Directory -Exclude @('node_modules', '.*') | ForEach-Object { $_.Name }
+$plugins = Get-ChildItem -Path ./plugins -Directory | ForEach-Object { $_.Name }
 
 yarn build
 
 [PSCustomObject[]]$updated = @()
 
 foreach ($plugin in $plugins) {
-    Set-Location $plugin
+    Set-Location "./plugins/$plugin"
     $manifest = Get-Content "package.json" | ConvertFrom-Json
     $version = $manifest.version
 
     if ($packages | Where-Object { $_.name -eq $plugin -and $_.version -eq $version }) {
-        Set-Location '..'
+        Set-Location '../../'
         continue
     }
 
@@ -96,11 +96,14 @@ foreach ($plugin in $plugins) {
 
     if (Test-Path 'composer.json') {
         composer install
+        Remove-Item 'composer.json' -Force
+        Remove-Item 'composer.lock' -Force
     }
 
     Set-Location '..'
 
-    zip -9 -r ".dist/${plugin}_$version.zip" $plugin
+    zip -9 -r "../.dist/${plugin}_$version.zip" $plugin
+    Set-Location '..'
 }
 ConvertTo-Json $updated | Out-File -FilePath 'updated.json'
 

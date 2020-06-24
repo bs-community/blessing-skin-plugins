@@ -7,7 +7,7 @@
     "module": "commonjs"
   },
   "include": [
-    "*/assets",
+    "plugins/*/assets",
     "shims.d.ts"
   ]
 }

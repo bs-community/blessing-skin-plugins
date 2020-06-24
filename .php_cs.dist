@@ -1,9 +1,7 @@
 <?php
 
 $finder = PhpCsFixer\Finder::create()
-    ->exclude('node_modules')
-    ->exclude('.git')
-    ->in(__DIR__)
+    ->in(__DIR__.'/plugins')
 ;
 
 return PhpCsFixer\Config::create()

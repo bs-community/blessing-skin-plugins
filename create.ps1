@@ -45,6 +45,7 @@ $manifest = [PSCustomObject]@{
     }
 }
 
+Set-Location ./plugins
 New-Item "./$Id/src" -ItemType Directory | Out-Null
 New-Item "./$Id/lang/en" -ItemType Directory | Out-Null
 New-Item "./$Id/lang/zh_CN" -ItemType Directory | Out-Null
@@ -64,3 +65,5 @@ if ($Asset) {
 if ($Lang) {
     New-Item "./$Id/lang" -ItemType Directory | Out-Null
 }
+
+Set-Location ..

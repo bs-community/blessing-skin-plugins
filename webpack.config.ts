@@ -4,19 +4,23 @@ import type { Configuration } from 'webpack'
 const config: Configuration = {
   mode: 'production',
   entry: async () => {
-    const files = await glob(['*/assets/**/*.ts', '*/assets/**/*.tsx'], {
-      ignore: ['node_modules'],
-    })
+    const files = await glob([
+      'plugins/*/assets/**/*.ts',
+      'plugins/*/assets/**/*.tsx',
+    ])
 
     // @ts-ignore
     return Object.fromEntries(
       files
         .filter((file) => !file.endsWith('.d.ts'))
-        .map((file) => [file.replace(/\.tsx?$/g, ''), `./${file}`]),
+        .map((file) => [
+          file.replace('plugins/', '').replace(/\.tsx?$/g, ''),
+          `./${file}`,
+        ]),
     )
   },
   output: {
-    path: __dirname,
+    path: `${__dirname}/plugins`,
     filename: '[name].js',
     ecmaVersion: 2017,
   },
@@ -38,6 +42,7 @@ const config: Configuration = {
     react: 'React',
     'react-dom': 'ReactDOM',
   },
+  devtool: false,
 }
 
 export default config

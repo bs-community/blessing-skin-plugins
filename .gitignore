@@ -1,9 +1,10 @@
 .dist/*
 node_modules
 littleskin/
-*/vendor
+plugins/*/vendor
 plugin-test/
-*/assets/**/*.js
+plugins/*/assets/**/*.js
+plugins/*/assets/**/*.map
 .php_cs.cache
 composer.lock
 yarn-error.log
