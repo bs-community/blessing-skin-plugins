@@ -109,7 +109,7 @@ ConvertTo-Json $updated | Out-File -FilePath 'updated.json'
 
 foreach ($lang in 'en', 'zh_CN') {
     $packages = $plugins | ForEach-Object {
-        $manifest = Get-Content "./${_}/package.json" | ConvertFrom-Json
+        $manifest = Get-Content "./plugins/${_}/package.json" | ConvertFrom-Json
         $name = $manifest.name
         $version = $manifest.version
         $url = "https://cdn.jsdelivr.net/gh/bs-community/plugins-dist/${name}_$version.zip"
