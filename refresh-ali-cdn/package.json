@@ -1,0 +1,17 @@
+{
+  "name": "refresh-ali-cdn",
+  "version": "1.0.0",
+  "title": "刷新阿里云 CDN",
+  "description": "当角色信息被更新时，自动刷新阿里云 CDN 中的 JSON Profile。",
+  "author": "hank9999",
+  "namespace": "Hank9999\\RefreshAliCdn",
+  "require": {
+    "blessing-skin-server": "^5.0.0"
+  },
+  "enchants": {
+    "icon": {
+      "fa": "fire",
+      "bg": "orange"
+    }
+  }
+}
