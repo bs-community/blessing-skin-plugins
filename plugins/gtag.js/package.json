@@ -1,0 +1,20 @@
+{
+  "name": "gtag.js",
+  "title": "gtag.js",
+  "version": "0.1.0",
+  "description": "Blessing\\Gtag::general.description",
+  "author": "GPlane",
+  "url": "https://gplane.win/",
+  "namespace": "Blessing\\Gtag",
+  "require": {
+    "blessing-skin-server": "^5.0.0"
+  },
+  "enchants": {
+    "config": "Configuration",
+    "icon": {
+      "fa": "google",
+      "faType": "fab",
+      "bg": "orange"
+    }
+  }
+}
