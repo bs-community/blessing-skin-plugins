@@ -1,0 +1,18 @@
+{
+  "name": "hide-advanced-menu",
+  "title": "Blessing\\HideAdvancedMenu::general.title",
+  "version": "1.0.0",
+  "description": "Blessing\\HideAdvancedMenu::general.description",
+  "author": "GPlane",
+  "url": "https://gplane.win/",
+  "namespace": "Blessing\\HideAdvancedMenu",
+  "require": {
+    "blessing-skin-server": "^5.0.0"
+  },
+  "enchants": {
+    "icon": {
+      "bg": "info",
+      "fa": "code-branch"
+    }
+  }
+}
