@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Blessing\FixV4Update;
 
+use App\Services\PackageManager as BaseClass;
 use Exception;
 
-class PackageManager extends \App\Services\PackageManager
+class PackageManager extends BaseClass
 {
     public function __construct(\GuzzleHttp\Client $guzzle)
     {
