@@ -9,7 +9,7 @@ class Configuration
 {
     public function render()
     {
-        $form = Option::form('gtag', 'gtag.js', function (OptionForm $form) {
+        $form = Option::form('gtag', 'gtag-js', function (OptionForm $form) {
             $form->text('ga_id', trans('Blessing\Gtag::config.ga_id'));
         })->handle();
 
