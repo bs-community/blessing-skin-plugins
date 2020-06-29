@@ -1,4 +1,4 @@
-import { notify, fetch } from 'blessing-skin'
+import { notify, fetch, t } from 'blessing-skin'
 
 document
   .querySelector('[name=generate-key]')!
@@ -11,7 +11,7 @@ document
     )
 
     if (response.code === 0) {
-      notify.toast.success(trans('yggdrasil-api.key-generated'))
+      notify.toast.success(t('yggdrasil-api.key-generated'))
 
       document.querySelector<HTMLTextAreaElement>('td.value textarea')!.value =
         response.key

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { fetch, notify, base_url } from 'blessing-skin'
+import { fetch, notify, base_url, t } from 'blessing-skin'
 
 type Player = {
   pid: number
@@ -56,7 +56,7 @@ const BindPlayer: React.FC = () => {
     <form method="post" onSubmit={handleSubmit}>
       {players.length > 0 ? (
         <>
-          <p>{trans('single-player-limit.bindExistedPlayer')}</p>
+          <p>{t('single-player-limit.bindExistedPlayer')}</p>
           <div className="mb-3">
             {players.map((player) => (
               <label key={player} className="d-block mb-1">
@@ -73,11 +73,11 @@ const BindPlayer: React.FC = () => {
         </>
       ) : (
         <>
-          <p>{trans('single-player-limit.bindNewPlayer')}</p>
+          <p>{t('single-player-limit.bindNewPlayer')}</p>
           <input
             type="text"
             className="form-control mb-3"
-            placeholder={trans('general.player.player-name')}
+            placeholder={t('general.player.player-name')}
             onChange={(e) => setSelected(e.target.value)}
           />
         </>
@@ -90,10 +90,10 @@ const BindPlayer: React.FC = () => {
         {isPending ? (
           <>
             <i className="fas fa-spinner fa-spin mr-1"></i>
-            {trans('general.wait')}
+            {t('general.wait')}
           </>
         ) : (
-          trans('general.submit')
+          t('general.submit')
         )}
       </button>
     </form>

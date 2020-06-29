@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import * as ReactDOM from 'react-dom'
-import { event } from 'blessing-skin'
+import { event, t } from 'blessing-skin'
 
 const CodeField: React.FC = () => {
   const [code, setCode] = useState('')
@@ -25,7 +25,7 @@ const CodeField: React.FC = () => {
       <input
         type="text"
         className="form-control"
-        placeholder={trans('invitation-codes.placeholder')}
+        placeholder={t('invitation-codes.placeholder')}
         required
         value={code}
         onChange={handleCodeChange}

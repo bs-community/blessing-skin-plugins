@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import * as ReactDOM from 'react-dom'
 import { nanoid } from 'nanoid'
 import { useImmer } from 'use-immer'
-import { fetch, notify } from 'blessing-skin'
+import { fetch, notify, t } from 'blessing-skin'
 
 type Item = { id: string; value: string }
 
@@ -79,7 +79,7 @@ const Configuration: React.FC = () => {
       allows.map((item) => item.value),
     )
     if (resp === '') {
-      notify.toast.success(trans('restricted-email-domains.ok'))
+      notify.toast.success(t('restricted-email-domains.ok'))
       setIsAllowListDirty(false)
     }
   }
@@ -90,7 +90,7 @@ const Configuration: React.FC = () => {
       denies.map((item) => item.value),
     )
     if (resp === '') {
-      notify.toast.success(trans('restricted-email-domains.ok'))
+      notify.toast.success(t('restricted-email-domains.ok'))
       setIsDenyListDirty(false)
     }
   }
@@ -101,7 +101,7 @@ const Configuration: React.FC = () => {
         <div className="card card-success">
           <div className="card-header">
             <h3 className="card-title">
-              {trans('restricted-email-domains.allow.title')}
+              {t('restricted-email-domains.allow.title')}
               {isAllowListDirty && <span className="ml-1">●</span>}
             </h3>
           </div>
@@ -112,7 +112,7 @@ const Configuration: React.FC = () => {
               </div>
             ) : allows.length === 0 ? (
               <div className="text-center">
-                <p>{trans('general.noResult')}</p>
+                <p>{t('general.noResult')}</p>
               </div>
             ) : (
               allows.map((item, i) => (
@@ -146,7 +146,7 @@ const Configuration: React.FC = () => {
           <div className="card-footer">
             <div className="float-right">
               <button className="btn btn-primary" onClick={saveAllowList}>
-                {trans('general.submit')}
+                {t('general.submit')}
               </button>
             </div>
           </div>
@@ -156,7 +156,7 @@ const Configuration: React.FC = () => {
         <div className="card card-danger">
           <div className="card-header">
             <h3 className="card-title">
-              {trans('restricted-email-domains.deny.title')}
+              {t('restricted-email-domains.deny.title')}
               {isDenyListDirty && <span className="ml-1">●</span>}
             </h3>
           </div>
@@ -167,7 +167,7 @@ const Configuration: React.FC = () => {
               </div>
             ) : denies.length === 0 ? (
               <div className="text-center">
-                <p>{trans('general.noResult')}</p>
+                <p>{t('general.noResult')}</p>
               </div>
             ) : (
               denies.map((item, i) => (
@@ -201,7 +201,7 @@ const Configuration: React.FC = () => {
           <div className="card-footer">
             <div className="float-right">
               <button className="btn btn-primary" onClick={saveDenyList}>
-                {trans('general.submit')}
+                {t('general.submit')}
               </button>
             </div>
           </div>

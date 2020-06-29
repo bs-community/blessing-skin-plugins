@@ -1,3 +1,5 @@
+import { t } from 'blessing-skin'
+
 document.body.addEventListener('dragstart', (event) => {
   if (!event.target) {
     return
@@ -33,7 +35,7 @@ document
     input.remove()
     const originalContent = target.textContent
     target.disabled = true
-    target.innerHTML = `<i class="fas fa-check mr-1"></i>${trans(
+    target.innerHTML = `<i class="fas fa-check mr-1"></i>${t(
       'yggdrasil-api.copied',
     )}`
 
