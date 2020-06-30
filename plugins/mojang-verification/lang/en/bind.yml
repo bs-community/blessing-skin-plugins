@@ -5,4 +5,7 @@ description: |
   Of course, we won't save your password. If you worry, you can use a temporary password for your Mojang account then change it back.
 
   After passed the verification, you will get a player with the same name as your premium Minecraft player. Besides, you will become a "Pro" user and gain :score score.
-failed: Failed to verify.
+failed:
+  rate: Operations are too frequent. Please try again later.
+  password: Invalid password.
+  other: Failed to verify.

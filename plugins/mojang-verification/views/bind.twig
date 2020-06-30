@@ -6,9 +6,9 @@
     </h3>
   </div>
   <div class="card-body">
-    {% if session_pull('mojang-failed') %}
+    {% if session_has('mojang-failed') %}
       <div class="alert alert-danger">
-        {{ trans('GPlane\\Mojang::bind.failed') }}
+        {{ session_pull('mojang-failed') }}
       </div>
     {% endif %}
     <div>

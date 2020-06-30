@@ -8,6 +8,7 @@ use GPlane\Mojang;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 if (!function_exists('validate_mojang_account')) {
     function validate_mojang_account($username, $password)
@@ -32,7 +33,16 @@ if (!function_exists('validate_mojang_account')) {
             } else {
                 Log::warning('Received unexpected HTTP status code from Mojang server: '.$response->status());
 
-                return ['valid' => false];
+                $error = $response->json()['errorMessage'];
+                if (Str::contains($error, 'Invalid username or password.')) {
+                    $message = trans('GPlang\Mojang::bind.failed.password');
+                } elseif ($error === 'Invalid credentials.') {
+                    $message = trans('GPlane\Mojang::bind.failed.rate');
+                } else {
+                    $message = trans('GPlane\Mojang::bind.failed.other');
+                }
+
+                return ['valid' => false, 'message' => $message];
             }
         } catch (\Exception $e) {
             report($e);

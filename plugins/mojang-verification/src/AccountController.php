@@ -26,7 +26,7 @@ class AccountController extends Controller
 
             return back();
         } else {
-            return back()->with('mojang-failed', true);
+            return back()->with('mojang-failed', $result['message']);
         }
     }
 
