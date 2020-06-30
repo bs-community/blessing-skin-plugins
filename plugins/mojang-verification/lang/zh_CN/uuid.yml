@@ -1,7 +1,6 @@
 title: 更新 UUID
 description: 如果希望您的正版角色使用正版 UUID 进入部署了 Yggdrasil API 的服务器，则可以点击下面的按钮更新 UUID。
 tip: 如果您的正版角色在本站设置了皮肤，则在游戏中优先显示本站中设置的皮肤；如果没有，则会自动使用您在 Mojang 设置的皮肤。
-notice: 只需要更新一次就可以，无需重复操作。
 button: 更新 UUID
 success: UUID 更新成功
 failed: UUID 更新失败

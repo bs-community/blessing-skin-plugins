@@ -5,6 +5,7 @@ namespace GPlane\Mojang\Listeners;
 use App\Services\Hook;
 use Blessing\Filter;
 use GPlane\Mojang\MojangVerification;
+use Illuminate\Support\Facades\DB;
 use Schema;
 
 class OnAuthenticated
@@ -20,8 +21,9 @@ class OnAuthenticated
     public function handle($event)
     {
         $uid = $event->user->uid;
-        if (MojangVerification::where('user_id', $uid)->count() == 1) {
-            if (Schema::hasTable('uuid')) {
+        $verificationData = MojangVerification::where('user_id', $uid)->first();
+        if ($verificationData) {
+            if (Schema::hasTable('uuid') && DB::table('uuid')->where('uuid', $verificationData->uuid)->count() === 0) {
                 $this->filter->add('grid:user.profile', function ($grid) {
                     array_unshift($grid['widgets'][0][1], 'GPlane\Mojang::uuid');
 
