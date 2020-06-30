@@ -32,13 +32,13 @@ class AccountController extends Controller
 
     public function uuid()
     {
-        $uuid = MojangVerification::where('user_id', auth()->id())->first()->uuid;
+        $uuid = MojangVerification::where('user_id', auth()->id())->value('uuid');
         try {
             $response = Http::withOptions(['verify' => CaBundle::getSystemCaRootBundlePath()])
                 ->get("https://api.mojang.com/user/profiles/$uuid/names");
-            $name = $response->json()[0];
+            $name = $response->json()[0]['name'];
 
-            DB::table('uuid')->where('name', $name)->update(['uuid' => $uuid]);
+            DB::table('uuid')->updateOrInsert(['name' => $name], ['uuid' => $uuid]);
 
             return json(trans('GPlane\Mojang::uuid.success'), 0);
         } catch (\Exception $e) {
