@@ -47,7 +47,7 @@ if (!function_exists('validate_mojang_account')) {
         } catch (\Exception $e) {
             report($e);
 
-            return ['valid' => false];
+            return ['valid' => false, 'message' => trans('GPlane\Mojang::bind.failed.other')];
         }
     }
 }
