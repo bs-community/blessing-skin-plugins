@@ -1,4 +1,7 @@
 title: Bind Your Mojang Account
+email: |
+  Please make sure that the email address you use on this site is the same as the email address of your Minecraft account, 
+  otherwise please modify your email address to complete the verification.
 description: |
   If you have already paid for Minecraft, you could enter your Mojang account's password below to bind it.
 
