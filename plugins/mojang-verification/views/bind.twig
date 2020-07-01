@@ -6,6 +6,9 @@
     </h3>
   </div>
   <div class="card-body">
+      <div class="alert alert-info">
+        {{ trans('GPlane\\Mojang::bind.email') }}
+      </div>
     {% if session_has('mojang-failed') %}
       <div class="alert alert-danger">
         {{ session_pull('mojang-failed') }}
