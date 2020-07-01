@@ -35,7 +35,7 @@ if (!function_exists('validate_mojang_account')) {
 
                 $error = $response->json()['errorMessage'];
                 if (Str::contains($error, 'Invalid username or password.')) {
-                    $message = trans('GPlang\Mojang::bind.failed.password');
+                    $message = trans('GPlane\Mojang::bind.failed.password');
                 } elseif ($error === 'Invalid credentials.') {
                     $message = trans('GPlane\Mojang::bind.failed.rate');
                 } else {
