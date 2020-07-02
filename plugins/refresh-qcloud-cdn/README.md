@@ -9,7 +9,3 @@
 - `QCLOUD_CDN_BASE_URL` - 您的腾讯云 CDN 的基础 URL，**不能**以斜杠结尾。
 - `QCLOUD_CDN_SECRET_ID` - 您的腾讯云账户的 SecretID。
 - `QCLOUD_CDN_SECRET_KEY` - 您的腾讯云账户的 SecretKey。
-
-## License
-
-MIT License (c) 2018-present Pig Fang

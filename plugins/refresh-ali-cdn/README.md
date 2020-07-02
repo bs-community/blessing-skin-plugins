@@ -11,7 +11,3 @@
 - `ALICDN_ACCESSKEY_SECRET` - 您的阿里云账户的 AccessKeySecret。
 
 **若使用子账号 请注意RAM鉴权。**
-
-## License
-
-MIT License (c) 2020-present hank9999
