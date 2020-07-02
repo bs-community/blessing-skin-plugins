@@ -4,7 +4,7 @@
     "declaration": false,
     "sourceMap": false,
     "target": "es2017",
-    "module": "commonjs",
+    "module": "es2015",
     "baseUrl": ".",
     "paths": {
       "blessing-skin": ["./types"]
@@ -13,5 +13,10 @@
   "include": [
     "plugins/*/assets",
     "types.ts"
-  ]
+  ],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  }
 }

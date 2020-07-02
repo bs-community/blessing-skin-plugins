@@ -31,9 +31,6 @@ const config: Configuration = {
         loader: 'ts-loader',
         options: {
           transpileOnly: true,
-          compilerOptions: {
-            module: 'es2015',
-          },
         },
       },
     ],
