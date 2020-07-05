@@ -1,7 +1,7 @@
 {
   "name": "oauth-github",
   "title": "Blessing\\OAuth\\GitHub::general.title",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Blessing\\OAuth\\GitHub::general.description",
   "author": "GPlane",
   "url": "https://gplane.win/",
