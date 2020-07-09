@@ -14,7 +14,9 @@ class Configuration
 
         $info = $users->groupBy(function ($user) {
             $password = $user->password;
-            if (Str::startsWith($password, '$2y')) {
+            if (empty($password)) {
+                return trans('GPlane\PasswordTransition::config.progress.no-password');
+            } elseif (Str::startsWith($password, '$2y')) {
                 return 'Bcrypt';
             } elseif (Str::startsWith($password, '$argon2i')) {
                 return 'Argon2i';

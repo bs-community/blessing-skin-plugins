@@ -3,3 +3,4 @@ title: Password Hashing Algorithm Migration
 progress:
   title: Progress
   count: "{1} :total user (:percentage%)|[2,*]:total users (:percentage%)"
+  no-password: No Password
