@@ -40,6 +40,7 @@ class SessionController extends Controller
             throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.uuid', ['profile' => $selectedProfile]));
         }
 
+        /** @var Player */
         $player = Player::where('name', $result->name)->first();
 
         if (!$player) {
@@ -48,6 +49,8 @@ class SessionController extends Controller
 
             throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.uuid', ['profile' => $selectedProfile]));
         }
+
+        app()->setLocale($player->user->locale);
 
         $identification = strtolower($player->user->email);
 

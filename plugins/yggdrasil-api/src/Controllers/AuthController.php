@@ -93,15 +93,16 @@ class AuthController extends Controller
             throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.token.invalid'));
         }
 
+        /** @var User */
+        $user = User::where('email', $token->owner)->first();
+        if (!$user) {
+            throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.user.not-existed'));
+        }
+        app()->setLocale($user->locale);
+
         if ($clientToken && $token->clientToken !== $clientToken) {
             Log::info("Expect client token to be [$token->clientToken]");
             throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.token.not-matched'));
-        }
-
-        $user = User::where('email', $token->owner)->first();
-
-        if (!$user) {
-            throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.user.not-existed'));
         }
 
         Log::channel('ygg')->info("The given access token is owned by user [$token->owner]");
@@ -191,7 +192,9 @@ class AuthController extends Controller
 
             Log::channel('ygg')->info('Given access token is valid and matches the client token');
 
+            /** @var User */
             $user = User::where('email', $token->owner)->first();
+            app()->setLocale($user->locale);
 
             if ($user->permission == User::BANNED) {
                 throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.user.banned'));
@@ -273,11 +276,13 @@ class AuthController extends Controller
             throw new IllegalArgumentException(trans('Yggdrasil::exceptions.auth.empty'));
         }
 
+        /** @var User */
         $user = User::where('email', $identification)->first();
 
         if (!$user) {
             throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.auth.not-existed', compact('identification')));
         }
+        app()->setLocale($user->locale);
 
         if (!$user->verifyPassword($password)) {
             throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.auth.not-matched'));
