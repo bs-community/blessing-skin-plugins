@@ -9,3 +9,13 @@ failed:
   rate: Operations are too frequent. Please try again later.
   password: Invalid password.
   other: Failed to verify.
+
+notification:
+  title: Player Owner Changed
+  content: |
+    Dear :nickname :
+
+    We are sorry to tell you that your player :player has been transferred to another user who has paid for Minecraft.
+    Because of that, we have added :score score(s) to your account.
+
+    Sorry for the inconvenience.
