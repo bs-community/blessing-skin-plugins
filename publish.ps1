@@ -23,6 +23,6 @@ chmod +x ./bot
 ./bot plugin updated.json
 
 foreach ($lang in 'en', 'zh_CN') {
-    Invoke-WebRequest "https://purge.jsdelivr.net/gh/bs-community/plugins-dist@latest/registry-preview_$lang.json"
+    Invoke-WebRequest "https://purge.jsdelivr.net/gh/bs-community/plugins-dist@latest/registry_$lang.json"
 }
-Invoke-WebRequest 'https://purge.jsdelivr.net/gh/bs-community/plugins-dist@latest/registry-preview.json'
+Invoke-WebRequest 'https://purge.jsdelivr.net/gh/bs-community/plugins-dist@latest/registry.json'
