@@ -50,7 +50,7 @@ class SessionController extends Controller
             throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.uuid', ['profile' => $selectedProfile]));
         }
 
-        app()->setLocale($player->user->locale);
+        app()->setLocale($player->user->locale ?? app()->getLocale());
 
         $identification = strtolower($player->user->email);
 
