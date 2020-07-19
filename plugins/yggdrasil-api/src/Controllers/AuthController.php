@@ -98,7 +98,9 @@ class AuthController extends Controller
         if (!$user) {
             throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.user.not-existed'));
         }
-        app()->setLocale($user->locale ?? app()->getLocale());
+        if (!is_null($user->locale)) {
+            app()->setLocale($user->locale);
+        }
 
         if ($clientToken && $token->clientToken !== $clientToken) {
             Log::info("Expect client token to be [$token->clientToken]");
@@ -194,7 +196,9 @@ class AuthController extends Controller
 
             /** @var User */
             $user = User::where('email', $token->owner)->first();
-            app()->setLocale($user->locale ?? app()->getLocale());
+            if (!is_null($user->locale)) {
+                app()->setLocale($user->locale);
+            }
 
             if ($user->permission == User::BANNED) {
                 throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.user.banned'));
@@ -282,7 +286,9 @@ class AuthController extends Controller
         if (!$user) {
             throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.auth.not-existed', compact('identification')));
         }
-        app()->setLocale($user->locale ?? app()->getLocale());
+        if (!is_null($user->locale)) {
+            app()->setLocale($user->locale);
+        }
 
         if (!$user->verifyPassword($password)) {
             throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.auth.not-matched'));
