@@ -154,7 +154,7 @@ class SessionController extends Controller
     {
         try {
             $response = Http::post('https://authserver.mojang.com/validate', [
-                'json' => ['accessToken' => $accessToken],
+                'accessToken' => $accessToken,
             ]);
 
             return $response->status() === 204;
