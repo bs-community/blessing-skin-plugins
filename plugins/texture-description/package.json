@@ -1,0 +1,18 @@
+{
+  "name": "texture-description",
+  "title": "Blessing\\TextureDesc::general.title",
+  "version": "0.1.0",
+  "description": "Blessing\\TextureDesc::general.description",
+  "author": "Steven Qiu & GPlane",
+  "url": "",
+  "namespace": "Blessing\\TextureDesc",
+  "require": {
+    "blessing-skin-server": "^5.0.0"
+  },
+  "enchants": {
+    "icon": {
+      "bg": "info",
+      "fa": "file-invoice"
+    }
+  }
+}
