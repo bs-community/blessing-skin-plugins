@@ -52,7 +52,7 @@ Write-Host 'Marketplace Builder'
 $env:NODE_ENV = 'production'
 
 git clone "https://github.com/bs-community/plugins-dist.git" .dist
-$registry = Get-Content '.dist/registry-preview.json' | ConvertFrom-Json
+$registry = Get-Content '.dist/registry_zh_CN.json' | ConvertFrom-Json
 $packages = $registry.packages
 $plugins = Get-ChildItem -Path ./plugins -Directory | ForEach-Object { $_.Name }
 
@@ -140,4 +140,4 @@ foreach ($lang in 'en', 'zh_CN') {
     $registry.packages = $packages
     ConvertTo-Json $registry -Depth 10 | Out-File -FilePath ".dist/registry_$lang.json"
 }
-Copy-Item -Path '.dist/registry-preview_zh_CN.json' -Destination '.dist/registry.json'
+Copy-Item -Path '.dist/registry_zh_CN.json' -Destination '.dist/registry.json'
