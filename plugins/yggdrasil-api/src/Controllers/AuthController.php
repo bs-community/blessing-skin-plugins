@@ -5,9 +5,11 @@ namespace Yggdrasil\Controllers;
 use App\Models\Player;
 use App\Models\User;
 use Cache;
+use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
+use Lcobucci\JWT;
 use Log;
 use Ramsey\Uuid\Uuid;
 use Yggdrasil\Exceptions\ForbiddenOperationException;
@@ -27,35 +29,47 @@ class AuthController extends Controller
         Log::channel('ygg')->info("User [$identification] is try to authenticate with", [$request->except(['username', 'password'])]);
         $user = $this->checkUserCredentials($request);
 
+        // 用户 ID 根据其邮箱生成
+        $userUuid = Uuid::uuid5(Uuid::NAMESPACE_DNS, $user->email)->getHex()->toString();
+
         // clientToken 原样返回，如果没提供就给客户端生成一个
         $clientToken = $request->input('clientToken', Uuid::uuid4()->getHex()->toString());
-        // clientToken 原样返回，生成新 accessToken 并格式化为不带符号的 UUID
-        $accessToken = Uuid::uuid4()->getHex()->toString();
 
-        $token = new Token($clientToken, $accessToken);
+        $builder = new JWT\Builder();
+        $builder->relatedTo($userUuid)
+            ->withClaim('yggt', Uuid::uuid4()->getHex()->toString());
+
+        $token = new Token($clientToken);
         $token->owner = $identification;
 
         $availableProfiles = $this->getAvailableProfiles($user);
 
         $resp = [
-            'accessToken' => $token->accessToken,
+            'accessToken' => '',
             'clientToken' => $token->clientToken,
             'availableProfiles' => $availableProfiles,
         ];
 
         if ($request->input('requestUser')) {
-            // 用户 ID 根据其邮箱生成
-            $resp['user'] = [
-                'id' => Uuid::uuid5($user->email, Uuid::NAMESPACE_DNS)->getHex()->toString(),
-                'properties' => [],
-            ];
+            $resp['user'] = ['id' => $userUuid, 'properties' => []];
         }
 
         // 当用户只有一个角色时自动帮他选择
         if (!empty($availableProfiles) && count($availableProfiles) === 1) {
             $resp['selectedProfile'] = $availableProfiles[0];
-            $token->profileId = $availableProfiles[0]['id'];
+            $id = $availableProfiles[0]['id'];
+            $token->profileId = $id;
+            $builder->withClaim('spr', $id);
         }
+
+        $now = CarbonImmutable::now();
+        $accessToken = (string) $builder->issuedBy('Yggdrasil-Auth')
+            ->expiresAt($now->addSeconds((int) option('ygg_token_expire_1'))->timestamp)
+            ->issuedAt($now->timestamp)
+            ->getToken(new JWT\Signer\Hmac\Sha256(), new JWT\Signer\Key(config('jwt.secret', '')));
+
+        $resp['accessToken'] = $accessToken;
+        $token->accessToken = $accessToken;
 
         $this->storeToken($token, $identification);
         Log::channel('ygg')->info("New access token [$accessToken] generated for user [$identification]");
@@ -79,13 +93,13 @@ class AuthController extends Controller
         Log::channel('ygg')->info("Try to refresh access token [$accessToken] with client token [$clientToken]");
 
         $token = Token::find($accessToken);
-        if (!$token) {
+        if (empty($token)) {
             throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.token.invalid'));
         }
 
         /** @var User */
         $user = User::where('email', $token->owner)->first();
-        if (!$user) {
+        if (empty($user)) {
             throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.user.not-existed'));
         }
         if (!is_null($user->locale)) {
@@ -103,22 +117,25 @@ class AuthController extends Controller
             throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.user.banned'));
         }
 
+        // 用户 ID 根据其邮箱生成
+        $userUuid = Uuid::uuid5(Uuid::NAMESPACE_DNS, $user->email)->getHex()->toString();
+
+        $builder = new JWT\Builder();
+        $builder->relatedTo($userUuid)
+            ->withClaim('yggt', Uuid::uuid4()->getHex()->toString());
+
         $availableProfiles = $this->getAvailableProfiles($user);
 
         $resp = [
             'accessToken' => $token->accessToken,
-            'clientToken' => $token->clientToken, // 原样返回
+            'clientToken' => $token->clientToken,
             'availableProfiles' => $availableProfiles,
         ];
 
         if ($request->input('requestUser')) {
-            $resp['user'] = [
-                'id' => Uuid::uuid5($user->email, Uuid::NAMESPACE_DNS)->getHex()->toString(),
-                'properties' => [],
-            ];
+            $resp['user'] = ['id' => $userUuid, 'properties' => []];
         }
 
-        // 当指定了 selectedProfile 时
         if ($selected = $request->get('selectedProfile')) {
             if (!Player::where('name', $selected['name'])->first()) {
                 throw new IllegalArgumentException(trans('Yggdrasil::exceptions.player.not-existed'));
@@ -128,31 +145,41 @@ class AuthController extends Controller
                 throw new IllegalArgumentException(trans('Yggdrasil::exceptions.player.not-matched'));
             }
 
-            foreach ($availableProfiles as $profile) {
-                if ($profile['id'] == $selected['id']) {
-                    $resp['selectedProfile'] = $profile;
-                }
-            }
-
-            if (!isset($resp['selectedProfile'])) {
+            $profile = Arr::first($availableProfiles, function ($profile) use ($selected) {
+                return $profile['id'] === $selected['id'];
+            });
+            if ($profile) {
+                $resp['selectedProfile'] = $profile;
+                $builder->withClaim('spr', $selected['id']);
+            } else {
                 throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.player.owner'));
             }
 
             $token->profileId = $resp['selectedProfile']['id'];
         } else {
-            foreach ($availableProfiles as $profile) {
-                if ($profile['id'] == $token->profileId) {
-                    $resp['selectedProfile'] = $profile;
-                }
+            $profile = Arr::first($availableProfiles, function ($profile) use ($token) {
+                return $profile['id'] === $token->profileId;
+            });
+            if ($profile) {
+                $resp['selectedProfile'] = $profile;
+                $builder->withClaim('spr', $selected['id']);
             }
         }
 
-        // 上面那一大票检测完了，最后再刷新令牌
         Cache::forget("yggdrasil-token-$accessToken");
+        $tokens = Arr::wrap(Cache::get('yggdrasil-id-'.$user->email));
+        $tokens = array_filter($tokens, function (Token $token) use ($accessToken) {
+            return $token->accessToken !== $accessToken;
+        });
+        Cache::put('yggdrasil-id-'.$user->email, $tokens);
         Log::channel('ygg')->info("The old access token [$accessToken] is now revoked");
 
-        $token->accessToken = Uuid::uuid4()->getHex()->toString();
-        $token->createdAt = time();
+        $now = CarbonImmutable::now();
+        $token->accessToken = (string) $builder->issuedBy('Yggdrasil-Auth')
+            ->expiresAt($now->addSeconds((int) option('ygg_token_expire_1'))->timestamp)
+            ->issuedAt($now->timestamp)
+            ->getToken(new JWT\Signer\Hmac\Sha256(), new JWT\Signer\Key(config('jwt.secret', '')));
+        $token->createdAt = $now->timestamp;
         Log::channel('ygg')->info("New token [$token->accessToken] generated for user [$user->email]");
         $this->storeToken($token, $token->owner);
 

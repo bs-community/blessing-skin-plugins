@@ -3,6 +3,8 @@
 namespace Yggdrasil\Models;
 
 use Cache;
+use Lcobucci\JWT;
+use Ramsey\Uuid\Uuid;
 
 class Token
 {
@@ -12,7 +14,7 @@ class Token
     public $clientToken;
     public $accessToken;
 
-    public function __construct($clientToken, $accessToken)
+    public function __construct($clientToken = '', $accessToken = '')
     {
         $this->clientToken = $clientToken;
         $this->accessToken = $accessToken;
@@ -21,7 +23,23 @@ class Token
 
     public function isValid()
     {
-        return (time() - $this->createdAt - option('ygg_token_expire_1')) < 0;
+        if (str_contains($this->accessToken, '.')) {
+            $token = (new JWT\Parser())->parse($this->accessToken);
+
+            $validationData = new JWT\ValidationData();
+            $validationData->setIssuer('Yggdrasil-Auth');
+            $validationData->setSubject(
+                Uuid::uuid5(Uuid::NAMESPACE_DNS, $this->owner)->getHex()->toString()
+            );
+
+            return $token->validate($validationData) && $token->verify(
+                new JWT\Signer\Hmac\Sha256(),
+                new JWT\Signer\Key(config('jwt.secret', ''))
+            );
+        } else {
+            // fallback for legacy UUID-format accessToken
+            return (time() - $this->createdAt - option('ygg_token_expire_1')) < 0;
+        }
     }
 
     public function isRefreshable()
