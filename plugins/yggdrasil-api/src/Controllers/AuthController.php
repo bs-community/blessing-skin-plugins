@@ -80,7 +80,7 @@ class AuthController extends Controller
 
         Log::channel('ygg')->info("Try to refresh access token [$accessToken] with client token [$clientToken]");
 
-        $token = Token::lookup($accessToken);
+        $token = Token::find($accessToken);
         if (!$token) {
             throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.token.invalid'));
         }
@@ -178,7 +178,7 @@ class AuthController extends Controller
 
         Log::channel('ygg')->info('Check if an access token is valid', compact('clientToken', 'accessToken'));
 
-        $token = Token::lookup($accessToken);
+        $token = Token::find($accessToken);
         if ($token && $token->isValid()) {
             if ($clientToken && $clientToken !== $token->clientToken) {
                 throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.token.not-matched'));

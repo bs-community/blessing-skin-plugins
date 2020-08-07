@@ -58,7 +58,7 @@ class SessionController extends Controller
 
         Log::channel('ygg')->info("Player [$selectedProfile]'s name is [$player->name], belongs to user [$identification]");
 
-        $token = Token::lookup($accessToken);
+        $token = Token::find($accessToken);
         if ($token && $token->isValid()) {
             Log::channel('ygg')->info("All access tokens issued for user [$identification] are as listed", [$token]);
 

@@ -41,10 +41,10 @@ class Token
     }
 
     /**
-     * Lookup the specified token, or null if the token does not exist or has expired.
+     * Search the specified token, or null if the token does not exist or has expired.
      * The returned token is guaranteed to be refreshable, but it may not be valid.
      */
-    public static function lookup(string $accessToken)
+    public static function find(string $accessToken)
     {
         $token = Cache::get("yggdrasil-token-$accessToken");
         if ($token) {
