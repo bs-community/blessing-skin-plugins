@@ -16,6 +16,9 @@ common:
   ygg_token_expire_2:
     title: 令牌完全失效时间
     description: 分别指定 Token「暂时失效」与「完全失效」的过期时间，单位为秒
+  ygg_tokens_limit:
+    title: 令牌数量限制
+    description: 限制每个用户能拥有令牌的最大数量
   ygg_rate_limit:
     title: 登录/登出频率限制
     hint: 两次操作之间的时间间隔（毫秒）

@@ -28,6 +28,7 @@ return [
             'ygg_uuid_algorithm' => 'v3',
             'ygg_token_expire_1' => '259200', // 3 days
             'ygg_token_expire_2' => '604800', // 7 days
+            'ygg_tokens_limit' => '10',
             'ygg_rate_limit' => '1000',
             'ygg_skin_domain' => '',
             'ygg_search_profile_max' => '5',

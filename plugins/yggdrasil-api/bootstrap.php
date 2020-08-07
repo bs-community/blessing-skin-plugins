@@ -4,6 +4,8 @@ use App\Models\User;
 use App\Services\Hook;
 use Blessing\Filter;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Arr;
+use Yggdrasil\Models\Token;
 
 require __DIR__.'/src/Utils/helpers.php';
 
@@ -72,23 +74,20 @@ return function (Filter $filter, Dispatcher $events) {
         }
 
         $identification = strtolower($user->email);
-        $token = Cache::get("yggdrasil-id-$identification");
-        if ($token) {
-            $accessToken = $token->accessToken;
-
-            Cache::forget("yggdrasil-id-$identification");
-            Cache::forget("yggdrasil-token-$accessToken");
-        }
+        // 吊销所有令牌
+        $tokens = Arr::wrap(Cache::get("yggdrasil-id-$identification"));
+        array_walk($tokens, function (Token $token) {
+            Cache::forget('yggdrasil-token-'.$token->accessToken);
+        });
+        Cache::forget("yggdrasil-id-$identification");
     });
 
-    // 向管理后台菜单添加「Yggdrasil 日志」项目
     Hook::addMenuItem('admin', 4, [
         'title' => 'Yggdrasil::log.title',
         'link' => 'admin/yggdrasil-log',
         'icon' => 'fa-history',
     ]);
 
-    // 添加 API 路由
     Hook::addRoute(function () {
         Route::namespace('Yggdrasil\Controllers')
             ->prefix('api/yggdrasil')

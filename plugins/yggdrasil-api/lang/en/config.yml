@@ -16,6 +16,9 @@ common:
   ygg_token_expire_2:
     title: Token Completely-expired Time
     description: Specify the expiry time of Token "Temporarily Invalid" and "Completely Invalid" in seconds.
+  ygg_tokens_limit:
+    title: Tokens Amount Limitation
+    description: Limit maximum amount of tokens for each user.
   ygg_rate_limit:
     title: Log-in/Log-out Rate Limit
     hint: Time interval between two operations (ms).

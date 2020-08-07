@@ -24,6 +24,8 @@ class ConfigController extends Controller
             $form->text('ygg_token_expire_1', trans('Yggdrasil::config.common.ygg_token_expire_1.title'));
             $form->text('ygg_token_expire_2', trans('Yggdrasil::config.common.ygg_token_expire_2.title'))
                 ->description(trans('Yggdrasil::config.common.ygg_token_expire_2.description'));
+            $form->text('ygg_tokens_limit', trans('Yggdrasil::config.common.ygg_tokens_limit.title'))
+                ->description(trans('Yggdrasil::config.common.ygg_tokens_limit.description'));
             $form->text('ygg_rate_limit', trans('Yggdrasil::config.common.ygg_rate_limit.title'))
                 ->hint(trans('Yggdrasil::config.common.ygg_rate_limit.hint'));
             $form->text('ygg_skin_domain', trans('Yggdrasil::config.common.ygg_skin_domain.title'))

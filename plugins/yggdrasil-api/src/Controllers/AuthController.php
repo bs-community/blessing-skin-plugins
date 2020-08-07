@@ -7,6 +7,7 @@ use App\Models\User;
 use Cache;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Arr;
 use Log;
 use Yggdrasil\Exceptions\ForbiddenOperationException;
 use Yggdrasil\Exceptions\IllegalArgumentException;
@@ -30,15 +31,6 @@ class AuthController extends Controller
         $clientToken = $request->input('clientToken', UUID::generate()->clearDashes());
         // clientToken 原样返回，生成新 accessToken 并格式化为不带符号的 UUID
         $accessToken = UUID::generate()->clearDashes();
-
-        // 吊销该用户的其他令牌
-        $token = Cache::get("yggdrasil-id-$identification");
-        if ($token) {
-            $expiredAccessToken = $token->accessToken;
-
-            Cache::forget("yggdrasil-id-$identification");
-            Cache::forget("yggdrasil-token-$expiredAccessToken");
-        }
 
         // 实例化并存储 Token
         $token = new Token($clientToken, $accessToken);
@@ -223,13 +215,11 @@ class AuthController extends Controller
         $user = $this->checkUserCredentials($request, false);
 
         // 吊销所有令牌
-        $token = Cache::get("yggdrasil-id-$identification");
-        if ($token) {
-            $accessToken = $token->accessToken;
-
-            Cache::forget("yggdrasil-id-$identification");
-            Cache::forget("yggdrasil-token-$accessToken");
-        }
+        $tokens = Arr::wrap(Cache::get("yggdrasil-id-$identification"));
+        array_walk($tokens, function (Token $token) {
+            Cache::forget('yggdrasil-token-'.$token->accessToken);
+        });
+        Cache::forget("yggdrasil-id-$identification");
 
         Log::channel('ygg')->info("User [$identification] signed out, all tokens revoked");
 
@@ -252,8 +242,12 @@ class AuthController extends Controller
         $token = Cache::get("yggdrasil-token-$accessToken");
         if ($token) {
             $identification = strtolower($token->owner);
+            $tokens = Arr::wrap(Cache::get("yggdrasil-id-$identification"));
+            $tokens = array_filter($tokens, function (Token $token) use ($accessToken) {
+                return $token->accessToken !== $accessToken;
+            });
+            Cache::put("yggdrasil-id-$identification", $tokens);
 
-            Cache::forget("yggdrasil-id-$identification");
             Cache::forget("yggdrasil-token-$accessToken");
 
             ygg_log([
@@ -321,17 +315,24 @@ class AuthController extends Controller
         return $profiles;
     }
 
-    // 推荐使用 Redis 作为缓存驱动
     protected function storeToken(Token $token, $identification)
     {
         $timeToFullyExpired = option('ygg_token_expire_2');
-        // 使用 accessToken 作为缓存主键
         Cache::put("yggdrasil-token-{$token->accessToken}", $token, $timeToFullyExpired);
-        // TODO: 实现一个用户可以签发多个 Token
-        Cache::put("yggdrasil-id-$identification", $token, $timeToFullyExpired);
+
+        $limit = (int) option('ygg_tokens_limit', 10);
+        $tokens = Arr::wrap(Cache::get("yggdrasil-id-$identification"));
+        if (count($tokens) >= $limit) {
+            $expired = array_shift($tokens);
+            if ($expired) {
+                Cache::forget('yggdrasil-token-'.$expired->accessToken);
+            }
+        }
+        $tokens[] = $token;
+        Cache::put("yggdrasil-id-$identification", $tokens);
 
         Log::channel('ygg')->info("Serialized token stored to cache with expiry time $timeToFullyExpired minutes", [
-            'keys' => ["yggdrasil-token-{$token->accessToken}", "yggdrasil-id-$identification"],
+            'keys' => ["yggdrasil-token-{$token->accessToken}"],
             'token' => $token,
         ]);
     }
