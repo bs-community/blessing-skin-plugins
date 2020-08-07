@@ -9,9 +9,9 @@ use DB;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use Log;
+use Ramsey\Uuid\Uuid;
 use Schema;
 use Yggdrasil\Exceptions\IllegalArgumentException;
-use Yggdrasil\Utils\UUID;
 
 class Profile
 {
@@ -38,7 +38,7 @@ class Profile
 
         $textures = [
             'timestamp' => round(microtime(true) * 1000),
-            'profileId' => UUID::format($this->uuid),
+            'profileId' => str_replace('-', '', $this->uuid),
             'profileName' => $this->name,
             'isPublic' => true,
             'textures' => [],
@@ -93,7 +93,7 @@ class Profile
         }
 
         $result = [
-            'id' => UUID::format($this->uuid),
+            'id' => str_replace('-', '', $this->uuid),
             'name' => $this->name,
             'properties' => [
                 [
@@ -129,17 +129,19 @@ class Profile
     {
         $result = DB::table('uuid')->where('name', $name)->first();
 
-        if (!$result) {
-            // 分配新的 UUID
-            $result = UUID::generateMinecraftUuid($name)->clearDashes();
-            DB::table('uuid')->insert(['name' => $name, 'uuid' => $result]);
-
-            Log::channel('ygg')->info("New uuid [$result] allocated to player [$name]");
-        } else {
-            $result = $result->uuid;
+        if ($result) {
+            return $result->uuid;
         }
 
-        return $result;
+        if (option('ygg_uuid_algorithm') === 'v3') {
+            $uuid = static::generateUuidV3($name);
+        } else {
+            $uuid = Uuid::uuid4()->getHex()->toString();
+        }
+        DB::table('uuid')->insert(['name' => $name, 'uuid' => $uuid]);
+        Log::channel('ygg')->info("New uuid [$uuid] allocated to player [$name]");
+
+        return $uuid;
     }
 
     public static function createFromUuid($uuid)
@@ -167,6 +169,16 @@ class Profile
         $profile->cape = optional($player->cape)->hash;
 
         return $profile;
+    }
+
+    public static function generateUuidV3(string $name): string
+    {
+        // @see https://gist.github.com/games647/2b6a00a8fc21fd3b88375f03c9e2e603
+        $data = hex2bin(md5('OfflinePlayer:'.$name));
+        $data[6] = chr(ord($data[6]) & 0x0f | 0x30);
+        $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
+
+        return bin2hex($data);
     }
 
     protected function fetchProfileFromMojang($type)

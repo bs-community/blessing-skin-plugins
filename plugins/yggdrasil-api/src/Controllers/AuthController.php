@@ -9,11 +9,11 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 use Log;
+use Ramsey\Uuid\Uuid;
 use Yggdrasil\Exceptions\ForbiddenOperationException;
 use Yggdrasil\Exceptions\IllegalArgumentException;
 use Yggdrasil\Models\Profile;
 use Yggdrasil\Models\Token;
-use Yggdrasil\Utils\UUID;
 
 class AuthController extends Controller
 {
@@ -28,9 +28,9 @@ class AuthController extends Controller
         $user = $this->checkUserCredentials($request);
 
         // clientToken 原样返回，如果没提供就给客户端生成一个
-        $clientToken = $request->input('clientToken', UUID::generate()->clearDashes());
+        $clientToken = $request->input('clientToken', Uuid::uuid4()->getHex()->toString());
         // clientToken 原样返回，生成新 accessToken 并格式化为不带符号的 UUID
-        $accessToken = UUID::generate()->clearDashes();
+        $accessToken = Uuid::uuid4()->getHex()->toString();
 
         // 实例化并存储 Token
         $token = new Token($clientToken, $accessToken);
@@ -48,7 +48,7 @@ class AuthController extends Controller
         if ($request->input('requestUser')) {
             // 用户 ID 根据其邮箱生成
             $result['user'] = [
-                'id' => UUID::generate(5, $user->email, UUID::NS_DNS)->clearDashes(),
+                'id' => Uuid::uuid5($user->email, Uuid::NAMESPACE_DNS)->getHex()->toString(),
                 'properties' => [],
             ];
         }
@@ -115,7 +115,7 @@ class AuthController extends Controller
 
         if ($request->input('requestUser')) {
             $result['user'] = [
-                'id' => UUID::generate(5, $user->email, UUID::NS_DNS)->clearDashes(),
+                'id' => Uuid::uuid5($user->email, Uuid::NAMESPACE_DNS)->getHex()->toString(),
                 'properties' => [],
             ];
         }
@@ -153,7 +153,7 @@ class AuthController extends Controller
         Cache::forget("yggdrasil-token-$accessToken");
         Log::channel('ygg')->info("The old access token [$accessToken] is now revoked");
 
-        $token->accessToken = UUID::generate()->clearDashes();
+        $token->accessToken = Uuid::uuid4()->getHex()->toString();
         $token->createdAt = time();
         Log::channel('ygg')->info("New token [$token->accessToken] generated for user [$user->email]");
         $this->storeToken($token, $token->owner);
