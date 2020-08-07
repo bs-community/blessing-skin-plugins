@@ -59,5 +59,15 @@ return [
         if (!env('YGG_VERBOSE_LOG')) {
             @unlink(storage_path('logs/yggdrasil.log'));
         }
+
+        // 从旧版升级上来的默认继续使用旧的 UUID 生成算法
+        if (DB::table('uuid')->count() > 0 && !Option::get('ygg_uuid_algorithm')) {
+            Option::set('ygg_uuid_algorithm', 'v4');
+        }
+
+        // 初次使用自动生成私钥
+        if (option('ygg_private_key') == '') {
+            option(['ygg_private_key' => ygg_generate_rsa_keys()['private']]);
+        }
     },
 ];
