@@ -1,5 +1,7 @@
 <?php
 
+namespace Blessing\TextureDesc;
+
 use App\Models\Texture;
 use Illuminate\Database\Eloquent\Model;
 
