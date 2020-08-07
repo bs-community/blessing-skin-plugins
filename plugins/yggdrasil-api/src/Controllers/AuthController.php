@@ -32,14 +32,12 @@ class AuthController extends Controller
         // clientToken 原样返回，生成新 accessToken 并格式化为不带符号的 UUID
         $accessToken = Uuid::uuid4()->getHex()->toString();
 
-        // 实例化并存储 Token
         $token = new Token($clientToken, $accessToken);
         $token->owner = $identification;
 
-        // 准备响应
         $availableProfiles = $this->getAvailableProfiles($user);
 
-        $result = [
+        $resp = [
             'accessToken' => $token->accessToken,
             'clientToken' => $token->clientToken,
             'availableProfiles' => $availableProfiles,
@@ -47,7 +45,7 @@ class AuthController extends Controller
 
         if ($request->input('requestUser')) {
             // 用户 ID 根据其邮箱生成
-            $result['user'] = [
+            $resp['user'] = [
                 'id' => Uuid::uuid5($user->email, Uuid::NAMESPACE_DNS)->getHex()->toString(),
                 'properties' => [],
             ];
@@ -55,7 +53,7 @@ class AuthController extends Controller
 
         // 当用户只有一个角色时自动帮他选择
         if (!empty($availableProfiles) && count($availableProfiles) === 1) {
-            $result['selectedProfile'] = $availableProfiles[0];
+            $resp['selectedProfile'] = $availableProfiles[0];
             $token->profileId = $availableProfiles[0]['id'];
         }
 
@@ -70,7 +68,7 @@ class AuthController extends Controller
             'parameters' => json_encode($request->except('username', 'password')),
         ]);
 
-        return json($result);
+        return json($resp);
     }
 
     public function refresh(Request $request)
@@ -107,14 +105,14 @@ class AuthController extends Controller
 
         $availableProfiles = $this->getAvailableProfiles($user);
 
-        $result = [
+        $resp = [
             'accessToken' => $token->accessToken,
             'clientToken' => $token->clientToken, // 原样返回
             'availableProfiles' => $availableProfiles,
         ];
 
         if ($request->input('requestUser')) {
-            $result['user'] = [
+            $resp['user'] = [
                 'id' => Uuid::uuid5($user->email, Uuid::NAMESPACE_DNS)->getHex()->toString(),
                 'properties' => [],
             ];
@@ -132,19 +130,19 @@ class AuthController extends Controller
 
             foreach ($availableProfiles as $profile) {
                 if ($profile['id'] == $selected['id']) {
-                    $result['selectedProfile'] = $profile;
+                    $resp['selectedProfile'] = $profile;
                 }
             }
 
-            if (!isset($result['selectedProfile'])) {
+            if (!isset($resp['selectedProfile'])) {
                 throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.player.owner'));
             }
 
-            $token->profileId = $result['selectedProfile']['id'];
+            $token->profileId = $resp['selectedProfile']['id'];
         } else {
             foreach ($availableProfiles as $profile) {
                 if ($profile['id'] == $token->profileId) {
-                    $result['selectedProfile'] = $profile;
+                    $resp['selectedProfile'] = $profile;
                 }
             }
         }
@@ -166,9 +164,9 @@ class AuthController extends Controller
             'parameters' => json_encode($request->except('accessToken')),
         ]);
 
-        $result['accessToken'] = $token->accessToken;
+        $resp['accessToken'] = $token->accessToken;
 
-        return json($result);
+        return json($resp);
     }
 
     public function validate(Request $request)
