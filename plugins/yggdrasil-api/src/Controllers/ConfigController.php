@@ -111,7 +111,7 @@ class ConfigController extends Controller
 
     public function logPage()
     {
-        $logs = DB::table('ygg_log')->paginate(10);
+        $logs = DB::table('ygg_log')->orderByDesc('time')->paginate(10);
         $actions = trans('Yggdrasil::log.actions');
 
         return view('Yggdrasil::log', ['logs' => $logs, 'actions' => $actions]);
