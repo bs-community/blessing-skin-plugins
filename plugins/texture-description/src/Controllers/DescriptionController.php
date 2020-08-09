@@ -56,6 +56,8 @@ class DescriptionController extends Controller
 
         Description::updateOrCreate(['tid' => $texture->tid], ['desc' => $content]);
 
-        return response()->noContent();
+        $converter = new GithubFlavoredMarkdownConverter();
+
+        return $converter->convertToHtml($content);
     }
 }
