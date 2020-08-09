@@ -15,6 +15,8 @@ class Description extends Model
 {
     protected $table = 'textures_desc';
 
+    public $timestamps = false;
+
     protected $casts = [
         'id' => 'int',
         'tid' => 'int',
