@@ -46,6 +46,13 @@ class DescriptionController extends Controller
 
     public function update(Request $request, Texture $texture)
     {
+        /** @var User */
+        $currentUser = auth()->user();
+
+        if ($texture->uploader !== auth()->id() && !$currentUser->isAdmin()) {
+            abort(403, trans('skinlib.no-permission'));
+        }
+
         $limit = (int) option('textures_desc_limit', 0);
         ['content' => $content] = $request->validate([
             'content' => array_merge(
