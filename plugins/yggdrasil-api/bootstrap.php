@@ -83,11 +83,7 @@ return function (Filter $filter, Dispatcher $events) {
     Hook::addRoute(function () {
         Route::namespace('Yggdrasil\Controllers')
             ->prefix('api/yggdrasil')
-            ->group(function () {
-                Route::any('', 'ConfigController@hello');
-
-                require __DIR__.'/routes.php';
-            });
+            ->group(__DIR__.'/routes.php');
 
         Route::middleware(['web', 'auth', 'role:admin'])
             ->namespace('Yggdrasil\Controllers')
@@ -102,7 +98,6 @@ return function (Filter $filter, Dispatcher $events) {
             });
     });
 
-    // 全局添加 ALI HTTP 响应头
     if (option('ygg_enable_ali')) {
         $kernel = app()->make(Illuminate\Contracts\Http\Kernel::class);
         $kernel->pushMiddleware(Yggdrasil\Middleware\AddApiIndicationHeader::class);

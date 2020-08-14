@@ -1,5 +1,7 @@
 <?php
 
+Route::any('', 'ConfigController@hello');
+
 Route::prefix('authserver')
     ->middleware(['Yggdrasil\Middleware\CheckContentType'])
     ->group(function () {
