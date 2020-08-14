@@ -72,11 +72,13 @@ return function (Filter $filter, Dispatcher $events) {
         Cache::forget("yggdrasil-id-$identification");
     });
 
-    Hook::addMenuItem('admin', 4, [
-        'title' => 'Yggdrasil::log.title',
-        'link' => 'admin/yggdrasil-log',
-        'icon' => 'fa-history',
-    ]);
+    if (env('YGG_VERBOSE_LOG')) {
+        Hook::addMenuItem('admin', 4, [
+            'title' => 'Yggdrasil::log.title',
+            'link' => 'admin/yggdrasil-log',
+            'icon' => 'fa-history',
+        ]);
+    }
 
     Hook::addRoute(function () {
         Route::namespace('Yggdrasil\Controllers')
