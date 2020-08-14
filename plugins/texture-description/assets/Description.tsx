@@ -15,6 +15,7 @@ function parseTid(): string {
 const Description: React.FC = () => {
   const [description, setDescription] = useState('')
   const [raw, setRaw] = useState<string | null>(null)
+  const [maxLength, setMaxLength] = useState(Infinity)
   const [canEdit, setCanEdit] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -29,7 +30,9 @@ const Description: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    setCanEdit(el?.dataset?.canEdit === 'true')
+    const dataset = el?.dataset
+    setCanEdit(dataset?.canEdit === 'true')
+    setMaxLength(Number.parseInt(dataset?.maxLength ?? '0') || Infinity)
   }, [])
 
   const handleEditContent = async (event: React.MouseEvent) => {
@@ -80,6 +83,8 @@ const Description: React.FC = () => {
     return null
   }
 
+  const isLengthExceeded = (raw?.length ?? 0) > maxLength
+
   return (
     <div className="card">
       {canEdit && (
@@ -113,10 +118,15 @@ const Description: React.FC = () => {
       </div>
       {isEditing && (
         <div className="card-footer">
+          {isLengthExceeded && (
+            <div className="alert alert-info">
+              {trans('texture-description.exceeded', { max: maxLength })}
+            </div>
+          )}
           <div className="d-flex justify-content-between">
             <button
               className="btn btn-primary"
-              disabled={isSubmitting}
+              disabled={isSubmitting || isLengthExceeded}
               onClick={handleSubmit}
             >
               {isSubmitting ? (
