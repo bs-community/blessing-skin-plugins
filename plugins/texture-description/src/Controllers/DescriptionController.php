@@ -26,7 +26,7 @@ class DescriptionController extends Controller
                     if ($statusCode === 404) {
                         abort($statusCode, trans('skinlib.show.deleted'));
                     } else {
-                        abort($statusCode, trans('skinlib.show.private'));
+                        abort(403, trans('skinlib.show.private'));
                     }
                 }
             }
