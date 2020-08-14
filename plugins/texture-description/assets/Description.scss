@@ -1,0 +1,21 @@
+#texture-description {
+  .btn-edit {
+    color: #ccc;
+    transition-property: color;
+    transition-duration: 0.4s;
+
+    &:hover {
+      color: #555;
+    }
+  }
+
+  h1, h2 {
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #eaecef;;
+  }
+
+  blockquote {
+    color: #aaa;
+    border-left: 0.3rem solid #aaa;
+  }
+}

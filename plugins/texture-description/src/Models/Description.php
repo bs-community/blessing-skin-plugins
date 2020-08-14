@@ -1,6 +1,6 @@
 <?php
 
-namespace Blessing\TextureDesc;
+namespace Blessing\TextureDesc\Models;
 
 use App\Models\Texture;
 use Illuminate\Database\Eloquent\Model;
@@ -22,6 +22,8 @@ class Description extends Model
         'tid' => 'int',
         'desc' => 'string',
     ];
+
+    protected $fillable = ['tid', 'desc'];
 
     public function texture()
     {

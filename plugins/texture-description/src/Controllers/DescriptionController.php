@@ -1,10 +1,11 @@
 <?php
 
-namespace Blessing\TextureDesc;
+namespace Blessing\TextureDesc\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Texture;
 use App\Models\User;
+use Blessing\TextureDesc\Models\Description;
 use Illuminate\Http\Request;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
 
@@ -56,15 +57,21 @@ class DescriptionController extends Controller
         $limit = (int) option('textures_desc_limit', 0);
         ['content' => $content] = $request->validate([
             'content' => array_merge(
-                ['required', 'string'],
+                ['nullable', 'string'],
                 $limit > 0 ? ['max:'.$limit] : []
             ),
         ]);
+        $content = $content ?: '';
 
         Description::updateOrCreate(['tid' => $texture->tid], ['desc' => $content]);
 
         $converter = new GithubFlavoredMarkdownConverter();
 
         return $converter->convertToHtml($content);
+    }
+
+    public function raw(Texture $texture)
+    {
+        return Description::where('tid', $texture->tid)->value('desc') ?? '';
     }
 }
