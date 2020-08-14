@@ -22,10 +22,9 @@ class AuthController extends Controller
     public function authenticate(Request $request)
     {
         /**
-         * 注意，新版账户验证中 username 字段填的是邮箱，
-         * 只有旧版的用户填的才是用户名（legacy = true）.
+         * 注意，账户验证中 username 字段填的是邮箱
          */
-        $identification = strtolower($request->input('username'));
+        $identification = $request->input('username');
         Log::channel('ygg')->info("User [$identification] is try to authenticate with", [$request->except(['username', 'password'])]);
         $user = $this->checkUserCredentials($request);
 
@@ -235,7 +234,7 @@ class AuthController extends Controller
 
     public function signout(Request $request)
     {
-        $identification = strtolower($request->input('username'));
+        $identification = $request->input('username');
         Log::channel('ygg')->info("User [$identification] is try to signout");
         $user = $this->checkUserCredentials($request, false);
 
@@ -266,7 +265,7 @@ class AuthController extends Controller
         // 不用检查 clientToken 与 accessToken 是否匹配
         $token = Cache::get("yggdrasil-token-$accessToken");
         if ($token) {
-            $identification = strtolower($token->owner);
+            $identification = $token->owner;
             $tokens = Arr::wrap(Cache::get("yggdrasil-id-$identification"));
             $tokens = array_filter($tokens, function (Token $token) use ($accessToken) {
                 return $token->accessToken !== $accessToken;

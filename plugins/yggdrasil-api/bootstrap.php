@@ -63,7 +63,7 @@ return function (Filter $filter, Dispatcher $events) {
             return;
         }
 
-        $identification = strtolower($user->email);
+        $identification = $user->email;
         // 吊销所有令牌
         $tokens = Arr::wrap(Cache::get("yggdrasil-id-$identification"));
         array_walk($tokens, function (Token $token) {

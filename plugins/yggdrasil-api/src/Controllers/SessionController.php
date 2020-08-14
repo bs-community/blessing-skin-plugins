@@ -54,7 +54,7 @@ class SessionController extends Controller
             app()->setLocale($player->user->locale);
         }
 
-        $identification = strtolower($player->user->email);
+        $identification = $player->user->email;
 
         Log::channel('ygg')->info("Player [$selectedProfile]'s name is [$player->name], belongs to user [$identification]");
 
