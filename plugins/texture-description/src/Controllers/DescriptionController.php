@@ -72,6 +72,10 @@ class DescriptionController extends Controller
 
     public function raw(Texture $texture)
     {
-        return Description::where('tid', $texture->tid)->value('desc') ?? '';
+        $raw = Description::where('tid', $texture->tid)->value('desc') ?? '';
+
+        return response($raw, 200, [
+            'Content-Type' => 'text/markdown',
+        ]);
     }
 }
