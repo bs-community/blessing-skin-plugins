@@ -10,6 +10,7 @@
     "blessing-skin-server": "^5.0.0"
   },
   "enchants": {
+    "config": "Controllers\\ConfigController",
     "icon": {
       "bg": "info",
       "fa": "file-invoice"

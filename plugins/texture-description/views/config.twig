@@ -1,0 +1,11 @@
+{% extends 'admin.base' %}
+
+{% block title %}{{ trans('Blessing\\TextureDesc::general.title') }}{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-6">
+      {{ form|raw }}
+    </div>
+  </div>
+{% endblock %}
