@@ -19,6 +19,7 @@ jobs:
       with:
         repository: bs-community/plugins-dist
         path: '.dist'
+        token: ${{ secrets.GH_TOKEN }}
     - name: Download nano
       run: ./download-nano.ps1
       shell: pwsh
