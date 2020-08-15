@@ -1,3 +1,7 @@
+if (!(Test-Path updated.json)) {
+    exit
+}
+
 git config --global user.name 'Pig Fang'
 git config --global user.email 'g-plane@hotmail.com'
 
