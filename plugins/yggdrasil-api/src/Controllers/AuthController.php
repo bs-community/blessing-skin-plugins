@@ -21,9 +21,7 @@ class AuthController extends Controller
 {
     public function authenticate(Request $request)
     {
-        /**
-         * 注意，账户验证中 username 字段填的是邮箱
-         */
+        // 注意，账户验证中 username 字段填的是邮箱
         $identification = $request->input('username');
         Log::channel('ygg')->info("User [$identification] is try to authenticate with", [$request->except(['username', 'password'])]);
         $user = $this->checkUserCredentials($request);
