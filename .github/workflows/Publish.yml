@@ -22,6 +22,7 @@ jobs:
     - name: Build
       run: ./nano
       env:
+        RUST_LOG: info
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Publish
       run: ./publish.ps1
