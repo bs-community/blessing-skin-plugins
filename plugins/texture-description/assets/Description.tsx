@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import { fetch, t, notify } from 'blessing-skin'
+import './markdown.scss'
 
 const el = document.querySelector<HTMLDivElement>('#texture-description')
 
