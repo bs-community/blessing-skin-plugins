@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import { fetch, t, notify } from 'blessing-skin'
-import './Description.scss'
 
 const el = document.querySelector<HTMLDivElement>('#texture-description')
 
@@ -86,10 +85,11 @@ const Description: React.FC = () => {
   const isLengthExceeded = (raw?.length ?? 0) > maxLength
 
   return (
-    <div className="card">
-      {canEdit && (
-        <div className="p-1">
-          {isEditing || (
+    <div className="card card-secondary">
+      <div className="card-header">
+        <div className="d-flex justify-content-between">
+          <h3 className="card-title">{t('texture-description.desc')}</h3>
+          {canEdit && !isEditing && (
             <a
               className="float-right btn-edit"
               href="#"
@@ -99,7 +99,7 @@ const Description: React.FC = () => {
             </a>
           )}
         </div>
-      )}
+      </div>
       <div className="card-body">
         {isEditing ? (
           <textarea
