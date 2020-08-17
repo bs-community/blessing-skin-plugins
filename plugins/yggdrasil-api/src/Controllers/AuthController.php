@@ -27,7 +27,7 @@ class AuthController extends Controller
         $user = $this->checkUserCredentials($request);
 
         // 用户 ID 根据其邮箱生成
-        $userUuid = Uuid::uuid5(Uuid::NAMESPACE_DNS, $user->email)->getHex()->toString();
+        $userUuid = Uuid::uuid5(Uuid::NAMESPACE_DNS, $identification)->getHex()->toString();
 
         // clientToken 原样返回，如果没提供就给客户端生成一个
         $clientToken = $request->input('clientToken', Uuid::uuid4()->getHex()->toString());
@@ -115,7 +115,7 @@ class AuthController extends Controller
         }
 
         // 用户 ID 根据其邮箱生成
-        $userUuid = Uuid::uuid5(Uuid::NAMESPACE_DNS, $user->email)->getHex()->toString();
+        $userUuid = Uuid::uuid5(Uuid::NAMESPACE_DNS, strtolower($user->email))->getHex()->toString();
 
         $builder = new JWT\Builder();
         $builder->relatedTo($userUuid)
