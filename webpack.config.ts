@@ -33,6 +33,14 @@ const config: Configuration = {
           transpileOnly: true,
         },
       },
+      {
+        test: /\.scss$/,
+        use: [
+          { loader: 'style-loader', options: { esModule: true } },
+          { loader: 'css-loader', options: { importLoaders: 1 } },
+          { loader: 'sass-loader' },
+        ],
+      },
     ],
   },
   externals: {

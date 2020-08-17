@@ -1,0 +1,4 @@
+general:
+  title: 基本配置
+  textures_desc_limit:
+    title: 字数限制
