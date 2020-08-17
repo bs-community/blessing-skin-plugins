@@ -2,9 +2,9 @@
 
 namespace Blessing\TextureDesc\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Services\Facades\Option;
 use App\Services\OptionForm;
+use Illuminate\Routing\Controller;
 
 class ConfigController extends Controller
 {

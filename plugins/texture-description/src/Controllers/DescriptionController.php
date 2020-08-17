@@ -2,11 +2,11 @@
 
 namespace Blessing\TextureDesc\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Texture;
 use App\Models\User;
 use Blessing\TextureDesc\Models\Description;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
 
 class DescriptionController extends Controller
