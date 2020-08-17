@@ -22,7 +22,7 @@ class AuthController extends Controller
     public function authenticate(Request $request)
     {
         // 注意，账户验证中 username 字段填的是邮箱
-        $identification = $request->input('username');
+        $identification = strtolower($request->input('username'));
         Log::channel('ygg')->info("User [$identification] is try to authenticate with", [$request->except(['username', 'password'])]);
         $user = $this->checkUserCredentials($request);
 
@@ -164,11 +164,12 @@ class AuthController extends Controller
         }
 
         Cache::forget("yggdrasil-token-$accessToken");
-        $tokens = Arr::wrap(Cache::get('yggdrasil-id-'.$user->email));
+        $identification = strtolower($user->email);
+        $tokens = Arr::wrap(Cache::get("yggdrasil-id-$identification"));
         $tokens = array_filter($tokens, function (Token $token) use ($accessToken) {
             return $token->accessToken !== $accessToken;
         });
-        Cache::put('yggdrasil-id-'.$user->email, $tokens);
+        Cache::put("yggdrasil-id-$identification", $tokens);
         Log::channel('ygg')->info("The old access token [$accessToken] is now revoked");
 
         $now = CarbonImmutable::now();
@@ -232,7 +233,7 @@ class AuthController extends Controller
 
     public function signout(Request $request)
     {
-        $identification = $request->input('username');
+        $identification = strtolower($request->input('username'));
         Log::channel('ygg')->info("User [$identification] is try to signout");
         $user = $this->checkUserCredentials($request, false);
 
