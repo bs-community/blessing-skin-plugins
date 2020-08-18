@@ -6,8 +6,6 @@ use GPlane\Mojang\Listeners;
 use GPlane\Mojang\MojangVerification;
 use Illuminate\Contracts\Events\Dispatcher;
 
-require __DIR__.'/src/helpers.php';
-
 return function (Dispatcher $events, Filter $filter) {
     View::composer('GPlane\Mojang::bind', function ($view) {
         $view->with('score', option('mojang_verification_score_award', 0));

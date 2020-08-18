@@ -5,21 +5,31 @@ namespace GPlane\Mojang\Listeners;
 use App\Models\User;
 use Blessing\Filter;
 use Carbon\Carbon;
-use Event;
+use GPlane\Mojang\AccountService;
 use GPlane\Mojang\MojangVerification;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Vectorface\Whip\Whip;
-
-require_once __DIR__.'/../helpers.php';
 
 class CreateNewUser
 {
     /** @var Filter */
     protected $filter;
 
-    public function __construct(Filter $filter)
-    {
+    /** @var AccountService */
+    protected $accountService;
+
+    /** @var Dispatcher */
+    protected $events;
+
+    public function __construct(
+        Filter $filter,
+        AccountService $accountService,
+        Dispatcher $dispatcher
+    ) {
         $this->filter = $filter;
+        $this->accountService = $accountService;
+        $this->events = $dispatcher;
     }
 
     public function handle($email, $password, $authType)
@@ -43,9 +53,9 @@ class CreateNewUser
         if ($record) {
             $user = User::find($record->user_id);
             if ($user) {
-                Event::dispatch('user.profile.updating', [$user, 'email', ['email' => $email]]);
+                $this->events->dispatch('user.profile.updating', [$user, 'email', ['email' => $email]]);
                 $user->update(['email' => $email]);
-                Event::dispatch('user.profile.updated', [$user, 'email', ['email' => $email]]);
+                $this->events->dispatch('user.profile.updated', [$user, 'email', ['email' => $email]]);
 
                 return;
             }
@@ -69,8 +79,8 @@ class CreateNewUser
         $user->last_sign_at = Carbon::now()->subDay();
         $user->save();
 
-        Event::dispatch('auth.registration.completed', [$user]);
+        $this->events->dispatch('auth.registration.completed', [$user]);
 
-        bind_mojang_account($user, $result['profiles'], $result['selected']);
+        $this->accountService->bindAccount($user, $result['profiles'], $result['selected']);
     }
 }

@@ -8,11 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Http;
 
-require_once __DIR__.'/helpers.php';
-
 class AccountController extends Controller
 {
-    public function verify(Request $request)
+    public function verify(Request $request, AccountService $accountService)
     {
         $user = auth()->user();
 
@@ -20,9 +18,9 @@ class AccountController extends Controller
             return back();
         }
 
-        $result = validate_mojang_account($user->email, $request->input('password'));
+        $result = $accountService->validate($user->email, $request->input('password'));
         if ($result['valid']) {
-            bind_mojang_account($user, $result['profiles'], $result['selected']);
+            $accountService->bindAccount($user, $result['profiles'], $result['selected']);
 
             return back();
         } else {

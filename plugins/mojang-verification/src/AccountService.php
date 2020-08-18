@@ -1,17 +1,31 @@
 <?php
 
+namespace GPlane\Mojang;
+
 use App\Models\Player;
 use App\Models\User;
 use App\Services\Hook;
 use Composer\CaBundle\CaBundle;
-use GPlane\Mojang;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail as MailService;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
-if (!function_exists('validate_mojang_account')) {
-    function validate_mojang_account($username, $password)
+class AccountService
+{
+    /** @var Dispatcher */
+    protected $events;
+
+    public function __construct(Dispatcher $dispatcher)
+    {
+        $this->events = $dispatcher;
+    }
+
+    public function validate(string $username, string $password)
     {
         try {
             $response = Http::withOptions(['verify' => CaBundle::getSystemCaRootBundlePath()])
@@ -50,10 +64,8 @@ if (!function_exists('validate_mojang_account')) {
             return ['valid' => false, 'message' => trans('GPlane\Mojang::bind.failed.other')];
         }
     }
-}
 
-if (!function_exists('bind_with_mojang_players')) {
-    function bind_with_mojang_players(User $user, $profiles)
+    public function bindPlayers(User $user, array $profiles)
     {
         array_walk($profiles, function ($profile) use ($user) {
             $player = Player::where('name', $profile['name'])->first();
@@ -70,7 +82,7 @@ if (!function_exists('bind_with_mojang_players')) {
                     $owner->save();
 
                     if (config('mail.default') != '') {
-                        @Mail::to($owner->email)->send(new Mojang\Mail($owner, $profile['name']));
+                        @MailService::to($owner->email)->send(new Mail($owner, $profile['name']));
                         $playerName = $player->name;
                         Hook::sendNotification(
                             [$owner],
@@ -84,9 +96,7 @@ if (!function_exists('bind_with_mojang_players')) {
                     }
                 }
             } else {
-                /** @var Dispatcher */
-                $dispatcher = resolve(Dispatcher::class);
-                $dispatcher->dispatch('player.adding', [$profile['name'], $user]);
+                $this->events->dispatch('player.adding', [$profile['name'], $user]);
 
                 $player = new Player();
                 $player->uid = $user->uid;
@@ -95,7 +105,7 @@ if (!function_exists('bind_with_mojang_players')) {
                 $player->tid_cape = 0;
                 $player->save();
 
-                $dispatcher->dispatch('player.added', [$player, $user]);
+                $this->events->dispatch('player.added', [$player, $user]);
             }
 
             // For "yggdrasil-api" plugin.
@@ -104,19 +114,17 @@ if (!function_exists('bind_with_mojang_players')) {
             }
         });
     }
-}
 
-if (!function_exists('bind_mojang_account')) {
-    function bind_mojang_account(User $user, $profiles, $selected)
+    public function bindAccount(User $user, array $profiles, $selected)
     {
-        bind_with_mojang_players($user, $profiles);
+        $this->bindPlayers($user, $profiles);
 
-        Mojang\MojangVerification::updateOrCreate(
+        MojangVerification::updateOrCreate(
             ['uuid' => $selected['id']],
             ['user_id' => $user->uid, 'verified' => true]
         );
 
-        $user->score += option('mojang_verification_score_award', 0);
+        $user->score += (int) option('mojang_verification_score_award', 0);
         $user->save();
     }
 }
