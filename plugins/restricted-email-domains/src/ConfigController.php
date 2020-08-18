@@ -2,9 +2,9 @@
 
 namespace Blessing\RestrictedEmailDomains;
 
-use App\Http\Controllers\Controller;
 use App\Services\Hook;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class ConfigController extends Controller
 {

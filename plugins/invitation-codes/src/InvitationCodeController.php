@@ -2,11 +2,11 @@
 
 namespace InvitationCodes;
 
-use App\Http\Controllers\Controller;
 use Carbon\Carbon;
-use DB;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class InvitationCodeController extends Controller

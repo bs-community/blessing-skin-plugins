@@ -2,11 +2,11 @@
 
 namespace Blessing\OAuthCore;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
 use Blessing\Filter;
 use Carbon\Carbon;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use Vectorface\Whip\Whip;

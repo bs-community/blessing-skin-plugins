@@ -2,7 +2,7 @@
 
 namespace GPlane\ShareRegistrationLink;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 
 class CodeController extends Controller

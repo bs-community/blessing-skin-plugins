@@ -4,11 +4,11 @@ namespace SinglePlayerLimit;
 
 use App\Events\PlayerWasAdded;
 use App\Events\PlayerWillBeAdded;
-use App\Http\Controllers\Controller;
 use App\Models\Player;
 use App\Rules\PlayerName;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class BindController extends Controller

@@ -2,9 +2,7 @@
 
 namespace Blessing\DisableRegistration;
 
-use App\Http\Controllers\Controller;
-
-class AuthController extends Controller
+class AuthController
 {
     public function handle()
     {

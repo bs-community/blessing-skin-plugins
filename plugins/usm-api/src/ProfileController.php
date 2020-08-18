@@ -2,10 +2,10 @@
 
 namespace Blessing\Usm;
 
-use App\Http\Controllers\Controller;
 use App\Models\Player;
 use App\Models\Texture;
 use App\Models\User;
+use Illuminate\Routing\Controller;
 
 class ProfileController extends Controller
 {

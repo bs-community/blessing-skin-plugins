@@ -2,10 +2,10 @@
 
 namespace GPlane\Mojang;
 
-use App\Http\Controllers\Controller;
 use Composer\CaBundle\CaBundle;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Http;
 
 require_once __DIR__.'/helpers.php';
