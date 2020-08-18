@@ -124,6 +124,8 @@ class AccountService
             ['user_id' => $user->uid, 'verified' => true]
         );
 
+        $this->events->dispatch('user.mojang.verified', [$user, $selected['id']]);
+
         $user->score += (int) option('mojang_verification_score_award', 0);
         $user->save();
     }
