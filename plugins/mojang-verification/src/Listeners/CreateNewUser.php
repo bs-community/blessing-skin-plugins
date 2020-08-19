@@ -43,7 +43,7 @@ class CreateNewUser
             return;
         }
 
-        $result = validate_mojang_account($email, $password);
+        $result = $this->accountService->validate($email, $password);
         if (!$result['valid']) {
             return;
         }
