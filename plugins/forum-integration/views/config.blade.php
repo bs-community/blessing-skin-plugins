@@ -59,16 +59,6 @@
       <div class="col-md-6">
         {!! $targetDbConfigForm->render() !!}
       </div>
-      <div class="col-md-6">
-        <div class="box">
-          <div class="box-header with-border">
-            <h3 class="box-title">说明</h3>
-          </div><!-- /.box-header -->
-          <div class="box-body table-responsive">
-            {!! (new Parsedown())->text($instruction ?? '') !!}
-          </div>
-        </div>
-      </div>
     </div>
 
   </section><!-- /.content -->

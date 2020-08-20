@@ -1,6 +1,6 @@
 {
   "name": "textures-qiniu-storage",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "title": "七牛云存储",
   "description": "将用户上传的材质存储文件至七牛云存储中。",
   "author": "printempw",

@@ -4,7 +4,7 @@ namespace Blessing\ConfigGenerator;
 
 use App\Services\Hook;
 use App\Services\PluginManager;
-use Parsedown;
+use League\CommonMark\GithubFlavoredMarkdownConverter;
 
 class Controller
 {
@@ -43,7 +43,8 @@ class Controller
             | JSON_UNESCAPED_SLASHES;
 
         $intro = option_localized('config_generator_intro', '');
-        $intro = (new Parsedown())->text($intro);
+        $converter = new GithubFlavoredMarkdownConverter();
+        $intro = $converter->convertToHtml($intro);
 
         return view('Blessing\ConfigGenerator::generator', [
             'csl' => json_encode($csl, $jsonConstants),

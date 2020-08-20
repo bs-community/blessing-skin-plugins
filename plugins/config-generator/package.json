@@ -1,6 +1,6 @@
 {
   "name": "config-generator",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "title": "Blessing\\ConfigGenerator::general.title",
   "description": "Blessing\\ConfigGenerator::general.description",
   "author": "printempw",
