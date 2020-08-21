@@ -61,18 +61,18 @@ class DescriptionController extends Controller
         }
 
         $limit = (int) option('textures_description_limit', 0);
-        ['content' => $content] = $request->validate([
-            'content' => array_merge(
+        ['description' => $description] = $request->validate([
+            'description' => array_merge(
                 ['nullable', 'string'],
                 $limit > 0 ? ['max:'.$limit] : []
             ),
         ]);
-        $content = $content ?: '';
+        $description = $description ?: '';
 
-        Description::updateOrCreate(['tid' => $texture->tid], ['description' => $content]);
+        Description::updateOrCreate(['tid' => $texture->tid], ['description' => $description]);
 
         $converter = new GithubFlavoredMarkdownConverter();
 
-        return $converter->convertToHtml($content);
+        return $converter->convertToHtml($description);
     }
 }
