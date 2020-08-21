@@ -1,7 +1,7 @@
 {
   "name": "texture-description",
   "title": "Blessing\\TextureDescription::general.title",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Blessing\\TextureDescription::general.description",
   "author": "Steven Qiu & GPlane",
   "url": "",
@@ -12,7 +12,7 @@
   "enchants": {
     "config": "Controllers\\ConfigController",
     "icon": {
-      "bg": "info",
+      "bg": "olive",
       "fa": "file-invoice"
     }
   }
