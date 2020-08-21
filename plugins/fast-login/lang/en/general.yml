@@ -1,1 +1,2 @@
 description: Insert a record to FastLogin when user passed Mojang verification.
+connection: Failed to connect to FastLogin database. Please read "readme" file and configure correctly by editing ".env" file.

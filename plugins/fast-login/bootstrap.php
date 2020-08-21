@@ -18,7 +18,11 @@ return function (Dispatcher $events) {
         'database' => env('FAST_LOGIN_DATABASE'),
     ]]);
 
-    /** @var MySqlConnection|SQLiteConnection */
-    $connection = DB::connection('fast-login')->table('premium')->getConnection();
-    $connection->getPdo(); // to check if database is available
+    try {
+        /** @var MySqlConnection|SQLiteConnection */
+        $connection = DB::connection('fast-login')->table('premium')->getConnection();
+        $connection->getPdo(); // to check if database is available
+    } catch (\Exception $e) {
+        abort(500, trans('Blessing\FastLogin::general.connection'));
+    }
 };
