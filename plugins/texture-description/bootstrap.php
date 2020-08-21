@@ -55,10 +55,10 @@ return function (Filter $filter, Plugin $plugin, Dispatcher $events) {
             return $view;
         }
 
-        /** @var User */
+        /** @var User|null */
         $user = auth()->user();
 
-        if ($user->uid === $texture->uploader || $user->isAdmin()) {
+        if ($user && ($user->uid === $texture->uploader || $user->isAdmin())) {
             $view->with('can_edit', 'true');
         }
 

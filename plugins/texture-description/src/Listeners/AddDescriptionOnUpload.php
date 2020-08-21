@@ -11,7 +11,7 @@ class AddDescriptionOnUpload
     {
         Description::create([
             'tid' => $texture->tid,
-            'desc' => request('description'),
+            'desc' => request('description', ''),
         ]);
     }
 }
