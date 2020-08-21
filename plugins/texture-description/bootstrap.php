@@ -3,7 +3,6 @@
 namespace Blessing\TextureDescription;
 
 use App\Events\RenderingFooter;
-use App\Models\Texture;
 use App\Models\User;
 use App\Services\Hook;
 use App\Services\Plugin;
@@ -16,15 +15,7 @@ use Illuminate\Support\Facades\View;
 return function (Filter $filter, Plugin $plugin, Dispatcher $events) {
     Hook::addRoute(function () {
         Route::namespace('Blessing\TextureDescription\Controllers')
-            ->group(function () {
-                Route::prefix('textures/{texture}/desc')
-                    ->middleware(['web'])
-                    ->group(__DIR__.'/routes.php');
-
-                Route::prefix('api/textures/{texture}/desc')
-                    ->middleware(['api', 'throttle:60,1'])
-                    ->group(__DIR__.'/routes.php');
-            });
+            ->group(__DIR__.'/routes.php');
     });
 
     $events->listen('texture.uploaded', AddDescriptionOnUpload::class);
@@ -46,11 +37,9 @@ return function (Filter $filter, Plugin $plugin, Dispatcher $events) {
     Hook::addScriptFileToPage($plugin->assets('UploadEditor.js'), ['skinlib/upload']);
 
     View::composer('Blessing\TextureDescription::description', function ($view) {
-        $view->with('max_length', option('textures_description_limit', 0));
+        $view->with('max_length', option('textures_description_limit', '0'));
 
-        $tid = request()->route('tid');
-        /** @var Texture */
-        $texture = Texture::find($tid);
+        $texture = request()->route('texture');
         if (empty($texture)) {
             return $view;
         }

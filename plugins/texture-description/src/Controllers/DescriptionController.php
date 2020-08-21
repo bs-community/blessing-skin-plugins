@@ -1,10 +1,10 @@
 <?php
 
-namespace Blessing\TextureDesc\Controllers;
+namespace Blessing\TextureDescription\Controllers;
 
 use App\Models\Texture;
 use App\Models\User;
-use Blessing\TextureDesc\Models\Description;
+use Blessing\TextureDescription\Models\Description;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
@@ -35,10 +35,16 @@ class DescriptionController extends Controller
         });
     }
 
-    public function read(Texture $texture)
+    public function read(Request $request, Texture $texture)
     {
         /** @var string */
-        $description = Description::where('tid', $texture->tid)->value('desc') ?? '';
+        $description = Description::where('tid', $texture->tid)->value('description') ?? '';
+
+        if ($request->has('raw')) {
+            return response($description, 200, [
+                'Content-Type' => 'text/markdown',
+            ]);
+        }
 
         $converter = new GithubFlavoredMarkdownConverter();
 
@@ -54,7 +60,7 @@ class DescriptionController extends Controller
             abort(403, trans('skinlib.no-permission'));
         }
 
-        $limit = (int) option('textures_desc_limit', 0);
+        $limit = (int) option('textures_description_limit', 0);
         ['content' => $content] = $request->validate([
             'content' => array_merge(
                 ['nullable', 'string'],
@@ -63,19 +69,10 @@ class DescriptionController extends Controller
         ]);
         $content = $content ?: '';
 
-        Description::updateOrCreate(['tid' => $texture->tid], ['desc' => $content]);
+        Description::updateOrCreate(['tid' => $texture->tid], ['description' => $content]);
 
         $converter = new GithubFlavoredMarkdownConverter();
 
         return $converter->convertToHtml($content);
-    }
-
-    public function raw(Texture $texture)
-    {
-        $raw = Description::where('tid', $texture->tid)->value('desc') ?? '';
-
-        return response($raw, 200, [
-            'Content-Type' => 'text/markdown',
-        ]);
     }
 }

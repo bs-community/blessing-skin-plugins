@@ -23,7 +23,7 @@ const Description: React.FC = () => {
   useEffect(() => {
     const getDescription = async () => {
       const tid = parseTid()
-      const description: string = await fetch.get(`/textures/${tid}/desc`)
+      const description: string = await fetch.get(`/texture/${tid}/description`)
       setDescription(description)
     }
     getDescription()
@@ -40,7 +40,10 @@ const Description: React.FC = () => {
     if (raw === null) {
       const tid = parseTid()
       const response: string | { message: string } = await fetch.get(
-        `/textures/${tid}/desc/raw`,
+        `/texture/${tid}/description`,
+        {
+          raw: true,
+        },
       )
       if (typeof response === 'string') {
         setRaw(response)
@@ -62,9 +65,9 @@ const Description: React.FC = () => {
     setIsSubmitting(true)
     const tid = parseTid()
     const response: string | { message: string } = await fetch.put(
-      `/textures/${tid}/desc`,
+      `/texture/${tid}/description`,
       {
-        content: raw,
+        description: raw,
       },
     )
     setIsSubmitting(false)
