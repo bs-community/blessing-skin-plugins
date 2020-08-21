@@ -1,6 +1,6 @@
 <?php
 
-namespace Blessing\FastLogin;
+namespace Blessing\FastLogin\Listeners;
 
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;

@@ -1,6 +1,8 @@
 <?php
 
-use Blessing\FastLogin\InsertToFastLogin;
+namespace Blessing\FastLogin;
+
+use Blessing\FastLogin\Listeners\InsertToFastLogin;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\MySqlConnection;
 use Illuminate\Database\SQLiteConnection;
