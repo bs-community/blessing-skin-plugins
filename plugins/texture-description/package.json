@@ -1,11 +1,11 @@
 {
   "name": "texture-description",
-  "title": "Blessing\\TextureDesc::general.title",
+  "title": "Blessing\\TextureDescription::general.title",
   "version": "0.1.0",
-  "description": "Blessing\\TextureDesc::general.description",
+  "description": "Blessing\\TextureDescription::general.description",
   "author": "Steven Qiu & GPlane",
   "url": "",
-  "namespace": "Blessing\\TextureDesc",
+  "namespace": "Blessing\\TextureDescription",
   "require": {
     "blessing-skin-server": "^5.0.0"
   },

@@ -1,6 +1,6 @@
 <?php
 
-namespace Blessing\TextureDesc\Controllers;
+namespace Blessing\TextureDescription\Controllers;
 
 use App\Services\Facades\Option;
 use App\Services\OptionForm;
@@ -12,15 +12,15 @@ class ConfigController extends Controller
     {
         $form = Option::form(
             'texture-description',
-            trans('Blessing\TextureDesc::config.general.title'),
+            trans('Blessing\TextureDescription::config.general.title'),
             function (OptionForm $form) {
                 $form->text(
-                    'textures_desc_limit',
-                    trans('Blessing\TextureDesc::config.general.textures_desc_limit.title')
+                    'textures_description_limit',
+                    trans('Blessing\TextureDescription::config.general.textures_description_limit.title')
                 );
             }
         )->handle();
 
-        return view('Blessing\TextureDesc::config', ['form' => $form]);
+        return view('Blessing\TextureDescription::config', ['form' => $form]);
     }
 }

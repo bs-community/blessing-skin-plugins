@@ -1,6 +1,6 @@
 <?php
 
-namespace Blessing\TextureDesc;
+namespace Blessing\TextureDescription;
 
 use App\Events\RenderingFooter;
 use App\Models\Texture;
@@ -8,14 +8,14 @@ use App\Models\User;
 use App\Services\Hook;
 use App\Services\Plugin;
 use Blessing\Filter;
-use Blessing\TextureDesc\Listeners\AddDescriptionOnUpload;
+use Blessing\TextureDescription\Listeners\AddDescriptionOnUpload;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
 return function (Filter $filter, Plugin $plugin, Dispatcher $events) {
     Hook::addRoute(function () {
-        Route::namespace('Blessing\TextureDesc\Controllers')
+        Route::namespace('Blessing\TextureDescription\Controllers')
             ->group(function () {
                 Route::prefix('textures/{texture}/desc')
                     ->middleware(['web'])
@@ -30,7 +30,7 @@ return function (Filter $filter, Plugin $plugin, Dispatcher $events) {
     $events->listen('texture.uploaded', AddDescriptionOnUpload::class);
 
     $filter->add('grid:skinlib.show', function (array $grid) {
-        $grid['widgets'][0][0][] = 'Blessing\TextureDesc::description';
+        $grid['widgets'][0][0][] = 'Blessing\TextureDescription::description';
 
         return $grid;
     });
@@ -39,14 +39,14 @@ return function (Filter $filter, Plugin $plugin, Dispatcher $events) {
     $events->listen(RenderingFooter::class, function (RenderingFooter $event) {
         if (request()->is('skinlib/upload')) {
             $event->addContent(
-                '<input id="desc-limit" type="hidden" value="'.(int) option('textures_desc_limit', 0).'">'
+                '<input id="description-limit" type="hidden" value="'.(int) option('textures_description_limit', 0).'">'
             );
         }
     });
     Hook::addScriptFileToPage($plugin->assets('UploadEditor.js'), ['skinlib/upload']);
 
-    View::composer('Blessing\TextureDesc::description', function ($view) {
-        $view->with('max_length', option('textures_desc_limit', 0));
+    View::composer('Blessing\TextureDescription::description', function ($view) {
+        $view->with('max_length', option('textures_description_limit', 0));
 
         $tid = request()->route('tid');
         /** @var Texture */

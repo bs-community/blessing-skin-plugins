@@ -1,9 +1,9 @@
 <?php
 
-namespace Blessing\TextureDesc\Listeners;
+namespace Blessing\TextureDescription\Listeners;
 
 use App\Models\Texture;
-use Blessing\TextureDesc\Models\Description;
+use Blessing\TextureDescription\Models\Description;
 
 class AddDescriptionOnUpload
 {
@@ -11,7 +11,7 @@ class AddDescriptionOnUpload
     {
         Description::create([
             'tid' => $texture->tid,
-            'desc' => request('description', ''),
+            'description' => request('description', ''),
         ]);
     }
 }

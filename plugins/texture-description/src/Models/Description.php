@@ -1,6 +1,6 @@
 <?php
 
-namespace Blessing\TextureDesc\Models;
+namespace Blessing\TextureDescription\Models;
 
 use App\Models\Texture;
 use Illuminate\Database\Eloquent\Model;
@@ -8,22 +8,22 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int     $id
  * @property int     $tid
- * @property string  $desc
+ * @property string  $description
  * @property Texture $texture
  */
 class Description extends Model
 {
-    protected $table = 'textures_desc';
+    protected $table = 'textures_description';
 
     public $timestamps = false;
 
     protected $casts = [
         'id' => 'int',
         'tid' => 'int',
-        'desc' => 'string',
+        'description' => 'string',
     ];
 
-    protected $fillable = ['tid', 'desc'];
+    protected $fillable = ['tid', 'description'];
 
     public function texture()
     {

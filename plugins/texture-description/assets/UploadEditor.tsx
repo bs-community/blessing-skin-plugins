@@ -13,7 +13,7 @@ const UploadEditor: React.FC = () => {
   }, [description])
 
   useEffect(() => {
-    const input = document.querySelector<HTMLInputElement>('#desc-limit')
+    const input = document.querySelector<HTMLInputElement>('#description-limit')
     setMaxLength(Number.parseInt(input?.value ?? '0') || Infinity)
   }, [])
 
@@ -25,7 +25,7 @@ const UploadEditor: React.FC = () => {
 
   return (
     <>
-      <label>{t('texture-description.desc')}</label>
+      <label>{t('texture-description.description')}</label>
       <textarea
         className="form-control"
         rows={9}

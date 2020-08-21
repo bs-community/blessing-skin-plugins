@@ -89,7 +89,7 @@ const Description: React.FC = () => {
     <div className="card card-secondary">
       <div className="card-header">
         <div className="d-flex justify-content-between">
-          <h3 className="card-title">{t('texture-description.desc')}</h3>
+          <h3 className="card-title">{t('texture-description.description')}</h3>
           {canEdit && !isEditing && (
             <a
               className="float-right btn-edit"
