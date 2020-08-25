@@ -2,14 +2,19 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Run webpack for plugin assets",
+      "label": "Build plugin assets",
       "type": "process",
       "command": "yarn",
       "args": [
         "dev",
-        "-o",
+        "-d",
         "../blessing-skin-server/public/plugins"
       ],
+      "options": {
+        "env": {
+          "NODE_ENV": "development"
+        }
+      },
       "isBackground": true,
       "problemMatcher": []
     }
