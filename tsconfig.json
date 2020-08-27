@@ -8,15 +8,11 @@
     "baseUrl": ".",
     "paths": {
       "blessing-skin": ["./types"]
-    }
+    },
+    "types": ["svelte"]
   },
   "include": [
     "plugins/*/assets",
     "types.ts"
-  ],
-  "ts-node": {
-    "compilerOptions": {
-      "module": "commonjs"
-    }
-  }
+  ]
 }
