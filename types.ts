@@ -31,26 +31,17 @@ export const fetch = {
     params
     return {} as T
   },
-  async post<T = any>(
-    url: string,
-    data?: Record<string, string> | FormData,
-  ): Promise<T> {
+  async post<T = any>(url: string, data?: any): Promise<T> {
     url
     data
     return {} as T
   },
-  async put<T = any>(
-    url: string,
-    data?: Record<string, string> | FormData,
-  ): Promise<T> {
+  async put<T = any>(url: string, data?: any): Promise<T> {
     url
     data
     return {} as T
   },
-  async del<T = any>(
-    url: string,
-    data?: Record<string, string> | FormData,
-  ): Promise<T> {
+  async del<T = any>(url: string, data?: any): Promise<T> {
     url
     data
     return {} as T
