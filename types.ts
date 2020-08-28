@@ -1,33 +1,77 @@
-declare class Toast {
-  success(message: string): void
-  info(message: string): void
-  warning(message: string): void
-  error(message: string): void
+import { EventEmitter } from 'events'
+
+class Toast {
+  success(message: string): void {
+    message
+  }
+  info(message: string): void {
+    message
+  }
+  warning(message: string): void {
+    message
+  }
+  error(message: string): void {
+    message
+  }
 }
 
-export let base_url: string
-export let locale: string
-export let site_name: string
+export let base_url = '/'
+export let locale = 'en'
+export let site_name = 'Blessing Skin'
 export let version: string
 export let route: string
 
-export let t: (key: string, params?: object) => string
-
-export let fetch: {
-  get<T = any>(url: string, params?: object): Promise<T>
-  post<T = any>(url: string, data?: object): Promise<T>
-  put<T = any>(url: string, data?: object): Promise<T>
-  del<T = any>(url: string, data?: object): Promise<T>
+export function t(key: string, params?: object) {
+  return `${key}(${JSON.stringify(params)})`
 }
 
-export let event: {
-  on(eventName: string | symbol, listener: Function): void
-  emit(eventName: string | symbol, payload: object): void
+export const fetch = {
+  async get<T = any>(url: string, params?: Record<string, string>): Promise<T> {
+    url
+    params
+    return {} as T
+  },
+  async post<T = any>(
+    url: string,
+    data?: Record<string, string> | FormData,
+  ): Promise<T> {
+    url
+    data
+    return {} as T
+  },
+  async put<T = any>(
+    url: string,
+    data?: Record<string, string> | FormData,
+  ): Promise<T> {
+    url
+    data
+    return {} as T
+  },
+  async del<T = any>(
+    url: string,
+    data?: Record<string, string> | FormData,
+  ): Promise<T> {
+    url
+    data
+    return {} as T
+  },
 }
 
-export let notify: {
-  showModal(options?: object): Promise<{ value: string }>
-  toast: Toast
+const emitter = new EventEmitter()
+export const event = {
+  on(eventName: string | symbol, listener: (...args: any[]) => any): void {
+    emitter.on(eventName, listener)
+  },
+  emit(eventName: string | symbol, payload?: object): void {
+    emitter.emit(eventName, payload)
+  },
+}
+
+export const notify = {
+  showModal(options?: object): Promise<{ value: string }> {
+    return Promise.resolve({ value: JSON.stringify(options) })
+  },
+  toast: new Toast(),
 }
 
 declare global {
