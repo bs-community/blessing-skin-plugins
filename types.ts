@@ -21,8 +21,8 @@ export let fetch: {
 }
 
 export let event: {
-  on(eventName: string, listener: Function): void
-  emit(eventName: string, payload: object): void
+  on(eventName: string | symbol, listener: Function): void
+  emit(eventName: string | symbol, payload: object): void
 }
 
 export let notify: {
