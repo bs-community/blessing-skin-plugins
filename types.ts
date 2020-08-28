@@ -26,7 +26,7 @@ export function t(key: string, params?: object) {
 }
 
 export const fetch = {
-  async get<T = any>(url: string, params?: Record<string, string>): Promise<T> {
+  async get<T = any>(url: string, params?: Record<string, any>): Promise<T> {
     url
     params
     return {} as T
@@ -50,8 +50,12 @@ export const fetch = {
 
 const emitter = new EventEmitter()
 export const event = {
-  on(eventName: string | symbol, listener: (...args: any[]) => any): void {
+  on(eventName: string | symbol, listener: (...args: any[]) => any): () => void {
     emitter.on(eventName, listener)
+
+    return () => {
+      emitter.off(eventName, listener)
+    }
   },
   emit(eventName: string | symbol, payload?: object): void {
     emitter.emit(eventName, payload)
