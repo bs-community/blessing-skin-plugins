@@ -2,7 +2,7 @@
   "extends": "@gplane/tsconfig",
   "compilerOptions": {
     "declaration": false,
-    "sourceMap": false,
+    "sourceMap": true,
     "target": "es2017",
     "module": "es2015",
     "baseUrl": ".",

@@ -27,6 +27,7 @@ function makeConfig(name, path) {
         'react-dom': 'ReactDOM',
       },
       indent: '  ',
+      sourcemap: isDev,
     },
     external: ['react', 'react-dom', 'blessing-skin'],
     plugins: [
