@@ -21,8 +21,10 @@ export let site_name = 'Blessing Skin'
 export let version: string
 export let route: string
 
-export function t(key: string, params?: object) {
-  return `${key}(${JSON.stringify(params)})`
+export function t(key: string, params?: object): string {
+  const data = params ? `(${JSON.stringify(params)})` : ''
+
+  return key + data
 }
 
 export const fetch = {
