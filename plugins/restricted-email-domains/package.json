@@ -1,7 +1,7 @@
 {
   "name": "restricted-email-domains",
   "title": "Blessing\\RestrictedEmailDomains::general.title",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Blessing\\RestrictedEmailDomains::general.description",
   "author": "GPlane",
   "url": "https://gplane.win/",
@@ -17,8 +17,6 @@
     }
   },
   "dependencies": {
-    "immer": "^7.0.4",
-    "nanoid": "^3.1.10",
-    "use-immer": "^0.4.0"
+    "nanoid": "^3.1.10"
   }
 }

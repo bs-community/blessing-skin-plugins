@@ -10,7 +10,7 @@ class ConfigController extends Controller
 {
     public function render()
     {
-        Hook::addScriptFileToPage(plugin('restricted-email-domains')->assets('Config.js'));
+        Hook::addScriptFileToPage(plugin('restricted-email-domains')->assets('config.js'));
 
         return view('Blessing\RestrictedEmailDomains::config');
     }
