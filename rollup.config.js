@@ -1,6 +1,7 @@
 // @ts-check
 import glob from 'fast-glob'
 import typescript from '@rollup/plugin-typescript'
+import replace from '@rollup/plugin-replace'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import { terser } from 'rollup-plugin-terser'
@@ -31,6 +32,9 @@ function makeConfig(name, path) {
     },
     external: ['react', 'react-dom', 'blessing-skin'],
     plugins: [
+      replace({
+        'process.env.NODE_ENV': isDev ? '"development"' : '"production"',
+      }),
       typescript(),
       svelte({
         preprocess: sveltePreprocess(),
