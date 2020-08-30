@@ -9,7 +9,7 @@
     "paths": {
       "blessing-skin": ["./types"]
     },
-    "types": ["svelte", "jest", "node"]
+    "types": ["svelte", "jest", "node", "@testing-library/jest-dom"]
   },
   "include": [
     "plugins/*/assets",

@@ -2,5 +2,10 @@
   "preset": "ts-jest",
   "moduleNameMapper": {
     "blessing-skin": "<rootDir>/types.ts"
-  }
+  },
+  "transform": {
+    "^.+\\.svelte$": "@gplane/svelte-jest",
+    "^.+\\.tsx?$": "ts-jest"
+  },
+  "setupFilesAfterEnv": ["@testing-library/jest-dom/extend-expect"]
 }

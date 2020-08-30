@@ -19,12 +19,14 @@ jobs:
     - name: Check coding style
       run: php-cs-fixer fix --dry-run --stop-on-violation --diff-format=udiff
   tsc:
-    name: Type Check
+    name: Front-end Tests
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
     - name: Install dependencies
       run: yarn
-    - name: Check
-      run: yarn tsc -p . --noEmit
+    - name: Lint
+      run: yarn lint
+    - name: Test
+      run: yarn test
