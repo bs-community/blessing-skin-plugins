@@ -6,33 +6,18 @@
   let raw = ''
   $: isEmptyDescription = description.trim() === ''
 
-  let canEdit = false
+  export let tid: string
+  export let canEdit = false
   let isEditing = false
   let isSubmitting = false
-  let maxLength = Infinity
+  export let maxLength = Infinity
   $: isLengthExceeded = (raw?.length ?? 0) > maxLength
 
-  function parseTid(): string {
-    const { pathname } = location
-    const matches = /(\d+)$/.exec(pathname)
-
-    return matches?.[1] ?? '0'
-  }
-
   onMount(async () => {
-    const tid = parseTid()
     description = await fetch.get(`/texture/${tid}/description`)
   })
 
-  onMount(() => {
-    const el = document.querySelector<HTMLDivElement>('#texture-description')
-    const dataset = el?.dataset
-    canEdit = dataset?.canEdit === 'true'
-    maxLength = Number.parseInt(dataset?.maxLength ?? '0') || Infinity
-  })
-
   async function editDescription() {
-    const tid = parseTid()
     const response: string | { message: string } = await fetch.get(
       `/texture/${tid}/description`,
       {
@@ -50,7 +35,6 @@
 
   async function submitDescription() {
     isSubmitting = true
-    const tid = parseTid()
     const response: string | { message: string } = await fetch.put(
       `/texture/${tid}/description`,
       {
@@ -91,6 +75,7 @@
       {#if canEdit && !isEditing}
         <button
           class="btn btn-secondary btn-sm float-right"
+          title={t('texture-description.edit')}
           on:click={editDescription}>
           <i class="fas fa-edit" />
         </button>

@@ -1,3 +1,4 @@
 description: 材质描述
 empty: 这个材质还没有描述。点击右上角的按钮来编辑描述。
 exceeded: 不能超过 :max 个字符。
+edit: 编辑
