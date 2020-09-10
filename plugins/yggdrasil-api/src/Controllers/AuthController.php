@@ -159,7 +159,7 @@ class AuthController extends Controller
             });
             if ($profile) {
                 $resp['selectedProfile'] = $profile;
-                $builder->withClaim('spr', $selected['id']);
+                $builder->withClaim('spr', $profile['id']);
             }
         }
 
