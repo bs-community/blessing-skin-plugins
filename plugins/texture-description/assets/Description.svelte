@@ -68,58 +68,60 @@
   }
 </style>
 
-<div class="card card-secondary">
-  <div class="card-header">
-    <div class="d-flex justify-content-between align-items-center">
-      <h3 class="card-title">{t('texture-description.description')}</h3>
-      {#if canEdit && !isEditing}
-        <button
-          class="btn btn-secondary btn-sm float-right"
-          title={t('texture-description.edit')}
-          on:click={editDescription}>
-          <i class="fas fa-edit" />
-        </button>
-      {/if}
-    </div>
-  </div>
-  <div class="card-body">
-    {#if isEditing}
-      <textarea class="form-control" rows="10" bind:value={raw} />
-    {:else if isEmptyDescription}
-      <p>
-        <i>{t('texture-description.empty')}</i>
-      </p>
-    {:else}
-      <description-content>
-        {@html description}
-      </description-content>
-    {/if}
-  </div>
-  {#if isEditing}
-    <div class="card-footer">
-      {#if isLengthExceeded}
-        <div class="alert alert-info">
-          {t('texture-description.exceeded', { max: maxLength })}
-        </div>
-      {/if}
-      <div class="d-flex justify-content-between">
-        <button
-          class="btn btn-primary"
-          disabled={isSubmitting || isLengthExceeded}
-          on:click={submitDescription}>
-          {#if isSubmitting}
-            <span>
-              <i class="fas fa-sync fa-spin" />
-            </span>
-          {:else}{t('general.submit')}{/if}
-        </button>
-        <button
-          class="btn btn-secondary"
-          disabled={isSubmitting}
-          on:click={() => (isEditing = false)}>
-          {t('general.cancel')}
-        </button>
+{#if canEdit || !isEmptyDescription}
+  <div class="card card-secondary">
+    <div class="card-header">
+      <div class="d-flex justify-content-between align-items-center">
+        <h3 class="card-title">{t('texture-description.description')}</h3>
+        {#if canEdit && !isEditing}
+          <button
+            class="btn btn-secondary btn-sm float-right"
+            title={t('texture-description.edit')}
+            on:click={editDescription}>
+            <i class="fas fa-edit" />
+          </button>
+        {/if}
       </div>
     </div>
-  {/if}
-</div>
+    <div class="card-body">
+      {#if isEditing}
+        <textarea class="form-control" rows="10" bind:value={raw} />
+      {:else if isEmptyDescription}
+        <p>
+          <i>{t('texture-description.empty')}</i>
+        </p>
+      {:else}
+        <description-content>
+          {@html description}
+        </description-content>
+      {/if}
+    </div>
+    {#if isEditing}
+      <div class="card-footer">
+        {#if isLengthExceeded}
+          <div class="alert alert-info">
+            {t('texture-description.exceeded', { max: maxLength })}
+          </div>
+        {/if}
+        <div class="d-flex justify-content-between">
+          <button
+            class="btn btn-primary"
+            disabled={isSubmitting || isLengthExceeded}
+            on:click={submitDescription}>
+            {#if isSubmitting}
+              <span>
+                <i class="fas fa-sync fa-spin" />
+              </span>
+            {:else}{t('general.submit')}{/if}
+          </button>
+          <button
+            class="btn btn-secondary"
+            disabled={isSubmitting}
+            on:click={() => (isEditing = false)}>
+            {t('general.cancel')}
+          </button>
+        </div>
+      </div>
+    {/if}
+  </div>
+{/if}

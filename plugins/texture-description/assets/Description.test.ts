@@ -12,6 +12,17 @@ test('render description', async () => {
   expect(document.querySelector('#md')).toBeInTheDocument()
 })
 
+test('hide description for non-uploader', async () => {
+  const spy = jest.spyOn(fetch, 'get').mockResolvedValue('')
+  const { queryByText } = render(Description, {
+    props: { tid: 1, canEdit: false },
+  })
+  await waitFor(() => expect(spy).toBeCalledWith('/texture/1/description'))
+  await tick()
+  await tick()
+  expect(queryByText(t('texture-description.empty'))).not.toBeInTheDocument()
+})
+
 test('edit is not allowed', async () => {
   const spy = jest.spyOn(fetch, 'get').mockResolvedValue('<div id="md"></div>')
   const { queryByTitle } = render(Description, { props: { tid: 1 } })
