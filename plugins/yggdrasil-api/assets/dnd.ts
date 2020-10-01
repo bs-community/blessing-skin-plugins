@@ -21,18 +21,10 @@ document.body.addEventListener('dragstart', (event) => {
 
 document
   .querySelector<HTMLButtonElement>('#ygg-dnd-button')
-  ?.addEventListener('click', (event) => {
+  ?.addEventListener('click', async (event) => {
     const target = event.target as HTMLButtonElement
-    const content = target.dataset.clipboardText!
+    await navigator.clipboard.writeText(target.dataset.clipboardText!)
 
-    const input = document.createElement('input')
-    input.style.visibility = 'none'
-    input.value = content
-    document.body.appendChild(input)
-    input.select()
-    document.execCommand('copy')
-
-    input.remove()
     const originalContent = target.textContent
     target.disabled = true
     target.innerHTML = `<i class="fas fa-check mr-1"></i>${t(
