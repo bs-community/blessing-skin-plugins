@@ -97,6 +97,7 @@ class ConfigController extends Controller
                 'links' => [
                     'homepage' => url('/'),
                 ],
+                'feature.non_email_login' => true,
             ],
             'skinDomains' => $skinDomains,
             'signaturePublickey' => $keyData['key'],

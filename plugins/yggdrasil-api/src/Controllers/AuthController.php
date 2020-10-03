@@ -21,13 +21,13 @@ class AuthController extends Controller
 {
     public function authenticate(Request $request)
     {
-        // 注意，账户验证中 username 字段填的是邮箱
         $identification = strtolower($request->input('username'));
         Log::channel('ygg')->info("User [$identification] is try to authenticate with", [$request->except(['username', 'password'])]);
         $user = $this->checkUserCredentials($request);
+        $email = $user->email;
 
         // 用户 ID 根据其邮箱生成
-        $userUuid = Uuid::uuid5(Uuid::NAMESPACE_DNS, $identification)->getHex()->toString();
+        $userUuid = Uuid::uuid5(Uuid::NAMESPACE_DNS, $email)->getHex()->toString();
 
         // clientToken 原样返回，如果没提供就给客户端生成一个
         $clientToken = $request->input('clientToken', Uuid::uuid4()->getHex()->toString());
@@ -37,7 +37,7 @@ class AuthController extends Controller
             ->withClaim('yggt', Uuid::uuid4()->getHex()->toString());
 
         $token = new Token($clientToken);
-        $token->owner = $identification;
+        $token->owner = $email;
 
         $availableProfiles = $this->getAvailableProfiles($user);
 
@@ -68,10 +68,10 @@ class AuthController extends Controller
         $resp['accessToken'] = $accessToken;
         $token->accessToken = $accessToken;
 
-        $this->storeToken($token, $identification);
-        Log::channel('ygg')->info("New access token [$accessToken] generated for user [$identification]");
+        $this->storeToken($token, $email);
+        Log::channel('ygg')->info("New access token [$accessToken] generated for user [$email]");
 
-        Log::channel('ygg')->info("User [$identification] authenticated successfully", [compact('availableProfiles')]);
+        Log::channel('ygg')->info("User [$email] authenticated successfully", [compact('availableProfiles')]);
 
         ygg_log([
             'action' => 'authenticate',
@@ -297,10 +297,17 @@ class AuthController extends Controller
             throw new IllegalArgumentException(trans('Yggdrasil::exceptions.auth.empty'));
         }
 
-        /** @var User */
-        $user = User::where('email', $identification)->first();
+        $authType = filter_var($identification, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        if ($authType === 'email') {
+            /** @var User */
+            $user = User::where('email', $identification)->first();
+        } else {
+            $player = Player::where('name', $identification)->first();
+            /** @var User */
+            $user = optional($player)->user;
+        }
 
-        if (!$user) {
+        if (is_null($user)) {
             throw new ForbiddenOperationException(trans('Yggdrasil::exceptions.auth.not-existed', compact('identification')));
         }
         if (!is_null($user->locale)) {
