@@ -20,14 +20,16 @@ class ConfigController extends Controller
         $allowList = json_decode(option('restricted-email-domains.allow', '[]'), true);
         $denyList = json_decode(option('restricted-email-domains.deny', '[]'), true);
 
-        return ['allow' => $allowList, 'deny' => $denyList];
+        return [
+            'allow' => array_values($allowList),
+            'deny' => array_values($denyList),
+        ];
     }
 
     public function save(Request $request, $list)
     {
-        option([
-            "restricted-email-domains.$list" => json_encode($request->input()),
-        ]);
+        $json = json_encode(array_values($request->input()));
+        option(["restricted-email-domains.$list" => $json]);
 
         return response()->noContent();
     }
