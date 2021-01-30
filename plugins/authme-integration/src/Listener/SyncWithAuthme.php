@@ -14,10 +14,11 @@ class SyncWithAuthme
     {
         // 初始化在 Authme 那边注册的用户
         User::where('realname', '<>', '')
+            ->join('players', 'users.uid', 'players.uid')
+            ->groupBy('players.uid')
+            ->havingRaw('COUNT(pid) <> 0')
+            ->select('users.*')
             ->get()
-            ->filter(function ($user) {
-                return $user->players->count() == 0;
-            })
             ->each(function ($user) {
                 $user->nickname = $user->realname;
                 $user->score = option('user_initial_score');
