@@ -24,18 +24,19 @@ class Token
     public function isValid()
     {
         if (str_contains($this->accessToken, '.')) {
-            $token = (new JWT\Parser())->parse($this->accessToken);
-
-            $validationData = new JWT\ValidationData();
-            $validationData->setIssuer('Yggdrasil-Auth');
-            $validationData->setSubject(
-                Uuid::uuid5(Uuid::NAMESPACE_DNS, $this->owner)->getHex()->toString()
-            );
-
-            return $token->validate($validationData) && $token->verify(
+            $jwtConfig = JWT\Configuration::forSymmetricSigner(
                 new JWT\Signer\Hmac\Sha256(),
-                new JWT\Signer\Key(config('jwt.secret', ''))
+                JWT\Signer\Key\InMemory::plainText(config('jwt.secret', ''))
             );
+            $jwtConfig->setValidationConstraints(
+                new JWT\Validation\Constraint\IssuedBy('Yggdrasil-Auth'),
+                new JWT\Validation\Constraint\RelatedTo(
+                    Uuid::uuid5(Uuid::NAMESPACE_DNS, $this->owner)->getHex()->toString()
+                )
+            );
+            $token = $jwtConfig->parser()->parse($this->accessToken);
+
+            return $jwtConfig->validator()->validate($token, ...$jwtConfig->validationConstraints());
         } else {
             // fallback for legacy UUID-format accessToken
             return (time() - $this->createdAt - option('ygg_token_expire_1')) < 0;

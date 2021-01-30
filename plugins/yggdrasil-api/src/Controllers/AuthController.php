@@ -32,7 +32,11 @@ class AuthController extends Controller
         // clientToken 原样返回，如果没提供就给客户端生成一个
         $clientToken = $request->input('clientToken', Uuid::uuid4()->getHex()->toString());
 
-        $builder = new JWT\Builder();
+        $jwtConfig = JWT\Configuration::forSymmetricSigner(
+            new JWT\Signer\Hmac\Sha256(),
+            JWT\Signer\Key\InMemory::plainText(config('jwt.secret', ''))
+        );
+        $builder = $jwtConfig->builder();
         $builder->relatedTo($userUuid)
             ->withClaim('yggt', Uuid::uuid4()->getHex()->toString());
 
@@ -61,9 +65,10 @@ class AuthController extends Controller
 
         $now = CarbonImmutable::now();
         $accessToken = (string) $builder->issuedBy('Yggdrasil-Auth')
-            ->expiresAt($now->addSeconds((int) option('ygg_token_expire_1'))->timestamp)
-            ->issuedAt($now->timestamp)
-            ->getToken(new JWT\Signer\Hmac\Sha256(), new JWT\Signer\Key(config('jwt.secret', '')));
+            ->expiresAt($now->addSeconds((int) option('ygg_token_expire_1')))
+            ->issuedAt($now)
+            ->getToken($jwtConfig->signer(), $jwtConfig->signingKey())
+            ->toString();
 
         $resp['accessToken'] = $accessToken;
         $token->accessToken = $accessToken;
@@ -117,7 +122,11 @@ class AuthController extends Controller
         // 用户 ID 根据其邮箱生成
         $userUuid = Uuid::uuid5(Uuid::NAMESPACE_DNS, strtolower($user->email))->getHex()->toString();
 
-        $builder = new JWT\Builder();
+        $jwtConfig = JWT\Configuration::forSymmetricSigner(
+            new JWT\Signer\Hmac\Sha256(),
+            JWT\Signer\Key\InMemory::plainText(config('jwt.secret', ''))
+        );
+        $builder = $jwtConfig->builder();
         $builder->relatedTo($userUuid)
             ->withClaim('yggt', Uuid::uuid4()->getHex()->toString());
 
@@ -174,9 +183,10 @@ class AuthController extends Controller
 
         $now = CarbonImmutable::now();
         $token->accessToken = (string) $builder->issuedBy('Yggdrasil-Auth')
-            ->expiresAt($now->addSeconds((int) option('ygg_token_expire_1'))->timestamp)
-            ->issuedAt($now->timestamp)
-            ->getToken(new JWT\Signer\Hmac\Sha256(), new JWT\Signer\Key(config('jwt.secret', '')));
+            ->expiresAt($now->addSeconds((int) option('ygg_token_expire_1')))
+            ->issuedAt($now)
+            ->getToken($jwtConfig->signer(), $jwtConfig->signingKey())
+            ->toString();
         $token->createdAt = $now->timestamp;
         Log::channel('ygg')->info("New token [$token->accessToken] generated for user [$user->email]");
         $this->storeToken($token, $token->owner);
