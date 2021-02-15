@@ -1,12 +1,12 @@
 {
   "name": "trust-proxies",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "title": "代理信任",
   "description": "当站点使用负载均衡并开启 SSL 时，若遇到 URL 问题，可尝试安装并开启此插件。",
   "author": "GPlane",
   "namespace": "GPlane\\TrustProxies",
   "require": {
-    "blessing-skin-server": "^4.2.0 || ^5"
+    "blessing-skin-server": "^4.2.0|^5|^6"
   },
   "enchants": {
     "icon": {

@@ -12,6 +12,6 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-    "socialiteproviders/github": "^1.0"
+    "socialiteproviders/github": "^4.1"
   }
 }

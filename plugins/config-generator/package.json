@@ -1,13 +1,13 @@
 {
   "name": "config-generator",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "title": "Blessing\\ConfigGenerator::general.title",
   "description": "Blessing\\ConfigGenerator::general.description",
   "author": "printempw",
   "url": "https://blessing.studio/",
   "namespace": "Blessing\\ConfigGenerator",
   "require": {
-    "blessing-skin-server": "^5.0.0"
+    "blessing-skin-server": "^5|^6"
   },
   "enchants": {
     "config": "Configuration",

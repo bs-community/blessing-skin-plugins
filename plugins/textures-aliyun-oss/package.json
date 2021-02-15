@@ -1,6 +1,6 @@
 {
   "name": "textures-aliyun-oss",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "title": "阿里云对象存储 OSS",
   "description": "将用户上传的材质存储文件至阿里云 OSS 中。",
   "author": "printempw",
@@ -8,7 +8,7 @@
   "namespace": "TextureAliyunOSS",
   "config": "config.blade.php",
   "require": {
-    "blessing-skin-server": "^4.0.0 || ^5"
+    "blessing-skin-server": "^4|^5|^6"
   },
   "enchants": {
     "icon": {

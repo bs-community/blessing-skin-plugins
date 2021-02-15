@@ -12,6 +12,6 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-    "socialiteproviders/google": "^3.0"
+    "socialiteproviders/google": "^4.1"
   }
 }

@@ -1,13 +1,13 @@
 {
   "name": "oauth-google",
   "title": "Blessing\\OAuth\\Google::general.title",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Blessing\\OAuth\\Google::general.description",
   "author": "GPlane",
   "url": "https://gplane.win/",
   "namespace": "Blessing\\OAuth\\Google",
   "require": {
-    "blessing-skin-server": "^5.0.0",
+    "blessing-skin-server": "^5|^6",
     "oauth": "^1.0.0"
   },
   "enchants": {

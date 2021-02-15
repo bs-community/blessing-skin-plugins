@@ -1,12 +1,12 @@
 {
   "name": "share-registration-link",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "title": "分享注册链接",
   "description": "允许用户分享注册链接并获得积分",
   "author": "GPlane",
   "namespace": "GPlane\\ShareRegistrationLink",
   "require": {
-    "blessing-skin-server": "^5.0.0"
+    "blessing-skin-server": "^5|^6"
   },
   "enchants": {
     "config": "GPlane\\ShareRegistrationLink\\Configuration",

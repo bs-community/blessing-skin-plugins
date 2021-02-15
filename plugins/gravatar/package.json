@@ -1,13 +1,13 @@
 {
   "name": "gravatar",
   "title": "Gravatar",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Gravatar 支持",
   "author": "GPlane",
   "url": "https://gplane.win/",
   "namespace": "Blessing\\Gravatar",
   "require": {
-    "blessing-skin-server": "^5.0.0"
+    "blessing-skin-server": "^5|^6"
   },
   "enchants": {
     "icon": {

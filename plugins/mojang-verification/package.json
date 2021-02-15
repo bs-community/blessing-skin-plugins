@@ -1,12 +1,12 @@
 {
   "name": "mojang-verification",
-  "version": "1.13.1",
+  "version": "1.13.2",
   "title": "GPlane\\Mojang::general.title",
   "description": "GPlane\\Mojang::general.description",
   "author": "GPlane",
   "namespace": "GPlane\\Mojang",
   "require": {
-    "blessing-skin-server": "^5.0.0"
+    "blessing-skin-server": "^5|^6"
   },
   "enchants": {
     "config": "Configuration",

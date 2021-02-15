@@ -1,13 +1,13 @@
 {
   "name": "oauth-microsoft-live",
   "title": "Blessing\\OAuth\\Live::general.title",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Blessing\\OAuth\\Live::general.description",
   "author": "GPlane",
   "url": "",
   "namespace": "Blessing\\OAuth\\Live",
   "require": {
-    "blessing-skin-server": "^5.0.0",
+    "blessing-skin-server": "^5|^6",
     "oauth": "^1.0.0"
   },
   "enchants": {

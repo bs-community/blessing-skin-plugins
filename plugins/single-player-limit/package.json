@@ -1,13 +1,13 @@
 {
   "name": "single-player-limit",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "title": "SinglePlayerLimit::general.title",
   "description": "SinglePlayerLimit::general.description",
   "author": "GPlane",
   "url": "https://gplane.win/",
   "namespace": "SinglePlayerLimit",
   "require": {
-    "blessing-skin-server": "^5.0.0"
+    "blessing-skin-server": "^5|^6"
   },
   "enchants": {
     "icon": {

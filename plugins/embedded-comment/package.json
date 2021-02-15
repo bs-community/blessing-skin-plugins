@@ -1,13 +1,13 @@
 {
   "name": "embedded-comment",
   "title": "Blessing\\EmbeddedComment::general.title",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Blessing\\EmbeddedComment::general.description",
   "author": "GPlane",
   "url": "https://gplane.win",
   "namespace": "Blessing\\EmbeddedComment",
   "require": {
-    "blessing-skin-server": "^5.0.0"
+    "blessing-skin-server": "^5|^6"
   },
   "enchants": {
     "config": "Configuration",

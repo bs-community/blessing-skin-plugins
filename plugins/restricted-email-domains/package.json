@@ -1,13 +1,13 @@
 {
   "name": "restricted-email-domains",
   "title": "Blessing\\RestrictedEmailDomains::general.title",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Blessing\\RestrictedEmailDomains::general.description",
   "author": "GPlane",
   "url": "https://gplane.win/",
   "namespace": "Blessing\\RestrictedEmailDomains",
   "require": {
-    "blessing-skin-server": "^5.0.0"
+    "blessing-skin-server": "^5|^6"
   },
   "enchants": {
     "config": "ConfigController",

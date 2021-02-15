@@ -1,13 +1,13 @@
 {
   "name": "oauth-github",
   "title": "Blessing\\OAuth\\GitHub::general.title",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Blessing\\OAuth\\GitHub::general.description",
   "author": "GPlane",
   "url": "https://gplane.win/",
   "namespace": "Blessing\\OAuth\\GitHub",
   "require": {
-    "blessing-skin-server": "^5.0.0",
+    "blessing-skin-server": "^5|^6",
     "oauth": "^1.0.0"
   },
   "enchants": {

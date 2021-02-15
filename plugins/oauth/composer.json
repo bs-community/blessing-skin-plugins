@@ -1,5 +1,5 @@
 {
     "require": {
-        "socialiteproviders/manager": "^3.5"
+        "socialiteproviders/manager": "^4.0"
     }
 }

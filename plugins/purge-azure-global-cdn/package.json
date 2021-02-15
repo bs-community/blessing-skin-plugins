@@ -1,12 +1,12 @@
 {
   "name": "purge-azure-global-cdn",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "title": "刷新 Azure 国际版 CDN",
   "description": "当资源被更新时，自动刷新 Azure 国际版 CDN 的缓存。不适用于 Azure 中国版。",
   "author": "Honoka Tech LTD(GB)",
   "namespace": "Honoka\\PurgeAzureGlobalCdn",
   "require": {
-    "blessing-skin-server": "^5"
+    "blessing-skin-server": "^5|^6"
   },
   "enchants": {
     "icon": {

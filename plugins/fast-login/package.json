@@ -1,13 +1,13 @@
 {
   "name": "fast-login",
   "title": "FastLogin",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Blessing\\FastLogin::general.description",
   "author": "GPlane",
   "url": "https://gplane.win",
   "namespace": "Blessing\\FastLogin",
   "require": {
-    "blessing-skin-server": "^5.0.0",
+    "blessing-skin-server": "^5|^6",
     "mojang-verification": "^1.13.0"
   },
   "enchants": {
