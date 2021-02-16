@@ -3,6 +3,7 @@
 use App\Models\User;
 use App\Services\Hook;
 use Blessing\Filter;
+use Illuminate\Console\Events\ArtisanStarting;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Yggdrasil\Models\Token;
@@ -70,6 +71,12 @@ return function (Filter $filter, Dispatcher $events) {
             Cache::forget('yggdrasil-token-'.$token->accessToken);
         });
         Cache::forget("yggdrasil-id-$identification");
+    });
+
+    $events->listen(ArtisanStarting::class, function (ArtisanStarting $event) {
+        $event->artisan->resolveCommands([
+            \Yggdrasil\Console\JWTSecretCommand::class,
+        ]);
     });
 
     if (env('YGG_VERBOSE_LOG')) {

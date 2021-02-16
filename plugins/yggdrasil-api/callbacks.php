@@ -69,5 +69,9 @@ return [
         if (option('ygg_private_key') == '') {
             option(['ygg_private_key' => ygg_generate_rsa_keys()['private']]);
         }
+
+        if (!config('jwt.secret')) {
+            Artisan::call('jwt:secret');
+        }
     },
 ];
