@@ -3,6 +3,7 @@
 namespace Blessing\TextureTypeCast;
 
 use App\Models\Texture;
+use Blessing\Renderer\TextureUtil;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Image;
@@ -31,7 +32,7 @@ class CastTextureType extends Command
                 return;
             }
 
-            $type = $this->isAlex($disk->get($skin->hash)) ? 'alex' : 'steve';
+            $type = TextureUtil::isAlex($disk->get($skin->hash)) ? 'alex' : 'steve';
 
             if ($skin->type !== $type) {
                 $skin->type = $type;
@@ -54,31 +55,5 @@ class CastTextureType extends Command
                 $this->info("\n Completed! $modified textures were updated.");
                 break;
         }
-    }
-
-    public function isAlex($data): bool
-    {
-        $image = Image::make($data);
-        $width = $image->width();
-
-        if ($width == $image->height()) {
-            $ratio = $width / 64;
-            for ($x = 46 * $ratio; $x < 48 * $ratio; $x += 1) {
-                for ($y = 52 * $ratio; $y < 64 * $ratio; $y += 1) {
-                    if (!$this->checkPixel($image->pickColor($x, $y))) {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    protected function checkPixel(array $color): bool
-    {
-        return $color[0] === 0 && $color[1] === 0 && $color[2] === 0;
     }
 }
