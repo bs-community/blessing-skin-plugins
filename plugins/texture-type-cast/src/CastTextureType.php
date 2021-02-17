@@ -6,7 +6,6 @@ use App\Models\Texture;
 use Blessing\Renderer\TextureUtil;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
-use Image;
 
 class CastTextureType extends Command
 {
