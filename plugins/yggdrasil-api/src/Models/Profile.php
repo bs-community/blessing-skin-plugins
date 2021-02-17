@@ -102,6 +102,10 @@ class Profile
                         json_encode($textures, JSON_UNESCAPED_SLASHES | JSON_FORCE_OBJECT)
                     ),
                 ],
+                [
+                    'name' => 'uploadableTextures',
+                    'value' => 'skin,cape',
+                ],
             ],
         ];
 
