@@ -156,35 +156,51 @@ class ProfileController extends Controller
 
         /** @var User */
         $user = $profile->player->user;
-        $size = ceil($file->getSize() / 1024);
-        $cost = (int) option('private_score_per_storage') * $size + (int) option('score_per_closet_item');
-        if ($cost > $user->score) {
-            throw new ForbiddenOperationException(trans('skinlib.upload.lack-score'));
+
+        $duplicate = Texture::where('hash', $hash)->where('uploader', $user->uid)->first();
+        if ($duplicate) {
+            $texture = $duplicate;
+
+            if ($user->closet->where('hash', $hash)->isEmpty()) {
+                $cost = (int) option('score_per_closet_item');
+                if ($cost > $user->score) {
+                    throw new ForbiddenOperationException(trans('skinlib.upload.lack-score'));
+                }
+
+                $user->closet()->attach($texture->tid, ['item_name' => $name]);
+                $user->save();
+            }
+        } else {
+            $size = ceil($file->getSize() / 1024);
+            $cost = (int) option('private_score_per_storage') * $size + (int) option('score_per_closet_item');
+            if ($cost > $user->score) {
+                throw new ForbiddenOperationException(trans('skinlib.upload.lack-score'));
+            }
+
+            $dispatcher->dispatch('texture.uploading', [$file, $name, $hash]);
+
+            $texture = new Texture();
+            $texture->name = $name;
+            $texture->type = $type === 'cape' ? 'cape' : ($isAlex ? 'alex' : 'steve');
+            $texture->hash = $hash;
+            $texture->size = $size;
+            $texture->public = false;
+            $texture->uploader = $user->uid;
+            $texture->likes = 1;
+            $texture->save();
+
+            /** @var FilesystemAdapter */
+            $disk = Storage::disk('textures');
+            if ($disk->missing($hash)) {
+                $file->storePubliclyAs('', $hash, ['disk' => 'textures']);
+            }
+
+            $user->score -= $cost;
+            $user->closet()->attach($texture->tid, ['item_name' => $name]);
+            $user->save();
+
+            $dispatcher->dispatch('texture.uploaded', [$texture, $file]);
         }
-
-        $dispatcher->dispatch('texture.uploading', [$file, $name, $hash]);
-
-        $texture = new Texture();
-        $texture->name = $name;
-        $texture->type = $type === 'cape' ? 'cape' : ($isAlex ? 'alex' : 'steve');
-        $texture->hash = $hash;
-        $texture->size = $size;
-        $texture->public = false;
-        $texture->uploader = $user->uid;
-        $texture->likes = 1;
-        $texture->save();
-
-        /** @var FilesystemAdapter */
-        $disk = Storage::disk('textures');
-        if ($disk->missing($hash)) {
-            $file->storePubliclyAs('', $hash, ['disk' => 'textures']);
-        }
-
-        $user->score -= $cost;
-        $user->closet()->attach($texture->tid, ['item_name' => $name]);
-        $user->save();
-
-        $dispatcher->dispatch('texture.uploaded', [$texture, $file]);
 
         $player = $profile->player;
         $can = $filter->apply('can_set_texture', true, [$player, $type, $texture->tid]);
