@@ -2,6 +2,7 @@ token:
   invalid: Invalid AccessToken. Please re-login.
   not-matched: ClientToken isn't matched with AccessToken. Please re-login.
   missing: No valid credential information.
+  bearer: Bearer token expired or is not correct.
 
 user:
   not-existed: The user that the token binds is not found.

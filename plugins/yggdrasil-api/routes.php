@@ -27,3 +27,10 @@ Route::prefix('sessionserver/session/minecraft')->group(function () {
 
 Route::post('api/profiles/minecraft', 'ProfileController@searchMultipleProfiles');
 Route::get('api/users/profiles/minecraft/{username}', 'ProfileController@searchSingleProfile');
+
+Route::prefix('api/user/profile')
+    ->middleware(['Yggdrasil\Middleware\CheckBearerToken'])
+    ->group(function () {
+        Route::put('{uuid}/{type}', 'ProfileController@uploadTexture');
+        Route::delete('{uuid}/{type}', 'ProfileController@resetTexture');
+    });
