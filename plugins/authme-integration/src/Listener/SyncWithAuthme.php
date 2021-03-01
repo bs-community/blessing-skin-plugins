@@ -13,10 +13,12 @@ class SyncWithAuthme
     public function subscribe(Dispatcher $events)
     {
         // 初始化在 Authme 那边注册的用户
-        User::where('realname', '<>', '')
+        User::where(function ($query) {
+            return $query->whereNotNull('realname')->orWhere('realname', '<>', '');
+        })
             ->join('players', 'users.uid', 'players.uid')
             ->groupBy('players.uid')
-            ->havingRaw('COUNT(pid) <> 0')
+            ->havingRaw('COUNT(pid) = 0')
             ->select('users.*')
             ->get()
             ->each(function ($user) {
