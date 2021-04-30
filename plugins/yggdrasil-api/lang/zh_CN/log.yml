@@ -3,6 +3,8 @@ header:
   action: 动作
   params: 附加参数
   time: 时间
+  playname: 角色名
+  email: 帐号邮箱
 show-details: 点击查看
 no-records: 暂无记录
 actions:

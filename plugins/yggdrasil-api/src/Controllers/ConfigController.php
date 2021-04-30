@@ -113,9 +113,22 @@ class ConfigController extends Controller
     public function logPage()
     {
         $logs = DB::table('ygg_log')->orderByDesc('time')->paginate(10);
+		foreach ($logs as $user)
+        {
+        	$users = DB::table('users')->where('uid',$user->user_id)->value('email');
+        	if($user->player_id != 0)
+			{
+          		$players = DB::table('players')->where('pid',$user->player_id)->value('name');        
+        	}
+			else
+			{
+          		$players =0;
+        	}
+          	$usna[$user->user_id] = $users;
+          	$playna[$user->player_id] = $players;
+        }
         $actions = trans('Yggdrasil::log.actions');
-
-        return view('Yggdrasil::log', ['logs' => $logs, 'actions' => $actions]);
+        return view('Yggdrasil::log', ['logs' => $logs, 'actions' => $actions,'usna' =>$usna ,'playna' =>$playna]);
     }
 
     public function generate()

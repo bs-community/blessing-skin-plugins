@@ -3,6 +3,8 @@ header:
   action: Action
   params: Parameters
   time: Time
+  playname: player name
+  email: email
 show-details: Show Details
 no-records: No records.
 actions:
