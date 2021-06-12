@@ -29,11 +29,16 @@ class JWTSecretCommand extends Command
     protected function setKeyInEnvironmentFile(string $key)
     {
         $path = $this->laravel->environmentFilePath();
+        $content = file_get_contents($path);
 
-        file_put_contents($path, str_replace(
-            'JWT_SECRET='.$this->laravel['config']['jwt.secret'],
-            'JWT_SECRET='.$key,
-            file_get_contents($path)
-        ));
+        if (str_contains($content, 'JWT_SECRET=')) {
+            file_put_contents($path, str_replace(
+                'JWT_SECRET='.$this->laravel['config']['jwt.secret'],
+                'JWT_SECRET='.$key,
+                file_get_contents($path)
+            ));
+        } else {
+            file_put_contents($path, $content.PHP_EOL.'JWT_SECRET='.$key);
+        }
     }
 }
