@@ -1,8 +1,9 @@
 .dist/
-node_modules
+node_modules/
+vendor/
 plugins/*/vendor
 plugins/*/assets/**/*.js
 plugins/*/assets/**/*.map
-.php_cs.cache
+.php-cs-fixer.cache
 composer.lock
 yarn-error.log

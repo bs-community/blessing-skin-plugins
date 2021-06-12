@@ -36,7 +36,7 @@ class CastTextureType extends Command
             if ($skin->type !== $type) {
                 $skin->type = $type;
                 $skin->save();
-                $modified += 1;
+                $modified++;
             }
 
             $bar->advance();
