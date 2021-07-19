@@ -32,7 +32,7 @@ return function (
 
     $events->listen('player.renamed', function ($player) {
         /** @var User */
-        $user = auth()->user();
+        $user = $player->user;
         $user->nickname = $player->name;
         $user->save();
     });
