@@ -2,6 +2,8 @@
 
 require __DIR__.'/src/Utils/helpers.php';
 
+use Illuminate\Support\Str;
+
 return [
     App\Events\PluginWasEnabled::class => function () {
         if (!Schema::hasTable('uuid')) {
@@ -71,7 +73,12 @@ return [
         }
 
         if (!config('jwt.secret')) {
-            Artisan::call('jwt:secret');
+            $key = Str::random(64);
+            config(['jwt.secret' => $key]);
+
+            $path = app()->environmentFilePath();
+            $content = file_get_contents($path);
+            file_put_contents($path, $content.PHP_EOL.'JWT_SECRET='.$key);
         }
     },
 ];
