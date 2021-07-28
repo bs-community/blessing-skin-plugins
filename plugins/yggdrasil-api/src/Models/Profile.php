@@ -118,7 +118,7 @@ class Profile
             }
 
             unset($prop);
-            openssl_free_key($key);
+            unset($key);
         }
 
         return json_encode($result, JSON_UNESCAPED_SLASHES);
