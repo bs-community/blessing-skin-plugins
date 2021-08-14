@@ -1,7 +1,7 @@
 {
   "name": "oauth-microsoft-live",
   "title": "Blessing\\OAuth\\Live::general.title",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Blessing\\OAuth\\Live::general.description",
   "author": "GPlane",
   "url": "",

@@ -10,6 +10,7 @@
     }
   ],
   "require": {
-    "socialiteproviders/microsoft-live": "^4.1"
+    "socialiteproviders/microsoft-live": "^4.1",
+    "psr/log": "^1"
   }
 }

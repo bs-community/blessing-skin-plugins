@@ -12,6 +12,7 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-    "socialiteproviders/google": "^4.1"
+    "socialiteproviders/google": "^4.1",
+    "psr/log": "^1"
   }
 }

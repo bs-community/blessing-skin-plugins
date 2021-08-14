@@ -12,6 +12,7 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-    "socialiteproviders/github": "^4.1"
+    "socialiteproviders/github": "^4.1",
+    "psr/log": "^1"
   }
 }
