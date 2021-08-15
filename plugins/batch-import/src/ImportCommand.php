@@ -3,7 +3,7 @@
 namespace BatchImport;
 
 use App\Models\Texture;
-use Blessing\TextureTypeCast\CastTextureType;
+use Blessing\Renderer\TextureUtil;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
@@ -26,7 +26,6 @@ class ImportCommand extends Command
     public function handle(Filesystem $fs)
     {
         $files = collect($fs->files($this->argument('dir')));
-        $castCommand = new CastTextureType();
         $disk = Storage::disk('textures');
         $invalid = [];
 
@@ -37,7 +36,7 @@ class ImportCommand extends Command
         $bar = $this->output->createProgressBar($files->count());
         $bar->start();
 
-        $files->each(function (SplFileInfo $file) use ($bar, $castCommand, $disk, &$invalid) {
+        $files->each(function (SplFileInfo $file) use ($bar, $disk, &$invalid) {
             try {
                 $image = Image::make($file->getPathname());
                 $width = $image->width();
@@ -62,7 +61,7 @@ class ImportCommand extends Command
                     : $file->getFilenameWithoutExtension();
                 $type = $this->option('cape')
                     ? 'cape'
-                    : ($castCommand->isAlex($image) ? 'alex' : 'steve');
+                    : (TextureUtil::isAlex($image) ? 'alex' : 'steve');
 
                 $disk->put($hash, $file->getContents());
                 $texture = new Texture();
@@ -74,6 +73,7 @@ class ImportCommand extends Command
                 $texture->public = true;
                 $texture->save();
             } catch (\Exception $e) {
+                throw $e;
                 $invalid[] = $file;
             }
 
