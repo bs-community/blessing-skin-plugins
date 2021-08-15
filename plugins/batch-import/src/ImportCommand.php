@@ -73,8 +73,9 @@ class ImportCommand extends Command
                 $texture->public = true;
                 $texture->save();
             } catch (\Exception $e) {
-                throw $e;
-                $invalid[] = $file;
+                $invalid[] = ['file' => $file, 'message' => $e->getMessage()];
+
+                report($e);
             }
 
             $bar->advance();
@@ -85,8 +86,8 @@ class ImportCommand extends Command
 
         if (count($invalid) > 0) {
             $this->error('Invalid textures:');
-            array_walk($invalid, function (SplFileInfo $file) {
-                $this->error($file->getFilename());
+            array_walk($invalid, function ($item) {
+                $this->error($item['file']->getFilename().': '.$item['message']);
             });
         }
     }
