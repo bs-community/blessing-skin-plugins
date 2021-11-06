@@ -1,6 +1,5 @@
 <?php
 
-use App\Services\Plugin;
 use Illuminate\Contracts\Events\Dispatcher;
 
 return function (Dispatcher $events) {
