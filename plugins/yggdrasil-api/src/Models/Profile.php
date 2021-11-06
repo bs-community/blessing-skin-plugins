@@ -179,8 +179,8 @@ class Profile
     {
         // @see https://gist.github.com/games647/2b6a00a8fc21fd3b88375f03c9e2e603
         $data = hex2bin(md5('OfflinePlayer:'.$name));
-        $data[6] = chr(ord($data[6]) & 0x0f | 0x30);
-        $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
+        $data[6] = chr(ord($data[6]) & 0x0F | 0x30);
+        $data[8] = chr(ord($data[8]) & 0x3F | 0x80);
 
         return bin2hex($data);
     }
