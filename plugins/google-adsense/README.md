@@ -15,3 +15,21 @@ MIT License
 Copyright ©️ Big_Cake, All Rights Reserved.
 
 [Google AdSense](https://www.google.com/adsense) is a registered trademark of Google LLC, [Blessing Skin Server](https://github.com/bs-community/blessing-skin-server) is developed by [bs-community](https://github.com/bs-community)
+
+# Google AdSense（谷歌广告）
+
+这个插件能让你在你的皮肤站内投放谷歌广告
+
+## 用法
+
+启用该插件，并将你在 AdSense 页面获取的 client-id 填入配置页面
+
+保存，这时查看页面源代码，就可以看到谷歌广告的 script 标签了
+
+## 开源协议
+
+MIT License
+
+Copyright ©️ Big_Cake, All Rights Reserved.
+
+[Google AdSense](https://www.google.com/adsense) 是 Google LLC 的注册商标, [Blessing Skin Server](https://github.com/bs-community/blessing-skin-server) 由 [bs-community](https://github.com/bs-community) 开发维护
