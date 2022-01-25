@@ -1,0 +1,20 @@
+{
+  "name": "google-adsense",
+  "title": "Google Adsense",
+  "version": "0.0.1",
+  "description": "BigCake\\googleadsense::general.description",
+  "author": "Big_Cake",
+  "url": "https://bigcake.cakemc.top/",
+  "namespace": "BigCake\\googleadsense",
+  "require": {
+    "blessing-skin-server": "^5|^6"
+  },
+  "enchants": {
+    "config": "Configuration",
+    "icon": {
+      "fa": "google",
+      "faType": "fab",
+      "bg": "success"
+    }
+  }
+}
