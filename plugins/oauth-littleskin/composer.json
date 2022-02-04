@@ -7,9 +7,8 @@
         "name": "Asnxthaony",
         "email": "asnxthaony@outlook.com"
     }],
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "require": {
-        "littleskinchina/bs-socialite-provider-littleskin": "dev-master"
+        "littleskinchina/bs-socialite-provider-littleskin": "dev-master",
+        "psr/log": "^1"
     }
 }
