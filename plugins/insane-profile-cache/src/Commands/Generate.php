@@ -22,11 +22,12 @@ class Generate extends Command
         $players = Player::all();
         $bar = $this->output->createProgressBar($players->count());
 
-        $players->each(function ($player) use ($bar) {
-            File::put(
-                storage_path('insane-profile-cache/'.$player->name.'.json'),
-                $player->toJson()
-            );
+        $players->each(function ($player) use ($dir, $bar) {
+            $cachePath = storage_path('insane-profile-cache/'.$player->name.'.json');
+
+            if (File::dirname($cachePath) === $dir) {
+                File::put($cachePath, $player->toJson());
+            }
 
             $bar->advance();
         });

@@ -8,10 +8,15 @@ class DeleteFileCache
 {
     public function handle($event)
     {
-        if (File::missing(storage_path('insane-profile-cache'))) {
+        $dir = storage_path('insane-profile-cache');
+        if (File::missing($dir)) {
             return;
         }
 
-        File::delete(storage_path('insane-profile-cache/'.$event->playerName.'.json'));
+        $cachePath = storage_path('insane-profile-cache/'.$event->playerName.'.json');
+
+        if (File::dirname($cachePath) === $dir) {
+            File::delete($cachePath);
+        }
     }
 }

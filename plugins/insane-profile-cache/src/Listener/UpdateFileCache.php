@@ -14,9 +14,10 @@ class UpdateFileCache
         }
 
         $player = $event->player;
-        File::put(
-            storage_path('insane-profile-cache/'.$player->name.'.json'),
-            $player->toJson()
-        );
+        $cachePath = storage_path('insane-profile-cache/'.$player->name.'.json');
+
+        if (File::dirname($cachePath) === $dir) {
+            File::put($cachePath, $player->toJson());
+        }
     }
 }
