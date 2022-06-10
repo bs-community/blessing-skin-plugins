@@ -46,7 +46,7 @@ class SynchronizeUser
         }
 
         $remoteDB = app('db.remote');
-        //使用该算法，则确定是discuz,否则为Flarum
+        // 使用该算法，则确定是 Discuz!，否则为 Flarum
         $remoteUser = null;
         if ($this->distinguishForumType() == 'discuz') {
             $remoteUser = $remoteDB->where('uid', $user->forum_uid)->first();
@@ -87,7 +87,7 @@ class SynchronizeUser
         }
 
         $player = Player::where('uid', $user->uid)->first();
-        //如果用户没有角色，则不进行同步
+        // 如果用户没有角色，则不进行同步
         if (!$player) {
             return;
         }
@@ -142,10 +142,10 @@ class SynchronizeUser
     protected function distinguishForumType()
     {
         if (config('secure.cipher') == 'SALTED2MD5') {
-            //discuz只会使用SALTED2MD5加密
+            // discuz只会使用SALTED2MD5加密
             return 'discuz';
         } elseif (config('secure.cipher') == 'BCRYPT' || config('secure.cipher') == 'PHP_PASSWORD_HASH') {
-            //Flarum会使用这两种算法
+            // Flarum会使用这两种算法
             return 'flarum';
         }
     }
@@ -158,12 +158,12 @@ class SynchronizeUser
     protected function syncFromLocal(User $user)
     {
         $player = Player::where('uid', $user->uid)->first();
-        //如果用户没有角色，则不进行同步
+        // 如果用户没有角色，则不进行同步
         if (!$player) {
             return;
         }
         $player_name = $player->name;
-        //如果论坛数据库里有邮箱和用户名都相同的账户，则将其绑定至本皮肤站账户
+        // 如果论坛数据库里有邮箱和用户名都相同的账户，则将其绑定至本皮肤站账户
         $remoteDB = app('db.remote');
         $remoteUser = $remoteDB->where([
             ['username', $player_name],
@@ -220,7 +220,7 @@ class SynchronizeUser
             return;
         }
 
-        //如果皮肤站数据库中已经存在对应uid的账户，则直接返回该账户
+        // 如果皮肤站数据库中已经存在对应uid的账户，则直接返回该账户
         $forumId = null;
         if ($this->distinguishForumType() == 'discuz') {
             $forumId = $result->uid;

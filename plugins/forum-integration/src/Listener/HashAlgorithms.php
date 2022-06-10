@@ -43,7 +43,7 @@ class HashAlgorithms
                 return;
             }
             $remoteUser = app('db.remote')->where('uid', $user->forum_uid)->first();
-            //如果绑定的论坛用户不存在，则不执行
+            // 如果绑定的论坛用户不存在，则不执行
             if (!$remoteUser) {
                 return;
             }
