@@ -7,11 +7,25 @@ use GPlane\Mojang\MojangVerification;
 use Illuminate\Contracts\Events\Dispatcher;
 
 return function (Dispatcher $events, Filter $filter) {
+    config(['logging.channels.mojang-verification' => [
+        'driver' => 'single',
+        'path' => storage_path('logs/mojang-verification.log'),
+    ]]);
+
+    config(['services.microsoft' => [
+        'client_id' => env('MICROSOFT_KEY'),
+        'client_secret' => env('MICROSOFT_SECRET'),
+        'redirect' => env('MICROSOFT_REDIRECT_URI'),
+    ]]);
+
     View::composer('GPlane\Mojang::bind', function ($view) {
         $view->with('score', option('mojang_verification_score_award', 0));
     });
 
-    $events->listen('auth.login.attempt', Listeners\CreateNewUser::class);
+    $events->listen(
+        'SocialiteProviders\Manager\SocialiteWasCalled',
+        'GPlane\Mojang\Providers\MicrosoftExtendSocialite@handle'
+    );
 
     $events->listen(
         Illuminate\Auth\Events\Authenticated::class,
@@ -26,18 +40,13 @@ return function (Dispatcher $events, Filter $filter) {
         return $badges;
     });
 
-    $filter->add('auth_page_rows:register', function ($rows) {
-        $rows[] = 'GPlane\Mojang::notice';
-
-        return $rows;
-    });
-
     Hook::addRoute(function () {
         Route::prefix('mojang')
             ->middleware(['web', 'auth'])
             ->namespace('GPlane\Mojang')
             ->group(function () {
-                Route::post('verify', 'AccountController@verify');
+                Route::get('verify', 'AccountController@verify');
+                Route::get('callback', 'AccountController@verifyCallback');
                 Route::post('update-uuid', 'AccountController@uuid');
             });
     });

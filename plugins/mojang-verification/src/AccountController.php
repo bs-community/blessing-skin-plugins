@@ -7,25 +7,41 @@ use DB;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Http;
+use Laravel\Socialite\Facades\Socialite;
+use Log;
 
 class AccountController extends Controller
 {
-    public function verify(Request $request, AccountService $accountService)
+    public function verify(Request $request)
     {
         $user = auth()->user();
 
         if (MojangVerification::where('user_id', $user->uid)->count() === 1) {
-            return back();
+            abort(403);
         }
 
-        $result = $accountService->validate($user->email, $request->input('password'));
-        if ($result['valid']) {
-            $accountService->bindAccount($user, $result['profiles'], $result['selected']);
+        Log::channel('mojang-verification')->info("User [$user->email] is try to start verification");
 
-            return back();
-        } else {
-            return back()->with('mojang-failed', $result['message']);
+        return Socialite::driver('microsoft')->redirect();
+    }
+
+    public function verifyCallback(Request $request, AccountService $accountService)
+    {
+        if (!$request->has('code')) {
+            abort(403);
         }
+
+        $user = auth()->user();
+
+        if (MojangVerification::where('user_id', $user->uid)->count() === 1) {
+            abort(403);
+        }
+
+        $userProfile = Socialite::driver('microsoft')->user();
+
+        $accountService->bindAccount($user, $userProfile);
+
+        return redirect()->route('user.home');
     }
 
     public function uuid()

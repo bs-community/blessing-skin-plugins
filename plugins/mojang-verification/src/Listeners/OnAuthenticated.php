@@ -29,7 +29,7 @@ class OnAuthenticated
 
                     return $grid;
                 });
-                Hook::addScriptFileToPage(plugin_assets('mojang-verification', 'update-uuid.js'), ['user/profile']);
+                Hook::addScriptFileToPage(plugin('mojang-verification')->assets('update-uuid.js'), ['user/profile']);
             }
         } else {
             $this->filter->add('grid:user.index', function ($grid) {

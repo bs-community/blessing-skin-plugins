@@ -1,13 +1,12 @@
 title: Bind Your Mojang Account
 description: |
-  If you have already paid for Minecraft, you could enter your Mojang account's password below to bind it. Please make sure your email address is the same as the email address of your Minecraft account before binding.
-
-  Of course, we won't save your password. If you worry, you can use a temporary password for your Mojang account then change it back.
+  If you have already paid for Minecraft, you could click the button below to bind it.
 
   After passed the verification, you will get a player with the same name as your premium Minecraft player. Besides, you will become a "Pro" user and gain :score score.
+verify: Verify
 failed:
   rate: Operations are too frequent. Please try again later.
-  password: Invalid password.
+  not-purchased: Unable to verify game ownership.
   other: Failed to verify.
 
 notification:
