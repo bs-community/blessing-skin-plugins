@@ -10,7 +10,7 @@ return function (Dispatcher $events, Filter $filter) {
         'SocialiteProviders\Google\GoogleExtendSocialite@handle'
     );
 
-    config(['services.github' => [
+    config(['services.google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('GOOGLE_CALLBACK_URL'),
