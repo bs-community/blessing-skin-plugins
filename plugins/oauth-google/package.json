@@ -1,7 +1,7 @@
 {
   "name": "oauth-google",
   "title": "Blessing\\OAuth\\Google::general.title",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Blessing\\OAuth\\Google::general.description",
   "author": "GPlane",
   "url": "https://gplane.win/",
