@@ -2,7 +2,6 @@
 
 namespace InsaneProfileCache\Commands;
 
-use File;
 use Illuminate\Console\Command;
 
 class Clean extends Command
@@ -14,8 +13,8 @@ class Clean extends Command
     public function handle()
     {
         $dir = storage_path('insane-profile-cache');
-        if (File::exists($dir)) {
-            File::deleteDirectory(storage_path('insane-profile-cache'));
+        if (\File::exists($dir)) {
+            \File::deleteDirectory(storage_path('insane-profile-cache'));
         }
 
         $this->info('Cache deleted.');

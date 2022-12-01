@@ -3,7 +3,6 @@
 namespace InsaneProfileCache\Commands;
 
 use App\Models\Player;
-use File;
 use Illuminate\Console\Command;
 
 class Generate extends Command
@@ -15,8 +14,8 @@ class Generate extends Command
     public function handle()
     {
         $dir = storage_path('insane-profile-cache');
-        if (File::missing($dir)) {
-            File::makeDirectory($dir);
+        if (\File::missing($dir)) {
+            \File::makeDirectory($dir);
         }
 
         $players = Player::all();
@@ -25,8 +24,8 @@ class Generate extends Command
         $players->each(function ($player) use ($dir, $bar) {
             $cachePath = storage_path('insane-profile-cache/'.$player->name.'.json');
 
-            if (File::dirname($cachePath) === $dir) {
-                File::put($cachePath, $player->toJson());
+            if (\File::dirname($cachePath) === $dir) {
+                \File::put($cachePath, $player->toJson());
             }
 
             $bar->advance();
