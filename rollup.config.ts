@@ -1,23 +1,16 @@
-// @ts-check
 import glob from 'fast-glob'
-import typescript from '@rollup/plugin-typescript'
+import { defineConfig } from 'rollup'
 import replace from '@rollup/plugin-replace'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
-import { terser } from 'rollup-plugin-terser'
+import { swc } from 'rollup-plugin-swc3'
 import svelte from 'rollup-plugin-svelte'
 import sveltePreprocess from 'svelte-preprocess'
 
 const isDev = process.env.NODE_ENV === 'development'
 
-/**
- * @param {string} name
- * @param {string} path
- *
- * @returns {import('rollup').RollupOptions}
- */
-function makeConfig(name, path) {
-  return {
+function makeConfig(name: string, path: string) {
+  return defineConfig({
     input: { [name]: path },
     output: {
       dir: './plugins',
@@ -37,16 +30,26 @@ function makeConfig(name, path) {
         },
         preventAssignment: true,
       }),
-      typescript(),
+      swc({
+        jsc: {
+          target: 'es2020',
+          minify: isDev
+            ? undefined
+            : {
+                compress: {},
+                mangle: {},
+              },
+        },
+        minify: !isDev,
+      }),
       svelte({
         preprocess: sveltePreprocess(),
         emitCss: false,
       }),
       resolve({ browser: true }),
       commonjs(),
-      !isDev && terser(),
     ],
-  }
+  })
 }
 
 export default glob([
@@ -55,9 +58,7 @@ export default glob([
   '!plugins/*/assets/**/*.test.ts',
   '!**/*.d.ts',
 ]).then((files) =>
-  files.map((file) => {
-    const name = file.replace('plugins/', '').replace(/\.tsx?$/g, '')
-
-    return makeConfig(name, file)
-  }),
+  files.map((file) =>
+    makeConfig(file.replace('plugins/', '').replace(/\.tsx?$/g, ''), file),
+  ),
 )
