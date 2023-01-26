@@ -28,16 +28,19 @@ function makeConfig(name, path) {
         'react-dom': 'ReactDOM',
       },
       indent: '  ',
-      sourcemap: isDev,
     },
     external: ['react', 'react-dom', 'blessing-skin'],
     plugins: [
       replace({
-        'process.env.NODE_ENV': isDev ? '"development"' : '"production"',
+        values: {
+          'process.env.NODE_ENV': isDev ? '"development"' : '"production"',
+        },
+        preventAssignment: true,
       }),
       typescript(),
       svelte({
         preprocess: sveltePreprocess(),
+        emitCss: false,
       }),
       resolve({ browser: true }),
       commonjs(),

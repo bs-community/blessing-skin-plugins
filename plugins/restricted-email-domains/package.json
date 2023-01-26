@@ -17,6 +17,6 @@
     }
   },
   "dependencies": {
-    "nanoid": "^3.1.10"
+    "nanoid": "^4.0.0"
   }
 }

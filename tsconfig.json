@@ -2,7 +2,7 @@
   "extends": "@gplane/tsconfig",
   "compilerOptions": {
     "declaration": false,
-    "sourceMap": true,
+    "sourceMap": false,
     "target": "es2017",
     "module": "es2015",
     "baseUrl": ".",
@@ -11,8 +11,5 @@
     },
     "types": ["svelte", "jest", "node", "@testing-library/jest-dom"]
   },
-  "include": [
-    "plugins/*/assets",
-    "types.ts"
-  ]
+  "include": ["plugins/*/assets", "types.ts"]
 }

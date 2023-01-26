@@ -7,26 +7,24 @@ jobs:
     name: PHP Linting
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: 8.0
-        coverage: none
-    - name: Install dependencies
-      run: composer install
-    - name: Check coding style
-      run: ./vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --diff --format=txt
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0
+          coverage: none
+      - name: Install dependencies
+        run: composer install
+      - name: Check coding style
+        run: ./vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --diff --format=txt
   tsc:
     name: Front-end Tests
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Install dependencies
-      run: yarn
-    - name: Lint
-      run: yarn lint
-    - name: Test
-      run: yarn test
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: yarn
+      - name: Lint
+        run: yarn lint

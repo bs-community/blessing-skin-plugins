@@ -1,3 +1,4 @@
 declare module 'highlight.js/lib/core' {
-  export * from 'highlight.js'
+  import hljs from 'highlight.js'
+  export default hljs
 }
