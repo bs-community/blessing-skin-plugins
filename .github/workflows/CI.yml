@@ -24,7 +24,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Install dependencies
-        run: yarn
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7.26.0
+          run_install: true
       - name: Lint
-        run: yarn lint
+        run: pnpm lint
