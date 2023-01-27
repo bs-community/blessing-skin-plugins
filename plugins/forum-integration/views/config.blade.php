@@ -28,8 +28,8 @@
     ];
 
       config(['database.connections.remote' => array_merge(
-      forum_get_default_db_config(), $config
-    )]);
+          forum_get_default_db_config(), $config
+      )]);
 
       try {
           DB::connection('remote')->getPdo();

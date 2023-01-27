@@ -90,7 +90,7 @@ return function (Dispatcher $events) {
         $signText = preg_replace('/\*/', '%2A', $signText);
         $signText = preg_replace('/%7E/', '~', $signText);
         $stringToSign = 'GET&%2F&'.$signText;
-        $signature = base64_encode(hash_hmac('sha1', $stringToSign, ($accessKeySecret.'&'), true));
+        $signature = base64_encode(hash_hmac('sha1', $stringToSign, $accessKeySecret.'&', true));
 
         // URL 拼接
         $apiQuery['Signature'] = $signature;

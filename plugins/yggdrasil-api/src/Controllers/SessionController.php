@@ -130,7 +130,7 @@ class SessionController extends Controller
                     'user_id' => $profile->player->uid,
                     'player_id' => $profile->player->pid,
                     'parameters' => json_encode($request->except('username')),
-                ], ($ip ? compact('ip') : [])));
+                ], $ip ? compact('ip') : []));
 
                 return response()->json()->setContent($response);
             }
