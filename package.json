@@ -11,6 +11,7 @@
     "dev": "rollup -c --configPlugin=swc3 -w",
     "build": "rollup -c --configPlugin=swc3",
     "lint": "tsc -p . --noEmit && svelte-check",
+    "fmt": "prettier --plugin-search-dir=. --write .",
     "test": "jest"
   },
   "devDependencies": {
@@ -29,6 +30,8 @@
     "@types/testing-library__jest-dom": "^5.14.5",
     "fast-glob": "^3.2.12",
     "jest": "^26.4.2",
+    "prettier": "^2.8.3",
+    "prettier-plugin-svelte": "^2.9.0",
     "rollup": "^3.10.1",
     "rollup-plugin-svelte": "^7.1.0",
     "rollup-plugin-swc3": "^0.8.0",
