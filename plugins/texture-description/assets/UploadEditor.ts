@@ -1,7 +1,6 @@
-import { event } from 'blessing-skin'
 import UploadEditor from './UploadEditor.svelte'
 
-event.on('mounted', () => {
+globalThis.blessing.event.on('mounted', () => {
   const input = document.querySelector<HTMLInputElement>('#description-limit')
   const maxLength = Number.parseInt(input?.value ?? '0') || Infinity
 

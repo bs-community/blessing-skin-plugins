@@ -2,12 +2,12 @@
   "preset": "ts-jest",
   "resetMocks": true,
   "timers": "modern",
-  "moduleNameMapper": {
-    "blessing-skin": "<rootDir>/types.ts"
-  },
   "transform": {
     "^.+\\.svelte$": "@gplane/svelte-jest",
     "^.+\\.tsx?$": "ts-jest"
   },
-  "setupFilesAfterEnv": ["@testing-library/jest-dom/extend-expect"]
+  "setupFilesAfterEnv": [
+    "@testing-library/jest-dom/extend-expect",
+    "<rootDir>/setup-test.ts"
+  ]
 }

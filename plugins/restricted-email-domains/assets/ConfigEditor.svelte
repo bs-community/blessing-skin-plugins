@@ -1,8 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { nanoid } from 'nanoid'
-  import { fetch, t, notify } from 'blessing-skin'
   import DomainsList from './DomainsList.svelte'
+
+  const { fetch, t, notify } = globalThis.blessing
 
   type Item = { id: string; value: string }
 
@@ -13,12 +14,8 @@
   let isDenyListDirty = false
 
   onMount(async () => {
-    const {
-      allow,
-      deny,
-    }: { allow: string[]; deny: string[] } = await fetch.get(
-      '/admin/restricted-email-domains',
-    )
+    const { allow, deny }: { allow: string[]; deny: string[] } =
+      await fetch.get('/admin/restricted-email-domains')
     allowList = allow.map((value) => ({ id: nanoid(), value }))
     denyList = deny.map((value) => ({ id: nanoid(), value }))
     isLoading = false
@@ -80,7 +77,8 @@
       on:edit={() => (isAllowListDirty = true)}
       on:add={createAllowItem}
       on:remove={(event) => removeAllowItem(event.detail)}
-      on:save={saveAllowList} />
+      on:save={saveAllowList}
+    />
   </div>
   <div class="col-lg-6">
     <DomainsList
@@ -92,6 +90,7 @@
       on:edit={() => (isDenyListDirty = true)}
       on:add={createDenyItem}
       on:remove={(event) => removeDenyItem(event.detail)}
-      on:save={saveDenyList} />
+      on:save={saveDenyList}
+    />
   </div>
 </div>

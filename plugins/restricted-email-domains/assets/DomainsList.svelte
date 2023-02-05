@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
-  import { t } from 'blessing-skin'
+
+  const { t } = globalThis.blessing
 
   type Item = { id: string; value: string }
 
@@ -37,11 +38,13 @@
             type="text"
             class="form-control"
             bind:value={item.value}
-            on:input={() => dispath('edit')} />
+            on:input={() => dispath('edit')}
+          />
           <div class="input-group-append">
             <button
               class="btn btn-secondary"
-              on:click={() => dispath('remove', item.id)}>
+              on:click={() => dispath('remove', item.id)}
+            >
               <i class="fas fa-trash" />
             </button>
           </div>

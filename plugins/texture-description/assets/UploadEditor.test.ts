@@ -1,7 +1,8 @@
 import { render, fireEvent } from '@testing-library/svelte'
 import { tick } from 'svelte'
-import { event, t } from 'blessing-skin'
 import UploadEditor from './UploadEditor.svelte'
+
+const { event, t } = globalThis.blessing
 
 test('submit data', () => {
   const { getByLabelText } = render(UploadEditor)

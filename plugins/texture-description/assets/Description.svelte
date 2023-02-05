@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { fetch, t, notify } from 'blessing-skin'
+
+  const { fetch, t, notify } = globalThis.blessing
 
   let description = ''
   let raw = ''
@@ -51,23 +52,6 @@
   }
 </script>
 
-<style>
-  description-content :global(h1),
-  description-content :global(h2) {
-    padding-bottom: 0.3rem;
-    border-bottom: 1px solid #eaecef;
-  }
-
-  description-content :global(blockquote) {
-    color: #aaa;
-    border-left: 0.3rem solid #aaa;
-  }
-
-  description-content :global(hr) {
-    border-top-width: 4px;
-  }
-</style>
-
 {#if canEdit || !isEmptyDescription}
   <div class="card card-secondary">
     <div class="card-header">
@@ -77,7 +61,8 @@
           <button
             class="btn btn-secondary btn-sm float-right"
             title={t('texture-description.edit')}
-            on:click={editDescription}>
+            on:click={editDescription}
+          >
             <i class="fas fa-edit" />
           </button>
         {/if}
@@ -107,7 +92,8 @@
           <button
             class="btn btn-primary"
             disabled={isSubmitting || isLengthExceeded}
-            on:click={submitDescription}>
+            on:click={submitDescription}
+          >
             {#if isSubmitting}
               <span>
                 <i class="fas fa-sync fa-spin" />
@@ -117,7 +103,8 @@
           <button
             class="btn btn-secondary"
             disabled={isSubmitting}
-            on:click={() => (isEditing = false)}>
+            on:click={() => (isEditing = false)}
+          >
             {t('general.cancel')}
           </button>
         </div>
@@ -125,3 +112,20 @@
     {/if}
   </div>
 {/if}
+
+<style>
+  description-content :global(h1),
+  description-content :global(h2) {
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #eaecef;
+  }
+
+  description-content :global(blockquote) {
+    color: #aaa;
+    border-left: 0.3rem solid #aaa;
+  }
+
+  description-content :global(hr) {
+    border-top-width: 4px;
+  }
+</style>

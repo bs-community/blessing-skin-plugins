@@ -11,5 +11,5 @@
     },
     "types": ["svelte", "jest", "node", "@testing-library/jest-dom"]
   },
-  "include": ["plugins/*/assets", "types.ts"]
+  "include": ["plugins/*/assets", "types.ts", "globals.d.ts"]
 }

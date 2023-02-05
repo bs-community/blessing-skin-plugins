@@ -1,7 +1,8 @@
 import { render, fireEvent, waitFor } from '@testing-library/svelte'
 import { tick } from 'svelte'
-import { fetch, t } from 'blessing-skin'
 import Description from './Description.svelte'
+
+const { fetch, t } = globalThis.blessing
 
 test('render description', async () => {
   const spy = jest.spyOn(fetch, 'get').mockResolvedValue('<div id="md"></div>')
