@@ -1,4 +1,4 @@
-import { notify, fetch, t } from 'blessing-skin'
+const { notify, t } = globalThis.blessing
 
 document
   .querySelector('[name=generate-key]')!
@@ -6,7 +6,7 @@ document
     type Ok = { code: 0; key: string }
     type Err = { code: 1; message: string }
 
-    const response: Ok | Err = await fetch.post(
+    const response: Ok | Err = await globalThis.blessing.fetch.post(
       '/admin/plugins/config/yggdrasil-api/generate',
     )
 
