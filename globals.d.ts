@@ -35,10 +35,14 @@ declare class Toast {
   error(message: string): void
 }
 
-// `var` is required here,
-// otherwise the `blessing` property won't appear in `globalThis` type
-declare var blessing: BlessingGlobals
+export {}
 
-interface Window {
-  blessing: BlessingGlobals
+declare global {
+  // `var` is required here,
+  // otherwise the `blessing` property won't appear in `globalThis` type
+  declare var blessing: BlessingGlobals
+
+  interface Window {
+    blessing: BlessingGlobals
+  }
 }
