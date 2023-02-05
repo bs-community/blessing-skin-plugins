@@ -14,15 +14,8 @@ function makeConfig(name: string, path: string) {
     input: { [name]: path },
     output: {
       dir: './plugins',
-      format: 'iife',
-      globals: {
-        'blessing-skin': 'blessing',
-        react: 'React',
-        'react-dom': 'ReactDOM',
-      },
-      indent: '  ',
+      format: 'esm',
     },
-    external: ['react', 'react-dom', 'blessing-skin'],
     plugins: [
       replace({
         values: {
@@ -54,11 +47,10 @@ function makeConfig(name: string, path: string) {
 
 export default glob([
   'plugins/*/assets/**/*.ts',
-  'plugins/*/assets/**/*.tsx',
   '!plugins/*/assets/**/*.test.ts',
   '!**/*.d.ts',
 ]).then((files) =>
   files.map((file) =>
-    makeConfig(file.replace('plugins/', '').replace(/\.tsx?$/g, ''), file),
+    makeConfig(file.replace('plugins/', '').replace(/\.ts$/g, ''), file),
   ),
 )
