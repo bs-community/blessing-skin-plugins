@@ -37,7 +37,7 @@ return function (
         $user->save();
     });
 
-    Hook::addScriptFileToPage($plugin->assets('BindPlayer.js'), ['user/player/bind']);
+    Hook::addScriptFileToPage($plugin->assets('bind.js'), ['user/player/bind']);
     Hook::addRoute(function () {
         Route::namespace('SinglePlayerLimit')
             ->middleware(['web', 'authorize'])
