@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Http;
 use Log;
 use Ramsey\Uuid\Uuid;
 use Schema;
-use Yggdrasil\Exceptions\IllegalArgumentException;
+use Yggdrasil\Utils\Key;
 
 class Profile
 {
@@ -46,11 +46,7 @@ class Profile
 
         // 检查 RSA 私钥
         if ($unsigned === false) {
-            $key = openssl_pkey_get_private(option('ygg_private_key'));
-
-            if (!$key) {
-                throw new IllegalArgumentException(trans('Yggdrasil::config.rsa.invalid'));
-            }
+            $key = Key::getPrivateKey(config('ygg_private_key'));
 
             $textures['signatureRequired'] = true;
         }
