@@ -11,10 +11,18 @@ require __DIR__.'/src/Utils/helpers.php';
 
 return function (Filter $filter, Dispatcher $events) {
     if (env('YGG_VERBOSE_LOG')) {
-        config(['logging.channels.ygg' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/yggdrasil.log'),
-        ]]);
+        if (env('YGG_VERBOSE_LOG_DAYS')) {
+            config(['logging.channels.ygg' => [
+                'driver' => 'daily',
+                'days' => env('YGG_VERBOSE_LOG_DAYS'),
+                'path' => storage_path('logs/yggdrasil.log'),
+            ]]);
+        } else {
+            config(['logging.channels.ygg' => [
+                'driver' => 'single',
+                'path' => storage_path('logs/yggdrasil.log'),
+            ]]);
+        }
     } else {
         config(['logging.channels.ygg' => [
             'driver' => 'monolog',
