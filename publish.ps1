@@ -12,9 +12,12 @@ git add .
 
 $shouldUpdate = git status -s
 if ($shouldUpdate) {
-  git commit -m "Publish"
-  git remote set-url origin "https://tadaf:$token@github.com/bs-community/plugins-dist.git"
-  git push origin master
+    if ($env:AWS_ACCESS_KEY_ID -and $env:AWS_SECRET_ACCESS_KEY -and $env:AWS_DEFAULT_REGION) {
+        aws s3 sync . s3://plugins-dist/ --exclude ".git/*"
+    }
+    git commit -m "Publish"
+    git remote set-url origin "https://tadaf:$token@github.com/bs-community/plugins-dist.git"
+    git push origin master
 }
 
 Set-Location '..'

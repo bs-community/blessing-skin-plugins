@@ -63,8 +63,8 @@ class Profile
                 $textures['textures']['SKIN']['metadata'] = ['model' => 'slim'];
             }
         } elseif (
-            Schema::hasTable('mojang_verifications') &&
-            DB::table('mojang_verifications')->where('uuid', $this->uuid)->exists()
+            Schema::hasTable('mojang_verifications')
+            && DB::table('mojang_verifications')->where('uuid', $this->uuid)->exists()
         ) {
             // 如果该角色没有在皮肤站设置皮肤，就从 Mojang 获取。
             $skin = $this->fetchProfileFromMojang('SKIN');
@@ -78,8 +78,8 @@ class Profile
                 'url' => url("textures/{$this->cape}"),
             ];
         } elseif (
-            Schema::hasTable('mojang_verifications') &&
-            DB::table('mojang_verifications')->where('uuid', $this->uuid)->exists()
+            Schema::hasTable('mojang_verifications')
+            && DB::table('mojang_verifications')->where('uuid', $this->uuid)->exists()
         ) {
             // 如果该角色没有在皮肤站设置披风，就从 Mojang 获取。
             $cape = $this->fetchProfileFromMojang('CAPE');
