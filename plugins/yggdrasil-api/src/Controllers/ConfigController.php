@@ -10,7 +10,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Option;
-use Yggdrasil\Utils\Key;
+use Yggdrasil\Exceptions\IllegalArgumentException;
 
 class ConfigController extends Controller
 {
@@ -77,7 +77,17 @@ class ConfigController extends Controller
             $request->getHost(),
         ]))));
 
-        $privateKey = Key::getPrivateKey(config('ygg_private_key'));
+        $privateKey = openssl_pkey_get_private(option('ygg_private_key'));
+
+        if (!$privateKey) {
+            throw new IllegalArgumentException(trans('Yggdrasil::config.rsa.invalid'));
+        }
+
+        $keyData = openssl_pkey_get_details($privateKey);
+
+        if ($keyData['bits'] < 4096) {
+            throw new IllegalArgumentException(trans('Yggdrasil::config.rsa.length'));
+        }
 
         $result = [
             'meta' => [
@@ -90,7 +100,7 @@ class ConfigController extends Controller
                 'feature.non_email_login' => true,
             ],
             'skinDomains' => $skinDomains,
-            'signaturePublickey' => Key::getPublicKey($privateKey),
+            'signaturePublickey' => $keyData['key'],
         ];
 
         if (!optional($pluginManager->get('disable-registration'))->isEnabled()) {
