@@ -18,6 +18,11 @@ Route::prefix('authserver')
         Route::post('invalidate', 'AuthController@invalidate');
     });
 
+Route::prefix('minecraftservices')
+    ->group(function () {
+        Route::get('publickeys', 'ServicesController@getPublicKeys');
+    });
+
 Route::prefix('sessionserver/session/minecraft')->group(function () {
     Route::post('join', 'SessionController@joinServer');
     Route::get('hasJoined', 'SessionController@hasJoinedServer');
