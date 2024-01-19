@@ -14,14 +14,14 @@ class ServicesController extends Controller
         $result = [
             'profilePropertyKeys' => [
                 [
-                    'publicKey' => Key::getPublicKey($privateKey)
-                ]
+                    'publicKey' => Key::getPublicKey($privateKey),
+                ],
             ],
             'playerCertificateKeys' => [
                 [
-                    'pulicKey' => Key::getPublicKey($privateKey)
-                ]
-            ]
+                    'pulicKey' => Key::getPublicKey($privateKey),
+                ],
+            ],
         ];
 
         return json($result);
