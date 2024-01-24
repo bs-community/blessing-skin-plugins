@@ -10,6 +10,6 @@ return function (Filter $filter) {
 
         $hashed = md5(strtolower(trim($user->email)));
 
-        return "https://www.gravatar.com/avatar/$hashed";
+        return "https://cravatar.cn/avatar/$hashed";
     });
 };
