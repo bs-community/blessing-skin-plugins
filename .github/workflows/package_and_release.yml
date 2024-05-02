@@ -1,0 +1,51 @@
+name: Package Plugins
+
+on:
+  push:
+    branches:
+      - main  # 设置为你的默认分支
+
+jobs:
+  package_plugins:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Package Plugins
+      run: |
+        # 获取 plugins 文件夹下的所有文件夹列表
+        PLUGINS=$(find plugins/* -maxdepth 0 -type d | sed 's|plugins/||')
+
+        # 创建一个临时目录用于存放所有插件文件夹的打包文件
+        mkdir packages
+
+        # 遍历每个插件文件夹，打包并存放到临时目录中
+        for plugin in $PLUGINS; do
+          zip -r "packages/$plugin.zip" "plugins/$plugin"
+        done
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.sha }}
+        release_name: Release ${{ github.sha }}
+        body: |
+          Release ${{ github.sha }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Assets
+      id: upload_release_assets
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: packages/*.zip
+        asset_name: ${{ github.sha }}-${{ matrix.os }}-packages.zip
+        asset_content_type: application/zip
