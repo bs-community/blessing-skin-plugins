@@ -14,6 +14,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+
     - name: Package Plugins
       run: |
         # 获取 plugins 文件夹下的所有文件夹列表
@@ -33,10 +38,10 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.sha }}
-        release_name: Release ${{ github.sha }}
+        tag_name: latest
+        release_name: Latest Release
         body: |
-          Release ${{ github.sha }}
+          Latest release
         draft: false
         prerelease: false
 
@@ -48,5 +53,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: packages/*.zip
-        asset_name: ${{ github.sha }}-${{ matrix.os }}-packages.zip
+        asset_name: ${{ github.sha }}-packages.zip
         asset_content_type: application/zip
