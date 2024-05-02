@@ -17,6 +17,6 @@ return function (App\Services\PluginManager $plugins) {
 
     app()->instance(
         'cipher',
-        new \GPlane\PasswordTransition\Cipher(preg_split('/,\s*/', env('SALT')))
+        new GPlane\PasswordTransition\Cipher(preg_split('/,\s*/', env('SALT')))
     );
 };

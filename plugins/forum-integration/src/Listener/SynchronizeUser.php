@@ -66,9 +66,9 @@ class SynchronizeUser
 
         // 首先同步邮箱
         if (
-            $user->email != $remoteUser->email &&
-            !empty($user->email) &&
-            !empty($remoteUser->email)
+            $user->email != $remoteUser->email
+            && !empty($user->email)
+            && !empty($remoteUser->email)
         ) {
             if (option('forum_duplicated_prefer') == 'remote') {
                 $user->email = $remoteUser->email;
@@ -94,9 +94,9 @@ class SynchronizeUser
         $player_name = $player->name;
         // 同理，保证两边的用户名、绑定角色名一致。
         if (
-            $player_name != $remoteUser->username &&
-            !empty($player_name) &&
-            !empty($remoteUser->username)
+            $player_name != $remoteUser->username
+            && !empty($player_name)
+            && !empty($remoteUser->username)
         ) {
             if (option('forum_duplicated_prefer') == 'remote') {
                 $player_name = $remoteUser->username;
@@ -114,8 +114,8 @@ class SynchronizeUser
         }
         // 如果两边用户的密码或 salt 不同，就按照「重复处理」选项的定义来处理。
         if (
-            $user->password != $remoteUser->password ||
-            (!empty($remoteUser->salt) && $user->salt != $remoteUser->salt)
+            $user->password != $remoteUser->password
+            || (!empty($remoteUser->salt) && $user->salt != $remoteUser->salt)
         ) {
             if (option('forum_duplicated_prefer') == 'remote') {
                 $user->password = $remoteUser->password;
