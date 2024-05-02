@@ -21,15 +21,16 @@ jobs:
 
     - name: Package Plugins
       run: |
+        # 创建一个目录用于存放所有插件文件夹的打包文件
+        mkdir packages
+        
         # 获取 plugins 文件夹下的所有文件夹列表
         PLUGINS=$(find plugins/* -maxdepth 0 -type d | sed 's|plugins/||')
 
-        # 创建一个临时目录用于存放所有插件文件夹的打包文件
-        mkdir packages
-
-        # 遍历每个插件文件夹，打包并存放到临时目录中
+        # 遍历每个插件文件夹，打包并移动到 packages 目录中
         for plugin in $PLUGINS; do
-          zip -r "packages/$plugin.zip" "plugins/$plugin"
+          zip -r "$plugin.zip" "plugins/$plugin"
+          mv "$plugin.zip" packages/
         done
 
     - name: Create Release
