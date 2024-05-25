@@ -1,0 +1,57 @@
+name: Package Plugins
+
+on:
+  push:
+    branches:
+      - main  # 设置为你的默认分支
+  workflow_dispatch:
+
+jobs:
+  package_plugins:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+
+    - name: Package Plugins
+      run: |
+        # 创建一个目录用于存放所有插件文件夹的打包文件
+        mkdir packages
+        
+        # 获取 plugins 文件夹下的所有文件夹列表
+        PLUGINS=$(find plugins/* -maxdepth 0 -type d | sed 's|plugins/||')
+
+        # 遍历每个插件文件夹，打包并移动到 packages 目录中
+        for plugin in $PLUGINS; do
+          zip -r "packages/$plugin.zip" "plugins/$plugin"
+        done
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: latest
+        release_name: Latest Release
+        body: |
+          Latest release
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Assets
+      id: upload_release_assets
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: packages
+        asset_name: ${{ github.sha }}-packages.zip
+        asset_content_type: application/zip

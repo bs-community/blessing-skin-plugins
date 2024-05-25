@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte'
-
-  const { event, t } = globalThis.blessing
+  import { event, t } from 'blessing-skin'
 
   let description = ''
   export let maxLength = Infinity
@@ -19,8 +18,7 @@
   id="description-editor"
   class="form-control"
   rows="9"
-  bind:value={description}
-/>
+  bind:value={description} />
 {#if description.length > maxLength}
   <div class="alert alert-info mt-2">
     {t('texture-description.exceeded', { max: maxLength })}
