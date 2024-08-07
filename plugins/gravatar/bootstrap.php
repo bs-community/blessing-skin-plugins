@@ -9,7 +9,8 @@ return function (Filter $filter) {
         }
 
         $hashed = md5(strtolower(trim($user->email)));
-
-        return "https://www.gravatar.com/avatar/$hashed";
+        $registry = env('GRAVATAR_REGISTRY');
+        
+        return "$registry$hashed";
     });
 };
