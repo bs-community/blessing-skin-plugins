@@ -1,0 +1,17 @@
+{
+  "name": "refresh-huawei-cdn",
+  "version": "1.0.0",
+  "title": "刷新华为云 CDN",
+  "description": "当角色信息被更新时，自动刷新华为云 CDN 缓存",
+  "author": "SRY-CTB",
+  "namespace": "SRY-CTB\\RefreshHuaweiCdn",
+  "require": {
+    "blessing-skin-server": "^5|^6"
+  },
+  "enchants": {
+    "icon": {
+      "fa": "fire",
+      "bg": "lime"
+    }
+  }
+}
