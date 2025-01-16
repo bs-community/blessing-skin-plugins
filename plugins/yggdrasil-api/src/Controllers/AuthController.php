@@ -37,8 +37,6 @@ class AuthController extends Controller
             JWT\Signer\Key\InMemory::plainText(config('jwt.secret', ''))
         );
         $builder = $jwtConfig->builder();
-        $builder->relatedTo($userUuid)
-            ->withClaim('yggt', Uuid::uuid4()->getHex()->toString());
 
         $token = new Token($clientToken);
         $token->owner = $email;
@@ -67,6 +65,8 @@ class AuthController extends Controller
         $accessToken = (string) $builder->issuedBy('Yggdrasil-Auth')
             ->expiresAt($now->addSeconds((int) option('ygg_token_expire_1')))
             ->issuedAt($now)
+            ->relatedTo($userUuid)
+            ->withClaim('yggt', Uuid::uuid4()->getHex()->toString())
             ->getToken($jwtConfig->signer(), $jwtConfig->signingKey())
             ->toString();
 
