@@ -1,6 +1,6 @@
 {
   "name": "yggdrasil-api",
-  "version": "5.2.1",
+  "version": "5.2.2",
   "title": "Yggdrasil API",
   "description": "Yggdrasil API + authlib-injector = ✨",
   "author": "printempw",
