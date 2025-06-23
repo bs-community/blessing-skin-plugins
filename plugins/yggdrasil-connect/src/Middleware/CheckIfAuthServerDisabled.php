@@ -8,9 +8,8 @@ use LittleSkin\YggdrasilConnect\Exceptions\Yggdrasil\ForbiddenOperationException
 
 class CheckIfAuthServerDisabled
 {
-
     private ClientRepository $clientRepository;
-    
+
     public function __construct(ClientRepository $clientRepository)
     {
         $this->clientRepository = $clientRepository;

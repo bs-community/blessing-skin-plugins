@@ -15,8 +15,8 @@ use LittleSkin\YggdrasilConnect\Exceptions\Yggdrasil\ForbiddenOperationException
 use LittleSkin\YggdrasilConnect\Exceptions\Yggdrasil\IllegalArgumentException;
 use LittleSkin\YggdrasilConnect\Models\AccessToken;
 use LittleSkin\YggdrasilConnect\Models\Profile;
-use LittleSkin\YggdrasilConnect\Models\UUID;
 use LittleSkin\YggdrasilConnect\Models\User;
+use LittleSkin\YggdrasilConnect\Models\UUID;
 use Vectorface\Whip\Whip;
 
 class SessionController extends Controller
@@ -28,7 +28,7 @@ class SessionController extends Controller
             'serverId' => ['required', 'string'],
         ]);
 
-        if($validation->fails()) {
+        if ($validation->fails()) {
             throw new IllegalArgumentException(trans('LittleSkin\\YggdrasilConnect::exceptions.illegal'));
         }
 
@@ -59,7 +59,7 @@ class SessionController extends Controller
 
         if ($token->owner->uid != $result->player->uid) {
             Log::channel('ygg')->info("Player [$selectedProfile] does not belong to user [{$token->owner->uid}]");
-            throw new ForbiddenOperationException(trans("LittleSkin\\YggdrasilConnect::exceptions.player.owner"));
+            throw new ForbiddenOperationException(trans('LittleSkin\\YggdrasilConnect::exceptions.player.owner'));
         }
 
         Log::channel('ygg')->info("Player [$selectedProfile]'s name is [$player->name], belongs to user [$player->uid]");
@@ -79,16 +79,15 @@ class SessionController extends Controller
         return response()->noContent();
     }
 
-    public function hasJoinedServer(Request $request) : Response | JsonResponse
+    public function hasJoinedServer(Request $request): Response|JsonResponse
     {
-
         $validation = Validator::make($request->all(), [
             'username' => ['required', 'string'],
             'serverId' => ['required', 'string'],
             'ip' => ['nullable', 'ip'],
         ]);
 
-        if($validation->fails()) {
+        if ($validation->fails()) {
             return response()->noContent();
         }
 
@@ -129,5 +128,4 @@ class SessionController extends Controller
 
         return response()->noContent();
     }
-
 }

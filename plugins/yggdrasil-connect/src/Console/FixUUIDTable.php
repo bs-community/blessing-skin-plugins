@@ -16,9 +16,9 @@ class FixUUIDTable extends Command implements Isolatable
 
     public function handle(): void
     {
-
         if (!Schema::hasTable('uuid')) {
             $this->info('UUID table does not exist. Nothing to do.');
+
             return;
         }
 
@@ -26,6 +26,7 @@ class FixUUIDTable extends Command implements Isolatable
         $this->warn('IT\'S IRREVERSIBLE! MAKE SURE YOU HAVE YOUR UUID TABLE BACKED UP BEFORE CONTINUE!');
         if (!$this->confirm('You\'ve been warned. Continue?')) {
             $this->info('Cancelled.');
+
             return;
         }
 

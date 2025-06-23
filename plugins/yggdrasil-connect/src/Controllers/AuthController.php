@@ -12,13 +12,12 @@ use LittleSkin\YggdrasilConnect\Exceptions\Yggdrasil\ForbiddenOperationException
 use LittleSkin\YggdrasilConnect\Exceptions\Yggdrasil\IllegalArgumentException;
 use LittleSkin\YggdrasilConnect\Models\AccessToken;
 use LittleSkin\YggdrasilConnect\Models\Profile;
-use LittleSkin\YggdrasilConnect\Models\UUID;
 use LittleSkin\YggdrasilConnect\Models\User;
+use LittleSkin\YggdrasilConnect\Models\UUID;
 use Ramsey\Uuid\Uuid as RamseyUuid;
 
 class AuthController extends Controller
 {
-
     public function authenticate(Request $request): JsonResponse
     {
         $identification = $request->input('username');
@@ -114,8 +113,8 @@ class AuthController extends Controller
         Log::channel('ygg')->info("Access token refreshed [$accessTokenToBeRefreshed->jwt] => [$newAccessToken->jwt]");
 
         $profile = [
-            "id" => $selectedProfile,
-            "name" => UUID::where('uuid', $selectedProfile)->first()->player->name,
+            'id' => $selectedProfile,
+            'name' => UUID::where('uuid', $selectedProfile)->first()->player->name,
         ];
 
         ygg_log([
@@ -139,7 +138,7 @@ class AuthController extends Controller
         return json($resp);
     }
 
-    public function validate(Request $request): Response | JsonResponse
+    public function validate(Request $request): Response|JsonResponse
     {
         ygg_log([
             'action' => 'validate',
@@ -152,7 +151,6 @@ class AuthController extends Controller
 
     public function signout(Request $request): Response
     {
-
         $user = $request->user();
         Log::channel('ygg')->info("User [$user->uid] is try to signout");
 
@@ -171,7 +169,6 @@ class AuthController extends Controller
 
     public function invalidate(Request $request): Response
     {
-
         /** @var User */
         $user = auth()->user();
         $token = $user->yggdrasilToken();

@@ -19,17 +19,18 @@ class CheckAccessToken
         $validation = Validator::make($request->all(), [
             'accessToken' => ['required', 'string'],
             'clientToken' => ['nullable', 'string'],
-            'requestUser' => ['nullable', 'boolean']
+            'requestUser' => ['nullable', 'boolean'],
         ]);
 
         if (!$validation->fails()) {
             $accessToken = $request->input('accessToken');
             try {
-                Log::channel('ygg')->info("User is authenticating with Access Token", [$accessToken]);
+                Log::channel('ygg')->info('User is authenticating with Access Token', [$accessToken]);
                 $token = new AccessToken($accessToken);
                 $valid = $request->is('api/yggdrasil/authserver/refresh') ? $token->isRefreshable() : $token->canJoinServer();
                 if ($valid) {
                     Auth::setUser($token->owner);
+
                     return $next($request);
                 } else {
                     throw new ForbiddenOperationException(trans('LittleSkin\\YggdrasilConnect::exceptions.token.invalid'));

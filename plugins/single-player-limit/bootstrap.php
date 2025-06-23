@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 return function (
     Filter $filter,
     Dispatcher $events,
-    Plugin $plugin
+    Plugin $plugin,
 ) {
     $filter->add('can_add_player', function () {
         return new Rejection(trans('SinglePlayerLimit::player.add'));

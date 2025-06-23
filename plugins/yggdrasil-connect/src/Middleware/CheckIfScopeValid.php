@@ -14,16 +14,14 @@ class CheckIfScopeValid
             $scopes = explode(' ', $scope);
             if ((
                 array_intersect($scopes, Scope::OIDC_SCOPES) && !in_array(Scope::OPENID, $scopes))
-                ||
-                (in_array(Scope::PROFILE_SELECT, $scopes) && in_array(Scope::PROFILE_READ, $scopes))
-                ||
-                (in_array(Scope::SERVER_JOIN, $scopes) && !in_array(Scope::PROFILE_SELECT, $scopes))
+                || (in_array(Scope::PROFILE_SELECT, $scopes) && in_array(Scope::PROFILE_READ, $scopes))
+                || (in_array(Scope::SERVER_JOIN, $scopes) && !in_array(Scope::PROFILE_SELECT, $scopes))
             ) {
                 $exception = new InvalidScopeException();
                 $query = $exception->toArray();
                 $query['state'] = $request->input('state');
 
-                return redirect()->away($request->input('redirect_uri') . '?' . http_build_query($query));
+                return redirect()->away($request->input('redirect_uri').'?'.http_build_query($query));
             }
         }
 

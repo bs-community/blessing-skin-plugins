@@ -2,8 +2,8 @@
 
 namespace LittleSkin\YggdrasilConnect\Controllers;
 
-use App\Services\Hook;
 use App\Services\Facades\Option;
+use App\Services\Hook;
 use App\Services\OptionForm;
 use App\Services\PluginManager;
 use Illuminate\Contracts\View\View;
@@ -16,7 +16,6 @@ use LittleSkin\YggdrasilConnect\Exceptions\Yggdrasil\IllegalArgumentException;
 
 class ConfigController extends Controller
 {
-
     private ClientRepository $clientRepository;
 
     public function __construct(ClientRepository $clientRepository)
@@ -71,7 +70,7 @@ class ConfigController extends Controller
 
         $yggcForm = Option::form('yggc', 'Yggdrasil Connect', function (OptionForm $form) {
             $form->text('ygg_connect_server_url', trans('LittleSkin\\YggdrasilConnect::config.yggc.server_url.title'))
-                ->description((trans('LittleSkin\\YggdrasilConnect::config.yggc.server_url.description')));
+                ->description(trans('LittleSkin\\YggdrasilConnect::config.yggc.server_url.description'));
             $form->checkbox('ygg_disable_authserver', trans('LittleSkin\\YggdrasilConnect::config.yggc.disable_authserver.title'))
                 ->hint(trans('LittleSkin\\YggdrasilConnect::config.yggc.disable_authserver.hint'))
                 ->label(trans('LittleSkin\\YggdrasilConnect::config.yggc.disable_authserver.label'))

@@ -21,12 +21,13 @@ class CheckBearerTokenOAuth
                 if ($token->isValid()) {
                     if (empty($scope) || $token->can($scope)) {
                         Auth::setUser($token->owner);
+
                         return $next($request);
                     } else {
                         throw new InsufficientScopeException(scope: $scope);
                     }
                 }
-            } catch (ForbiddenOperationException | IllegalArgumentException $e) {
+            } catch (ForbiddenOperationException|IllegalArgumentException $e) {
                 throw new InvalidTokenException(scope: $scope);
             }
         }

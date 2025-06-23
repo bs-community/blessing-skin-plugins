@@ -7,7 +7,7 @@ return function () {
             'default' => env('QINIU_DOMAIN'),
             'https' => env('QINIU_HTTPS_DOMAIN'),
             'custom' => '',
-         ],
+        ],
         'access_key' => env('QINIU_ACCESS_KEY'),
         'secret_key' => env('QINIU_SECRET_KEY'),
         'bucket' => env('QINIU_BUCKET'),

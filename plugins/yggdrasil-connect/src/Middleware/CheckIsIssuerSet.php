@@ -7,7 +7,6 @@ use Illuminate\Http\Response;
 
 class CheckIsIssuerSet
 {
-
     public function handle(Request $request, \Closure $next)
     {
         if (empty(option('ygg_connect_server_url'))) {

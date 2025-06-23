@@ -7,16 +7,15 @@ use App\Models\Texture;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use LittleSkin\YggdrasilConnect\Exceptions\Yggdrasil\IllegalArgumentException;
-use LittleSkin\YggdrasilConnect\Models\UUID;
 
 class Profile
 {
-    public string      $uuid;
-    public string      $name;
-    public Player      $player;
-    public string      $model = 'default';
-    public string|null $skin;
-    public string|null $cape;
+    public string $uuid;
+    public string $name;
+    public Player $player;
+    public string $model = 'default';
+    public ?string $skin;
+    public ?string $cape;
 
     public function sign($data, $key)
     {
@@ -112,6 +111,7 @@ class Profile
         if ($player = Player::where('name', $name)->first()) {
             return static::getUuidFromPlayer($player);
         }
+
         return null;
     }
 
@@ -150,12 +150,14 @@ class Profile
         } else {
             UUID::where('uuid', $uuid)->delete();
         }
+
         return null;
     }
 
     public static function createFromPlayer(Player $player): Profile
     {
         $uuid = static::getUuidFromPlayer($player);
+
         return static::createFromUuid($uuid);
     }
 

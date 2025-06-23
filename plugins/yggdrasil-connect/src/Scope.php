@@ -2,7 +2,8 @@
 
 namespace LittleSkin\YggdrasilConnect;
 
-class Scope {
+class Scope
+{
     public const OPENID = 'openid';
     public const PROFILE = 'profile';
     public const EMAIL = 'email';
@@ -18,6 +19,6 @@ class Scope {
         self::OFFLINE_ACCESS,
         self::PROFILE_READ,
         self::PROFILE_SELECT,
-        self::SERVER_JOIN
+        self::SERVER_JOIN,
     ];
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Originally created by Matt Mullenweg as a WordPress plugin,
  * migrated to Blessing Skin Server by printempw.

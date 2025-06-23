@@ -4,8 +4,8 @@ namespace LittleSkin\YggdrasilConnect\Listeners;
 
 use App\Models\Player;
 use Illuminate\Support\Facades\DB;
-use Ramsey\Uuid\Uuid as RamseyUuid;
 use LittleSkin\YggdrasilConnect\Models\UUID;
+use Ramsey\Uuid\Uuid as RamseyUuid;
 
 class OnPlayerAdded
 {

@@ -1,8 +1,8 @@
 <?php
 
 use App\Models\User;
-use App\Services\Hook;
 use App\Services\Facades\Option;
+use App\Services\Hook;
 use Blessing\Filter;
 use Blessing\Rejection;
 use Illuminate\Console\Events\ArtisanStarting;
@@ -17,7 +17,7 @@ use LittleSkin\YggdrasilConnect\Models\AccessToken;
 use LittleSkin\YggdrasilConnect\Models\UUID;
 use LittleSkin\YggdrasilConnect\Scope;
 
-require __DIR__ . '/src/Utils/helpers.php';
+require __DIR__.'/src/Utils/helpers.php';
 
 return function (Dispatcher $events, Filter $filter, Request $request) {
     Passport::personalAccessTokensExpireIn(now()->addSeconds(Option::get('ygg_token_expire_1')));
@@ -44,13 +44,14 @@ return function (Dispatcher $events, Filter $filter, Request $request) {
         if (option('ygg_uuid_algorithm') === 'v3') {
             $uuid = UUID::generateUuidV3($name);
             if (UUID::where('uuid', $uuid)->orWhere('name', $name)->count()) {
-                return new Rejection("UUID 表数据错误，请联系站点管理员处理");
+                return new Rejection('UUID 表数据错误，请联系站点管理员处理');
             }
         } else {
             if (UUID::where('name', $name)->count()) {
-                return new Rejection("UUID 表数据错误，请联系站点管理员处理");
+                return new Rejection('UUID 表数据错误，请联系站点管理员处理');
             }
         }
+
         return $can;
     });
 
@@ -67,7 +68,7 @@ return function (Dispatcher $events, Filter $filter, Request $request) {
     $events->listen(ArtisanStarting::class, function (ArtisanStarting $event) {
         $event->artisan->resolveCommands([
             CreatePersonalAccessClient::class,
-            FixUUIDTable::class
+            FixUUIDTable::class,
         ]);
     });
     $events->listen('user.profile.updated', function (User $user, string $action) {
@@ -88,7 +89,7 @@ return function (Dispatcher $events, Filter $filter, Request $request) {
     Hook::addRoute(function () {
         Route::namespace('LittleSkin\YggdrasilConnect\Controllers')
             ->group(function () {
-                Route::prefix('api/yggdrasil')->group(__DIR__ . '/routes.php');
+                Route::prefix('api/yggdrasil')->group(__DIR__.'/routes.php');
 
                 Route::prefix('admin')->middleware(['web', 'auth'])->group(function () {
                     Route::middleware('role:admin')
@@ -107,7 +108,7 @@ return function (Dispatcher $events, Filter $filter, Request $request) {
                         Route::get('cancel', 'OIDCController@cancel');
                     });
                     // Route::get('device', 'OIDCController@userCode');
-                    Route::middleware(['api', 'LittleSkin\YggdrasilConnect\Middleware\CheckBearerTokenOAuth:' . Scope::OPENID])
+                    Route::middleware(['api', 'LittleSkin\YggdrasilConnect\Middleware\CheckBearerTokenOAuth:'.Scope::OPENID])
                         ->get('userinfo', 'OIDCController@getUserInfo');
                 });
             });
@@ -125,7 +126,7 @@ return function (Dispatcher $events, Filter $filter, Request $request) {
 
     Client::retrieved(function (Client $client) use ($request) {
         if ($request->is('oauth/authorize')) {
-            $yggc_redirect = option('site_url') . '/yggc/callback';
+            $yggc_redirect = option('site_url').'/yggc/callback';
             if (!in_array($yggc_redirect, explode(',', $client->redirect))) {
                 $client->redirect = "$client->redirect,$yggc_redirect";
             }

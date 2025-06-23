@@ -9,11 +9,11 @@ class HandleCors
 {
     public function handle(Request $request, \Closure $next)
     {
-        if(!$request->is('yggc/userinfo')) {
+        if (!$request->is('yggc/userinfo')) {
             return $next($request);
         }
 
-        if($this->isPreflightRequest($request)) {
+        if ($this->isPreflightRequest($request)) {
             return response(null)->setStatusCode(Response::HTTP_NO_CONTENT)
                 ->header('Access-Control-Allow-Origin', '*')
                 ->header('Access-Control-Allow-Methods', 'GET, HEAD')
@@ -22,6 +22,7 @@ class HandleCors
 
         $response = $next($request);
         $response->header('Access-Control-Allow-Origin', '*');
+
         return $response;
     }
 

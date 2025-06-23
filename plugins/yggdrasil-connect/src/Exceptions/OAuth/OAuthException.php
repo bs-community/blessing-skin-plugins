@@ -2,8 +2,8 @@
 
 namespace LittleSkin\YggdrasilConnect\Exceptions\OAuth;
 
-use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use LittleSkin\YggdrasilConnect\Exceptions\BaseException;
 
 abstract class OAuthException extends BaseException
@@ -17,13 +17,13 @@ abstract class OAuthException extends BaseException
         $this->scope = $scope;
     }
 
-    public function render(): Response | JsonResponse
+    public function render(): Response|JsonResponse
     {
         return json($this->toArray())->setStatusCode($this->statusCode)->withHeaders([
-            'WWW-Authenticate' => "Bearer error=\"$this->error\"" .
-                ", error_description=\"$this->message\"" .
-                (!empty($this->error_uri) ? ", error_uri=\"$this->error_uri\"" : '') .
-                (!empty($this->scope) ? ", realm=\"$this->scope\"" : '')
+            'WWW-Authenticate' => "Bearer error=\"$this->error\"".
+                ", error_description=\"$this->message\"".
+                (!empty($this->error_uri) ? ", error_uri=\"$this->error_uri\"" : '').
+                (!empty($this->scope) ? ", realm=\"$this->scope\"" : ''),
         ]);
     }
 

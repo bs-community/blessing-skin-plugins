@@ -7,7 +7,6 @@ use Illuminate\Http\Response;
 
 abstract class BaseException extends \Exception
 {
-
     // 只有 PHP 8.4 以上才能在抽象类中添加抽象属性，所以就先这样放这了
     protected string $error;
     protected string $error_description;
@@ -19,7 +18,7 @@ abstract class BaseException extends \Exception
         $this->error_description = $error_description;
     }
 
-    abstract public function render(): Response | JsonResponse;
+    abstract public function render(): Response|JsonResponse;
 
     public function report(): bool
     {

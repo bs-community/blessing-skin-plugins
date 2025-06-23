@@ -14,9 +14,9 @@ use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use LittleSkin\YggdrasilConnect\Exceptions\Yggdrasil\ForbiddenOperationException;
 use LittleSkin\YggdrasilConnect\Exceptions\Yggdrasil\IllegalArgumentException;
 use LittleSkin\YggdrasilConnect\Exceptions\Yggdrasil\NotFoundException;
@@ -25,7 +25,7 @@ use LittleSkin\YggdrasilConnect\Utils\Http;
 
 class ProfileController extends Controller
 {
-    public function getProfileFromUuid($uuid): Response | JsonResponse
+    public function getProfileFromUuid($uuid): Response|JsonResponse
     {
         $profile = Profile::createFromUuid($uuid);
 
@@ -43,7 +43,7 @@ class ProfileController extends Controller
         }
     }
 
-    public function getProfileFromName($name): Response | JsonResponse
+    public function getProfileFromName($name): Response|JsonResponse
     {
         $player = Player::where('name', $name)->first();
 
@@ -84,7 +84,7 @@ class ProfileController extends Controller
         return json($profiles);
     }
 
-    public function searchSingleProfile($username): Response | JsonResponse
+    public function searchSingleProfile($username): Response|JsonResponse
     {
         $player = Player::where('name', $username)->first();
         if (empty($player)) {

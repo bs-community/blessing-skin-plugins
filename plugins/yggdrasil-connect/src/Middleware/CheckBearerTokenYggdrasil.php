@@ -16,11 +16,12 @@ class CheckBearerTokenYggdrasil
     public function handle(Request $request, \Closure $next)
     {
         if ($accessToken = $request->bearerToken()) {
-            Log::channel('ygg')->info("User is authenticating with Access Token", [$accessToken]);
+            Log::channel('ygg')->info('User is authenticating with Access Token', [$accessToken]);
             try {
                 $token = new AccessToken($accessToken);
                 if ($token->canJoinServer() && $token->selectedProfile == $request->route('uuid')) {
                     Auth::setUser($token->owner);
+
                     return $next($request);
                 }
             } catch (ForbiddenOperationException $e) {

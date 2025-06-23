@@ -18,14 +18,13 @@ use LittleSkin\YggdrasilConnect\Exceptions\OAuth\AccessDeniedException;
 use LittleSkin\YggdrasilConnect\Exceptions\OAuth\InvalidRequestException;
 use LittleSkin\YggdrasilConnect\Exceptions\OAuth\OAuthException;
 use LittleSkin\YggdrasilConnect\Models\Profile;
-use LittleSkin\YggdrasilConnect\Models\UUID;
 use LittleSkin\YggdrasilConnect\Models\User;
+use LittleSkin\YggdrasilConnect\Models\UUID;
 use LittleSkin\YggdrasilConnect\Scope;
 
 class OIDCController extends Controller
 {
-
-    public function passportCallback(Request $request): RedirectResponse | View
+    public function passportCallback(Request $request): RedirectResponse|View
     {
         $validation = Validator::make($request->all(), [
             'code' => ['required_without:error', 'string'],
@@ -66,16 +65,17 @@ class OIDCController extends Controller
                     'name' => $client->name,
                     'code_id' => $codeId,
                     'state' => $state,
-                    'availableProfiles' => Profile::getAvailableProfiles($user)
+                    'availableProfiles' => Profile::getAvailableProfiles($user),
                 ]);
             }
 
             return static::handleRedirect($state, $codeId, null);
-        } catch (CryptoException | InvalidRequestException $e) {
+        } catch (CryptoException|InvalidRequestException $e) {
             if ($e instanceof OAuthException) {
                 return static::handleRedirect($state, null, http_build_query($e->toArray()));
             }
             $exception = new InvalidRequestException(trans('LittleSkin\\YggdrasilConnect::exceptions.yggc.authorization-code-invalid'));
+
             return static::handleRedirect($state, null, http_build_query($exception->toArray()));
         }
     }
@@ -101,7 +101,6 @@ class OIDCController extends Controller
                 throw new InvalidRequestException(trans('LittleSkin\\YggdrasilConnect::exceptions.yggc.authorization-code-invalid'));
             }
 
-
             $authCode = AuthCode::where(['id' => $codeId, 'revoked' => false])->first();
             $user = auth()->user();
             if (empty($authCode) || $authCode->user_id != $user->uid || $authCode->expires_at->isPast() || $authCode->revoked) {
@@ -115,7 +114,7 @@ class OIDCController extends Controller
 
             DB::table('code_id_to_uuid')->insert([
                 'code_id' => $codeId,
-                'uuid' => $uuid->uuid
+                'uuid' => $uuid->uuid,
             ]);
 
             return static::handleRedirect($state, $codeId, null);
@@ -142,6 +141,7 @@ class OIDCController extends Controller
         $state = $request->input('state');
 
         $exception = new AccessDeniedException(trans('LittleSkin\\YggdrasilConnect::exceptions.yggc.access-denied'));
+
         return static::handleRedirect($state, null, http_build_query($exception->toArray()));
     }
 
@@ -154,7 +154,7 @@ class OIDCController extends Controller
             return redirect()->away("$callbackUrl?$errorQuery");
         }
 
-        return redirect()->away("$callbackUrl?" . http_build_query(['code' => $code, 'state' => $state]));
+        return redirect()->away("$callbackUrl?".http_build_query(['code' => $code, 'state' => $state]));
     }
 
     public function getUserInfo()
@@ -180,7 +180,7 @@ class OIDCController extends Controller
             $profile = Profile::createFromUuid($user->yggdrasilToken()->selectedProfile);
             $resp['selectedProfile'] = [
                 'id' => $profile->uuid,
-                'name' => $profile->name
+                'name' => $profile->name,
             ];
         }
 

@@ -2,8 +2,8 @@
 
 namespace LittleSkin\YggdrasilConnect\Middleware;
 
-use App\Models\User as BaseUser;
 use App\Models\Player;
+use App\Models\User as BaseUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -73,6 +73,7 @@ class CheckLoginCredentials
         }
 
         Auth::setUser($user);
+
         return $next($request);
     }
 }

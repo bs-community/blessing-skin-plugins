@@ -3,7 +3,6 @@
 namespace LittleSkin\YggdrasilConnect\Exceptions\OAuth;
 
 use Illuminate\Http\Response;
-use LittleSkin\YggdrasilConnect\Exceptions\OAuth\OAuthException;
 
 class InvalidRequestException extends OAuthException
 {

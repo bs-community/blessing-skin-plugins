@@ -43,15 +43,15 @@ class ConfigController extends Controller
                 ->rows(10)
                 ->hint(trans('Yggdrasil::config.keypair.ygg_private_key.hint'));
         })->renderWithOutSubmitButton()->addButton([
-                'style' => 'success',
-                'name' => 'generate-key',
-                'text' => trans('Yggdrasil::config.keypair.ygg_private_key.generate'),
-            ])->addButton([
-                'style' => 'primary',
-                'type' => 'submit',
-                'name' => 'submit-key',
-                'text' => trans('Yggdrasil::config.keypair.ygg_private_key.submit'),
-            ])->addMessage(trans('Yggdrasil::config.keypair.ygg_private_key.message'))->handle();
+            'style' => 'success',
+            'name' => 'generate-key',
+            'text' => trans('Yggdrasil::config.keypair.ygg_private_key.generate'),
+        ])->addButton([
+            'style' => 'primary',
+            'type' => 'submit',
+            'name' => 'submit-key',
+            'text' => trans('Yggdrasil::config.keypair.ygg_private_key.submit'),
+        ])->addMessage(trans('Yggdrasil::config.keypair.ygg_private_key.message'))->handle();
 
         if (openssl_pkey_get_private(option('ygg_private_key'))) {
             $keypairForm->addMessage(trans('Yggdrasil::config.keypair.ygg_private_key.valid'), 'success');

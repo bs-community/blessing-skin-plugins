@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . '/src/Utils/helpers.php';
+require __DIR__.'/src/Utils/helpers.php';
 
 use App\Models\Scope;
 use App\Services\Facades\Option;
@@ -11,46 +11,45 @@ use Illuminate\Support\Str;
 
 return [
     App\Events\PluginWasEnabled::class => function () {
-
         if (!Scope::where('name', 'openid')->exists()) {
             Scope::create([
                 'name' => 'openid',
-                'description' => 'LittleSkin\\YggdrasilConnect::scopes.openid'
+                'description' => 'LittleSkin\\YggdrasilConnect::scopes.openid',
             ]);
         }
 
         if (!Scope::where('name', 'profile')->exists()) {
             Scope::create([
                 'name' => 'profile',
-                'description' => 'LittleSkin\\YggdrasilConnect::scopes.profile'
+                'description' => 'LittleSkin\\YggdrasilConnect::scopes.profile',
             ]);
         }
 
         if (!Scope::where('name', 'offline_access')->exists()) {
             Scope::create([
                 'name' => 'offline_access',
-                'description' => 'LittleSkin\\YggdrasilConnect::scopes.offline-access'
+                'description' => 'LittleSkin\\YggdrasilConnect::scopes.offline-access',
             ]);
         }
 
         if (!Scope::where('name', 'Yggdrasil.PlayerProfiles.Read')->exists()) {
             Scope::create([
                 'name' => 'Yggdrasil.PlayerProfiles.Read',
-                'description' => 'LittleSkin\\YggdrasilConnect::scopes.player-profiles.read'
+                'description' => 'LittleSkin\\YggdrasilConnect::scopes.player-profiles.read',
             ]);
         }
 
         if (!Scope::where('name', 'Yggdrasil.PlayerProfiles.Select')->exists()) {
             Scope::create([
                 'name' => 'Yggdrasil.PlayerProfiles.Select',
-                'description' => 'LittleSkin\\YggdrasilConnect::scopes.player-profiles.select'
+                'description' => 'LittleSkin\\YggdrasilConnect::scopes.player-profiles.select',
             ]);
         }
 
         if (!Scope::where('name', 'Yggdrasil.Server.Join')->exists()) {
             Scope::create([
                 'name' => 'Yggdrasil.Server.Join',
-                'description' => 'LittleSkin\\YggdrasilConnect::scopes.server.join'
+                'description' => 'LittleSkin\\YggdrasilConnect::scopes.server.join',
             ]);
         }
 
@@ -141,7 +140,7 @@ return [
 
             $path = app()->environmentFilePath();
             $content = file_get_contents($path);
-            file_put_contents($path, $content . PHP_EOL . 'JWT_SECRET=' . $key);
+            file_put_contents($path, $content.PHP_EOL.'JWT_SECRET='.$key);
         }
     },
 ];

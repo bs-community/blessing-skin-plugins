@@ -5,29 +5,28 @@ namespace LittleSkin\YggdrasilConnect\Models;
 use App\Models\User as BaseUser;
 use App\Services\Facades\Option;
 use Illuminate\Support\Facades\Cache;
-use Laravel\Passport\TokenRepository;
 use Laravel\Passport\RefreshTokenRepository;
 use Laravel\Passport\Token;
+use Laravel\Passport\TokenRepository;
 use Lcobucci\Clock\SystemClock;
 use Lcobucci\JWT;
 use LittleSkin\YggdrasilConnect\Exceptions\Yggdrasil\ForbiddenOperationException;
 use LittleSkin\YggdrasilConnect\Exceptions\Yggdrasil\IllegalArgumentException;
-use LittleSkin\YggdrasilConnect\Models\User;
 use LittleSkin\YggdrasilConnect\Scope;
 
 class AccessToken
 {
-    public     string                 $jwt;
-    protected  Token                  $passportToken;
-    protected  TokenRepository        $tokenRepository;
-    protected  RefreshTokenRepository $refreshTokenRepository;
-    protected  JWT\Configuration      $jwtConfig;
-    protected  JWT\Builder            $builder;
-    protected  JWT\Parser             $parser;
-    protected  JWT\Validator          $validator;
-    protected  JWT\Token\Plain        $jwtDecoded;
-    public     ?User                  $owner = null;
-    public     ?string                $selectedProfile = null;
+    public string $jwt;
+    protected Token $passportToken;
+    protected TokenRepository $tokenRepository;
+    protected RefreshTokenRepository $refreshTokenRepository;
+    protected JWT\Configuration $jwtConfig;
+    protected JWT\Builder $builder;
+    protected JWT\Parser $parser;
+    protected JWT\Validator $validator;
+    protected JWT\Token\Plain $jwtDecoded;
+    public ?User $owner = null;
+    public ?string $selectedProfile = null;
 
     public function __construct(string $jwt)
     {
@@ -76,9 +75,10 @@ class AccessToken
         $this->jwt = $jwt;
     }
 
-    static public function create(BaseUser $user): AccessToken
+    public static function create(BaseUser $user): AccessToken
     {
         $token = $user->createToken('Yggdrasil Connect', [Scope::PROFILE_SELECT, Scope::SERVER_JOIN])->accessToken;
+
         return new AccessToken($token);
     }
 
@@ -115,7 +115,6 @@ class AccessToken
 
     private function isSelectedProfileValid(): bool
     {
-
         $profile = Profile::createFromUuid($this->selectedProfile);
         if (empty($profile)) {
             return false;
@@ -180,7 +179,6 @@ class AccessToken
 
     public function refresh(?string $uuid = null): AccessToken
     {
-
         if (!$this->isRefreshable()) {
             throw new ForbiddenOperationException(trans('LittleSkin\\YggdrasilConnect::exceptions.token.invalid'));
         }
@@ -253,7 +251,7 @@ class AccessToken
         return true;
     }
 
-    static public function revokeAllForUser(BaseUser $user): void
+    public static function revokeAllForUser(BaseUser $user): void
     {
         $tokens = Token::where('user_id', $user->uid)->where([
             ['user_id', $user->uid],

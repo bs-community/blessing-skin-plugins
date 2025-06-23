@@ -52,7 +52,7 @@ class UUID extends Model
     public static function generateUuidV3(string $name): string
     {
         // @see https://gist.github.com/games647/2b6a00a8fc21fd3b88375f03c9e2e603
-        $data = hex2bin(md5('OfflinePlayer:' . $name));
+        $data = hex2bin(md5('OfflinePlayer:'.$name));
         $data[6] = chr(ord($data[6]) & 0x0F | 0x30);
         $data[8] = chr(ord($data[8]) & 0x3F | 0x80);
 
