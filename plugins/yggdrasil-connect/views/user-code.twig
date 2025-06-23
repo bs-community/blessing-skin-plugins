@@ -1,0 +1,77 @@
+{% extends 'auth.base' %}
+
+{% block title %}{{ trans('LittleSkin\\YggdrasilConnect::front-end.select-profile.select-profile') }}{% endblock %}
+
+{% block content %}
+<p class="login-box-msg">输入授权码以授予应用权限</p>
+<main>
+    <form id="user-code-form">
+        <div class="form-group">
+            <input type="text" class="form-control" name="user-code" placeholder="User Code" value="{{ userCode }}" required autofocus>
+        </div>
+        <div class="alert alert-warning" id="error-alert" style="display:none"></div>
+        <div class="alert alert-info">请勿输入来自你不信任的来源的授权码，注意帐号和个人信息安全。</div>
+        <button class="btn btn-primary btn-block" type="submit">继续</button>
+    </form>
+    <form id"real-form" style="display:none">
+        <input type="hidden" name="xsrf" value="">
+        <input type="hidden" name="user-code" value="">
+        <input type="hidden" name="confirm" value="yes">
+    </form>
+</main>
+{% endblock %}
+
+{% block before_foot %}
+<script>
+const codeForm = document.getElementById('user-code-form');
+const errorAlert = document.getElementById('error-alert');
+const janusRoot = '{{ janusRoot }}';
+codeForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    errorAlert.style.display = 'none';
+    const userCode = codeForm.querySelector('input[name="user-code"]').value.trim();
+
+    const url = await fetch(`${janusRoot}/device?xsrf`, {
+        credentials: "include"
+    }).then(async (response) => {
+        const data = await response.json();
+        return data.xsrf;
+    }).then(async (xsrf) => fetch(`${janusRoot}/device`, {
+        method: "POST",
+        credentials: "include",
+        body: new URLSearchParams({
+            xsrf: xsrf,
+            user_code: userCode,
+            confirm: 'yes'
+        })
+    })).then(async(response) => {
+        const data = await response.json();
+        console.log(data)
+        if(data.error) {
+            switch(data.error) {
+                case 'AlreadyUsedError':
+                case 'ExpiredError':
+                case 'NotFoundError':
+                    throw new Error('授权代码无效或已过期，请重新输入');
+                    break;
+                default:
+                    throw new Error(data.error_description);
+                    break;
+            }
+        }
+        return data.url;
+    }).catch((error) => {
+        console.log(error)
+        if(error instanceof TypeError) {
+            errorAlert.textContent = errorAlert.textContent = `${trans("无法解析服务器响应，请联系站点管理员处理：")}${error.message}`;
+        } else {
+            errorAlert.textContent = error.message;
+        }
+        errorAlert.style.display = 'block';
+    });
+    if(url) {
+        window.location.href = url;
+    }
+})
+</script>
+{% endblock %}

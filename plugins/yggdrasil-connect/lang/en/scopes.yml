@@ -1,0 +1,11 @@
+openid: Read user identifier
+profile: Read user profile
+offline-access: Maintain access that you have given
+
+player-profiles:
+  read: Read all player profiles that you have
+  select: Read the player profile you that have selected
+
+server:
+  join: Join Minecraft server with selected player profile
+  

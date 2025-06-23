@@ -1,0 +1,67 @@
+plugin-description: 重构版 Yggdrasil API 插件，修复了大量 Bug，添加了 Yggdrasil Connect 支持。使用之前请阅读插件 README。
+read-readme-first: 使用前请务必阅读 <a href="/admin/plugins/readme/yggdrasil-connect">插件 README</a>，了解插件配置方法和注意事项！
+title: Yggdrasil Connect 配置
+
+url:
+  label: 本站的 Yggdrasil API 地址：
+  notice: 请确认以上 URL 能够正常访问后再进行 authlib-injector 的配置。
+
+common:
+  title: 常规配置
+  ygg_uuid_algorithm:
+    title: UUID 生成算法
+    v3: 'Version 3: 与离线用户 UUID 一致'
+    v4: 'Version 4: 随机生成（想要同时兼容离线登录的不要选）'
+    hint: 选择 Version 3 以获得对原离线服务器的最佳兼容性。
+  ygg_token_expire_1:
+    title: 令牌暂时失效时间
+  ygg_token_expire_2:
+    title: 令牌完全失效时间
+    description: 分别指定 Token「暂时失效」与「完全失效」的过期时间，单位为秒
+  ygg_tokens_limit:
+    title: 令牌数量限制
+    description: 限制每个用户能拥有令牌的最大数量
+  ygg_rate_limit:
+    title: 登录/登出频率限制
+    hint: 两次操作之间的时间间隔（毫秒）
+  ygg_skin_domain:
+    title: 额外皮肤白名单域名
+    description: 只有在此列表中的材质才能被加载。「本站地址」和「当前访问地址」已经默认添加至白名单列表，需要添加的额外白名单域名请使用半角逗号 (,) 分隔
+  ygg_search_profile_max:
+    title: 批量查询角色数量限制
+    hint: 一次请求中最多能查询几个角色
+  ygg_show_config_section:
+    title: 显示快速配置板块
+    label: 在用户中心首页显示「快速配置启动器」板块
+  ygg_enable_ali:
+    title: API 地址指示
+    label: 开启「API 地址指示 (ALI)」功能
+
+keypair:
+  title: 密钥对配置
+  ygg_private_key:
+    title: OpenSSL 私钥
+    hint: 只需填写 PEM 格式的私钥即可，公钥会根据私钥自动生成。
+    generate: 生成私钥
+    submit: 保存私钥
+    message: 使用下方的按钮来自动生成符合格式的私钥。
+    valid: 私钥有效。
+    invalid: 无效的私钥，请检查后重新配置。
+
+rsa:
+  invalid: 无效的 RSA 私钥，请访问插件配置页重新设置
+  length: RSA 私钥的长度至少为 4096，请访问插件配置页重新设置
+
+yggc:
+  server_url:
+    title: OpenID 提供者标识符
+    description: 你的 Janus 实例的根地址，必须以 <code>https://</code> 开头且不以 <code>/</code> 结尾。请确保用户可以正常访问该 URL。
+  disable_authserver:
+    title: 禁用 Auth Server
+    hint: 即 /authserver 下的 API
+    label: 禁用 Yggdrasil API 的 Auth Server
+    description: |
+      禁用后，用户将无法通过在启动器中输入用户名和密码的传统方式登录，必须通过 Yggdrasil Connect 登录。<br>
+      如不禁用，请确保你创建了个人访问客户端，并在 <code>.env</code> 文件中设置了 <code>PASSPORT_PERSONAL_ACCESS_CLIENT_ID</code>，否则插件无法正常工作。
+    empty-client-id: 你启用了 Auth Server，但没有设置 <code>PASSPORT_PERSONAL_ACCESS_CLIENT_ID</code>。请在 <code>.env</code> 文件中设置该值。要了解如何配置该设置项，请阅读 <a href="/admin/plugins/readme/yggdrasil-connect">插件 README</a>。
+    invalid-client-id: <code>PASSPORT_PERSONAL_ACCESS_CLIENT_ID</code> 对应的应用不是个人访问客户端，请创建个人访问客户端，并将 <code>PASSPORT_PERSONAL_ACCESS_CLIENT_ID</code> 的值设为该客户端的 ID。

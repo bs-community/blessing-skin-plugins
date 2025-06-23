@@ -1,0 +1,7 @@
+key-generated: 成功生成了一个新的 4096 bit OpenSSL RSA 私钥
+copied: 已复制
+
+select-profile:
+  no-available-profiles: 你没有可用的角色，无法授权。请先前往角色管理页面创建角色。
+  select-profile: 选择角色
+  select-profile-dropdown-hidden: 点击选择角色…

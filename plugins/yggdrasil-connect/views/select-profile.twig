@@ -1,0 +1,36 @@
+{% extends 'auth.base' %}
+
+{% block title %}{{ trans('LittleSkin\\YggdrasilConnect::front-end.select-profile.select-profile') }}{% endblock %}
+
+{% block content %}
+<p class="login-box-msg">{{ trans('auth.oauth.authorization.introduction', { name: name }) }}</p>
+<main>
+    <form id="deny-authorization" method="post" action="/yggc/cancel">
+        {{ csrf_field() }}
+        {{ method_field('GET') }}
+        <input type="hidden" name="code_id" value="{{ code_id }}">
+        <input type="hidden" name="state" value="{{ state }}">
+    </form>
+    {% if availableProfiles %}
+    <form id="select-profile" method="post" action="/yggc/callback">
+        <div class="form-group">
+            {{ csrf_field() }}
+            <input type="hidden" name="code_id" value="{{ code_id }}">
+            <input type="hidden" name="state" value="{{ state }}">
+            <label for="profile-dropdown">{{ trans('LittleSkin\\YggdrasilConnect::front-end.select-profile.select-profile') }}</label>
+            <select required class="form-control" name="selectedProfile" id="profile-dropdown">
+                <option hidden value>{{ trans('LittleSkin\\YggdrasilConnect::front-end.select-profile.select-profile-dropdown-hidden') }}</option>
+                {% for profile in availableProfiles %}
+                    <option value="{{ profile.id }}" {% if availableProfiles|length == 1 %}selected{% endif %}>{{ profile.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </form>
+    <button class="btn btn-success btn-block" type="submit" form="select-profile">{{ trans('auth.oauth.authorization.button') }}</button>
+    {% else %}
+    <div class="alert alert-danger">{{ trans('LittleSkin\\YggdrasilConnect::front-end.select-profile.no-available-profiles') }}</div>
+    <a href="{{url('/user/player')}}" class="btn btn-primary btn-block">{{ trans('general.player-manage') }}</a>
+    {% endif %}
+    <button class="btn btn-default btn-block" type="submit" form="deny-authorization">{{ trans('general.cancel') }}</button>
+</main>
+{% endblock %}

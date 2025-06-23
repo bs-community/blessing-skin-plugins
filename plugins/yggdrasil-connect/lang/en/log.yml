@@ -1,0 +1,16 @@
+title: Yggdrasil Logs
+header:
+  action: Action
+  params: Parameters
+  time: Time
+show-details: Show Details
+no-records: No records.
+actions:
+  authenticate: Sign In
+  refresh: Refresh Token
+  validate: Validate Token
+  signout: Sign Out
+  invalidate: Invalidate Token
+  join: Attempt to Join Server
+  has_joined: Join Server
+  undefined: Unknown

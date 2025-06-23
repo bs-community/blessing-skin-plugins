@@ -1,0 +1,67 @@
+plugin-description: Refactored from Yggdrasil API plugin, fixing some bugs and adding Yggdrasil Connect support. Please read the plugin README before use.
+read-readme-first: Please read the <a href="/admin/plugins/readme/yggdrasil-connect">README</a> to learn how to configure the plugin before use!
+title: Yggdrasil Connect Configuration
+
+url:
+  label: 'Yggdrasil API URL: '
+  notice: Please make sure the URL above is accessible before configuring authlib-injector.
+
+common:
+  title: Common
+  ygg_uuid_algorithm:
+    title: UUID Algorithm
+    v3: 'Version 3: Keep it same with "Offline Users"'
+    v4: 'Version 4: Generate randomly (DO NOT use this if you expect it can be compatible with "Offline Users")'
+    hint: Use "Version 3" to gather compatibility with offline servers.
+  ygg_token_expire_1:
+    title: Token Temporarily-expired Time
+  ygg_token_expire_2:
+    title: Token Completely-expired Time
+    description: Specify the expiry time of Token "Temporarily Invalid" and "Completely Invalid" in seconds.
+  ygg_tokens_limit:
+    title: Tokens Amount Limitation
+    description: Limit maximum amount of tokens for each user.
+  ygg_rate_limit:
+    title: Log-in/Log-out Rate Limit
+    hint: Time interval between two operations (ms).
+  ygg_skin_domain:
+    title: Additional Skin Domain Names Whitelist
+    description: Only textures from the list here will be loaded. Split them with comma. URL of this site and current access URL are added by default.
+  ygg_search_profile_max:
+    title: Limit Number of Roles for Batch Query
+    hint: How many roles can be queried in one request?
+  ygg_show_config_section:
+    title: Show "Quick Configuartion"
+    label: Show "Quick Configuration" at user center.
+  ygg_enable_ali:
+    title: API Location Indicator
+    label: Enable API Location Indicator (ALI).
+
+keypair:
+  title: Keypair
+  ygg_private_key:
+    title: OpenSSL Private Key
+    hint: PEM-format private key is required and public key will be generated automatically according to private key.
+    generate: Generate Private Key
+    submit: Submit Private Key
+    message: Click the button below to generate a private key.
+    valid: Valid private key.
+    invalid: Invalid RSA private key. Please check and re-configure it.
+
+rsa:
+  invalid: Invalid RSA private key. Please re-configure it.
+  length: The length of RSA private key must be greater than 4096. Please re-configure it.
+
+yggc:
+  server_url:
+    title: OpenID Issuer Identifier
+    description: The root URL of your Janus instance. Must start with <code>https://</code> and end without <code>/</code>. Make sure it is accessible for the public.
+  disable_authserver:
+    title: Disable Auth Server
+    hint: APIs under /authserver
+    label: Disable Yggdrasil API Auth Server
+    description: |
+      Disabling Auth Server will enforce Yggdrasil Connect login, preventing traditional username/password login through the launcher.<br>
+      Make sure you've created a Personal Access Client and set <code>PASSPORT_PERSONAL_ACCESS_CLIENT_ID</code> in <code>.env</code> file if you decide to keep it enabled, otherwise the Auth Server may not work functionally.
+    empty-client-id: You have the Auth Server enabled, but <code>PASSPORT_PERSONAL_ACCESS_CLIENT_ID</code> is not set. Please set it in <code>.env</code> file. Read the <a href="/admin/plugins/readme/yggdrasil-connect">README</a> to learn how to configure it.
+    invalid-client-id: The client set in <code>PASSPORT_PERSONAL_ACCESS_CLIENT_ID</code> is not a Personal Access Client. Please create one and set the value to the ID of that client.

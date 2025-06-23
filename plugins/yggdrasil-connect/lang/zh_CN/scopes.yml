@@ -1,0 +1,10 @@
+openid: 读取用户身份标识符
+profile: 读取用户信息
+offline-access: 保持已授予的访问权限
+
+player-profiles:
+  read: 读取名下所有角色的档案
+  select: 读取指定的角色的档案
+
+server:
+  join: 在 Minecraft 中使用选定的角色加入多人游戏

@@ -1,0 +1,32 @@
+token:
+  invalid: Invalid AccessToken. Please re-login.
+  not-match: ClientToken isn't matched with AccessToken. Please re-login.
+  missing: No valid credential information.
+  bearer: Bearer token expired or is not correct.
+  no-selected-profile: This AccessToken has no selected profile yet. Please provide a profile.
+
+user:
+  banned: You're banned.
+  not-verified: Your email isn't verified. Please verify it before logging in.
+  no-available-profiles: You have no available players. Please create one in Player Manage.
+
+player:
+  not-exist: Player is not found.
+  not-match: The player requested doesn't match with that token.
+  owner: The player requested doesn't belong to that user.
+  query-max: 'You can query up to :count players in one request.'
+
+auth:
+  empty: Email address and password are required.
+  not-match: Invalid credential information.
+
+illegal: Request parameter is illegal.
+
+yggc:
+  authserver-disabled: Auth Server is disabled, please login by Yggdrasil Connect.
+  invalid-client-id: Invalid Personal Access Client ID. Please contact the administrator.
+  authorization-code-invalid: Authorization Code is invalid or expired.
+  callback-request-invalid: Request parameter is invalid. Please contact the administrator.
+  access-denied: The resource owner or authorization server denied the request.
+  invalid-scope: The requested scope is invalid, unknown, or malformed.
+  issuer-not-set: OpenID Issuer Identifier is not set. Please contact the administrator.

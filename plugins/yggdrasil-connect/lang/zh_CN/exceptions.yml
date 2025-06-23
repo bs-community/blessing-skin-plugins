@@ -1,0 +1,32 @@
+token:
+  invalid: 无效的 AccessToken，请重新登录
+  not-match: 提供的 ClientToken 与 AccessToken 不匹配，请重新登录
+  missing: 未提供 AccessToken
+  bearer: Bearer token 过期或无效。
+  no-selected-profile: 该令牌未绑定角色，请在刷新时指定角色
+
+user:
+  banned: 你已经被本站封禁，详情请询问站点管理员
+  no-available-profiles: 你没有可用的角色，请先在皮肤站的角色管理中创建角色
+  not-verified: 你还没有验证你的邮箱，请在通过皮肤站的邮箱验证后再尝试登录
+
+player:
+  not-exist: 请求的角色不存在
+  not-match: 请求的角色与令牌绑定的角色不一致
+  owner: 请求的角色不属于该用户
+  query-max: '一次最多只能查询 :count 个角色'
+
+auth:
+  empty: 邮箱或者密码没填哦
+  not-match: 用户名或密码错误
+
+illegal: 请求参数不合法
+
+yggc:
+  authserver-disabled: 本站已禁用传统登录方式，请通过 Yggdrasil Connect 登录
+  invalid-client-id: 个人访问客户端 ID 无效，请联系站点管理员处理
+  authorization-code-invalid: 授权代码无效或已过期
+  callback-request-invalid: 请求参数错误，请联系站点管理员处理
+  access-denied: 用户拒绝了授权请求
+  invalid-scope: 请求的 scope 有误
+  issuer-not-set: OpenID 提供者标识符未设置，请联系站点管理员处理

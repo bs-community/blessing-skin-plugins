@@ -1,0 +1,7 @@
+key-generated: An 4096 bit OpenSSL RSA private key is generated.
+copied: Copied
+
+select-profile:
+  no-available-profiles: You have no available players to authorize. Please add a player first in the Player Management page.
+  select-profile: Select Player
+  select-profile-dropdown-hidden: Select a player...

@@ -1,0 +1,2 @@
+content-type: 请求的 Content-Type 必须为 application/json
+throttle: '请求过于频繁，请等待 :s 秒后重试'

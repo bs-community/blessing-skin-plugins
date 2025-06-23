@@ -1,0 +1,26 @@
+<div class="card card-success card-outline">
+  <div class="card-header">
+    <h3 class="card-title">{{ trans('LittleSkin\\YggdrasilConnect::dnd.title') }}</h3>
+  </div>
+  <div class="card-body">
+    <p>{{ trans('LittleSkin\\YggdrasilConnect::dnd.url') }}<code>{{ url('/api/yggdrasil') }}</code></p>
+    <p>{{ trans('LittleSkin\\YggdrasilConnect::dnd.tip') }}</p>
+  </div>
+  <div class="card-footer">
+    <button
+      id="ygg-dnd-button"
+      class="btn btn-primary"
+      draggable="true"
+      data-clipboard-text="{{ url('/api/yggdrasil') }}"
+    >
+      {{ trans('LittleSkin\\YggdrasilConnect::dnd.button') }}
+    </button>
+    <a
+      class="btn btn-default ml-2"
+      target="_blank"
+      href="https://blessing.netlify.app/yggdrasil-api/authlib-injector.html"
+    >
+      {{ trans('LittleSkin\\YggdrasilConnect::dnd.guide') }}
+    </a>
+  </div>
+</div>

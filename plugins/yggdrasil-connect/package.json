@@ -1,0 +1,21 @@
+{
+  "name": "yggdrasil-connect",
+  "version": "0.1.0",
+  "title": "Yggdrasil Connect",
+  "description": "LittleSkin\\YggdrasilConnect::config.plugin-description",
+  "author": "LittleSkin",
+  "namespace": "LittleSkin\\YggdrasilConnect",
+  "require": {
+    "blessing-skin-server": "^6"
+  },
+  "enchants": {
+    "config": "Controllers\\ConfigController",
+    "icon": {
+      "fa": "khanda",
+      "bg": "blue"
+    },
+    "conflicts": {
+      "yggdrasil-api": "*"
+    }
+  }
+}
