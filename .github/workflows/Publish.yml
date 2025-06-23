@@ -19,11 +19,11 @@ jobs:
         with:
           repository: bs-community/plugins-dist
           path: '.dist'
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.2
+        uses: pnpm/action-setup@v4.1.0
         with:
-          version: 7.26.0
+          version: 8.15.9
       - name: Download nano
         run: ./download-nano.ps1
         shell: pwsh
@@ -38,7 +38,7 @@ jobs:
         run: ./publish.ps1
         shell: pwsh
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
