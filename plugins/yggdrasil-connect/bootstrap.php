@@ -5,7 +5,6 @@ use App\Services\Facades\Option;
 use App\Services\Hook;
 use Blessing\Filter;
 use Blessing\Rejection;
-use Illuminate\Auth\Events\Authenticated;
 use Illuminate\Console\Events\ArtisanStarting;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Http\Request;
