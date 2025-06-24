@@ -22,3 +22,5 @@ document
       notify.toast.error(response.message)
     }
   })
+
+export {}
