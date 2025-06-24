@@ -16,7 +16,7 @@ if ($shouldUpdate) {
         aws s3 sync . s3://plugins-dist/ --exclude ".git/*"
     }
     git commit -m "Publish"
-    git remote set-url origin "https://tadaf:$token@github.com/bs-community/plugins-dist.git"
+    git remote set-url origin "https://x-access-token:$token@github.com/bs-community/plugins-dist.git"
     git push origin master
 }
 
