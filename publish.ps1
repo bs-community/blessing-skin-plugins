@@ -22,8 +22,8 @@ if ($shouldUpdate) {
 
 Set-Location '..'
 
-$botRelease = (Invoke-WebRequest 'https://api.github.com/repos/bs-community/telegram-bot/releases/latest').Content | ConvertFrom-Json
-$botBinUrl = ((Invoke-WebRequest $botRelease.assets_url).Content | ConvertFrom-Json).browser_download_url
+$botRelease = Invoke-RestMethod -Uri 'https://api.github.com/repos/bs-community/telegram-bot/releases/latest'
+$botBinUrl = (Invoke-RestMethod -Uri $botRelease.assets_url).browser_download_url
 
 bash -c "curl -fSL $botBinUrl -o bot"
 chmod +x ./bot
