@@ -47,6 +47,7 @@ jobs:
         shell: pwsh
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
