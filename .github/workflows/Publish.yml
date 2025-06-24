@@ -39,6 +39,7 @@ jobs:
         uses: actions/create-github-app-token@v2
         with:
           app-id: ${{ secrets.GH_APP_ID }}
+          permission-contents: write
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
           repositories: plugins-dist
       - name: Publish
