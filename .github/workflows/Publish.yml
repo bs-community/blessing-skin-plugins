@@ -40,6 +40,7 @@ jobs:
         with:
           app-id: ${{ secrets.GH_APP_ID }}
           private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+          repositories: plugins-dist
       - name: Publish
         run: ./publish.ps1
         shell: pwsh
