@@ -7,7 +7,6 @@ use App\Services\Facades\Option;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 
 return [
     App\Events\PluginWasEnabled::class => function () {
@@ -132,15 +131,6 @@ return [
         // 初次使用自动生成私钥
         if (option('ygg_private_key') == '') {
             option(['ygg_private_key' => ygg_generate_rsa_keys()['private']]);
-        }
-
-        if (!config('jwt.secret')) {
-            $key = Str::random(64);
-            config(['jwt.secret' => $key]);
-
-            $path = app()->environmentFilePath();
-            $content = file_get_contents($path);
-            file_put_contents($path, $content.PHP_EOL.'JWT_SECRET='.$key);
         }
     },
 ];
