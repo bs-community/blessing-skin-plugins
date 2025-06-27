@@ -2,14 +2,17 @@
 
 require __DIR__.'/src/Utils/helpers.php';
 
+use App\Events\PluginWasDisabled;
+use App\Events\PluginWasEnabled;
 use App\Models\Scope;
 use App\Services\Facades\Option;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use LittleSkin\YggdrasilConnect\Scope as OpenIDScope;
 
 return [
-    App\Events\PluginWasEnabled::class => function () {
+    PluginWasEnabled::class => function () {
         if (!Scope::where('name', 'openid')->exists()) {
             Scope::create([
                 'name' => 'openid',
@@ -132,5 +135,9 @@ return [
         if (option('ygg_private_key') == '') {
             option(['ygg_private_key' => ygg_generate_rsa_keys()['private']]);
         }
+    },
+
+    PluginWasDisabled::class => function () {
+        Scope::whereIn('name', OpenIDScope::getAllScopes())->get()->each->delete();
     },
 ];
