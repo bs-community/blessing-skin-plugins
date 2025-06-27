@@ -21,6 +21,12 @@
     - 要了解 Yggdrasil Connect 和 Janus 是什么，请阅读下面的 [关于 Yggdrasil Connect](#关于-yggdrasil-connect) 部分。
     - 要了解如何部署 Janus，请查看 [Janus 项目的代码仓库](https://github.com/bs-community/janus)。
 
+## 已知问题
+
+- 在部分情况下，用户在通过传统 Auth Server 登录时，可能会遇到 HTTP 500 错误；或在请求 OAuth 授权时，在请求了正确的 scope 的情况下，仍遇到 `invalid_scopes` 错误。
+    - 要了解导致该问题的原因，请参阅 [bs-community/blessing-skin-server#661 (comment)](https://github.com/bs-community/blessing-skin-server/pull/661#issuecomment-3008486580)。
+    - 在插件管理中重启（禁用再启用）本插件，或将 Blessing Skin Server 升级至最新开发版即可解决该问题。
+
 ## 关于 Yggdrasil Connect
 
 Yggdrasil Connect 是基于 OAuth 2.0 和 OpenID Connect 协议的 Minecraft 外置登录身份验证协议，其核心目标是取代 Yggdrasil API 中的 Auth Server 部分，从而改善 authlib-injector 外置登录方案的安全性和用户体验。
