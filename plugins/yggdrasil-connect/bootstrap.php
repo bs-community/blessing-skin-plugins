@@ -20,7 +20,7 @@ use LittleSkin\YggdrasilConnect\Scope;
 require __DIR__.'/src/Utils/helpers.php';
 
 return function (Dispatcher $events, Filter $filter, Request $request) {
-    Passport::personalAccessTokensExpireIn(now()->addSeconds(Option::get('ygg_token_expire_1')));
+    Passport::personalAccessTokensExpireIn(now()->addSeconds(intval(Option::get('ygg_token_expire_1'))));
 
     if (env('YGG_VERBOSE_LOG')) {
         config(['logging.channels.ygg' => [
