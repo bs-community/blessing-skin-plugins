@@ -17,6 +17,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 use LittleSkin\YggdrasilConnect\Exceptions\Yggdrasil\ForbiddenOperationException;
 use LittleSkin\YggdrasilConnect\Exceptions\Yggdrasil\IllegalArgumentException;
 use LittleSkin\YggdrasilConnect\Exceptions\Yggdrasil\NotFoundException;
@@ -153,8 +154,11 @@ class ProfileController extends Controller
             }
         }
 
-        $hash = hash_file('sha256', $file);
-        $hash = $filter->apply('uploaded_texture_hash', $hash, [$file]);
+        $image = Image::make($file);
+        $sanitized = $image->encode('png', 100)->getEncoded();
+
+        $hash = hash('sha256', $sanitized);
+        $hash = $filter->apply('uploaded_texture_hash', $hash, [$image]);
 
         /** @var User */
         $user = $profile->player->user;
@@ -173,8 +177,8 @@ class ProfileController extends Controller
                 $user->save();
             }
         } else {
-            $size = ceil($file->getSize() / 1024);
-            $cost = (int) option('private_score_per_storage') * $size + (int) option('score_per_closet_item');
+            $fileSize = ceil(strlen($sanitized) / 1024);
+            $cost = (int) option('private_score_per_storage') * $fileSize + (int) option('score_per_closet_item');
             if ($cost > $user->score) {
                 throw new ForbiddenOperationException(trans('skinlib.upload.lack-score'));
             }
@@ -185,7 +189,7 @@ class ProfileController extends Controller
             $texture->name = $name;
             $texture->type = $type === 'cape' ? 'cape' : ($isAlex ? 'alex' : 'steve');
             $texture->hash = $hash;
-            $texture->size = $size;
+            $texture->size = $fileSize;
             $texture->public = false;
             $texture->uploader = $user->uid;
             $texture->likes = 1;
@@ -194,7 +198,7 @@ class ProfileController extends Controller
             /** @var FilesystemAdapter */
             $disk = Storage::disk('textures');
             if ($disk->missing($hash)) {
-                $file->storePubliclyAs('', $hash, ['disk' => 'textures']);
+                $disk->put($hash, $sanitized);
             }
 
             $user->score -= $cost;
