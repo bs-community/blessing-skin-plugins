@@ -12,7 +12,7 @@
 
 1. 通过 Blessing Skin 插件市场安装并启用本插件。
 2. 进入终端，在 Blessing Skin Server 根目录下执行 `php artisan yggc:create-personal-access-client` 命令，创建个人访问客户端（Personal Access Client）。
-    - 创建完成后，请在 .env 中新建一条配置 `PERSONAL_ACCESS_CLIENT_ID`，并将其值设为命令返回的个人访问客户端的 Client ID。
+    - 创建完成后，请在 .env 中新建一条配置 `PASSPORT_PERSONAL_ACCESS_CLIENT_ID`，并将其值设为命令返回的个人访问客户端的 Client ID。
 3. 如果你是从原版 Yggdrasil API 插件迁移而来，请在终端中执行 `php artisan yggc:fix-uuid-table` 命令，以清除原版 Yggdrasil API 插件的 UUID 表中可能存在的异常数据，并修改数据表结构。
     - **该指令会直接删除 `uuid` 表中的部分记录，因此在执行该指令前，请务必备份原先的 `uuid` 表！！！**
         - 要了解该指令对你的 `uuid` 表都做了什么，请阅读下面的 [关于 Bug 修复](#关于-bug-修复) 部分。
