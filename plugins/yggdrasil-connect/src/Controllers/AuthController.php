@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use LittleSkin\YggdrasilConnect\Exceptions\Yggdrasil\ForbiddenOperationException;
 use LittleSkin\YggdrasilConnect\Exceptions\Yggdrasil\IllegalArgumentException;
 use LittleSkin\YggdrasilConnect\Models\AccessToken;
@@ -81,10 +82,11 @@ class AuthController extends Controller
 
     public function refresh(Request $request): JsonResponse
     {
+        $requireProfileInfo = !($request->input('selectedProfile') === null);
         $validation = Validator::make($request->all(), [
-            'selectedProfile' => ['nullable', 'required_array_keys:id,name'],
-            'selectedProfile.id' => ['required_with:selectedProfile', 'string'],
-            'selectedProfile.name' => ['required_with:selectedProfile', 'string'],
+            'selectedProfile' => ['nullable'],
+            'selectedProfile.id' => [Rule::requiredIf($requireProfileInfo), 'string'],
+            'selectedProfile.name' => [Rule::requiredIf($requireProfileInfo), 'string'],
         ]);
 
         if ($validation->fails()) {
