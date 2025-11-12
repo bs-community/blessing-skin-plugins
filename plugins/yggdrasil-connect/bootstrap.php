@@ -15,12 +15,14 @@ use LittleSkin\YggdrasilConnect\Console\CreatePersonalAccessClient;
 use LittleSkin\YggdrasilConnect\Console\FixUUIDTable;
 use LittleSkin\YggdrasilConnect\Models\AccessToken;
 use LittleSkin\YggdrasilConnect\Models\UUID;
+use LittleSkin\YggdrasilConnect\Observers\UserObserver;
 use LittleSkin\YggdrasilConnect\Scope;
 
 require __DIR__.'/src/Utils/helpers.php';
 
 return function (Dispatcher $events, Filter $filter, Request $request) {
     Passport::personalAccessTokensExpireIn(now()->addSeconds(intval(Option::get('ygg_token_expire_1'))));
+    User::observe(UserObserver::class);
 
     if (env('YGG_VERBOSE_LOG')) {
         config(['logging.channels.ygg' => [
