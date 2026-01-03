@@ -46,17 +46,19 @@ class AuthController extends Controller
             $resp['user'] = ['id' => User::getUserUuid($user), 'properties' => []];
         }
 
-        if (!filter_var($identification, FILTER_VALIDATE_EMAIL)) {
-            // 如果是角色名登录，就直接绑定角色
-            $resp['selectedProfile'] = [
-                'id' => Profile::getUuidFromName($identification),
-                'name' => $identification,
-            ];
-            $resp['availableProfiles'] = [$resp['selectedProfile']];
-        } elseif (count($availableProfiles) === 1) {
+        if (count($availableProfiles) === 1) {
             // 当用户只有一个角色时自动帮他选择
             $resp['selectedProfile'] = $availableProfiles[0];
             $resp['availableProfiles'] = [$availableProfiles[0]];
+        } elseif (!filter_var($identification, FILTER_VALIDATE_EMAIL)) {
+            // 如果是角色名登录，就直接绑定角色
+            foreach ($availableProfiles as $profile) {
+                if (strcasecmp($profile['name'], $identification) === 0) {
+                    $resp['selectedProfile'] =  $profile;
+                    $resp['availableProfiles'] = [$profile];
+                    break;
+                }
+            }
         } else {
             $resp['availableProfiles'] = $availableProfiles;
         }
