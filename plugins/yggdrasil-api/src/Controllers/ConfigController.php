@@ -122,7 +122,7 @@ class ConfigController extends Controller
 
     public function getPublicKeys()
     {
-        $keyData = $this->getPkey();
+        $keyData = $this->getPrivateKey();
 
         $publicKeyBase64 = str_replace(
             array("-----BEGIN PUBLIC KEY-----", "-----END PUBLIC KEY-----", "\n"),
