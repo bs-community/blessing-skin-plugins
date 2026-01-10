@@ -173,7 +173,7 @@ class ConfigController extends Controller
         return json($result);
     }
 
-    public function getPkey(): string
+    public function getPrivateKey(): string
     {
         $privateKey = openssl_pkey_get_private(option('ygg_private_key'));
 
