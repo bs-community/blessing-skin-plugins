@@ -165,8 +165,8 @@ class ConfigController extends Controller
         );
 
         $result = [
-            'profilePropertyKeys' => array(['publicKey' => $publicKeyBase64]),
-            'playerCertificateKeys' => array(['publicKey' => $publicKeyBase64]),
+            'profilePropertyKeys' => [['publicKey' => $publicKeyBase64]],
+            'playerCertificateKeys' => [['publicKey' => $publicKeyBase64]],
             'authenticationKeys' => array(['publicKey' => $publicKeyBase64]),
         ];
 
