@@ -103,7 +103,7 @@ class ConfigController extends Controller
             $request->getHost(),
         ]))));
 
-        $signaturePublickey = $this->getPkey();
+        $signaturePublickey = $this->getPrivateKey();
 
         $result = [
             'meta' => [
