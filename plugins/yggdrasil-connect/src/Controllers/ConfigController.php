@@ -103,17 +103,7 @@ class ConfigController extends Controller
             $request->getHost(),
         ]))));
 
-        $privateKey = openssl_pkey_get_private(option('ygg_private_key'));
-
-        if (!$privateKey) {
-            throw new IllegalArgumentException(trans('LittleSkin\\YggdrasilConnect::config.rsa.invalid'));
-        }
-
-        $keyData = openssl_pkey_get_details($privateKey);
-
-        if ($keyData['bits'] < 4096) {
-            throw new IllegalArgumentException(trans('LittleSkin\\YggdrasilConnect::config.rsa.length'));
-        }
+        $signaturePublickey = $this->getPkey();
 
         $result = [
             'meta' => [
@@ -125,7 +115,7 @@ class ConfigController extends Controller
                 ],
             ],
             'skinDomains' => $skinDomains,
-            'signaturePublickey' => $keyData['key'],
+            'signaturePublickey' => $signaturePublickey,
         ];
 
         if (!optional($pluginManager->get('disable-registration'))->isEnabled()) {
@@ -162,5 +152,41 @@ class ConfigController extends Controller
         } catch (\Exception $e) {
             return json('Error: '.$e->getMessage(), 1);
         }
+    }
+
+    public function getPublicKeys(): JsonResponse
+    {
+        $keyData = $this->getPkey();
+
+        $publicKeyBase64 = str_replace(
+            array("-----BEGIN PUBLIC KEY-----", "-----END PUBLIC KEY-----", "\n"),
+            '',
+            $keyData
+        );
+
+        $result = [
+            'profilePropertyKeys' => array(['publicKey' => $publicKeyBase64]),
+            'playerCertificateKeys' => array(['publicKey' => $publicKeyBase64]),
+            'authenticationKeys' => array(['publicKey' => $publicKeyBase64]),
+        ];
+
+        return json($result);
+    }
+
+    public function getPkey(): string
+    {
+        $privateKey = openssl_pkey_get_private(option('ygg_private_key'));
+
+        if (!$privateKey) {
+            throw new IllegalArgumentException(trans('LittleSkin\\YggdrasilConnect::config.rsa.invalid'));
+        }
+
+        $keyData = openssl_pkey_get_details($privateKey);
+
+        if ($keyData['bits'] < 4096) {
+            throw new IllegalArgumentException(trans('LittleSkin\\YggdrasilConnect::config.rsa.length'));
+        }
+
+        return $keyData['key'];
     }
 }
