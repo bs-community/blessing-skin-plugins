@@ -31,9 +31,11 @@ Route::prefix('sessionserver/session/minecraft')->group(function () {
 
 Route::post('api/profiles/minecraft', 'ProfileController@searchMultipleProfiles');
 Route::post('minecraftservices/minecraft/profile/lookup/bulk/byname', 'ProfileController@searchMultipleProfiles');
+Route::post('api/minecraft/profile/lookup/bulk/byname', 'ProfileController@searchMultipleProfiles');
 
 Route::get('api/users/profiles/minecraft/{username}', 'ProfileController@searchSingleProfile');
 Route::get('minecraftservices/minecraft/profile/lookup/name/{username}', 'ProfileController@searchSingleProfile');
+Route::get('api/minecraft/profile/lookup/name/{username}', 'ProfileController@searchSingleProfile');
 
 Route::prefix('api/user/profile')
     ->middleware(['api', 'LittleSkin\YggdrasilConnect\Middleware\CheckBearerTokenYggdrasil'])
