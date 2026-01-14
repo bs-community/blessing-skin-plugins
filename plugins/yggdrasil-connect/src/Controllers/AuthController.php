@@ -54,7 +54,7 @@ class AuthController extends Controller
             // 如果是角色名登录，就直接绑定角色
             foreach ($availableProfiles as $profile) {
                 if (strcasecmp($profile['name'], $identification) === 0) {
-                    $resp['selectedProfile'] =  $profile;
+                    $resp['selectedProfile'] = $profile;
                     $resp['availableProfiles'] = [$profile];
                     break;
                 }

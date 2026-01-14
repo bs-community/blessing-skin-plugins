@@ -125,7 +125,7 @@ class ConfigController extends Controller
         $keyData = $this->getPrivateKey();
 
         $publicKeyBase64 = str_replace(
-            array("-----BEGIN PUBLIC KEY-----", "-----END PUBLIC KEY-----", "\n"),
+            ['-----BEGIN PUBLIC KEY-----', '-----END PUBLIC KEY-----', "\n"],
             '',
             $keyData
         );
