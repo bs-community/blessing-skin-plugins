@@ -43,3 +43,5 @@ Route::prefix('api/user/profile')
         Route::put('{uuid}/{type}', 'ProfileController@uploadTexture');
         Route::delete('{uuid}/{type}', 'ProfileController@resetTexture');
     });
+
+Route::get('minecraftservices/publickeys', 'ConfigController@getPublicKeys');
